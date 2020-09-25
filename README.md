@@ -24,7 +24,7 @@ On the first release, Forest Map TM will allow local cooperatives to use the abu
 4. [TODO-list](#4-TODO-list)
 
 
-# Setting up your Python environment
+# Setting up your environment
 
 # Prepare your environment
 
