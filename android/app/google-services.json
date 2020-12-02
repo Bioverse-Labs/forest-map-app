@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "311285571218",
+    "firebase_url": "https://forestmap-5d284.firebaseio.com",
+    "project_id": "forestmap-5d284",
+    "storage_bucket": "forestmap-5d284.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311285571218:android:782e762252e4882a14104b",
+        "android_client_info": {
+          "package_name": "com.bioverselabs.forestmap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311285571218-hfqafvluiq1rrqisf2pdrdq0t8l9fa48.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC45jKNfpVFCkc5cmXILXstpI-Oql1hbQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311285571218-hfqafvluiq1rrqisf2pdrdq0t8l9fa48.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

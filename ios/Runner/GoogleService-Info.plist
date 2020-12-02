@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>311285571218-klu3mej2d8qbd0q9ma6seothdpmbcb8d.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.311285571218-klu3mej2d8qbd0q9ma6seothdpmbcb8d</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB86g0gLZUbqzWMMwjjX7Km9ASeT54Mjw0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>311285571218</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.bioverselabs.forestmap</string>
+	<key>PROJECT_ID</key>
+	<string>forestmap-5d284</string>
+	<key>STORAGE_BUCKET</key>
+	<string>forestmap-5d284.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:311285571218:ios:9b71119981b74a7114104b</string>
+	<key>DATABASE_URL</key>
+	<string>https://forestmap-5d284.firebaseio.com</string>
+</dict>
+</plist>
