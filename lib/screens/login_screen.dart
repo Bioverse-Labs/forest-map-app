@@ -11,6 +11,8 @@ class LoginScreen extends StatelessWidget {
 
   void _signInWithEmailAndPassword() {}
 
+  void _goToSignUpScreen() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,14 +74,20 @@ class LoginScreen extends StatelessWidget {
                   obscureText: true,
                 ),
                 SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    RaisedButton(
-                      onPressed: _signInWithEmailAndPassword,
-                      child: Text('login-screen.submit-button').tr(),
-                    ),
-                  ],
+                SizedBox(
+                  width: double.infinity,
+                  child: RaisedButton(
+                    onPressed: _signInWithEmailAndPassword,
+                    child: Text('login-screen.submit-button').tr(),
+                  ),
+                ),
+                Divider(),
+                SizedBox(
+                  width: double.infinity,
+                  child: FlatButton(
+                    onPressed: _goToSignUpScreen,
+                    child: Text('login-screen.sign-up-button').tr(),
+                  ),
                 ),
               ],
             ),

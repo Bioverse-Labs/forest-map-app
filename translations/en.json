@@ -22,6 +22,7 @@
     "title": "Sign-in",
     "submit-button": "Sign-in",
     "social-login-google": "Sign-in",
-    "social-login-facebook": "Sign-in"
+    "social-login-facebook": "Sign-in",
+    "sign-up-button": "Or Sign-up here"
   }
 }

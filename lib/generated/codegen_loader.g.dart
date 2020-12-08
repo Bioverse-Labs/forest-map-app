@@ -38,7 +38,8 @@ class CodegenLoader extends AssetLoader{
     "title": "Sign-in",
     "submit-button": "Sign-in",
     "social-login-google": "Sign-in",
-    "social-login-facebook": "Sign-in"
+    "social-login-facebook": "Sign-in",
+    "sign-up-button": "Or Sign-up here"
   }
 };
 static const Map<String,dynamic> pt_BR = {
@@ -65,7 +66,8 @@ static const Map<String,dynamic> pt_BR = {
     "title": "Entrar",
     "submit-button": "Entrar",
     "social-login-google": "Entrar",
-    "social-login-facebook": "Entrar"
+    "social-login-facebook": "Entrar",
+    "sign-up-button": "Ou Cadastre-se aqui"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "pt_BR": pt_BR};
