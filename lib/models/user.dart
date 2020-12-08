@@ -1,39 +1,35 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
-class User {
+class UserModel extends ChangeNotifier {
   String id;
   String name;
   String email;
   String phone;
   String photoUrl;
   auth.User firebaseUser;
+  final auth.FirebaseAuth firebaseAuth;
 
-  User({
-    @required this.id,
-    this.name,
-    this.email,
-    this.phone,
-    this.photoUrl,
-    this.firebaseUser,
-  });
+  UserModel({this.firebaseAuth});
 
-  factory User.fromFirebase(auth.User firebaseUser) {
-    if (firebaseUser == null) {
-      throw Exception('Firebase user not provided!');
+  bool get emailIsVerified => firebaseUser.emailVerified;
+
+  Future<void> createUser({
+    String name,
+    String email,
+    String phone,
+    String password,
+  }) async {
+    try {
+      final resp = await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on PlatformException catch (err) {
+      throw Exception(err.message);
+    } catch (err) {
+      throw Exception(err.toString());
     }
-
-    if (!(firebaseUser is auth.User)) {
-      throw Exception('Provided user is not Firebase User Type');
-    }
-
-    return User(
-      id: firebaseUser?.uid,
-      name: firebaseUser?.displayName,
-      email: firebaseUser?.email,
-      phone: firebaseUser?.phoneNumber,
-      photoUrl: firebaseUser?.photoURL,
-      firebaseUser: firebaseUser,
-    );
   }
 }
