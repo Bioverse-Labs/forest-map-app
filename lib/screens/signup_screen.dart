@@ -4,6 +4,7 @@ import 'package:forestMapApp/common/input_decoration.dart';
 import 'package:forestMapApp/models/user.dart';
 import 'package:forestMapApp/utils/validations.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SignupScreen extends StatelessWidget {
   final _nameController = TextEditingController();
@@ -29,7 +30,7 @@ class SignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Signup')),
+      appBar: AppBar(title: Text('signup-screen.title').tr()),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -40,10 +41,10 @@ class SignupScreen extends StatelessWidget {
               children: [
                 TextFormField(
                   controller: _nameController,
-                  decoration: inputDecoration('Name'),
+                  decoration: inputDecoration('labels.name'.tr()),
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'This field is required!';
+                      return 'input-validations.required'.tr();
                     }
 
                     return null;
@@ -52,14 +53,14 @@ class SignupScreen extends StatelessWidget {
                 SizedBox(height: 10),
                 TextFormField(
                   controller: _emailController,
-                  decoration: inputDecoration('Email'),
+                  decoration: inputDecoration('labels.email'.tr()),
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'This field is required!';
+                      return 'input-validations.required'.tr();
                     }
 
                     if (!emailIsValid(value)) {
-                      return 'Please input an valid email!';
+                      return 'input-validations.invalid-email'.tr();
                     }
 
                     return null;
@@ -68,15 +69,15 @@ class SignupScreen extends StatelessWidget {
                 SizedBox(height: 10),
                 TextFormField(
                   controller: _phoneController,
-                  decoration: inputDecoration('Phone'),
-                  inputFormatters: [TextInputMask(mask: '99? (99) 999 99-99')],
+                  decoration: inputDecoration('labels.phone'.tr()),
+                  inputFormatters: [TextInputMask(mask: 'masks.phone'.tr())],
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'This Field is required!';
+                      return 'input-validations.required'.tr();
                     }
 
-                    if (value.length < 17) {
-                      return 'Please input an valid phone number!';
+                    if (value.length < 4) {
+                      return 'input-validations.invalid-phone'.tr();
                     }
 
                     return null;
@@ -85,15 +86,15 @@ class SignupScreen extends StatelessWidget {
                 SizedBox(height: 10),
                 TextFormField(
                   controller: _passwordController,
-                  decoration: inputDecoration('Password'),
+                  decoration: inputDecoration('labels.password'.tr()),
                   obscureText: true,
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'This field is required!';
+                      return 'input-validations.required'.tr();
                     }
 
                     if (value.length < 8) {
-                      return 'The password must contain at least 8 characters';
+                      return 'input-validations.invalid-password'.tr();
                     }
 
                     return null;
@@ -105,7 +106,7 @@ class SignupScreen extends StatelessWidget {
                   children: [
                     RaisedButton(
                       onPressed: () => _handleFormSubmit(context),
-                      child: Text('Create account'),
+                      child: Text('signup-screen.submit-button').tr(),
                     ),
                   ],
                 ),

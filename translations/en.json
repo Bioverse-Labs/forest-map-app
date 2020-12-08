@@ -1,0 +1,21 @@
+{
+  "labels": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "password": "Password"
+  },
+  "input-validations": {
+    "required": "This field is required!",
+    "invalid-email": "Please input an valid email!",
+    "invalid-phone": "Please input an valid phone number!",
+    "invalid-password": "The password must contain at least 8 characters"
+  },
+  "masks": {
+    "phone": "(99) 999 99-99"
+  },
+  "signup-screen": {
+    "title": "Signup",
+    "submit-button": "Create account"
+  }
+}

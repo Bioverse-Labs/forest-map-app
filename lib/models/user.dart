@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:forestMapApp/utils/notifications.dart';
 
 class UserModel extends ChangeNotifier {
   String id;
@@ -46,9 +47,11 @@ class UserModel extends ChangeNotifier {
 
       notifyListeners();
     } on PlatformException catch (err) {
-      BotToast.showSimpleNotification(title: err.message);
+      Notifications.showErrorNotification(err.message);
+    } on auth.FirebaseException catch (err) {
+      Notifications.showErrorNotification(err.message);
     } catch (err) {
-      BotToast.showSimpleNotification(title: err.toString());
+      Notifications.showErrorNotification(err.toString());
     }
   }
 
@@ -74,9 +77,11 @@ class UserModel extends ChangeNotifier {
         photoUrl: photoUrl,
       );
     } on PlatformException catch (err) {
-      BotToast.showSimpleNotification(title: err.message);
+      Notifications.showErrorNotification(err.message);
+    } on auth.FirebaseAuthException catch (err) {
+      Notifications.showErrorNotification(err.message);
     } catch (err) {
-      BotToast.showSimpleNotification(title: err.toString());
+      Notifications.showErrorNotification(err.toString());
     } finally {
       BotToast.closeAllLoading();
     }
