@@ -1,8 +1,14 @@
+import 'package:bot_toast/bot_toast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/screens/map.dart';
+import 'package:forestMapApp/common/theme.dart';
+import 'package:forestMapApp/models/user.dart';
+import 'package:forestMapApp/screens/signup_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -18,7 +24,16 @@ class MyApp extends StatelessWidget {
       builder: (context, snapshot) {
         return MaterialApp(
           title: 'Forest App Map',
-          home: HomeScreen(),
+          theme: mainTheme,
+          darkTheme: darkTheme,
+          builder: BotToastInit(), //1. call BotToastInit
+          navigatorObservers: [BotToastNavigatorObserver()],
+          home: ChangeNotifierProvider(
+            create: (_) => UserModel(firebaseAuth: FirebaseAuth.instance),
+            builder: (ctx, child) {
+              return SignupScreen();
+            },
+          ),
         );
       },
     );

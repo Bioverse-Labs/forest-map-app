@@ -13,9 +13,14 @@ dependencies:
 
   cupertino_icons: ^1.0.0
   google_maps_flutter: ^0.5.33
+  provider: ^4.3.2+3
+  easy_mask: ^1.1.4
+  bot_toast: ^3.0.5
+
+  # Firebase Deps
   firebase_core: "0.5.3"
   firebase_auth: "^0.18.4"
-  provider: ^4.3.2+3
+  cloud_firestore: "^0.14.4"
 
 dev_dependencies:
   flutter_test:
