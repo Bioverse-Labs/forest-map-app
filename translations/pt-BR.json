@@ -17,5 +17,11 @@
   "signup-screen": {
     "title": "Cadastrar",
     "submit-button": "Criar conta"
+  },
+  "login-screen": {
+    "title": "Entrar",
+    "submit-button": "Entrar",
+    "social-login-google": "Entrar",
+    "social-login-facebook": "Entrar"
   }
 }

@@ -33,3 +33,4 @@ flutter:
   assets:
     - translations/en.json
     - translations/pt-BR.json
+    - assets/

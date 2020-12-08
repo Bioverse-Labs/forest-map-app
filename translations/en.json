@@ -15,7 +15,13 @@
     "phone": "(99) 999 99-99"
   },
   "signup-screen": {
-    "title": "Signup",
+    "title": "Sign-up",
     "submit-button": "Create account"
+  },
+  "login-screen": {
+    "title": "Sign-in",
+    "submit-button": "Sign-in",
+    "social-login-google": "Sign-in",
+    "social-login-facebook": "Sign-in"
   }
 }

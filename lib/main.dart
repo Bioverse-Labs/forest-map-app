@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:forestMapApp/common/theme.dart';
 import 'package:forestMapApp/generated/codegen_loader.g.dart';
 import 'package:forestMapApp/models/user.dart';
+import 'package:forestMapApp/screens/login_screen.dart';
 import 'package:forestMapApp/screens/signup_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
             home: ChangeNotifierProvider(
               create: (_) => UserModel(firebaseAuth: FirebaseAuth.instance),
               builder: (ctx, child) {
-                return SignupScreen();
+                return LoginScreen();
               },
             ),
           );
