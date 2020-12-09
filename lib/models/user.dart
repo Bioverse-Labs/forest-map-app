@@ -54,5 +54,26 @@ class User {
     );
   }
 
+  factory User.fromDocument(DocumentSnapshot documentSnapshot) {
+    if (documentSnapshot == null) {
+      throw Exception('Firebase user not provided!');
+    }
+
+    if (!(documentSnapshot is DocumentSnapshot)) {
+      throw Exception('Provided user is not Firebase User Type');
+    }
+
+    final data = documentSnapshot.data();
+
+    return User(
+      id: documentSnapshot.id,
+      name: data['name'] as String,
+      email: data['email'] as String,
+      phone: data['phone'] as String,
+      photoUrl: data['photoUrl'] as String,
+      documentReference: documentSnapshot?.reference,
+    );
+  }
+
   bool get emailIsVerified => firebaseUser?.emailVerified;
 }
