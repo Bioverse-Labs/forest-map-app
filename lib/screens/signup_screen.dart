@@ -1,7 +1,7 @@
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
 import 'package:forestMapApp/common/input_decoration.dart';
-import 'package:forestMapApp/models/user.dart';
+import 'package:forestMapApp/notifiers/user_notifier.dart';
 import 'package:forestMapApp/utils/validations.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -17,7 +17,7 @@ class SignupScreen extends StatelessWidget {
 
   void _handleFormSubmit(BuildContext context) {
     if (_formKey.currentState.validate()) {
-      Provider.of<UserModel>(context, listen: false)
+      Provider.of<UserNotifier>(context, listen: false)
           .createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,

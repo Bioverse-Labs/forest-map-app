@@ -5,9 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:forestMapApp/common/theme.dart';
 import 'package:forestMapApp/generated/codegen_loader.g.dart';
-import 'package:forestMapApp/models/user.dart';
+import 'package:forestMapApp/notifiers/user_notifier.dart';
 import 'package:forestMapApp/screens/login_screen.dart';
-import 'package:forestMapApp/screens/signup_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -33,7 +32,7 @@ class MyApp extends StatelessWidget {
             builder: BotToastInit(), //1. call BotToastInit
             navigatorObservers: [BotToastNavigatorObserver()],
             home: ChangeNotifierProvider(
-              create: (_) => UserModel(firebaseAuth: FirebaseAuth.instance),
+              create: (_) => UserNotifier(firebaseAuth: FirebaseAuth.instance),
               builder: (ctx, child) {
                 return LoginScreen();
               },
