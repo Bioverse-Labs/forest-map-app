@@ -21,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _userNotifier = Provider.of<UserNotifier>(context);
+    _userNotifier = Provider.of<UserNotifier>(context, listen: false);
   }
 
   void _signInWithGoogle() => _userNotifier.signInWithGoogle();
@@ -47,6 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
           child: Form(
+            key: _formKey,
             child: Column(
               children: [
                 Row(

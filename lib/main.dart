@@ -1,15 +1,16 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/common/theme.dart';
+import 'package:forestMapApp/app.dart';
 import 'package:forestMapApp/generated/codegen_loader.g.dart';
 import 'package:forestMapApp/notifiers/user_notifier.dart';
-import 'package:forestMapApp/screens/login_screen.dart';
+import 'package:forestMapApp/utils/app_navigator.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  GetIt.I.registerLazySingleton<AppNavigator>(() => AppNavigator());
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
@@ -25,18 +26,13 @@ class MyApp extends StatelessWidget {
       child: FutureBuilder(
         future: _initialization,
         builder: (context, snapshot) {
-          return MaterialApp(
-            title: 'Forest App Map',
-            theme: mainTheme,
-            darkTheme: darkTheme,
-            builder: BotToastInit(), //1. call BotToastInit
-            navigatorObservers: [BotToastNavigatorObserver()],
-            home: ChangeNotifierProvider(
-              create: (_) => UserNotifier(firebaseAuth: FirebaseAuth.instance),
-              builder: (ctx, child) {
-                return LoginScreen();
-              },
-            ),
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container();
+          }
+
+          return ChangeNotifierProvider(
+            create: (_) => UserNotifier(firebaseAuth: FirebaseAuth.instance),
+            child: App(),
           );
         },
       ),

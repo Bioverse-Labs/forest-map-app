@@ -12,7 +12,14 @@ class UserNotifier extends ChangeNotifier {
   User user;
   auth.FirebaseAuth firebaseAuth;
 
-  UserNotifier({@required this.firebaseAuth});
+  UserNotifier({@required this.firebaseAuth, user});
+
+  bool get hasUser => user != null;
+
+  void setUser(User _user) {
+    user = _user;
+    notifyListeners();
+  }
 
   Future<void> createUserWithEmailAndPassword({
     String name,
