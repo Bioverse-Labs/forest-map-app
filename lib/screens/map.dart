@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/widgets/home_drawer.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -19,6 +20,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Forest Map App'),
       ),
+      drawer: HomeDrawer(),
       body: GoogleMap(
         mapType: MapType.hybrid,
         initialCameraPosition: _initialPosition,

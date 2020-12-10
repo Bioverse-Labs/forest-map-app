@@ -14,6 +14,9 @@
   "masks": {
     "phone": "(99) 999 99-99"
   },
+  "home-drawer": {
+    "logout": "Logout"
+  },
   "signup-screen": {
     "title": "Sign-up",
     "submit-button": "Create account"

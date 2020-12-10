@@ -30,6 +30,9 @@ class CodegenLoader extends AssetLoader{
   "masks": {
     "phone": "(99) 999 99-99"
   },
+  "home-drawer": {
+    "logout": "Logout"
+  },
   "signup-screen": {
     "title": "Sign-up",
     "submit-button": "Create account"
@@ -57,6 +60,9 @@ static const Map<String,dynamic> pt_BR = {
   },
   "masks": {
     "phone": "(99) 99999-9999"
+  },
+  "home-drawer": {
+    "logout": "Sair"
   },
   "signup-screen": {
     "title": "Cadastrar",
