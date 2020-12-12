@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:forestMapApp/app.dart';
 import 'package:forestMapApp/generated/codegen_loader.g.dart';
+import 'package:forestMapApp/notifiers/data_notifier.dart';
 import 'package:forestMapApp/notifiers/user_notifier.dart';
 import 'package:forestMapApp/screens/splash_screen.dart';
 import 'package:forestMapApp/utils/register_hive_adapters.dart';
@@ -37,8 +38,16 @@ class MyApp extends StatelessWidget {
             return SplashScreen();
           }
 
-          return ChangeNotifierProvider(
-            create: (_) => UserNotifier(firebaseAuth: FirebaseAuth.instance),
+          return MultiProvider(
+            providers: [
+              ChangeNotifierProvider<UserNotifier>(
+                create: (_) =>
+                    UserNotifier(firebaseAuth: FirebaseAuth.instance),
+              ),
+              ChangeNotifierProvider<DataNotifier>(
+                create: (_) => DataNotifier(),
+              ),
+            ],
             child: App(),
           );
         },

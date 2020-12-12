@@ -32,5 +32,9 @@
     "social-login-google": "Entrar",
     "social-login-facebook": "Entrar",
     "sign-up-button": "Ou Cadastre-se aqui"
+  },
+  "preview-screen": {
+    "title": "Pré Visualização",
+    "submit-button": "Salvar"
   }
 }

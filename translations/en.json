@@ -14,7 +14,7 @@
   "location-permission": {
     "disabled": "Location services are disabled.",
     "denied-permantly": "Location permissions are permantly denied, we cannot request permissions.",
-    "denied": "Location permissions are denied (actual value: $permission)."
+    "denied": "Location permissions are denied"
   },
   "masks": {
     "phone": "(99) 999 99-99"
@@ -32,5 +32,9 @@
     "social-login-google": "Sign-in",
     "social-login-facebook": "Sign-in",
     "sign-up-button": "Or Sign-up here"
+  },
+  "preview-screen": {
+    "title": "Preview",
+    "submit-button": "Save"
   }
 }

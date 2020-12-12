@@ -3,9 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:forestMapApp/common/theme.dart';
 import 'package:forestMapApp/notifiers/user_notifier.dart';
-import 'package:forestMapApp/screens/login_screen.dart';
-import 'package:forestMapApp/screens/home_screen.dart';
-import 'package:forestMapApp/screens/splash_screen.dart';
+import 'package:forestMapApp/routes.dart';
 import 'package:forestMapApp/services/user.dart';
 import 'package:forestMapApp/utils/app_navigator.dart';
 import 'package:get_it/get_it.dart';
@@ -27,13 +25,13 @@ class _AppState extends State<App> {
     _notifier?.firebaseAuth?.authStateChanges()?.asBroadcastStream()?.listen(
       (auth.User firebaseUser) async {
         if (firebaseUser == null) {
-          _appNavigator.pushReplacementWidget(LoginScreen());
+          _appNavigator.pushAndReplace('/login');
           return;
         }
 
         final user = await UserService.getUser(firebaseUser?.uid);
         _notifier.setUser(user);
-        _appNavigator.pushReplacementWidget(HomeScreen());
+        _appNavigator.pushAndReplace('/home');
       },
     );
   }
@@ -47,7 +45,8 @@ class _AppState extends State<App> {
       builder: BotToastInit(),
       navigatorKey: GetIt.I<AppNavigator>().navigatorKey,
       navigatorObservers: [BotToastNavigatorObserver()],
-      home: SplashScreen(),
+      initialRoute: '/splash',
+      routes: routes,
     );
   }
 }

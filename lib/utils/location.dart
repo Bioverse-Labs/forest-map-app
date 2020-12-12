@@ -41,4 +41,21 @@ class LocationUtils {
 
     return null;
   }
+
+  static Future<Position> getLastKnowLocation() async {
+    try {
+      final hasAccess = await checkLocationPermission();
+      if (hasAccess) {
+        return Geolocator.getLastKnownPosition(
+          forceAndroidLocationManager: true,
+        );
+      }
+    } on PlatformException catch (err) {
+      Notifications.showErrorNotification(err.message);
+    } catch (err) {
+      Notifications.showErrorNotification(err);
+    }
+
+    return null;
+  }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:forestMapApp/common/input_decoration.dart';
 import 'package:forestMapApp/notifiers/user_notifier.dart';
-import 'package:forestMapApp/screens/signup_screen.dart';
 import 'package:forestMapApp/utils/app_navigator.dart';
 import 'package:forestMapApp/utils/validations.dart';
 import 'package:get_it/get_it.dart';
@@ -40,8 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _goToSignUpScreen() =>
-      GetIt.I<AppNavigator>().pushWidget(SignupScreen());
+  void _goToSignUpScreen() => GetIt.I<AppNavigator>().push('/signUp');
 
   @override
   Widget build(BuildContext context) {

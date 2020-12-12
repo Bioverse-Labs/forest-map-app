@@ -27,6 +27,11 @@ class CodegenLoader extends AssetLoader{
     "invalid-phone": "Please input an valid phone number!",
     "invalid-password": "The password must contain at least 8 characters"
   },
+  "location-permission": {
+    "disabled": "Location services are disabled.",
+    "denied-permantly": "Location permissions are permantly denied, we cannot request permissions.",
+    "denied": "Location permissions are denied"
+  },
   "masks": {
     "phone": "(99) 999 99-99"
   },
@@ -43,6 +48,10 @@ class CodegenLoader extends AssetLoader{
     "social-login-google": "Sign-in",
     "social-login-facebook": "Sign-in",
     "sign-up-button": "Or Sign-up here"
+  },
+  "preview-screen": {
+    "title": "Preview",
+    "submit-button": "Save"
   }
 };
 static const Map<String,dynamic> pt_BR = {
@@ -57,6 +66,11 @@ static const Map<String,dynamic> pt_BR = {
     "invalid-email": "Por favor digite um e-mail valido!",
     "invalid-phone": "Por favor digite um número de celular valido!",
     "invalid-password": "A senha deve conter no mínimo 8 caracteres"
+  },
+  "location-permission": {
+    "disabled": "O GPS está desativado.",
+    "denied-permantly": "As permissões de localização do aparelho estão permanentemente negadas, por favor ative a localização para continuar.",
+    "denied": "As permissões de localização foram negadas"
   },
   "masks": {
     "phone": "(99) 99999-9999"
@@ -74,6 +88,10 @@ static const Map<String,dynamic> pt_BR = {
     "social-login-google": "Entrar",
     "social-login-facebook": "Entrar",
     "sign-up-button": "Ou Cadastre-se aqui"
+  },
+  "preview-screen": {
+    "title": "Pré Visualização",
+    "submit-button": "Salvar"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "pt_BR": pt_BR};

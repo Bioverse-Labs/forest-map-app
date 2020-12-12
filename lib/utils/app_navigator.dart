@@ -3,22 +3,16 @@ import 'package:flutter/material.dart';
 class AppNavigator {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  void pushWidget(Widget widget) => navigatorKey.currentState
-      .push(MaterialPageRoute(builder: (context) => widget));
+  void push(String route) => navigatorKey.currentState.pushNamed(route);
 
   void pop() => navigatorKey.currentState.pop();
 
-  void pushAndRemoveWidget(
-    Widget widget,
+  void pushAndRemove(
+    String route,
     bool Function(Route<dynamic> route) predicate,
   ) =>
-      navigatorKey.currentState.pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => widget,
-        ),
-        predicate,
-      );
+      navigatorKey.currentState.pushNamedAndRemoveUntil(route, predicate);
 
-  void pushReplacementWidget(Widget widget) => navigatorKey.currentState
-      .pushReplacement(MaterialPageRoute(builder: (context) => widget));
+  void pushAndReplace(String route) =>
+      navigatorKey.currentState.pushReplacementNamed(route);
 }

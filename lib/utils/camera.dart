@@ -14,9 +14,9 @@ class CameraUtils {
         imageQuality: 50,
         preferredCameraDevice: CameraDevice.rear,
       );
-      final appDir = await getApplicationDocumentsDirectory();
+      final appDir = (await getApplicationDocumentsDirectory()).path;
       final imgFile = await File(pickerFile?.path).copy(
-        '$appDir/${DateTime.now()}',
+        '$appDir/${DateTime.now().millisecond}',
       );
 
       return imgFile;
