@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:forestMapApp/common/theme.dart';
 import 'package:forestMapApp/notifiers/user_notifier.dart';
 import 'package:forestMapApp/screens/login_screen.dart';
-import 'package:forestMapApp/screens/map.dart';
+import 'package:forestMapApp/screens/home_screen.dart';
 import 'package:forestMapApp/screens/splash_screen.dart';
 import 'package:forestMapApp/services/user.dart';
 import 'package:forestMapApp/utils/app_navigator.dart';

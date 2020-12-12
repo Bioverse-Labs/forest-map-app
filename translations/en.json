@@ -11,6 +11,11 @@
     "invalid-phone": "Please input an valid phone number!",
     "invalid-password": "The password must contain at least 8 characters"
   },
+  "location-permission": {
+    "disabled": "Location services are disabled.",
+    "denied-permantly": "Location permissions are permantly denied, we cannot request permissions.",
+    "denied": "Location permissions are denied (actual value: $permission)."
+  },
   "masks": {
     "phone": "(99) 999 99-99"
   },

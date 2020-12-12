@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:forestMapApp/app.dart';
 import 'package:forestMapApp/generated/codegen_loader.g.dart';
 import 'package:forestMapApp/notifiers/user_notifier.dart';
-import 'package:forestMapApp/utils/app_navigator.dart';
-import 'package:get_it/get_it.dart';
+import 'package:forestMapApp/screens/splash_screen.dart';
+import 'package:forestMapApp/utils/register_hive_adapters.dart';
+import 'package:forestMapApp/utils/register_singletons.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  GetIt.I.registerLazySingleton<AppNavigator>(() => AppNavigator());
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
@@ -18,16 +20,21 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({Key key}) : super(key: key);
 
-  final _initialization = Firebase.initializeApp();
+  Future<void> _initApp() async {
+    await Firebase.initializeApp();
+    await Hive.initFlutter();
+    registerHiveAdapters();
+    registerSingletons();
+  }
 
   @override
   Widget build(BuildContext context) {
     return EasyLocalization(
       child: FutureBuilder(
-        future: _initialization,
+        future: _initApp(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container();
+            return SplashScreen();
           }
 
           return ChangeNotifierProvider(

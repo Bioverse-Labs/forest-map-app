@@ -5,8 +5,10 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      child: Center(
         child: Image.asset('assets/bioverse.png'),
       ),
     );
