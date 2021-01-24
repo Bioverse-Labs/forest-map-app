@@ -1,0 +1,40 @@
+{
+  "labels": {
+    "name": "Nome",
+    "email": "E-mail",
+    "phone": "Celular",
+    "password": "Senha"
+  },
+  "input-validations": {
+    "required": "Esse campo é obrigatório!",
+    "invalid-email": "Por favor digite um e-mail valido!",
+    "invalid-phone": "Por favor digite um número de celular valido!",
+    "invalid-password": "A senha deve conter no mínimo 8 caracteres"
+  },
+  "location-permission": {
+    "disabled": "O GPS está desativado.",
+    "denied-permantly": "As permissões de localização do aparelho estão permanentemente negadas, por favor ative a localização para continuar.",
+    "denied": "As permissões de localização foram negadas"
+  },
+  "masks": {
+    "phone": "(99) 99999-9999"
+  },
+  "home-drawer": {
+    "logout": "Sair"
+  },
+  "signup-screen": {
+    "title": "Cadastrar",
+    "submit-button": "Criar conta"
+  },
+  "login-screen": {
+    "title": "Entrar",
+    "submit-button": "Entrar",
+    "social-login-google": "Entrar",
+    "social-login-facebook": "Entrar",
+    "sign-up-button": "Ou Cadastre-se aqui"
+  },
+  "preview-screen": {
+    "title": "Pré Visualização",
+    "submit-button": "Salvar"
+  }
+}

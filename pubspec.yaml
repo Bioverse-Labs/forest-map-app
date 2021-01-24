@@ -13,11 +13,34 @@ dependencies:
 
   cupertino_icons: ^1.0.0
   google_maps_flutter: ^0.5.33
-  firebase_core: "0.5.2+1"
+  provider: ^4.3.2+3
+  easy_mask: ^1.1.4
+  bot_toast: ^3.0.5
+  easy_localization: ^2.3.3
+  google_sign_in: "^4.5.1"
+  flutter_facebook_auth: "^1.0.0"
+  get_it: ^5.0.3
+  image_picker: ^0.6.7+15
+  hive: ^1.4.4+1
+  hive_flutter: ^0.3.1
+  path_provider: ^1.6.24
+  geolocator: ^6.1.13
+
+  # Firebase Deps
+  firebase_core: "0.5.3"
+  firebase_auth: "^0.18.4"
+  cloud_firestore: "^0.14.4"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  hive_generator: ^0.8.2
+  build_runner: ^1.10.9
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - translations/en.json
+    - translations/pt-BR.json
+    - assets/
