@@ -1,5 +1,6 @@
-import 'package:forestMapApp/models/hive/geopoint.dart';
 import 'package:hive/hive.dart';
+
+import 'geopoint.dart';
 
 part 'tree.g.dart';
 

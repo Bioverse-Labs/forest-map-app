@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:forestMapApp/common/input_decoration.dart';
-import 'package:forestMapApp/notifiers/data_notifier.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../core/input_decoration.dart';
+import '../notifiers/data_notifier.dart';
 
 class PreviewScreen extends StatelessWidget {
   const PreviewScreen({Key key}) : super(key: key);

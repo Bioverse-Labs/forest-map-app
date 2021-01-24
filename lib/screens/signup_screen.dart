@@ -1,8 +1,8 @@
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/common/input_decoration.dart';
-import 'package:forestMapApp/notifiers/user_notifier.dart';
-import 'package:forestMapApp/utils/validations.dart';
+import '../core/input_decoration.dart';
+import '../notifiers/user_notifier.dart';
+import '../core/validations.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 

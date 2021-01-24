@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:forestMapApp/services/user.dart';
-import 'package:forestMapApp/utils/notifications.dart';
-import 'package:forestMapApp/models/user.dart';
+import '../services/user.dart';
+import '../core/notifications.dart';
+import '../models/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class UserNotifier extends ChangeNotifier {

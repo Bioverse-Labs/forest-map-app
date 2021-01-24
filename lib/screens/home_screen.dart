@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/notifiers/data_notifier.dart';
-import 'package:forestMapApp/utils/app_navigator.dart';
-import 'package:forestMapApp/utils/camera.dart';
-import 'package:forestMapApp/widgets/home_drawer.dart';
+import '../notifiers/data_notifier.dart';
+import '../core/app_navigator.dart';
+import '../core/camera.dart';
+import '../widgets/home_drawer.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';

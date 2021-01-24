@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:forestMapApp/common/notification.dart';
+
+import 'notification.dart';
 
 class Notifications {
   static void showErrorNotification(

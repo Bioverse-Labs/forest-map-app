@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:forestMapApp/models/user.dart';
-import 'package:forestMapApp/utils/notifications.dart';
+
+import '../core/notifications.dart';
+import '../models/user.dart';
 
 class UserService {
   static Future<User> createUser({

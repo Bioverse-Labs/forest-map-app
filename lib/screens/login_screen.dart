@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:forestMapApp/common/input_decoration.dart';
-import 'package:forestMapApp/notifiers/user_notifier.dart';
-import 'package:forestMapApp/utils/app_navigator.dart';
-import 'package:forestMapApp/utils/validations.dart';
+import '../core/input_decoration.dart';
+import '../notifiers/user_notifier.dart';
+import '../core/app_navigator.dart';
+import '../core/validations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 

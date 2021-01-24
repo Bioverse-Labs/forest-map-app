@@ -1,11 +1,11 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/common/theme.dart';
-import 'package:forestMapApp/notifiers/user_notifier.dart';
-import 'package:forestMapApp/routes.dart';
-import 'package:forestMapApp/services/user.dart';
-import 'package:forestMapApp/utils/app_navigator.dart';
+import 'core/theme.dart';
+import 'notifiers/user_notifier.dart';
+import 'routes.dart';
+import 'services/user.dart';
+import 'core/app_navigator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 

@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:forestMapApp/utils/notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+
+import 'notifications.dart';
 
 class CameraUtils {
   static Future<File> takePicture() async {

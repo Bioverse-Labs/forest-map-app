@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/notifiers/user_notifier.dart';
+import '../notifiers/user_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 
