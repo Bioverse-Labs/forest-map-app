@@ -28,6 +28,7 @@ dependencies:
   connectivity: ^2.0.2
   dartz: ^0.9.2
   equatable: ^1.2.5
+  data_connection_checker: ^0.3.4
 
   # Firebase Deps
   firebase_core: "0.5.3"
