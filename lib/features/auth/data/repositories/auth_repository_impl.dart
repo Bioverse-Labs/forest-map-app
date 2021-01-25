@@ -8,6 +8,8 @@ import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_data_source.dart';
 
+typedef Future<User> _DSExecutor();
+
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource dataSource;
   final NetworkInfo networkInfo;
@@ -18,45 +20,28 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, User>> signInWithEmailAndPassword(
     String email,
     String password,
-  ) async {
-    if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure());
-    }
-
-    try {
-      return Right(
-        await dataSource.signInWithEmailAndPassword(email, password),
-      );
-    } on ServerException catch (error) {
-      return Left(ServerFailure(error.message, error.code, error.origin));
-    }
-  }
+  ) async =>
+      _getUser(() => dataSource.signInWithEmailAndPassword(email, password));
 
   @override
-  Future<Either<Failure, User>> signInWithSocial(SocialLoginType type) async {
-    if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure());
-    }
-
-    try {
-      return Right(await dataSource.signInWithSocial(type));
-    } on ServerException catch (error) {
-      return Left(ServerFailure(error.message, error.code, error.origin));
-    }
-  }
+  Future<Either<Failure, User>> signInWithSocial(SocialLoginType type) async =>
+      _getUser(() => dataSource.signInWithSocial(type));
 
   @override
   Future<Either<Failure, User>> signUp(
     String name,
     String email,
     String password,
-  ) async {
+  ) async =>
+      _getUser(() => dataSource.signUp(name, email, password));
+
+  Future<Either<Failure, User>> _getUser(_DSExecutor dataSourceExecutor) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure());
     }
 
     try {
-      return Right(await dataSource.signUp(name, email, password));
+      return Right(await dataSourceExecutor());
     } on ServerException catch (error) {
       return Left(ServerFailure(error.message, error.code, error.origin));
     }
