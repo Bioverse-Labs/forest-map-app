@@ -1,0 +1,268 @@
+import 'package:dartz/dartz.dart';
+import 'package:faker/faker.dart';
+import 'package:forestMapApp/core/enums/exception_origin_types.dart';
+import 'package:forestMapApp/core/enums/social_login_types.dart';
+import 'package:forestMapApp/core/errors/exceptions.dart';
+import 'package:forestMapApp/core/errors/failure.dart';
+import 'package:forestMapApp/core/platform/network_info.dart';
+import 'package:forestMapApp/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:forestMapApp/features/auth/data/models/user_model.dart';
+import 'package:forestMapApp/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:forestMapApp/features/auth/domain/entities/user.dart';
+import 'package:mockito/mockito.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+class MockRemoteDataSource extends Mock implements AuthRemoteDataSource {}
+
+class MockNetworkInfo extends Mock implements NetworkInfo {}
+
+void main() {
+  AuthRepositoryImpl repository;
+  MockRemoteDataSource dataSource;
+  MockNetworkInfo networkInfo;
+
+  setUp(() {
+    dataSource = MockRemoteDataSource();
+    networkInfo = MockNetworkInfo();
+    repository = AuthRepositoryImpl(dataSource, networkInfo);
+  });
+
+  final userId = faker.guid.guid();
+  final name = faker.person.name();
+  final email = faker.internet.email();
+  final password = faker.internet.password();
+  final avatarUrl = faker.internet.uri('protocol');
+  final errorMessage = faker.randomGenerator.string(10);
+  final errorCode = faker.randomGenerator.string(3);
+  final tUserModel = UserModel(
+    id: userId,
+    name: name,
+    email: email,
+    avatarUrl: avatarUrl,
+  );
+  final User tUser = tUserModel;
+
+  void runTestOnline(Function body) {
+    group('device is online', () {
+      setUp(() {
+        when(networkInfo.isConnected).thenAnswer((_) async => true);
+      });
+
+      body();
+    });
+  }
+
+  void runTestOffline(Function body) {
+    group('device is offline', () {
+      setUp(() {
+        when(networkInfo.isConnected).thenAnswer((_) async => false);
+      });
+
+      body();
+    });
+  }
+
+  group('signInWithEmailAndPassword', () {
+    test('should check if device is online', () async {
+      when(networkInfo.isConnected).thenAnswer((_) async => true);
+
+      repository.signInWithEmailAndPassword(email, password);
+      verify(networkInfo.isConnected);
+    });
+
+    runTestOnline(() {
+      test(
+        'should return UserModel when remote data source is successful',
+        () async {
+          when(dataSource.signInWithEmailAndPassword(any, any))
+              .thenAnswer((_) async => tUserModel);
+
+          final result = await repository.signInWithEmailAndPassword(
+            email,
+            password,
+          );
+
+          verify(dataSource.signInWithEmailAndPassword(email, password));
+          expect(result, equals(Right(tUser)));
+        },
+      );
+
+      test(
+        'should return ServerFailure when remote data source is unsuccessful',
+        () async {
+          when(dataSource.signInWithEmailAndPassword(any, any)).thenThrow(
+            ServerException(
+              errorMessage,
+              errorCode,
+              ExceptionOriginTypes.test,
+            ),
+          );
+
+          final result =
+              await repository.signInWithEmailAndPassword(email, password);
+
+          verify(dataSource.signInWithEmailAndPassword(email, password));
+          expect(
+            result,
+            equals(
+              Left(
+                ServerFailure(
+                  errorMessage,
+                  errorCode,
+                  ExceptionOriginTypes.test,
+                ),
+              ),
+            ),
+          );
+          verifyNoMoreInteractions(dataSource);
+        },
+      );
+    });
+
+    runTestOffline(() {
+      test('should return NoInternetFailure when device is offline', () async {
+        final result =
+            await repository.signInWithEmailAndPassword(email, password);
+
+        verifyNever(dataSource.signInWithEmailAndPassword(email, password));
+        expect(
+          result,
+          equals(Left(NoInternetFailure())),
+        );
+      });
+    });
+  });
+
+  group('signInWithSocial', () {
+    test('should check if device is online', () async {
+      when(networkInfo.isConnected).thenAnswer((_) async => true);
+
+      repository.signInWithSocial(SocialLoginType.facebook);
+      verify(networkInfo.isConnected);
+    });
+
+    runTestOnline(() {
+      test(
+        'should return UserModel when remote data source is successful',
+        () async {
+          when(dataSource.signInWithSocial(any))
+              .thenAnswer((_) async => tUserModel);
+
+          final result =
+              await repository.signInWithSocial(SocialLoginType.facebook);
+
+          verify(dataSource.signInWithSocial(SocialLoginType.facebook));
+          expect(result, equals(Right(tUser)));
+        },
+      );
+
+      test(
+        'should return ServerFailure when remote data source is unsuccessful',
+        () async {
+          when(dataSource.signInWithSocial(any)).thenThrow(
+            ServerException(
+              errorMessage,
+              errorCode,
+              ExceptionOriginTypes.test,
+            ),
+          );
+
+          final result =
+              await repository.signInWithSocial(SocialLoginType.google);
+
+          verify(dataSource.signInWithSocial(SocialLoginType.google));
+          expect(
+            result,
+            equals(
+              Left(
+                ServerFailure(
+                  errorMessage,
+                  errorCode,
+                  ExceptionOriginTypes.test,
+                ),
+              ),
+            ),
+          );
+          verifyNoMoreInteractions(dataSource);
+        },
+      );
+    });
+
+    runTestOffline(() {
+      test(
+        'should return NoInternetFailure when device is offline',
+        () async {
+          final result =
+              await repository.signInWithSocial(SocialLoginType.facebook);
+
+          expect(result, equals(Left(NoInternetFailure())));
+        },
+      );
+    });
+  });
+
+  group('signUp', () {
+    test('should check if device is online', () async {
+      when(networkInfo.isConnected).thenAnswer((_) async => true);
+
+      repository.signUp(name, email, password);
+      verify(networkInfo.isConnected);
+    });
+
+    runTestOnline(() {
+      test(
+        'should return UserModel when remote data source is successful',
+        () async {
+          when(dataSource.signUp(any, any, any))
+              .thenAnswer((_) async => tUserModel);
+
+          final result = await repository.signUp(name, email, password);
+
+          verify(dataSource.signUp(name, email, password));
+          expect(result, equals(Right(tUser)));
+        },
+      );
+
+      test(
+        'should return ServerFailure when remote data source is unsuccessful',
+        () async {
+          when(dataSource.signUp(any, any, any)).thenThrow(
+            ServerException(
+              errorMessage,
+              errorCode,
+              ExceptionOriginTypes.test,
+            ),
+          );
+
+          final result = await repository.signUp(name, email, password);
+
+          verify(dataSource.signUp(name, email, password));
+          expect(
+            result,
+            equals(
+              Left(
+                ServerFailure(
+                  errorMessage,
+                  errorCode,
+                  ExceptionOriginTypes.test,
+                ),
+              ),
+            ),
+          );
+          verifyNoMoreInteractions(dataSource);
+        },
+      );
+    });
+
+    runTestOffline(() {
+      test(
+        'should return NoInternetFailure when device is offline',
+        () async {
+          final result = await repository.signUp(name, email, password);
+
+          expect(result, equals(Left(NoInternetFailure())));
+        },
+      );
+    });
+  });
+}
