@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:forestMapApp/core/adapters/firebase_auth_adapter.dart';
+import 'package:forestMapApp/core/adapters/firestore_adapter.dart';
 import 'package:forestMapApp/core/enums/exception_origin_types.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -41,10 +43,10 @@ abstract class AuthRemoteDataSource {
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final FirebaseAuth firebaseAuth;
-  final FirebaseFirestore firebaseFirestore;
+  final FirestoreAdapter firestoreAdapter;
+  final FirebaseAuthAdapter firebaseAuthAdapter;
 
-  AuthRemoteDataSourceImpl(this.firebaseAuth, this.firebaseFirestore);
+  AuthRemoteDataSourceImpl(this.firestoreAdapter, this.firebaseAuthAdapter);
 
   @override
   Future<UserModel> signInWithEmailAndPassword(
@@ -52,16 +54,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     String password,
   ) async {
     try {
-      final credential = await firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final authResult =
+          await firebaseAuthAdapter.signInWithEmailAndPassword(email, password);
 
-      final userId = credential.user.uid;
-      final snapshot =
-          await firebaseFirestore.collection('users').doc(userId).get();
+      final docSnapshot =
+          await firestoreAdapter.getDocument('users/${authResult.id}');
 
-      if (!snapshot.exists) {
+      if (!docSnapshot.exists) {
         throw ServerException(
           'database-exceptions.get-error'.tr(),
           '404',
@@ -69,7 +68,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      final model = UserModel.fromMap(snapshot.data());
+      final model = UserModel.fromMap(docSnapshot.data());
       return model;
     } on FirebaseAuthException catch (error) {
       throw getServerExceptionFromFirebaseAuth(error);
