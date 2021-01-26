@@ -1,6 +1,6 @@
 enum ExceptionOriginTypes {
   firebaseAuth,
-  firebaseDatabase,
+  firebaseFirestore,
   platform,
   hive,
   test,

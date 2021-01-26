@@ -5,6 +5,18 @@
     "phone": "Celular",
     "password": "Senha"
   },
+  "generic-exception": "Ops... alguma coisa deu errado",
+  "database-exceptions": {
+    "get-error": "Ops... ocorreu uma falha durante a leitura de dados",
+    "update-error": "Ops... ocorreu uma falha durante a atualização de dados",
+    "deletion-error": "Ops... ocorreu uma falha durante a remoção de dados"
+  },
+  "auth-exceptions": {
+    "invalid-email": "Por favor digite um e-mail valido!",
+    "user-disabled": "Ops... essa conta está temporariamente desativada, por favor entre em contato como nosso suporte.",
+    "user-not-found": "Ops... não encontramos nenhum conta cadastrada com esse endereço de email",
+    "wrong-password": "Email ou senha incorretos..."
+  },
   "input-validations": {
     "required": "Esse campo é obrigatório!",
     "invalid-email": "Por favor digite um e-mail valido!",

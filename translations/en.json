@@ -5,6 +5,18 @@
     "phone": "Phone",
     "password": "Password"
   },
+  "generic-exception": "Ops... something went wrong",
+  "database-exceptions": {
+    "get-error": "Ops... failed to get data from database",
+    "update-error": "Ops... failed to update data in database",
+    "deletion-error": "Ops... failed to delete data from database"
+  },
+  "auth-exceptions": {
+    "invalid-email": "Please input an valid email!",
+    "user-disabled": "Sorry but this user account is disabled, please contact our support",
+    "user-not-found": "Sorry but we don't have any user with this email address in our base",
+    "wrong-password": "Password or email incorrect"
+  },
   "input-validations": {
     "required": "This field is required!",
     "invalid-email": "Please input an valid email!",

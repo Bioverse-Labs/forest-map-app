@@ -1,6 +1,8 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/core/adapters/firestore_adapter.dart';
 import 'core/theme.dart';
 import 'notifiers/user_notifier.dart';
 import 'routes.dart';

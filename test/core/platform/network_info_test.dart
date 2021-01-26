@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:forestMapApp/core/platform/network_info.dart';
 import 'package:mockito/mockito.dart';
