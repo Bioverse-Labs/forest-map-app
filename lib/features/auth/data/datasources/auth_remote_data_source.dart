@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:forestMapApp/core/adapters/firebase_auth_adapter.dart';
-import 'package:forestMapApp/core/adapters/firestore_adapter.dart';
-import 'package:forestMapApp/core/enums/exception_origin_types.dart';
-import 'package:easy_localization/easy_localization.dart';
 
+import '../../../../core/adapters/firebase_auth_adapter.dart';
+import '../../../../core/adapters/firestore_adapter.dart';
+import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/enums/social_login_types.dart';
 import '../../../../core/errors/exceptions.dart';
+import '../../../../core/util/localized_string.dart';
 import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -45,8 +45,13 @@ abstract class AuthRemoteDataSource {
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirestoreAdapter firestoreAdapter;
   final FirebaseAuthAdapter firebaseAuthAdapter;
+  final LocalizedString localizedString;
 
-  AuthRemoteDataSourceImpl(this.firestoreAdapter, this.firebaseAuthAdapter);
+  AuthRemoteDataSourceImpl(
+    this.firestoreAdapter,
+    this.firebaseAuthAdapter,
+    this.localizedString,
+  );
 
   @override
   Future<UserModel> signInWithEmailAndPassword(
@@ -62,7 +67,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       if (!docSnapshot.exists) {
         throw ServerException(
-          'database-exceptions.get-error'.tr(),
+          localizedString.getLocalizedString('database-exceptions.get-error'),
           '404',
           ExceptionOriginTypes.firebaseFirestore,
         );
@@ -71,16 +76,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final model = UserModel.fromMap(docSnapshot.data());
       return model;
     } on FirebaseAuthException catch (error) {
-      throw getServerExceptionFromFirebaseAuth(error);
+      throw getServerExceptionFromFirebaseAuth(error, localizedString);
     } on FirebaseException catch (error) {
       throw ServerException(
-        'database-exceptions.get-error'.tr(),
+        localizedString.getLocalizedString('database-exceptions.get-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
       );
     } catch (error) {
       throw ServerException(
-        'generic-exception'.tr(),
+        localizedString.getLocalizedString('generic-exception'),
         'generic-error',
         ExceptionOriginTypes.firebaseFirestore,
       );
@@ -88,14 +93,76 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<UserModel> signInWithSocial(SocialLoginType type) {
-    // TODO: implement signInWithSocial
-    throw UnimplementedError();
+  Future<UserModel> signInWithSocial(SocialLoginType type) async {
+    try {
+      AuthCredential credential;
+      if (type == SocialLoginType.facebook) {
+        credential = await firebaseAuthAdapter.getFacebookAuthCredential();
+      } else {
+        credential = await firebaseAuthAdapter.getGoogleAuthCredential();
+      }
+
+      final authResult =
+          await firebaseAuthAdapter.signInWithCredential(credential);
+
+      final docSnapshot =
+          await firestoreAdapter.getDocument('users/${authResult.id}');
+
+      if (!docSnapshot.exists) {
+        await firestoreAdapter.addDocument(
+          'users/${authResult.id}',
+          authResult.toMap(),
+        );
+      }
+
+      final model = UserModel.fromMap(docSnapshot.data());
+      return model;
+    } on FirebaseAuthException catch (error) {
+      throw getServerExceptionFromFirebaseAuth(error, localizedString);
+    } on FirebaseException catch (error) {
+      throw ServerException(
+        localizedString.getLocalizedString('database-exceptions.get-error'),
+        error.code,
+        ExceptionOriginTypes.firebaseFirestore,
+      );
+    } catch (error) {
+      throw ServerException(
+        localizedString.getLocalizedString('generic-exception'),
+        'generic-error',
+        ExceptionOriginTypes.firebaseFirestore,
+      );
+    }
   }
 
   @override
-  Future<UserModel> signUp(String name, String email, String password) {
-    // TODO: implement signUp
-    throw UnimplementedError();
+  Future<UserModel> signUp(String name, String email, String password) async {
+    try {
+      final authResult = await firebaseAuthAdapter
+          .signUpUserWithEmailAndPassword(email, password);
+
+      final payload = authResult.toMap();
+      payload['name'] = name;
+
+      await firestoreAdapter.addDocument(
+        'users/${authResult.id}',
+        payload,
+      );
+
+      return authResult;
+    } on FirebaseAuthException catch (error) {
+      throw getServerExceptionFromFirebaseAuth(error, localizedString);
+    } on FirebaseException catch (error) {
+      throw ServerException(
+        localizedString.getLocalizedString('database-exceptions.get-error'),
+        error.code,
+        ExceptionOriginTypes.firebaseFirestore,
+      );
+    } catch (error) {
+      throw ServerException(
+        localizedString.getLocalizedString('generic-exception'),
+        'generic-error',
+        ExceptionOriginTypes.firebaseFirestore,
+      );
+    }
   }
 }
