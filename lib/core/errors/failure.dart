@@ -38,3 +38,7 @@ class LocalFailure extends Failure {
 }
 
 class NoInternetFailure extends Failure {}
+
+class CameraCancelFailure extends Failure {}
+
+class CameraFailure extends Failure {}

@@ -12,8 +12,7 @@ class User extends Equatable {
     @required this.name,
     this.email,
     this.avatarUrl,
-  })  : assert(id != null),
-        assert(name != null);
+  });
 
   @override
   List<Object> get props => [id, name, email, avatarUrl];

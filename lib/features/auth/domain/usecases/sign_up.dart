@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
@@ -16,10 +17,13 @@ class SignUp implements UseCase<User, SignUpParams> {
   }
 }
 
-class SignUpParams {
+class SignUpParams extends Equatable {
   final String name;
   final String email;
   final String password;
 
   SignUpParams(this.name, this.email, this.password);
+
+  @override
+  List<Object> get props => [name, email, password];
 }
