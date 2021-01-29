@@ -21,6 +21,18 @@ class CodegenLoader extends AssetLoader{
     "phone": "Phone",
     "password": "Password"
   },
+  "generic-exception": "Ops... something went wrong",
+  "database-exceptions": {
+    "get-error": "Ops... failed to get data from database",
+    "update-error": "Ops... failed to update data in database",
+    "deletion-error": "Ops... failed to delete data from database"
+  },
+  "auth-exceptions": {
+    "invalid-email": "Please input an valid email!",
+    "user-disabled": "Sorry but this user account is disabled, please contact our support",
+    "user-not-found": "Sorry but we don't have any user with this email address in our base",
+    "wrong-password": "Password or email incorrect"
+  },
   "input-validations": {
     "required": "This field is required!",
     "invalid-email": "Please input an valid email!",
@@ -60,6 +72,18 @@ static const Map<String,dynamic> pt_BR = {
     "email": "E-mail",
     "phone": "Celular",
     "password": "Senha"
+  },
+  "generic-exception": "Ops... alguma coisa deu errado",
+  "database-exceptions": {
+    "get-error": "Ops... ocorreu uma falha durante a leitura de dados",
+    "update-error": "Ops... ocorreu uma falha durante a atualização de dados",
+    "deletion-error": "Ops... ocorreu uma falha durante a remoção de dados"
+  },
+  "auth-exceptions": {
+    "invalid-email": "Por favor digite um e-mail valido!",
+    "user-disabled": "Ops... essa conta está temporariamente desativada, por favor entre em contato como nosso suporte.",
+    "user-not-found": "Ops... não encontramos nenhum conta cadastrada com esse endereço de email",
+    "wrong-password": "Email ou senha incorretos..."
   },
   "input-validations": {
     "required": "Esse campo é obrigatório!",
