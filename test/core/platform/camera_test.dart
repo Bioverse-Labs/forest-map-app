@@ -10,8 +10,6 @@ import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:path/path.dart' as path;
-import 'package:http/http.dart' as httpClient;
 
 import '../util/get_path.dart';
 
@@ -34,23 +32,13 @@ void main() {
     cameraImpl = CameraImpl(mockImagePicker, mockImageUtils);
   });
 
-  final tImageUrl = faker.image.image(
-    width: 648,
-    height: 480,
-    keywords: ['tree', 'forest'],
-  );
   final tPath = getTestPath('test/core/platform/test_file.jpeg');
   final tFile = File(tPath);
   final tSize = Size(648, 480);
-  Image tImage;
+  final tImage = decodeImage(tFile.readAsBytesSync());
 
   group('takePicture', () {
     setUp(() async {
-      final imageResp = await httpClient.get(tImageUrl, headers: {
-        'Content-Type': 'image/jpeg',
-      });
-      tImage = decodeImage(imageResp.bodyBytes);
-      tFile.writeAsBytesSync(imageResp.bodyBytes);
       when(mockPickedFile.path).thenReturn(tPath);
       when(mockImageUtils.pathToFile(any)).thenReturn(tFile);
       when(mockImageUtils.fileToImage(any)).thenReturn(tImage);

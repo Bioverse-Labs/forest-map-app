@@ -1,32 +1,20 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:forestMapApp/core/util/image.dart';
 import 'package:image/image.dart';
-import 'package:http/http.dart' as httpClient;
 
 import 'get_path.dart';
 
 void main() {
-  final tImageUrl = faker.image.image(
-    width: 648,
-    height: 480,
-    keywords: ['tree', 'forest'],
-  );
   final tSize = Size(648, 480);
-  ImageUtilsImpl imageUtilsImpl;
-  Image tImage;
   final tPath = getTestPath('test/core/util/test_file.jpeg');
   final tFile = File(tPath);
+  final tImage = decodeImage(tFile.readAsBytesSync());
+  ImageUtilsImpl imageUtilsImpl;
 
   setUp(() async {
-    final imageResp = await httpClient.get(tImageUrl, headers: {
-      'Content-Type': 'image/jpeg',
-    });
-    tImage = decodeImage(imageResp.bodyBytes);
-    tFile.writeAsBytesSync(imageResp.bodyBytes);
     imageUtilsImpl = ImageUtilsImpl();
   });
 
