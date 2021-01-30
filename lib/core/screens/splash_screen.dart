@@ -8,6 +8,7 @@ class SplashScreen extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: double.infinity,
+      color: Colors.white,
       child: Center(
         child: Image.asset('assets/bioverse.png'),
       ),

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:dartz/dartz.dart';
-import 'package:faker/faker.dart';
 import 'package:forestMapApp/core/errors/failure.dart';
 import 'package:forestMapApp/core/platform/camera.dart';
 import 'package:forestMapApp/core/util/image.dart';

@@ -1,8 +1,8 @@
 import 'package:bot_toast/bot_toast.dart';
 
-import 'notification.dart';
+import '../widgets/notification.dart';
 
-class Notifications {
+class NotificationsUtils {
   static void showErrorNotification(
     String message, {
     Duration duration = const Duration(seconds: 3),

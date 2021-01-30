@@ -42,3 +42,9 @@ class NoInternetFailure extends Failure {}
 class CameraCancelFailure extends Failure {}
 
 class CameraFailure extends Failure {}
+
+class LocationFailure extends Failure {
+  final String message;
+
+  LocationFailure(this.message) : super([message]);
+}
