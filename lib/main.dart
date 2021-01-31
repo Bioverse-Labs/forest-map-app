@@ -1,31 +1,31 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/app.dart';
-import 'package:forestMapApp/generated/codegen_loader.g.dart';
-import 'package:forestMapApp/notifiers/data_notifier.dart';
-import 'package:forestMapApp/notifiers/user_notifier.dart';
-import 'package:forestMapApp/screens/splash_screen.dart';
-import 'package:forestMapApp/utils/register_hive_adapters.dart';
-import 'package:forestMapApp/utils/register_singletons.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:provider/provider.dart';
+
+import 'core/config/app_config.dart';
+import 'core/config/app_notifier.dart';
+import 'core/widgets/app.dart';
+import 'generated/codegen_loader.g.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(ForestMap());
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({Key key}) : super(key: key);
+class ForestMap extends StatelessWidget {
+  const ForestMap({Key key}) : super(key: key);
 
   Future<void> _initApp() async {
-    await Firebase.initializeApp();
-    await Hive.initFlutter();
-    registerHiveAdapters();
-    registerSingletons();
+    await AppConfig.initEssentialServices();
+    AppConfig.registerHiveAdapters();
+    AppConfig.registerUtils();
+    AppConfig.registerPlatformServices();
+    AppConfig.registerStyles();
+    AppConfig.registerNavigation();
+    AppConfig.registerAdapters();
+    AppConfig.registerDatasources();
+    AppConfig.registerRepositories();
+    AppConfig.registerUseCases();
+    AppConfig.registerNotifiers();
   }
 
   @override
@@ -33,22 +33,13 @@ class MyApp extends StatelessWidget {
     return EasyLocalization(
       child: FutureBuilder(
         future: _initApp(),
-        builder: (context, snapshot) {
+        builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return SplashScreen();
+            return Container();
           }
 
-          return MultiProvider(
-            providers: [
-              ChangeNotifierProvider<UserNotifier>(
-                create: (_) =>
-                    UserNotifier(firebaseAuth: FirebaseAuth.instance),
-              ),
-              ChangeNotifierProvider<DataNotifier>(
-                create: (_) => DataNotifier(),
-              ),
-            ],
-            child: App(),
+          return AppNotifier(
+            widget: App(),
           );
         },
       ),
