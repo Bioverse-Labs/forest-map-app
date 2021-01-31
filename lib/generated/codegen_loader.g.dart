@@ -31,6 +31,7 @@ class CodegenLoader extends AssetLoader{
     "invalid-email": "Please input an valid email!",
     "user-disabled": "Sorry but this user account is disabled, please contact our support",
     "user-not-found": "Sorry but we don't have any user with this email address in our base",
+    "email-in-use": "Sorry but we already have an account registered with this email",
     "wrong-password": "Password or email incorrect"
   },
   "input-validations": {
@@ -83,6 +84,7 @@ static const Map<String,dynamic> pt_BR = {
     "invalid-email": "Por favor digite um e-mail valido!",
     "user-disabled": "Ops... essa conta está temporariamente desativada, por favor entre em contato como nosso suporte.",
     "user-not-found": "Ops... não encontramos nenhum conta cadastrada com esse endereço de email",
+    "email-in-use": "Ops.. esse endereço de email já está cadastrado em outra conta",
     "wrong-password": "Email ou senha incorretos..."
   },
   "input-validations": {

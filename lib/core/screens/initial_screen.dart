@@ -1,40 +1,39 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/adapters/firebase_auth_adapter.dart';
-import 'package:get_it/get_it.dart';
+
+import '../adapters/firebase_auth_adapter.dart';
+import '../navigation/app_navigator.dart';
+import 'splash_screen.dart';
 
 class InitialScreen extends StatelessWidget {
-  final _firebaseAuthAdapter = GetIt.I<FirebaseAuthAdapterImpl>();
+  final FirebaseAuthAdapterImpl firebaseAuthAdapterImpl;
+  final AppNavigator appNavigator;
 
-  InitialScreen({Key key}) : super(key: key);
+  InitialScreen({
+    Key key,
+    @required this.firebaseAuthAdapterImpl,
+    @required this.appNavigator,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User>(
-      stream: _firebaseAuthAdapter.firebaseAuth.authStateChanges(),
+      stream: firebaseAuthAdapterImpl.firebaseAuth.authStateChanges(),
       builder: (ctx, snapshot) {
-        print(snapshot.connectionState);
-        print(snapshot.data);
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.white,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
+        if (snapshot.connectionState == ConnectionState.active) {
+          Future.delayed(
+            const Duration(milliseconds: 300),
+            () {
+              if (snapshot.data == null) {
+                appNavigator.pushAndReplace('/signIn');
+              } else {
+                appNavigator.pushAndReplace('/home');
+              }
+            },
           );
         }
 
-        return Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: Colors.white,
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
+        return SplashScreen();
       },
     );
   }

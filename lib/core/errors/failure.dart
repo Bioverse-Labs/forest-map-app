@@ -15,12 +15,14 @@ class ServerFailure extends Failure {
   final String message;
   final String code;
   final ExceptionOriginTypes origin;
+  final StackTrace stackTrace;
 
-  ServerFailure(this.message, this.code, this.origin)
+  ServerFailure(this.message, this.code, this.origin, {this.stackTrace})
       : super([
           message,
           code,
           origin,
+          stackTrace,
         ]);
 }
 

@@ -109,9 +109,9 @@ class AppConfig {
 
     GetIt.I.registerLazySingleton<AuthRemoteDataSourceImpl>(
       () => AuthRemoteDataSourceImpl(
-        GetIt.I(),
-        GetIt.I(),
-        GetIt.I(),
+        GetIt.I<FirestoreAdapterImpl>(),
+        GetIt.I<FirebaseAuthAdapterImpl>(),
+        GetIt.I<LocalizedStringImpl>(),
       ),
     );
   }
@@ -119,8 +119,8 @@ class AppConfig {
   static void registerRepositories() {
     GetIt.I.registerLazySingleton<AuthRepositoryImpl>(
       () => AuthRepositoryImpl(
-        GetIt.I(),
-        GetIt.I(),
+        GetIt.I<AuthRemoteDataSourceImpl>(),
+        GetIt.I<NetworkInfoImpl>(),
       ),
     );
   }
@@ -130,19 +130,19 @@ class AppConfig {
   static void registerUseCases() {
     GetIt.I.registerLazySingleton<SignInWithEmailAndPassword>(
       () => SignInWithEmailAndPassword(
-        GetIt.I(),
+        GetIt.I<AuthRepositoryImpl>(),
       ),
     );
 
     GetIt.I.registerLazySingleton<SignInWithSocial>(
       () => SignInWithSocial(
-        GetIt.I(),
+        GetIt.I<AuthRepositoryImpl>(),
       ),
     );
 
     GetIt.I.registerLazySingleton<SignUp>(
       () => SignUp(
-        GetIt.I(),
+        GetIt.I<AuthRepositoryImpl>(),
       ),
     );
   }

@@ -69,9 +69,9 @@ class FirebaseAuthAdapterImpl implements FirebaseAuthAdapter {
 
     return UserModel(
       id: result.user.uid,
-      name: result.user.displayName,
-      email: result.user.email,
-      avatarUrl: result.user.photoURL,
+      name: result.user.displayName ?? '',
+      email: result.user.email ?? '',
+      avatarUrl: result.user.photoURL ?? '',
     );
   }
 
@@ -87,9 +87,9 @@ class FirebaseAuthAdapterImpl implements FirebaseAuthAdapter {
 
     return UserModel(
       id: result.user.uid,
-      name: result.user.displayName,
-      email: result.user.email,
-      avatarUrl: result.user.photoURL,
+      name: result.user.displayName ?? '',
+      email: result.user.email ?? '',
+      avatarUrl: result.user.photoURL ?? '',
     );
   }
 }

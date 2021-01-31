@@ -44,13 +44,14 @@ class NotificationWidget extends StatelessWidget {
         color: backgroundColor,
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(icon, color: textColor),
               SizedBox(width: 8),
-              Flexible(
+              Expanded(
+                flex: 1,
                 child: Text(
                   message,
                   style: TextStyle(color: textColor, fontSize: 18),
@@ -60,7 +61,7 @@ class NotificationWidget extends StatelessWidget {
               GestureDetector(
                 onTap: onCancel,
                 child: Icon(Icons.close, color: textColor),
-              )
+              ),
             ],
           ),
         ),

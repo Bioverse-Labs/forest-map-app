@@ -82,12 +82,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         localizedString.getLocalizedString('database-exceptions.get-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
+        stackTrace: error.stackTrace,
       );
     } catch (error) {
       throw ServerException(
         localizedString.getLocalizedString('generic-exception'),
         'generic-error',
         ExceptionOriginTypes.firebaseFirestore,
+        stackTrace: error.stackTrace,
       );
     }
   }
@@ -156,12 +158,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         localizedString.getLocalizedString('database-exceptions.get-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
+        stackTrace: error.stackTrace,
       );
     } catch (error) {
       throw ServerException(
         localizedString.getLocalizedString('generic-exception'),
         'generic-error',
         ExceptionOriginTypes.firebaseFirestore,
+        stackTrace: error.stackTrace,
       );
     }
   }

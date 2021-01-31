@@ -14,7 +14,7 @@ class AppNotifier extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthNotifierImpl>(
-          create: (_) => GetIt.I<AuthNotifier>(),
+          create: (_) => GetIt.I(),
         )
       ],
       child: widget,

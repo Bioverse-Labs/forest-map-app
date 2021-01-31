@@ -43,7 +43,12 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       return Right(await dataSourceExecutor());
     } on ServerException catch (error) {
-      return Left(ServerFailure(error.message, error.code, error.origin));
+      return Left(ServerFailure(
+        error.message,
+        error.code,
+        error.origin,
+        stackTrace: error.stackTrace,
+      ));
     }
   }
 }

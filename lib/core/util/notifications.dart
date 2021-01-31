@@ -3,7 +3,7 @@ import 'package:bot_toast/bot_toast.dart';
 import '../widgets/notification.dart';
 
 class NotificationsUtils {
-  static void showErrorNotification(
+  void showErrorNotification(
     String message, {
     Duration duration = const Duration(seconds: 3),
   }) {
@@ -15,7 +15,7 @@ class NotificationsUtils {
     );
   }
 
-  static void showSuccessNotification(
+  void showSuccessNotification(
     String message, {
     Duration duration = const Duration(seconds: 3),
   }) {

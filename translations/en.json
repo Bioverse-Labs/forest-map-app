@@ -15,6 +15,7 @@
     "invalid-email": "Please input an valid email!",
     "user-disabled": "Sorry but this user account is disabled, please contact our support",
     "user-not-found": "Sorry but we don't have any user with this email address in our base",
+    "email-in-use": "Sorry but we already have an account registered with this email",
     "wrong-password": "Password or email incorrect"
   },
   "input-validations": {
