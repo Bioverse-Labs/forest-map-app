@@ -1,14 +1,14 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../errors/failure.dart';
+import '../enums/exception_origin_types.dart';
+import '../errors/exceptions.dart';
 import '../util/localized_string.dart';
 
 abstract class LocationUtils {
-  Future<Either<Failure, bool>> checkLocationPermission();
-  Future<Either<Failure, Position>> getCurrentPosition(bool hasPermission);
-  Future<Either<Failure, Position>> getLastKnowPosition(bool hasPermission);
+  Future<bool> checkLocationPermission();
+  Future<Position> getCurrentPosition(bool hasPermission);
+  Future<Position> getLastKnowPosition(bool hasPermission);
   Future<bool> get isServiceEnabled;
 }
 
@@ -18,112 +18,124 @@ class LocationUtilsImpl implements LocationUtils {
   LocationUtilsImpl(this.localizedString);
 
   @override
-  Future<Either<Failure, Position>> getLastKnowPosition(
+  Future<Position> getLastKnowPosition(
     bool hasPermission,
   ) async {
     try {
       final hasAccess = await checkLocationPermission();
 
-      return hasAccess.fold(
-        (failure) => Left(failure),
-        (_) async {
-          final position = await Geolocator.getLastKnownPosition(
-            forceAndroidLocationManager: true,
-          );
-          return Right(position);
-        },
+      if (hasAccess) {
+        final position = await Geolocator.getLastKnownPosition(
+          forceAndroidLocationManager: true,
+        );
+        return position;
+      }
+
+      return null;
+    } on PlatformException catch (error) {
+      throw LocalException(
+        error.message,
+        error.code,
+        ExceptionOriginTypes.platform,
+        stackTrace: StackTrace.fromString(error.stacktrace),
       );
-    } on PlatformException catch (err) {
-      return Left(LocationFailure(
-        err.message,
-        true,
-        true,
-      ));
-    } catch (err) {
-      return Left(LocationFailure(
-        err.toString(),
-        true,
-        true,
-      ));
+    } catch (error) {
+      throw LocalException(
+        error?.toString(),
+        error?.code,
+        ExceptionOriginTypes.platform,
+        stackTrace: StackTrace.fromString(error?.stacktrace),
+      );
     }
   }
 
   @override
-  Future<Either<Failure, bool>> checkLocationPermission() async {
-    if (!await isServiceEnabled) {
-      return Left(
-        LocationFailure(
+  Future<bool> checkLocationPermission() async {
+    try {
+      if (!await isServiceEnabled) {
+        throw LocationException(
           localizedString.getLocalizedString(
             'location-permission.disabled',
           ),
-          true,
           false,
-        ),
-      );
-    }
+          false,
+        );
+      }
 
-    LocationPermission permission = await Geolocator.checkPermission();
+      LocationPermission permission = await Geolocator.checkPermission();
 
-    if (permission == LocationPermission.deniedForever) {
-      return Left(
-        LocationFailure(
+      if (permission == LocationPermission.deniedForever) {
+        throw LocationException(
           localizedString.getLocalizedString(
             'location-permission.denied-permantly',
           ),
           false,
           true,
-        ),
-      );
-    }
+        );
+      }
 
-    if (permission == LocationPermission.denied) {
-      return Left(
-        LocationFailure(
+      if (permission == LocationPermission.denied) {
+        throw LocationException(
           localizedString.getLocalizedString(
             'location-permission.denied',
           ),
           false,
           true,
-        ),
+        );
+      }
+
+      if (permission == LocationPermission.always ||
+          permission == LocationPermission.whileInUse) {
+        return true;
+      }
+
+      return true;
+    } on PlatformException catch (error) {
+      throw LocalException(
+        error.message,
+        error.code,
+        ExceptionOriginTypes.platform,
+        stackTrace: StackTrace.fromString(error.stacktrace),
+      );
+    } catch (error) {
+      throw LocalException(
+        error?.toString(),
+        error?.code,
+        ExceptionOriginTypes.platform,
+        stackTrace: StackTrace.fromString(error?.stacktrace),
       );
     }
-
-    if (permission == LocationPermission.always ||
-        permission == LocationPermission.whileInUse) {
-      return Right(true);
-    }
-
-    return Right(false);
   }
 
   @override
-  Future<Either<Failure, Position>> getCurrentPosition(
+  Future<Position> getCurrentPosition(
     bool hasPermission,
   ) async {
     try {
       final hasAccess = await checkLocationPermission();
-      return hasAccess.fold(
-        (failure) => Left(failure),
-        (_) async {
-          final position = await Geolocator.getCurrentPosition(
-            forceAndroidLocationManager: true,
-          );
+      if (hasAccess) {
+        final position = await Geolocator.getCurrentPosition(
+          forceAndroidLocationManager: true,
+        );
 
-          return Right(position);
-        },
+        return position;
+      }
+
+      return null;
+    } on PlatformException catch (error) {
+      throw LocalException(
+        error.message,
+        error.code,
+        ExceptionOriginTypes.platform,
+        stackTrace: StackTrace.fromString(error.stacktrace),
       );
-    } on PlatformException catch (err) {
-      return Left(LocationFailure(
-        err.message,
-        true,
-        true,
-      ));
-    } catch (err) {
-      return Left(LocationFailure(
-        err.toString(),
-        true,
-        true,
-      ));
+    } catch (error) {
+      throw LocalException(
+        error?.toString(),
+        error?.code,
+        ExceptionOriginTypes.platform,
+        stackTrace: StackTrace.fromString(error?.stacktrace),
+      );
     }
   }
 
