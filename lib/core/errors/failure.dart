@@ -30,12 +30,14 @@ class LocalFailure extends Failure {
   final String message;
   final String code;
   final ExceptionOriginTypes origin;
+  final StackTrace stackTrace;
 
-  LocalFailure(this.message, this.code, this.origin)
+  LocalFailure(this.message, this.code, this.origin, {this.stackTrace})
       : super([
           message,
           code,
           origin,
+          stackTrace,
         ]);
 }
 
@@ -47,6 +49,16 @@ class CameraFailure extends Failure {}
 
 class LocationFailure extends Failure {
   final String message;
+  final bool hasPermission;
+  final bool isGPSEnabled;
+  final StackTrace stackTrace;
 
-  LocationFailure(this.message) : super([message]);
+  LocationFailure(this.message, this.hasPermission, this.isGPSEnabled,
+      {this.stackTrace})
+      : super([
+          message,
+          hasPermission,
+          isGPSEnabled,
+          stackTrace,
+        ]);
 }

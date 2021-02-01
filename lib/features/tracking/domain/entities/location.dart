@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 class Location extends Equatable {
+  final String id;
   final double lat;
   final double lng;
   final DateTime timestamp;
@@ -13,6 +14,7 @@ class Location extends Equatable {
   final double speedAccuracy;
 
   Location({
+    @required this.id,
     @required this.lat,
     @required this.lng,
     @required this.timestamp,

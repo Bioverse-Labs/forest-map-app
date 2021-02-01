@@ -34,9 +34,17 @@ class LocationUtilsImpl implements LocationUtils {
         },
       );
     } on PlatformException catch (err) {
-      return Left(LocationFailure(err.message));
+      return Left(LocationFailure(
+        err.message,
+        true,
+        true,
+      ));
     } catch (err) {
-      return Left(LocationFailure(err.toString()));
+      return Left(LocationFailure(
+        err.toString(),
+        true,
+        true,
+      ));
     }
   }
 
@@ -44,9 +52,13 @@ class LocationUtilsImpl implements LocationUtils {
   Future<Either<Failure, bool>> checkLocationPermission() async {
     if (!await isServiceEnabled) {
       return Left(
-        LocationFailure(localizedString.getLocalizedString(
-          'location-permission.disabled',
-        )),
+        LocationFailure(
+          localizedString.getLocalizedString(
+            'location-permission.disabled',
+          ),
+          true,
+          false,
+        ),
       );
     }
 
@@ -54,17 +66,25 @@ class LocationUtilsImpl implements LocationUtils {
 
     if (permission == LocationPermission.deniedForever) {
       return Left(
-        LocationFailure(localizedString.getLocalizedString(
-          'location-permission.denied-permantly',
-        )),
+        LocationFailure(
+          localizedString.getLocalizedString(
+            'location-permission.denied-permantly',
+          ),
+          false,
+          true,
+        ),
       );
     }
 
     if (permission == LocationPermission.denied) {
       return Left(
-        LocationFailure(localizedString.getLocalizedString(
-          'location-permission.denied',
-        )),
+        LocationFailure(
+          localizedString.getLocalizedString(
+            'location-permission.denied',
+          ),
+          false,
+          true,
+        ),
       );
     }
 
@@ -93,9 +113,17 @@ class LocationUtilsImpl implements LocationUtils {
         },
       );
     } on PlatformException catch (err) {
-      return Left(LocationFailure(err.message));
+      return Left(LocationFailure(
+        err.message,
+        true,
+        true,
+      ));
     } catch (err) {
-      return Left(LocationFailure(err.toString()));
+      return Left(LocationFailure(
+        err.toString(),
+        true,
+        true,
+      ));
     }
   }
 

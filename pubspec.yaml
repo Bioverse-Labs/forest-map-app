@@ -30,6 +30,7 @@ dependencies:
   equatable: ^1.2.5
   data_connection_checker: ^0.3.4
   image: ^2.1.19
+  uuid: ^2.2.2
 
   # Firebase Deps
   firebase_core: "0.5.3"

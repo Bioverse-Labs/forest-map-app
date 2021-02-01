@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forestMapApp/core/errors/failure.dart';
 import 'package:forestMapApp/core/usecases/usecase.dart';
 import 'package:forestMapApp/features/tracking/domain/entities/location.dart';
 import 'package:forestMapApp/features/tracking/domain/repositories/location_repository.dart';
@@ -20,12 +19,14 @@ void main() {
   });
 
   final tLocation = Location(
+    id: faker.guid.guid(),
     lat: faker.randomGenerator.decimal(),
     lng: faker.randomGenerator.decimal(),
     timestamp: faker.date.dateTime(),
   );
-  Stream<Either<Failure, Location>> tStream() async* {
-    yield (Right(tLocation));
+
+  Stream<Location> tStream() async* {
+    yield tLocation;
   }
 
   test(
@@ -37,16 +38,11 @@ void main() {
 
       final result = await trackUser(NoParams());
 
-      expect(
-        result,
-        isInstanceOf<Right<Failure, Stream<Either<Failure, Location>>>>(),
-      );
-
       result.fold(
         (l) => null,
         (stream) => stream.listen(expectAsync1(
           (location) {
-            expect(location, Right(tLocation));
+            expect(location, tLocation);
           },
         )),
       );

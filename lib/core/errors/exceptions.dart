@@ -21,6 +21,16 @@ class LocalException implements Exception {
   LocalException(this.message, this.code, this.origin, {this.stackTrace});
 }
 
+class LocationException implements Exception {
+  final String message;
+  final bool hasPermission;
+  final bool isGpsEnabled;
+  final StackTrace stackTrace;
+
+  LocationException(this.message, this.hasPermission, this.isGpsEnabled,
+      {this.stackTrace});
+}
+
 ServerException getServerExceptionFromFirebaseAuth(
   FirebaseAuthException exception,
   LocalizedString localizedString,
