@@ -5,59 +5,26 @@ import 'package:forestMapApp/core/enums/exception_origin_types.dart';
 import 'package:forestMapApp/core/errors/exceptions.dart';
 import 'package:forestMapApp/core/errors/failure.dart';
 import 'package:forestMapApp/core/platform/network_info.dart';
-import 'package:forestMapApp/features/tracking/data/datasources/location_local_data_source.dart';
-import 'package:forestMapApp/features/tracking/data/datasources/location_remote_data_source.dart';
+import 'package:forestMapApp/features/tracking/data/datasources/location_data_source.dart';
 import 'package:forestMapApp/features/tracking/data/models/location_model.dart';
 import 'package:forestMapApp/features/tracking/data/repositories/location_repository_impl.dart';
 import 'package:forestMapApp/features/tracking/domain/entities/location.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:mockito/mockito.dart';
 
-class MockLocationRemoteDataSource extends Mock
-    implements LocationRemoteDataSourceImpl {}
-
-class MockLocationLocalDataSource extends Mock
-    implements LocationLocalDataSourceImpl {}
+class MockLocationDataSource extends Mock implements LocationDataSourceImpl {}
 
 class LocationLocalDatasource {}
 
 class MockNetworkInfo extends Mock implements NetworkInfoImpl {}
 
 void main() {
-  MockLocationRemoteDataSource mockLocationRemoteDataSource;
-  MockLocationLocalDataSource mockLocationLocalDataSource;
-  MockNetworkInfo mockNetworkInfo;
+  MockLocationDataSource mockLocationDataSource;
   LocationRepositoryImpl locationRepositoryImpl;
 
-  void runTestOnline(Function body) {
-    group('device is online', () {
-      setUp(() {
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      });
-
-      body();
-    });
-  }
-
-  void runTestOffline(Function body) {
-    group('device is offline', () {
-      setUp(() {
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-      });
-
-      body();
-    });
-  }
-
   setUp(() {
-    mockLocationRemoteDataSource = MockLocationRemoteDataSource();
-    mockLocationLocalDataSource = MockLocationLocalDataSource();
-    mockNetworkInfo = MockNetworkInfo();
-    locationRepositoryImpl = LocationRepositoryImpl(
-      localDataSource: mockLocationLocalDataSource,
-      remoteDataSource: mockLocationRemoteDataSource,
-      networkInfo: mockNetworkInfo,
-    );
+    mockLocationDataSource = MockLocationDataSource();
+    locationRepositoryImpl =
+        LocationRepositoryImpl(dataSource: mockLocationDataSource);
   });
 
   final tId = faker.guid.guid();
@@ -72,20 +39,7 @@ void main() {
     timestamp: tTimestamp,
   );
 
-  final tPosition = Position(
-    latitude: tLat,
-    longitude: tLng,
-    timestamp: tTimestamp,
-  );
-
   final tServerException = ServerException(
-    faker.randomGenerator.string(20),
-    faker.randomGenerator.string(4),
-    ExceptionOriginTypes.test,
-    stackTrace: StackTrace.empty,
-  );
-
-  final tLocalException = LocalException(
     faker.randomGenerator.string(20),
     faker.randomGenerator.string(4),
     ExceptionOriginTypes.test,
@@ -98,33 +52,33 @@ void main() {
     false,
   );
 
-  Stream<Position> tPositionStream() async* {
-    yield tPosition;
-  }
-
   Stream<Location> tLocationStream() async* {
     yield tLocationModel;
   }
 
-  runTestOnline(() {
+  group('saveLocation', () {
+    final tUserId = faker.guid.guid();
+
     test('should return [LocationModel] if datasource succeed', () async {
-      when(mockLocationRemoteDataSource.saveLocation(any))
+      when(mockLocationDataSource.saveLocation(any, any))
           .thenAnswer((_) async => tLocationModel);
 
-      final result = await locationRepositoryImpl.saveLocation(tLocationModel);
+      final result =
+          await locationRepositoryImpl.saveLocation(tUserId, tLocationModel);
 
       expect(result, Right(tLocationModel));
       verify(
-        mockLocationRemoteDataSource.saveLocation(tLocationModel.toMap()),
+        mockLocationDataSource.saveLocation(tUserId, tLocationModel.toMap()),
       );
-      verifyNoMoreInteractions(mockLocationRemoteDataSource);
+      verifyNoMoreInteractions(mockLocationDataSource);
     });
 
     test('should return [ServerFailure] if datasource fails', () async {
-      when(mockLocationRemoteDataSource.saveLocation(any))
+      when(mockLocationDataSource.saveLocation(any, any))
           .thenThrow(tServerException);
 
-      final result = await locationRepositoryImpl.saveLocation(tLocationModel);
+      final result =
+          await locationRepositoryImpl.saveLocation(tUserId, tLocationModel);
 
       expect(
         result,
@@ -136,45 +90,9 @@ void main() {
         )),
       );
       verify(
-        mockLocationRemoteDataSource.saveLocation(tLocationModel.toMap()),
+        mockLocationDataSource.saveLocation(tUserId, tLocationModel.toMap()),
       );
-      verifyNoMoreInteractions(mockLocationRemoteDataSource);
-    });
-  });
-
-  runTestOffline(() {
-    test('should return [LocationModel] if datasource succeed', () async {
-      when(mockLocationLocalDataSource.saveLocation(any))
-          .thenAnswer((_) async => tLocationModel);
-
-      final result = await locationRepositoryImpl.saveLocation(tLocationModel);
-
-      expect(result, Right(tLocationModel));
-      verify(
-        mockLocationLocalDataSource.saveLocation(tLocationModel.toMap()),
-      );
-      verifyNoMoreInteractions(mockLocationLocalDataSource);
-    });
-
-    test('should return [LocalFailure] if datasource fails', () async {
-      when(mockLocationLocalDataSource.saveLocation(any))
-          .thenThrow(tLocalException);
-
-      final result = await locationRepositoryImpl.saveLocation(tLocationModel);
-
-      expect(
-        result,
-        Left(LocalFailure(
-          tLocalException.message,
-          tLocalException.code,
-          tLocalException.origin,
-          stackTrace: tLocalException.stackTrace,
-        )),
-      );
-      verify(
-        mockLocationLocalDataSource.saveLocation(tLocationModel.toMap()),
-      );
-      verifyNoMoreInteractions(mockLocationLocalDataSource);
+      verifyNoMoreInteractions(mockLocationDataSource);
     });
   });
 
@@ -182,8 +100,8 @@ void main() {
     test(
       'should return [Stream] if datasource succeed',
       () async {
-        when(mockLocationLocalDataSource.getPositionStream())
-            .thenAnswer((_) async => tPositionStream());
+        when(mockLocationDataSource.getPositionStream())
+            .thenAnswer((_) async => tLocationStream());
 
         final result = await locationRepositoryImpl.trackUserLocation();
 
@@ -195,15 +113,15 @@ void main() {
             },
           )),
         );
-        verify(mockLocationLocalDataSource.getPositionStream());
-        verifyNoMoreInteractions(mockLocationLocalDataSource);
+        verify(mockLocationDataSource.getPositionStream());
+        verifyNoMoreInteractions(mockLocationDataSource);
       },
     );
 
     test(
       'should throw [LocationException] if datasource fails',
       () async {
-        when(mockLocationLocalDataSource.getPositionStream()).thenThrow(
+        when(mockLocationDataSource.getPositionStream()).thenThrow(
           tLocationException,
         );
 
@@ -218,8 +136,8 @@ void main() {
             stackTrace: tLocationException.stackTrace,
           )),
         );
-        verify(mockLocationLocalDataSource.getPositionStream());
-        verifyNoMoreInteractions(mockLocationLocalDataSource);
+        verify(mockLocationDataSource.getPositionStream());
+        verifyNoMoreInteractions(mockLocationDataSource);
       },
     );
   });

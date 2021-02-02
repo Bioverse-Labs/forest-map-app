@@ -7,5 +7,8 @@ import '../entities/location.dart';
 abstract class LocationRepository {
   Future<Either<Failure, Stream<Location>>> trackUserLocation();
 
-  Future<Either<Failure, Location>> saveLocation(LocationModel location);
+  Future<Either<Failure, Location>> saveLocation(
+    String userId,
+    LocationModel location,
+  );
 }

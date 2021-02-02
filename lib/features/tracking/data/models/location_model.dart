@@ -46,7 +46,25 @@ class LocationModel extends Location {
     );
   }
 
+  factory LocationModel.fromMap(Map<String, dynamic> map) {
+    assert(map != null);
+
+    return LocationModel(
+      id: map['id'],
+      lat: (map['lat'] as num),
+      lng: (map['lng'] as num),
+      timestamp: map['timestamp'] as DateTime,
+      accuracy: (map['accuracy'] as num),
+      altitude: (map['altitude'] as num),
+      floor: (map['floor'] as num),
+      heading: (map['heading'] as num),
+      speed: (map['speed'] as num),
+      speedAccuracy: (map['speedAccuracy'] as num),
+    );
+  }
+
   Map<String, dynamic> toMap() => {
+        'id': id,
         'lat': lat,
         'lng': lng,
         'timestamp': timestamp,
