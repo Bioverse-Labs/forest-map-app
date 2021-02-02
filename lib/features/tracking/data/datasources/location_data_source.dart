@@ -1,7 +1,7 @@
-import 'package:forestMapApp/core/adapters/firestore_adapter.dart';
-import 'package:forestMapApp/core/platform/location.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/adapters/firestore_adapter.dart';
+import '../../../../core/platform/location.dart';
 import '../../domain/entities/location.dart';
 import '../models/location_model.dart';
 

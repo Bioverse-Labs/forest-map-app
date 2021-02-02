@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:forestMapApp/features/auth/data/models/user_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../../features/auth/data/models/user_model.dart';
 
 abstract class FirebaseAuthAdapter {
   Future<UserModel> signInWithEmailAndPassword(String email, String password);

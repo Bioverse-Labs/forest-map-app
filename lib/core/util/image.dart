@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
+
 import 'package:image/image.dart';
 
 abstract class ImageUtils {

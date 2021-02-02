@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:forestMapApp/core/enums/exception_origin_types.dart';
+
+import '../enums/exception_origin_types.dart';
 
 abstract class Failure extends Equatable {
   final List properties;

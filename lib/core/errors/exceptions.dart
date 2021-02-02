@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:forestMapApp/core/util/localized_string.dart';
 
 import '../enums/exception_origin_types.dart';
+import '../util/localized_string.dart';
 
 class ServerException implements Exception {
   final String message;

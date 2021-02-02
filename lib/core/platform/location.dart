@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
-import 'package:forestMapApp/features/tracking/domain/entities/location.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../features/tracking/data/models/location_model.dart';
+import '../../features/tracking/domain/entities/location.dart';
 import '../enums/exception_origin_types.dart';
 import '../errors/exceptions.dart';
 import '../util/localized_string.dart';
