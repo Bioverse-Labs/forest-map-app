@@ -11,9 +11,11 @@ Future<void> expectToNotifiyListener<T extends ChangeNotifier>(
 
   int i = 0;
   changeNotifier.addListener(() {
-    final value = assertParams[i].value(changeNotifier);
-    expect(value, assertParams[i].matcher);
-    i++;
+    if (i < assertParams.length) {
+      final value = assertParams[i].value(changeNotifier);
+      expect(value, assertParams[i].matcher);
+      i++;
+    }
   });
 
   await testFunction();

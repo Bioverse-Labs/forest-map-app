@@ -4,7 +4,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:forestMapApp/core/style/theme.dart';
+import 'package:forestMapApp/features/tracking/presentation/notifiers/location_notifier.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
@@ -17,12 +17,16 @@ import '../../features/auth/domain/usecases/sign_in_with_email_and_password.dart
 import '../../features/auth/domain/usecases/sign_in_with_social.dart';
 import '../../features/auth/domain/usecases/sign_up.dart';
 import '../../features/auth/presentation/notifiers/auth_notifier.dart';
+import '../../features/tracking/data/datasources/location_data_source.dart';
+import '../../features/tracking/data/repositories/location_repository_impl.dart';
+import '../../features/tracking/domain/usecases/track_user.dart';
 import '../adapters/firebase_auth_adapter.dart';
 import '../adapters/firestore_adapter.dart';
 import '../navigation/app_navigator.dart';
 import '../platform/camera.dart';
 import '../platform/location.dart';
 import '../platform/network_info.dart';
+import '../style/theme.dart';
 import '../util/image.dart';
 import '../util/localized_string.dart';
 import '../util/notifications.dart';
@@ -115,6 +119,13 @@ class AppConfig {
         GetIt.I<LocalizedStringImpl>(),
       ),
     );
+
+    GetIt.I.registerLazySingleton<LocationDataSourceImpl>(
+      () => LocationDataSourceImpl(
+        firestoreAdapter: GetIt.I(),
+        locationUtils: GetIt.I(),
+      ),
+    );
   }
 
   static void registerRepositories() {
@@ -122,6 +133,12 @@ class AppConfig {
       () => AuthRepositoryImpl(
         GetIt.I<AuthRemoteDataSourceImpl>(),
         GetIt.I<NetworkInfoImpl>(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<LocationRepositoryImpl>(
+      () => LocationRepositoryImpl(
+        dataSource: GetIt.I(),
       ),
     );
   }
@@ -146,6 +163,12 @@ class AppConfig {
         GetIt.I<AuthRepositoryImpl>(),
       ),
     );
+
+    GetIt.I.registerLazySingleton<TrackUser>(
+      () => TrackUser(
+        GetIt.I(),
+      ),
+    );
   }
 
   // * PRESENTATION LAYER SINGLETON'S //
@@ -155,6 +178,12 @@ class AppConfig {
       () => AuthNotifierImpl(
         GetIt.I(),
         GetIt.I(),
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerFactory<LocationNotifierImpl>(
+      () => LocationNotifierImpl(
         GetIt.I(),
       ),
     );
