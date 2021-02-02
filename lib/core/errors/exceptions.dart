@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:forestMapApp/core/util/localized_string.dart';
 
 import '../enums/exception_origin_types.dart';
+import '../util/localized_string.dart';
 
 class ServerException implements Exception {
   final String message;
@@ -19,6 +19,16 @@ class LocalException implements Exception {
   final StackTrace stackTrace;
 
   LocalException(this.message, this.code, this.origin, {this.stackTrace});
+}
+
+class LocationException implements Exception {
+  final String message;
+  final bool hasPermission;
+  final bool isGpsEnabled;
+  final StackTrace stackTrace;
+
+  LocationException(this.message, this.hasPermission, this.isGpsEnabled,
+      {this.stackTrace});
 }
 
 ServerException getServerExceptionFromFirebaseAuth(
