@@ -63,7 +63,7 @@ class AppConfig {
 
     GetIt.I.registerLazySingleton<LocationUtilsImpl>(
       () => LocationUtilsImpl(
-        GetIt.I<LocalizedString>(),
+        GetIt.I<LocalizedStringImpl>(),
         LocationSource(),
       ),
     );
@@ -166,7 +166,7 @@ class AppConfig {
 
     GetIt.I.registerLazySingleton<TrackUser>(
       () => TrackUser(
-        GetIt.I(),
+        GetIt.I<LocationRepositoryImpl>(),
       ),
     );
   }

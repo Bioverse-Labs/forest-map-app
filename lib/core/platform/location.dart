@@ -154,13 +154,14 @@ class LocationUtilsImpl implements LocationUtils {
 }
 
 class LocationSource {
-  Future<LocationPermission> getPermission() => Geolocator.checkPermission();
+  Future<LocationPermission> getPermission() => Geolocator.requestPermission();
 
   Future<Position> getCurrentPosition() => Geolocator.getCurrentPosition();
 
   Future<Position> getLastKnowPosition() => Geolocator.getLastKnownPosition();
 
-  Stream<Position> getPositionStream() => Geolocator.getPositionStream();
+  Stream<Position> getPositionStream() =>
+      Geolocator.getPositionStream(distanceFilter: 100);
 
   Future<bool> get isLocationServiceEnabled =>
       Geolocator.isLocationServiceEnabled();
