@@ -1,0 +1,111 @@
+import 'dart:async';
+
+import 'package:faker/faker.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:forestMapApp/core/errors/exceptions.dart';
+import 'package:forestMapApp/core/platform/location.dart';
+import 'package:forestMapApp/core/util/localized_string.dart';
+import 'package:forestMapApp/features/tracking/domain/entities/location.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:mockito/mockito.dart';
+
+class MockLocationSource extends Mock implements LocationSource {}
+
+class MockLocalizedString extends Mock implements LocalizedString {}
+
+void main() {
+  MockLocationSource mockLocationSource;
+  MockLocalizedString mockLocalizedString;
+  LocationUtilsImpl locationUtilsImpl;
+
+  setUp(() {
+    mockLocationSource = MockLocationSource();
+    mockLocalizedString = MockLocalizedString();
+    locationUtilsImpl = LocationUtilsImpl(
+      mockLocalizedString,
+      mockLocationSource,
+    );
+  });
+
+  final tPosition = Position(
+    latitude: faker.randomGenerator.decimal(),
+    longitude: faker.randomGenerator.decimal(),
+  );
+
+  group('getLastKnowPosition', () {
+    test(
+      'should return [Location] if source succeed',
+      () async {
+        when(mockLocationSource.getLastKnowPosition())
+            .thenAnswer((_) async => tPosition);
+
+        final result = await locationUtilsImpl.getLastKnowPosition(true);
+
+        expect(result, isInstanceOf<Location>());
+        verify(mockLocationSource.getLastKnowPosition());
+        verifyNoMoreInteractions(mockLocationSource);
+      },
+    );
+
+    test(
+      'should throw [LocalException] if permission is false',
+      () async {
+        final call = locationUtilsImpl.getLastKnowPosition;
+        expect(() => call(false), throwsA(isInstanceOf<LocalException>()));
+        verifyZeroInteractions(mockLocationSource);
+      },
+    );
+  });
+
+  group('getCurrentPosition', () {
+    test(
+      'should return [Location] if source succeed',
+      () async {
+        when(mockLocationSource.getCurrentPosition())
+            .thenAnswer((_) async => tPosition);
+
+        final result = await locationUtilsImpl.getCurrentPosition(true);
+
+        expect(result, isInstanceOf<Location>());
+        verify(mockLocationSource.getCurrentPosition());
+        verifyNoMoreInteractions(mockLocationSource);
+      },
+    );
+
+    test(
+      'should throw [LocalException] if permission is false',
+      () async {
+        final call = locationUtilsImpl.getCurrentPosition;
+        expect(() => call(false), throwsA(isInstanceOf<LocalException>()));
+        verifyZeroInteractions(mockLocationSource);
+      },
+    );
+  });
+
+  group('getStream', () {
+    final tStream = StreamController<Position>();
+    test(
+      'should return [Stream] if source succeed',
+      () async {
+        when(mockLocationSource.getPositionStream())
+            .thenAnswer((_) => tStream.stream);
+
+        final result = await locationUtilsImpl.getLocationStream(true);
+
+        expect(result, isInstanceOf<Stream<Location>>());
+        verify(mockLocationSource.getPositionStream());
+        verifyNoMoreInteractions(mockLocationSource);
+        tStream.close();
+      },
+    );
+
+    test(
+      'should throw [LocalException] if permission is false',
+      () async {
+        final call = locationUtilsImpl.getLocationStream;
+        expect(() => call(false), throwsA(isInstanceOf<LocalException>()));
+        verifyZeroInteractions(mockLocationSource);
+      },
+    );
+  });
+}

@@ -17,8 +17,9 @@ abstract class LocationUtils {
 
 class LocationUtilsImpl implements LocationUtils {
   final LocalizedString localizedString;
+  final LocationSource locationSource;
 
-  LocationUtilsImpl(this.localizedString);
+  LocationUtilsImpl(this.localizedString, this.locationSource);
 
   @override
   Future<LocationModel> getLastKnowPosition(
@@ -26,9 +27,7 @@ class LocationUtilsImpl implements LocationUtils {
   ) async {
     try {
       if (hasPermission) {
-        final position = await Geolocator.getLastKnownPosition(
-          forceAndroidLocationManager: true,
-        );
+        final position = await locationSource.getLastKnowPosition();
 
         return LocationModel.fromPosition(position);
       }
@@ -44,13 +43,6 @@ class LocationUtilsImpl implements LocationUtils {
         error.code,
         ExceptionOriginTypes.platform,
         stackTrace: StackTrace.fromString(error.stacktrace),
-      );
-    } catch (error) {
-      throw LocalException(
-        error?.toString(),
-        error?.code,
-        ExceptionOriginTypes.platform,
-        stackTrace: StackTrace.fromString(error?.stacktrace),
       );
     }
   }
@@ -68,7 +60,7 @@ class LocationUtilsImpl implements LocationUtils {
         );
       }
 
-      LocationPermission permission = await Geolocator.checkPermission();
+      LocationPermission permission = await locationSource.getPermission();
 
       if (permission == LocationPermission.deniedForever) {
         throw LocationException(
@@ -103,13 +95,6 @@ class LocationUtilsImpl implements LocationUtils {
         ExceptionOriginTypes.platform,
         stackTrace: StackTrace.fromString(error.stacktrace),
       );
-    } catch (error) {
-      throw LocalException(
-        error?.toString(),
-        error?.code,
-        ExceptionOriginTypes.platform,
-        stackTrace: StackTrace.fromString(error?.stacktrace),
-      );
     }
   }
 
@@ -119,9 +104,7 @@ class LocationUtilsImpl implements LocationUtils {
   ) async {
     try {
       if (hasPermission) {
-        final position = await Geolocator.getCurrentPosition(
-          forceAndroidLocationManager: true,
-        );
+        final position = await locationSource.getCurrentPosition();
 
         return LocationModel.fromPosition(position);
       }
@@ -138,24 +121,17 @@ class LocationUtilsImpl implements LocationUtils {
         ExceptionOriginTypes.platform,
         stackTrace: StackTrace.fromString(error.stacktrace),
       );
-    } catch (error) {
-      throw LocalException(
-        error?.toString(),
-        error?.code,
-        ExceptionOriginTypes.platform,
-        stackTrace: StackTrace.fromString(error?.stacktrace),
-      );
     }
   }
 
   @override
-  Future<bool> get isServiceEnabled => Geolocator.isLocationServiceEnabled();
+  Future<bool> get isServiceEnabled => locationSource.isLocationServiceEnabled;
 
   @override
   Future<Stream<Location>> getLocationStream(bool hasPermission) async {
     try {
       if (hasPermission) {
-        final stream = Geolocator.getPositionStream();
+        final stream = locationSource.getPositionStream();
         return Future.value(
           stream.expand((element) => [LocationModel.fromPosition(element)]),
         );
@@ -173,13 +149,19 @@ class LocationUtilsImpl implements LocationUtils {
         ExceptionOriginTypes.platform,
         stackTrace: StackTrace.fromString(error.stacktrace),
       );
-    } catch (error) {
-      throw LocalException(
-        error?.toString(),
-        error?.code,
-        ExceptionOriginTypes.platform,
-        stackTrace: StackTrace.fromString(error?.stacktrace),
-      );
     }
   }
+}
+
+class LocationSource {
+  Future<LocationPermission> getPermission() => Geolocator.checkPermission();
+
+  Future<Position> getCurrentPosition() => Geolocator.getCurrentPosition();
+
+  Future<Position> getLastKnowPosition() => Geolocator.getLastKnownPosition();
+
+  Stream<Position> getPositionStream() => Geolocator.getPositionStream();
+
+  Future<bool> get isLocationServiceEnabled =>
+      Geolocator.isLocationServiceEnabled();
 }

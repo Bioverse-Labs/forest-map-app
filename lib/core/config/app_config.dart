@@ -60,6 +60,7 @@ class AppConfig {
     GetIt.I.registerLazySingleton<LocationUtilsImpl>(
       () => LocationUtilsImpl(
         GetIt.I<LocalizedString>(),
+        LocationSource(),
       ),
     );
 
