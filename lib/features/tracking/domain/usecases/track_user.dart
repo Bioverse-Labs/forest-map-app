@@ -1,20 +1,32 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:forestMapApp/features/tracking/domain/entities/location.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../repositories/location_repository.dart';
 
-class TrackUser implements UseCase<void, TrackUserParams> {
+class TrackUser
+    implements UseCase<StreamSubscription<Location>, TrackUserParams> {
   final LocationRepository locationRepository;
 
   TrackUser(this.locationRepository);
 
   @override
-  Future<Either<Failure, void>> call(
+  Future<Either<Failure, StreamSubscription<Location>>> call(
     TrackUserParams params,
   ) async {
-    return await locationRepository.trackUserLocation();
+    final failureOrStream = await locationRepository.trackUserLocation();
+    return failureOrStream.fold(
+      (failure) => Left(failure),
+      (stream) {
+        return Right(stream.listen((event) async {
+          await locationRepository.saveLocation(params.userId, event);
+        }));
+      },
+    );
   }
 }
 

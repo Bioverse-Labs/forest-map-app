@@ -108,4 +108,77 @@ void main() {
       },
     );
   });
+
+  group('checkLocationPermission', () {
+    test(
+      'should return [true] if permission is granted',
+      () async {
+        when(mockLocationSource.isLocationServiceEnabled)
+            .thenAnswer((_) async => true);
+        when(mockLocationSource.getPermission())
+            .thenAnswer((_) async => LocationPermission.always);
+
+        final result = await locationUtilsImpl.checkLocationPermission();
+
+        expect(result, true);
+        verify(mockLocationSource.isLocationServiceEnabled);
+        verify(mockLocationSource.getPermission());
+        verifyNoMoreInteractions(mockLocationSource);
+      },
+    );
+
+    test(
+      'should throw [LocationException] if service is not enabled',
+      () async {
+        when(mockLocationSource.isLocationServiceEnabled)
+            .thenAnswer((_) async => false);
+
+        final call = locationUtilsImpl.checkLocationPermission;
+
+        expect(() => call(), throwsA(isInstanceOf<LocationException>()));
+        verify(mockLocationSource.isLocationServiceEnabled);
+        verifyNoMoreInteractions(mockLocationSource);
+      },
+    );
+
+    test(
+      'should throw [LocationException] if permission is not granted',
+      () async {
+        when(mockLocationSource.isLocationServiceEnabled)
+            .thenAnswer((_) async => true);
+        when(mockLocationSource.getPermission())
+            .thenAnswer((_) async => LocationPermission.denied);
+
+        try {
+          await locationUtilsImpl.checkLocationPermission();
+        } catch (error) {
+          expect(error, isInstanceOf<LocationException>());
+        }
+
+        verify(mockLocationSource.isLocationServiceEnabled);
+        verify(mockLocationSource.getPermission());
+        verifyNoMoreInteractions(mockLocationSource);
+      },
+    );
+
+    test(
+      'should throw [LocationException] if permission is denied forever',
+      () async {
+        when(mockLocationSource.isLocationServiceEnabled)
+            .thenAnswer((_) async => true);
+        when(mockLocationSource.getPermission())
+            .thenAnswer((_) async => LocationPermission.deniedForever);
+
+        try {
+          await locationUtilsImpl.checkLocationPermission();
+        } catch (error) {
+          expect(error, isInstanceOf<LocationException>());
+        }
+
+        verify(mockLocationSource.isLocationServiceEnabled);
+        verify(mockLocationSource.getPermission());
+        verifyNoMoreInteractions(mockLocationSource);
+      },
+    );
+  });
 }

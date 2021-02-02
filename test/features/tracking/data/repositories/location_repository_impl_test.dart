@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:forestMapApp/core/enums/exception_origin_types.dart';
 import 'package:forestMapApp/core/errors/exceptions.dart';
@@ -40,6 +41,13 @@ void main() {
   );
 
   final tServerException = ServerException(
+    faker.randomGenerator.string(20),
+    faker.randomGenerator.string(4),
+    ExceptionOriginTypes.test,
+    stackTrace: StackTrace.empty,
+  );
+
+  final tLocalException = LocalException(
     faker.randomGenerator.string(20),
     faker.randomGenerator.string(4),
     ExceptionOriginTypes.test,
@@ -94,6 +102,28 @@ void main() {
       );
       verifyNoMoreInteractions(mockLocationDataSource);
     });
+
+    test('should return [LocalFailure] if datasource fails', () async {
+      when(mockLocationDataSource.saveLocation(any, any))
+          .thenThrow(tLocalException);
+
+      final result =
+          await locationRepositoryImpl.saveLocation(tUserId, tLocationModel);
+
+      expect(
+        result,
+        Left(LocalFailure(
+          tLocalException.message,
+          tLocalException.code,
+          tLocalException.origin,
+          stackTrace: tLocalException.stackTrace,
+        )),
+      );
+      verify(
+        mockLocationDataSource.saveLocation(tUserId, tLocationModel.toMap()),
+      );
+      verifyNoMoreInteractions(mockLocationDataSource);
+    });
   });
 
   group('trackUserLocation', () {
@@ -134,6 +164,29 @@ void main() {
             tLocationException.hasPermission,
             tLocationException.isGpsEnabled,
             stackTrace: tLocationException.stackTrace,
+          )),
+        );
+        verify(mockLocationDataSource.getPositionStream());
+        verifyNoMoreInteractions(mockLocationDataSource);
+      },
+    );
+
+    test(
+      'should throw [LocationException] if datasource fails',
+      () async {
+        when(mockLocationDataSource.getPositionStream()).thenThrow(
+          tLocalException,
+        );
+
+        final result = await locationRepositoryImpl.trackUserLocation();
+
+        expect(
+          result,
+          Left(LocalFailure(
+            tLocalException.message,
+            tLocalException.code,
+            tLocalException.origin,
+            stackTrace: tLocalException.stackTrace,
           )),
         );
         verify(mockLocationDataSource.getPositionStream());
