@@ -195,4 +195,22 @@ void main() {
       verifyNoMoreInteractions(mockSignUp);
     });
   });
+
+  group('setUser', () {
+    test(
+      'should set [User] into auth notifier',
+      () async {
+        await expectToNotifiyListener<AuthNotifierImpl>(
+          authNotifierImpl,
+          () => authNotifierImpl.setUser(tUser),
+          [
+            NotifierAssertParams(
+              value: (notifier) => notifier.user,
+              matcher: tUser,
+            ),
+          ],
+        );
+      },
+    );
+  });
 }

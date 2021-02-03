@@ -32,12 +32,12 @@
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">32</td>
-            <td class="headerCovTableEntry">55</td>
-            <td class="headerCovTableEntryLo">58.2 %</td>
+            <td class="headerCovTableEntry">56</td>
+            <td class="headerCovTableEntryLo">57.1 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2021-02-02 03:51:30</td>
+            <td class="headerValue">2021-02-03 03:11:34</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -61,10 +61,10 @@
 <pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : import 'package:flutter/services.dart';</a>
-<a name="2"><span class="lineNum">       2 </span>            : import 'package:forestMapApp/features/tracking/domain/entities/location.dart';</a>
-<a name="3"><span class="lineNum">       3 </span>            : import 'package:geolocator/geolocator.dart';</a>
-<a name="4"><span class="lineNum">       4 </span>            : </a>
-<a name="5"><span class="lineNum">       5 </span>            : import '../../features/tracking/data/models/location_model.dart';</a>
+<a name="2"><span class="lineNum">       2 </span>            : import 'package:geolocator/geolocator.dart';</a>
+<a name="3"><span class="lineNum">       3 </span>            : </a>
+<a name="4"><span class="lineNum">       4 </span>            : import '../../features/tracking/data/models/location_model.dart';</a>
+<a name="5"><span class="lineNum">       5 </span>            : import '../../features/tracking/domain/entities/location.dart';</a>
 <a name="6"><span class="lineNum">       6 </span>            : import '../enums/exception_origin_types.dart';</a>
 <a name="7"><span class="lineNum">       7 </span>            : import '../errors/exceptions.dart';</a>
 <a name="8"><span class="lineNum">       8 </span>            : import '../util/localized_string.dart';</a>
@@ -216,17 +216,18 @@
 <a name="154"><span class="lineNum">     154 </span>            : }</a>
 <a name="155"><span class="lineNum">     155 </span>            : </a>
 <a name="156"><span class="lineNum">     156 </span>            : class LocationSource {</a>
-<a name="157"><span class="lineNum">     157 </span><span class="lineNoCov">          0 :   Future&lt;LocationPermission&gt; getPermission() =&gt; Geolocator.checkPermission();</span></a>
+<a name="157"><span class="lineNum">     157 </span><span class="lineNoCov">          0 :   Future&lt;LocationPermission&gt; getPermission() =&gt; Geolocator.requestPermission();</span></a>
 <a name="158"><span class="lineNum">     158 </span>            : </a>
 <a name="159"><span class="lineNum">     159 </span><span class="lineNoCov">          0 :   Future&lt;Position&gt; getCurrentPosition() =&gt; Geolocator.getCurrentPosition();</span></a>
 <a name="160"><span class="lineNum">     160 </span>            : </a>
 <a name="161"><span class="lineNum">     161 </span><span class="lineNoCov">          0 :   Future&lt;Position&gt; getLastKnowPosition() =&gt; Geolocator.getLastKnownPosition();</span></a>
 <a name="162"><span class="lineNum">     162 </span>            : </a>
-<a name="163"><span class="lineNum">     163 </span><span class="lineNoCov">          0 :   Stream&lt;Position&gt; getPositionStream() =&gt; Geolocator.getPositionStream();</span></a>
-<a name="164"><span class="lineNum">     164 </span>            : </a>
-<a name="165"><span class="lineNum">     165 </span><span class="lineNoCov">          0 :   Future&lt;bool&gt; get isLocationServiceEnabled =&gt;</span></a>
-<a name="166"><span class="lineNum">     166 </span><span class="lineNoCov">          0 :       Geolocator.isLocationServiceEnabled();</span></a>
-<a name="167"><span class="lineNum">     167 </span>            : }</a>
+<a name="163"><span class="lineNum">     163 </span><span class="lineNoCov">          0 :   Stream&lt;Position&gt; getPositionStream() =&gt;</span></a>
+<a name="164"><span class="lineNum">     164 </span><span class="lineNoCov">          0 :       Geolocator.getPositionStream(distanceFilter: 100);</span></a>
+<a name="165"><span class="lineNum">     165 </span>            : </a>
+<a name="166"><span class="lineNum">     166 </span><span class="lineNoCov">          0 :   Future&lt;bool&gt; get isLocationServiceEnabled =&gt;</span></a>
+<a name="167"><span class="lineNum">     167 </span><span class="lineNoCov">          0 :       Geolocator.isLocationServiceEnabled();</span></a>
+<a name="168"><span class="lineNum">     168 </span>            : }</a>
 </pre>
       </td>
     </tr>
