@@ -1,0 +1,4 @@
+enum OrganizationRoleType {
+  member,
+  admin,
+}

@@ -1,0 +1,40 @@
+import 'dart:io';
+import 'package:dartz/dartz.dart';
+import 'package:meta/meta.dart';
+
+import '../../../../core/enums/organization_role_types.dart';
+import '../../../../core/errors/failure.dart';
+import '../../../auth/domain/entities/user.dart';
+import '../entities/organization.dart';
+
+abstract class OrganizationRepository {
+  Future<Either<Failure, Organization>> createOrganization({
+    @required User user,
+    @required String name,
+    @required String email,
+    @required String phone,
+    File avatar,
+  });
+  Future<Either<Failure, Organization>> getOrganization(String id);
+  Future<Either<Failure, Organization>> updateOrganization({
+    @required String id,
+    String name,
+    String email,
+    String phone,
+    File avatar,
+  });
+  Future<Either<Failure, void>> deleteOrganization(String id);
+  Future<Either<Failure, Organization>> inviteUserToOrganization({
+    @required String id,
+    @required User user,
+  });
+  Future<Either<Failure, Organization>> updateMember({
+    @required String id,
+    @required String userId,
+    @required OrganizationRoleType type,
+  });
+  Future<Either<Failure, Organization>> removeMember({
+    @required String id,
+    @required String userId,
+  });
+}
