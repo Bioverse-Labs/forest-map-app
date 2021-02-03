@@ -15,6 +15,7 @@ import 'features/tracking/presentation/notifiers/location_notifier.dart';
 Map<String, Widget Function(BuildContext)> routes = {
   '/': (_) => InitialScreen(
         firebaseAuthAdapterImpl: GetIt.I(),
+        firestoreAdapterImpl: GetIt.I(),
         appNavigator: GetIt.I(),
       ),
   '/signIn': (ctx) => SignInScreen(

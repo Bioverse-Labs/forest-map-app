@@ -10,6 +10,7 @@ abstract class AuthNotifier {
   Future<void> signInWithEmailAndPassword(String email, String password);
   Future<void> signInWithSocial(SocialLoginType type);
   Future<void> signUp(String name, String email, String password);
+  void setUser(User user);
 }
 
 class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
@@ -87,5 +88,11 @@ class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
         notifyListeners();
       },
     );
+  }
+
+  @override
+  void setUser(User user) {
+    this._user = user;
+    notifyListeners();
   }
 }
