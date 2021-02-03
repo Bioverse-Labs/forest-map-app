@@ -51,7 +51,7 @@ class SignInScreen extends StatelessWidget {
           _emailController.text,
           _passwordController.text,
         );
-        appNavigator.pushAndReplace('/');
+        appNavigator.pushAndReplace('/home');
       } on ServerFailure catch (failure) {
         notificationsUtils.showErrorNotification(failure.message);
       } on ServerException catch (exception) {
@@ -63,7 +63,7 @@ class SignInScreen extends StatelessWidget {
   Future<void> _signInWithSocial(SocialLoginType type) async {
     try {
       await authNotifierImpl.signInWithSocial(type);
-      appNavigator.pushAndReplace('/');
+      appNavigator.pushAndReplace('/home');
     } on ServerFailure catch (failure) {
       notificationsUtils.showErrorNotification(failure.message);
     } on ServerException catch (exception) {

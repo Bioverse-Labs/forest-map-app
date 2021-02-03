@@ -47,7 +47,7 @@ class SignupScreen extends StatelessWidget {
           _emailController.text,
           _passwordController.text,
         );
-        appNavigator.pushAndReplace('/');
+        appNavigator.pushAndReplace('/home');
       } on ServerFailure catch (failure) {
         print(failure.stackTrace);
         notificationsUtils.showErrorNotification(failure.message);
