@@ -1,5 +1,6 @@
-import 'package:forestMapApp/features/auth/domain/entities/user.dart';
 import 'package:meta/meta.dart';
+
+import '../../../auth/domain/entities/user.dart';
 
 class Organization {
   final String id;
