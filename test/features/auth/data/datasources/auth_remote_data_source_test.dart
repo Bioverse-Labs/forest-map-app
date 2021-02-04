@@ -121,7 +121,10 @@ void main() {
       'should throw ServerException if firebaseAuth fails to signIn',
       () async {
         when(mockFirebaseAuthAdapterImpl.signInWithEmailAndPassword(any, any))
-            .thenThrow(FirebaseAuthException(message: tExceptionMessage));
+            .thenThrow(FirebaseAuthException(
+          message: tExceptionMessage,
+          code: tExceptionMessage,
+        ));
 
         final call = authRemoteDataSourceImpl.signInWithEmailAndPassword;
 
@@ -215,7 +218,10 @@ void main() {
       'should throw ServerException if firebaseAuth fails to signIn',
       () async {
         when(mockFirebaseAuthAdapterImpl.signInWithCredential(any))
-            .thenThrow(FirebaseAuthException(message: tExceptionMessage));
+            .thenThrow(FirebaseAuthException(
+          message: tExceptionMessage,
+          code: tExceptionMessage,
+        ));
 
         final call = authRemoteDataSourceImpl.signInWithSocial;
 
@@ -281,7 +287,10 @@ void main() {
         when(mockFirebaseAuthAdapterImpl.signUpUserWithEmailAndPassword(
           any,
           any,
-        )).thenThrow(FirebaseAuthException(message: tExceptionMessage));
+        )).thenThrow(FirebaseAuthException(
+          message: tExceptionMessage,
+          code: tExceptionMessage,
+        ));
 
         final call = authRemoteDataSourceImpl.signUp;
 

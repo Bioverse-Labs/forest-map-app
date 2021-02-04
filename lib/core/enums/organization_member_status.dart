@@ -1,5 +1,5 @@
 enum OrganizationMemberStatus {
+  removed,
   pending,
   active,
-  removed,
 }

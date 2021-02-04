@@ -1,6 +1,5 @@
+import 'package:forestMapApp/features/organization/domain/entities/member.dart';
 import 'package:meta/meta.dart';
-
-import '../../../auth/domain/entities/user.dart';
 
 class Organization {
   final String id;
@@ -8,7 +7,7 @@ class Organization {
   final String email;
   final String phone;
   final String avatarUrl;
-  final List<User> members;
+  final List<Member> members;
 
   Organization({
     @required this.id,

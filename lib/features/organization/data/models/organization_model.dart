@@ -1,23 +1,16 @@
 import 'package:meta/meta.dart';
 
-import '../../../auth/domain/entities/user.dart';
+import '../../domain/entities/member.dart';
 import '../../domain/entities/organization.dart';
 
 class OrganizationModel extends Organization {
-  final String id;
-  final String name;
-  final String email;
-  final String phone;
-  final String avatarUrl;
-  final List<User> members;
-
   OrganizationModel({
-    @required this.id,
-    @required this.name,
-    @required this.email,
-    this.phone,
-    this.avatarUrl,
-    this.members,
+    @required id,
+    @required name,
+    @required email,
+    phone,
+    avatarUrl,
+    List<Member> members,
   }) : super(
           id: id,
           name: name,
@@ -45,4 +38,21 @@ class OrganizationModel extends Organization {
         'phone': phone,
         'avatarUrl': avatarUrl,
       };
+
+  OrganizationModel copyWith({
+    id,
+    name,
+    email,
+    phone,
+    avatarUrl,
+    members,
+  }) =>
+      OrganizationModel(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        email: email ?? this.email,
+        phone: phone ?? this.phone,
+        avatarUrl: avatarUrl ?? this.avatarUrl,
+        members: members ?? this.members,
+      );
 }

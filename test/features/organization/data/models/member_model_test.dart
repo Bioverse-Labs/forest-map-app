@@ -1,28 +1,32 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:forestMapApp/core/enums/organization_member_status.dart';
+import 'package:forestMapApp/core/enums/organization_role_types.dart';
+import 'package:forestMapApp/features/organization/data/models/member_model.dart';
 import 'package:forestMapApp/features/organization/data/models/organization_model.dart';
 
 void main() {
   final tId = faker.guid.guid();
-  final tName = faker.company.name();
+  final tName = faker.person.name();
   final tEmail = faker.internet.email();
-  final tPhone = faker.randomGenerator.integer(9).toString();
   final tAvatar = faker.image.image();
 
   final tMap = {
     'id': tId,
     'name': tName,
     'email': tEmail,
-    'phone': tPhone,
     'avatarUrl': tAvatar,
+    'status': OrganizationMemberStatus.active,
+    'role': OrganizationRoleType.member,
   };
 
-  final tOrganizationModel = OrganizationModel(
+  final tMemberModel = MemberModel(
     id: tId,
     name: tName,
     email: tEmail,
-    phone: tPhone,
     avatarUrl: tAvatar,
+    status: OrganizationMemberStatus.active,
+    role: OrganizationRoleType.member,
   );
 
   test(
@@ -37,7 +41,7 @@ void main() {
   test(
     'should return [Map<String, dynamic> map] from model',
     () async {
-      final map = tOrganizationModel.toMap();
+      final map = tMemberModel.toMap();
 
       expect(map, tMap);
     },

@@ -33,9 +33,10 @@ dependencies:
   uuid: ^2.2.2
 
   # Firebase Deps
-  firebase_core: "0.5.3"
-  firebase_auth: "^0.18.4"
-  cloud_firestore: "^0.14.4"
+  firebase_core: "0.7.0"
+  firebase_auth: "^0.20.0"
+  firebase_storage: "^7.0.0"
+  cloud_firestore: "^0.16.0"
 
 dev_dependencies:
   flutter_test:

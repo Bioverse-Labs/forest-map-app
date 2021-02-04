@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import '../../../organization/domain/entities/organization.dart';
 import '../../domain/entities/user.dart';
 
 class UserModel extends User {
@@ -8,9 +9,15 @@ class UserModel extends User {
     @required String name,
     String email,
     String avatarUrl,
+    List<Organization> organizations,
   })  : assert(id != null),
         assert(name != null),
-        super(id: id, name: name, email: email, avatarUrl: avatarUrl);
+        super(
+          id: id,
+          name: name,
+          email: email,
+          avatarUrl: avatarUrl,
+        );
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     assert(map['id'] != null);
@@ -30,4 +37,19 @@ class UserModel extends User {
         'email': email,
         'avatarUrl': avatarUrl,
       };
+
+  UserModel copyWith({
+    String id,
+    String name,
+    String email,
+    String avatarUrl,
+    List<Organization> organizations,
+  }) =>
+      UserModel(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        email: email ?? this.email,
+        avatarUrl: avatarUrl ?? this.avatarUrl,
+        organizations: organizations ?? this.organizations,
+      );
 }

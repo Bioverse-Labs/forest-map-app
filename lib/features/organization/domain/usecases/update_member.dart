@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:forestMapApp/core/enums/organization_role_types.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/enums/organization_role_types.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entities/organization.dart';

@@ -57,4 +57,14 @@ void main() {
       expect(result, map);
     });
   });
+
+  group('copyWith', () {
+    test(
+      'should return a new instance of [UserModel] with new data',
+      () async {
+        final result = tUserModel.copyWith(name: faker.person.name());
+        expect(result, isNot(tUserModel));
+      },
+    );
+  });
 }

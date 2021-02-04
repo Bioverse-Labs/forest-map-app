@@ -79,7 +79,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw getServerExceptionFromFirebaseAuth(error, localizedString);
     } on FirebaseException catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('database-exceptions.get-error'),
+        localizedString.getLocalizedString('database-exceptions.update-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,

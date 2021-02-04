@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/adapters/firebase_auth_adapter.dart';
-import 'package:forestMapApp/core/errors/failure.dart';
-import 'package:forestMapApp/core/navigation/app_navigator.dart';
-import 'package:forestMapApp/core/util/notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import 'core/adapters/firebase_auth_adapter.dart';
+import 'core/errors/failure.dart';
+import 'core/navigation/app_navigator.dart';
 import 'core/screens/initial_screen.dart';
+import 'core/util/notifications.dart';
 import 'features/auth/presentation/notifiers/auth_notifier.dart';
 import 'features/auth/presentation/screens/sign_in_screen.dart';
 import 'features/auth/presentation/screens/sign_up_screen.dart';

@@ -1,0 +1,39 @@
+import '../../domain/entities/member.dart';
+
+class MemberModel extends Member {
+  MemberModel({
+    id,
+    name,
+    email,
+    avatarUrl,
+    status,
+    role,
+  }) : super(
+          id: id,
+          name: name,
+          email: email,
+          avatarUrl: avatarUrl,
+          status: status,
+          role: role,
+        );
+
+  factory MemberModel.fromMap(Map<String, dynamic> map) {
+    return MemberModel(
+      id: map['id'],
+      name: map['name'],
+      email: map['email'],
+      avatarUrl: map['avatarUrl'],
+      status: map['status'],
+      role: map['role'],
+    );
+  }
+
+  Map<String, dynamic> toMap() => {
+        'id': this.id,
+        'name': this.name,
+        'email': this.email,
+        'avatarUrl': this.avatarUrl,
+        'status': this.status,
+        'role': this.role,
+      };
+}
