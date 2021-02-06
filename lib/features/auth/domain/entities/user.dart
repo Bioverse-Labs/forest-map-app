@@ -15,7 +15,7 @@ class User extends Equatable {
     @required this.name,
     this.email,
     this.avatarUrl,
-    this.organizations,
+    this.organizations = const <Organization>[],
   });
 
   @override

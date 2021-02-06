@@ -1,8 +1,9 @@
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 import 'member.dart';
 
-class Organization {
+class Organization extends Equatable {
   final String id;
   final String name;
   final String email;
@@ -18,4 +19,7 @@ class Organization {
     this.avatarUrl,
     this.members,
   });
+
+  @override
+  List<Object> get props => [id, name, email, phone, avatarUrl, members];
 }

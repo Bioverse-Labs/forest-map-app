@@ -92,11 +92,10 @@ class OrganizationDataSourceImpl implements OrganizationDataSource {
       var avatarUrl;
 
       if (avatar != null) {
-        final uploadTask = await firebaseStorageAdapter.uploadFile(
+        await firebaseStorageAdapter.uploadFile(
           file: avatar,
           storagePath: 'organizations/$orgId/avatar/avatar.png',
         );
-        await uploadTask;
         avatarUrl = await firebaseStorageAdapter.getDownloadUrl(
           'organizations/$orgId/avatar/avatar.png',
         );
@@ -203,20 +202,25 @@ class OrganizationDataSourceImpl implements OrganizationDataSource {
   }
 
   @override
-  Future<OrganizationModel> removeMember({String id, String userId}) async {
+  Future<OrganizationModel> removeMember({
+    @required String id,
+    @required String userId,
+  }) async {
     try {
       await firestoreAdapter.deleteDocument(
         'organizations/$id/members/$userId',
       );
 
       final userDoc = await firestoreAdapter.getDocument('users/$userId');
-      final List<String> organizations =
-          userDoc.data()['organizations'] as List<String>;
-      organizations.remove(id);
+      if (userDoc.exists) {
+        final List<String> organizations =
+            userDoc.data()['organizations'] as List<String>;
+        organizations.remove(id);
 
-      await firestoreAdapter.updateDocument('users/$userId', {
-        'organizations': organizations,
-      });
+        await firestoreAdapter.updateDocument('users/$userId', {
+          'organizations': organizations,
+        });
+      }
 
       final orgDoc = await firestoreAdapter.getDocument('organizations/$id');
       return OrganizationModel.fromMap({
@@ -288,11 +292,10 @@ class OrganizationDataSourceImpl implements OrganizationDataSource {
       }
 
       if (avatar != null) {
-        final uploadTask = await firebaseStorageAdapter.uploadFile(
+        await firebaseStorageAdapter.uploadFile(
           file: avatar,
           storagePath: 'organizations/$id/avatar/avatar.png',
         );
-        await uploadTask;
         final avatarUrl = await firebaseStorageAdapter.getDownloadUrl(
           'organizations/$id/avatar/avatar.png',
         );
@@ -326,9 +329,17 @@ class OrganizationDataSourceImpl implements OrganizationDataSource {
     );
     final membersDoc = await firestoreAdapter.runQuery(membersQuery);
     if (membersDoc.isNotEmpty) {
-      members = membersDoc
-          .map<MemberModel>((e) => MemberModel.fromMap(e.data()))
-          .toList();
+      for (var member in membersDoc) {
+        final userId = member.id;
+        final userDoc = await firestoreAdapter.getDocument('users/$userId');
+
+        if (userDoc.exists) {
+          members.add(MemberModel.fromMap({
+            ...userDoc.data(),
+            ...member.data(),
+          }));
+        }
+      }
     }
 
     return members;

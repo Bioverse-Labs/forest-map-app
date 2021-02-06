@@ -1,3 +1,6 @@
+import 'package:forestMapApp/core/enums/organization_member_status.dart';
+import 'package:forestMapApp/core/enums/organization_role_types.dart';
+
 import '../../domain/entities/member.dart';
 
 class MemberModel extends Member {
@@ -6,8 +9,8 @@ class MemberModel extends Member {
     name,
     email,
     avatarUrl,
-    status,
-    role,
+    OrganizationMemberStatus status,
+    OrganizationRoleType role,
   }) : super(
           id: id,
           name: name,
@@ -23,8 +26,8 @@ class MemberModel extends Member {
       name: map['name'],
       email: map['email'],
       avatarUrl: map['avatarUrl'],
-      status: map['status'],
-      role: map['role'],
+      status: OrganizationMemberStatus.values[map['status'] as int],
+      role: OrganizationRoleType.values[map['role'] as int],
     );
   }
 
