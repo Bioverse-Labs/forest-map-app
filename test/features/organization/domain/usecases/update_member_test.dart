@@ -38,20 +38,20 @@ void main() {
       when(mockOrganizationRepository.updateMember(
         id: anyNamed('id'),
         userId: anyNamed('userId'),
-        type: anyNamed('type'),
+        role: anyNamed('role'),
       )).thenAnswer((_) async => Right(tOrganization));
 
       final result = await useCase(UpdateMemberParams(
         id: tId,
         userId: tUserId,
-        type: OrganizationRoleType.admin,
+        role: OrganizationRoleType.admin,
       ));
 
       expect(result, Right(tOrganization));
       verify(mockOrganizationRepository.updateMember(
         id: tId,
         userId: tUserId,
-        type: OrganizationRoleType.admin,
+        role: OrganizationRoleType.admin,
       ));
       verifyNoMoreInteractions(mockOrganizationRepository);
     },

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:forestMapApp/core/enums/organization_member_status.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/enums/organization_role_types.dart';
@@ -32,7 +33,8 @@ abstract class OrganizationRepository {
   Future<Either<Failure, Organization>> updateMember({
     @required String id,
     @required String userId,
-    @required OrganizationRoleType type,
+    OrganizationRoleType role,
+    OrganizationMemberStatus status,
   });
   Future<Either<Failure, Organization>> removeMember({
     @required String id,

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:forestMapApp/core/enums/organization_member_status.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/enums/organization_role_types.dart';
@@ -78,10 +79,16 @@ class OrganizationRepositoryImpl implements OrganizationRepository {
   Future<Either<Failure, Organization>> updateMember({
     @required String id,
     @required String userId,
-    @required OrganizationRoleType type,
+    OrganizationRoleType role,
+    OrganizationMemberStatus status,
   }) {
     return _getOrganization(
-      () => dataSource.updateMember(id: id, userId: userId, type: type),
+      () => dataSource.updateMember(
+        id: id,
+        userId: userId,
+        role: role,
+        status: status,
+      ),
     );
   }
 

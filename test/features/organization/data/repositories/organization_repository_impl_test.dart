@@ -326,20 +326,20 @@ void main() {
         when(mockOrganizationDataSource.updateMember(
           id: anyNamed('id'),
           userId: anyNamed('userId'),
-          type: anyNamed('type'),
+          role: anyNamed('role'),
         )).thenAnswer((_) async => tOrganizationModel);
 
         final result = await organizationRepositoryImpl.updateMember(
           id: tId,
           userId: tUserId,
-          type: OrganizationRoleType.admin,
+          role: OrganizationRoleType.admin,
         );
 
         expect(result, Right(tOrganizationModel));
         verify(mockOrganizationDataSource.updateMember(
           id: tId,
           userId: tUserId,
-          type: OrganizationRoleType.admin,
+          role: OrganizationRoleType.admin,
         ));
         verifyNoMoreInteractions(mockOrganizationDataSource);
       },
@@ -351,13 +351,13 @@ void main() {
         when(mockOrganizationDataSource.updateMember(
           id: anyNamed('id'),
           userId: anyNamed('userId'),
-          type: anyNamed('type'),
+          role: anyNamed('role'),
         )).thenThrow(tServerException);
 
         final result = await organizationRepositoryImpl.updateMember(
           id: tId,
           userId: tUserId,
-          type: OrganizationRoleType.admin,
+          role: OrganizationRoleType.admin,
         );
 
         expect(
@@ -371,7 +371,7 @@ void main() {
         verify(mockOrganizationDataSource.updateMember(
           id: tId,
           userId: tUserId,
-          type: OrganizationRoleType.admin,
+          role: OrganizationRoleType.admin,
         ));
         verifyNoMoreInteractions(mockOrganizationDataSource);
       },

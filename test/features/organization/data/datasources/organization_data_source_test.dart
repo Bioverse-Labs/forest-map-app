@@ -485,7 +485,7 @@ void main() {
         final result = await organizationDataSourceImpl.updateMember(
           id: tId,
           userId: tUserId,
-          type: OrganizationRoleType.member,
+          role: OrganizationRoleType.member,
         );
         expect(
           result,

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
@@ -11,16 +12,18 @@ import '../repositories/organization_repository.dart';
 class UpdateMemberParams extends Equatable {
   final String id;
   final String userId;
-  final OrganizationRoleType type;
+  final OrganizationRoleType role;
+  final OrganizationMemberStatus status;
 
   UpdateMemberParams({
     @required this.id,
     @required this.userId,
-    @required this.type,
+    this.role,
+    this.status,
   });
 
   @override
-  List<Object> get props => [id, userId];
+  List<Object> get props => [id, userId, role, status];
 }
 
 class UpdateMember implements UseCase<Organization, UpdateMemberParams> {
@@ -33,7 +36,8 @@ class UpdateMember implements UseCase<Organization, UpdateMemberParams> {
     return organizationRepository.updateMember(
       id: params.id,
       userId: params.userId,
-      type: params.type,
+      role: params.role,
+      status: params.status,
     );
   }
 }

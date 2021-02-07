@@ -62,7 +62,8 @@ abstract class OrganizationDataSource {
   Future<OrganizationModel> updateMember({
     @required String id,
     @required String userId,
-    @required OrganizationRoleType type,
+    OrganizationRoleType role,
+    OrganizationMemberStatus status,
   });
 }
 
@@ -241,12 +242,23 @@ class OrganizationDataSourceImpl implements OrganizationDataSource {
   Future<OrganizationModel> updateMember({
     String id,
     String userId,
-    OrganizationRoleType type,
+    OrganizationRoleType role,
+    OrganizationMemberStatus status,
   }) async {
     try {
+      final map = {};
+
+      if (role != null) {
+        map['role'] = role;
+      }
+
+      if (status != null) {
+        map['status'] = status;
+      }
+
       await firestoreAdapter.updateDocument(
         'organizations/$id/members/$userId',
-        {'role': type.index},
+        map,
       );
 
       final orgDoc = await firestoreAdapter.getDocument('organizations/$id');
