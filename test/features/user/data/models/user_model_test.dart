@@ -1,7 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:forestMapApp/features/user/domain/entities/user.dart';
-import 'package:forestMapApp/features/auth/data/models/user_model.dart';
+import 'package:forestMapApp/features/user/data/models/user_model.dart';
 
 void main() {
   final userId = faker.guid.guid();
@@ -49,6 +49,7 @@ void main() {
         'id': userId,
         'name': name,
         'email': email,
+        'organizations': [],
         'avatarUrl': avatarUrl,
       };
 

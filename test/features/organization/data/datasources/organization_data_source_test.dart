@@ -11,7 +11,7 @@ import 'package:forestMapApp/core/enums/organization_role_types.dart';
 import 'package:forestMapApp/core/errors/exceptions.dart';
 import 'package:forestMapApp/core/util/localized_string.dart';
 import 'package:forestMapApp/core/util/uuid_generator.dart';
-import 'package:forestMapApp/features/auth/data/models/user_model.dart';
+import 'package:forestMapApp/features/user/data/models/user_model.dart';
 import 'package:forestMapApp/features/organization/data/datasources/organization_data_source.dart';
 import 'package:forestMapApp/features/organization/data/models/member_model.dart';
 import 'package:forestMapApp/features/organization/data/models/organization_model.dart';

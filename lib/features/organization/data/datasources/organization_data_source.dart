@@ -12,7 +12,7 @@ import '../../../../core/enums/organization_role_types.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/util/localized_string.dart';
 import '../../../../core/util/uuid_generator.dart';
-import '../../../auth/data/models/user_model.dart';
+import '../../../user/data/models/user_model.dart';
 import '../../../user/domain/entities/user.dart';
 import '../models/member_model.dart';
 import '../models/organization_model.dart';
@@ -125,7 +125,9 @@ class OrganizationDataSourceImpl implements OrganizationDataSource {
         'users/${user.id}',
         {
           'organizations': [
-            ...user.organizations.map((e) => e.id).toList(),
+            ...(user?.organizations != null
+                ? user?.organizations?.map((e) => e.id)?.toList()
+                : []),
             orgId,
           ]
         },

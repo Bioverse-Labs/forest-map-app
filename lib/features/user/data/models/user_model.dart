@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../../../organization/domain/entities/organization.dart';
-import '../../../user/domain/entities/user.dart';
+import '../../domain/entities/user.dart';
 
 class UserModel extends User {
   UserModel({
@@ -16,6 +16,7 @@ class UserModel extends User {
           id: id,
           name: name,
           email: email,
+          organizations: organizations,
           avatarUrl: avatarUrl,
         );
 
@@ -27,6 +28,7 @@ class UserModel extends User {
       id: map['id'],
       name: map['name'],
       email: map['email'],
+      organizations: map['organizations'],
       avatarUrl: map['avatarUrl'],
     );
   }
@@ -35,6 +37,7 @@ class UserModel extends User {
         'id': id,
         'name': name,
         'email': email,
+        'organizations': organizations?.map((e) => e.id)?.toList() ?? [],
         'avatarUrl': avatarUrl,
       };
 

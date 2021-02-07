@@ -25,8 +25,12 @@ class MemberModel extends Member {
       name: map['name'],
       email: map['email'],
       avatarUrl: map['avatarUrl'],
-      status: OrganizationMemberStatus.values[map['status'] as int],
-      role: OrganizationRoleType.values[map['role'] as int],
+      status: map['status'] != null
+          ? OrganizationMemberStatus.values[map['status'] as int]
+          : null,
+      role: map['role'] != null
+          ? OrganizationRoleType.values[map['role'] as int]
+          : null,
     );
   }
 

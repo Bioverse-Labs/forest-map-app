@@ -21,4 +21,18 @@ class Member extends User {
           email: email,
           avatarUrl: avatarUrl,
         );
+
+  @override
+  String toString() {
+    return '''
+      {
+        'id': $id,
+        'name': $name,
+        'email': $email,
+        'avatarUrl': $avatarUrl,
+        'status': $status,
+        'role': $role,
+      }
+    ''';
+  }
 }

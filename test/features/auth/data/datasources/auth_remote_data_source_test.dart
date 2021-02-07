@@ -7,7 +7,7 @@ import 'package:forestMapApp/core/enums/social_login_types.dart';
 import 'package:forestMapApp/core/errors/exceptions.dart';
 import 'package:forestMapApp/core/util/localized_string.dart';
 import 'package:forestMapApp/features/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:forestMapApp/features/auth/data/models/user_model.dart';
+import 'package:forestMapApp/features/user/data/models/user_model.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -61,6 +61,7 @@ void main() {
     'id': tUserId,
     'name': tName,
     'email': tEmail,
+    'organizations': [],
     'avatarUrl': tAvatarUrl,
   };
   final tExceptionMessage = faker.randomGenerator.string(20);
@@ -79,41 +80,17 @@ void main() {
       () async {
         when(mockFirebaseAuthAdapterImpl.signInWithEmailAndPassword(any, any))
             .thenAnswer((_) async => tUserModel);
-        when(mockDocumentSnapshot.exists).thenReturn(true);
-        when(mockFirestoreAdapterImpl.getDocument(any))
-            .thenAnswer((_) async => mockDocumentSnapshot);
 
         final result = await authRemoteDataSourceImpl
             .signInWithEmailAndPassword(tEmail, tPassword);
 
+        expect(result, tUserModel);
         verify(mockFirebaseAuthAdapterImpl.signInWithEmailAndPassword(
           tEmail,
           tPassword,
         ));
-        verify(mockFirestoreAdapterImpl.getDocument('users/$tUserId'));
         expect(result, tUserModel);
         verifyNoMoreInteractions(mockFirebaseAuthAdapterImpl);
-        verifyNoMoreInteractions(mockFirestoreAdapterImpl);
-      },
-    );
-
-    test(
-      'should throw ServerException if document does not exist',
-      () async {
-        when(mockFirebaseAuthAdapterImpl.signInWithEmailAndPassword(any, any))
-            .thenAnswer((_) async => tUserModel);
-        when(mockDocumentSnapshot.exists).thenReturn(false);
-        when(mockFirestoreAdapterImpl.getDocument(any))
-            .thenAnswer((_) async => mockDocumentSnapshot);
-
-        final call = authRemoteDataSourceImpl.signInWithEmailAndPassword;
-
-        expect(
-          () => call(tEmail, tPassword),
-          throwsA(
-            isInstanceOf<ServerException>(),
-          ),
-        );
       },
     );
 
@@ -125,25 +102,6 @@ void main() {
           message: tExceptionMessage,
           code: tExceptionMessage,
         ));
-
-        final call = authRemoteDataSourceImpl.signInWithEmailAndPassword;
-
-        expect(
-          () => call(tEmail, tPassword),
-          throwsA(
-            isInstanceOf<ServerException>(),
-          ),
-        );
-      },
-    );
-
-    test(
-      'should throw ServerException if firestore fails',
-      () async {
-        when(mockFirebaseAuthAdapterImpl.signInWithEmailAndPassword(any, any))
-            .thenAnswer((_) async => tUserModel);
-        when(mockFirestoreAdapterImpl.getDocument(any)).thenThrow(
-            FirebaseException(plugin: 'firestore', message: tExceptionMessage));
 
         final call = authRemoteDataSourceImpl.signInWithEmailAndPassword;
 
@@ -185,6 +143,7 @@ void main() {
         final result = await authRemoteDataSourceImpl
             .signInWithSocial(SocialLoginType.facebook);
 
+        expect(result, tUserModel);
         verify(mockFirebaseAuthAdapterImpl.signInWithCredential(
           mockAuthCredential,
         ));
@@ -201,9 +160,9 @@ void main() {
       () async {
         when(mockFirebaseAuthAdapterImpl.signInWithCredential(any))
             .thenAnswer((_) async => tUserModel);
-        when(mockDocumentSnapshot.exists).thenReturn(false);
         when(mockFirestoreAdapterImpl.getDocument(any))
             .thenAnswer((_) async => mockDocumentSnapshot);
+        when(mockDocumentSnapshot.exists).thenReturn(false);
         when(mockFirestoreAdapterImpl.addDocument(any, any))
             .thenAnswer((_) async => mockDocumentReference);
 
