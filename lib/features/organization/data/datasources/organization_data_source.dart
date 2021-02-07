@@ -246,14 +246,14 @@ class OrganizationDataSourceImpl implements OrganizationDataSource {
     OrganizationMemberStatus status,
   }) async {
     try {
-      final map = {};
+      final map = <String, dynamic>{};
 
       if (role != null) {
-        map['role'] = role;
+        map['role'] = role.index;
       }
 
       if (status != null) {
-        map['status'] = status;
+        map['status'] = status.index;
       }
 
       await firestoreAdapter.updateDocument(

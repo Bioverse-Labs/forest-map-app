@@ -39,7 +39,7 @@ void main() {
       () async {
         when(mockReference.putFile(any)).thenAnswer((_) => mockUploadTask);
 
-        final result = await firebaseStorageAdapterImpl.uploadFile(
+        final result = firebaseStorageAdapterImpl.uploadFile(
           file: tFile,
           storagePath: 'users/$tId',
         );
