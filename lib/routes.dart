@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/core/notifiers/home_screen_notifier.dart';
+import 'package:forestMapApp/core/screens/home_screen.dart';
+import 'package:forestMapApp/features/organization/presentation/notifiers/organizations_notifier.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
@@ -36,62 +39,16 @@ Map<String, Widget Function(BuildContext)> routes = {
         appNavigator: GetIt.I(),
         notificationsUtils: GetIt.I(),
       ),
-  '/home': (ctx) => TempWidget(),
-};
-
-class TempWidget extends StatefulWidget {
-  const TempWidget({Key key}) : super(key: key);
-
-  @override
-  _TempWidgetState createState() => _TempWidgetState();
-}
-
-class _TempWidgetState extends State<TempWidget> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Future<void> _startTracking(context) async {
-    final userNotifier = Provider.of<UserNotifierImpl>(context, listen: false);
-    final locationNotifier =
-        Provider.of<LocationNotifierImpl>(context, listen: false);
-
-    try {
-      await locationNotifier.startTracking(userNotifier.user.id);
-    } on LocationFailure catch (failure) {
-      GetIt.I<NotificationsUtils>().showErrorNotification(failure.message);
-    }
-  }
-
-  void _signOut() {
-    GetIt.I<FirebaseAuthAdapterImpl>().firebaseAuth.signOut();
-    GetIt.I<AppNavigator>().pushAndReplace('/');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.red,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              RaisedButton(
-                onPressed: () => _startTracking(context),
-                child: Text('Start Tracking'),
-              ),
-              RaisedButton(
-                onPressed: _signOut,
-                child: Text('Logout'),
-              ),
-            ],
-          ),
+  '/home': (ctx) => HomeScreen(
+        localizedString: GetIt.I(),
+        homeScreenNotifier: Provider.of<HomeScreenNotifierImpl>(
+          ctx,
+          listen: false,
         ),
+        organizationNotifier: Provider.of<OrganizationNotifierImpl>(
+          ctx,
+          listen: false,
+        ),
+        userNotifierImpl: Provider.of<UserNotifierImpl>(ctx, listen: false),
       ),
-    );
-  }
-}
+};

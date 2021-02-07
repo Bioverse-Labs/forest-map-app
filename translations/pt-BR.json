@@ -49,5 +49,24 @@
   "preview-screen": {
     "title": "Pré Visualização",
     "submit-button": "Salvar"
+  },
+  "map-screen": {},
+  "organization-screen": {
+    "title": "Organizações",
+    "empty-state-title": "Atualmente você não faz parte de nenhum organização :/",
+    "empty-state-button": "Nova organização",
+    "members-counter": "Membros",
+    "invite-member-button": "Convidar membros",
+    "invite-member-button-tooltip": "Gera um link para convidar um usuário",
+    "edit-button": "Editar info",
+    "data-section-title": "Localizações das árvores"
+  },
+  "edit-organization-screen": {
+    "title": "Editar Organização"
+  },
+  "home-screen": {
+    "map-tab": "Mapa",
+    "organization-tab": "Organizações",
+    "profile-tab": "Perfil"
   }
 }

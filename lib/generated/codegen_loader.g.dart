@@ -65,6 +65,25 @@ class CodegenLoader extends AssetLoader{
   "preview-screen": {
     "title": "Preview",
     "submit-button": "Save"
+  },
+  "map-screen": {},
+  "organization-screen": {
+    "title": "Organizations",
+    "empty-state-title": "Currently you are not assined to any organization... :/",
+    "empty-state-button": "New organization",
+    "members-counter": "Members",
+    "invite-member-button": "Invite Members",
+    "invite-member-button-tooltip": "Generate link to invite an User",
+    "edit-button": "Edit data",
+    "data-section-title": "Tree Locations Data"
+  },
+  "edit-organization-screen": {
+    "title": "Edit Organization"
+  },
+  "home-screen": {
+    "map-tab": "Map",
+    "organization-tab": "Organizations",
+    "profile-tab": "Profile"
   }
 };
 static const Map<String,dynamic> pt_BR = {
@@ -118,6 +137,25 @@ static const Map<String,dynamic> pt_BR = {
   "preview-screen": {
     "title": "Pré Visualização",
     "submit-button": "Salvar"
+  },
+  "map-screen": {},
+  "organization-screen": {
+    "title": "Organizações",
+    "empty-state-title": "Atualmente você não faz parte de nenhum organização :/",
+    "empty-state-button": "Nova organização",
+    "members-counter": "Membros",
+    "invite-member-button": "Convidar membros",
+    "invite-member-button-tooltip": "Gera um link para convidar um usuário",
+    "edit-button": "Editar info",
+    "data-section-title": "Localizações das árvores"
+  },
+  "edit-organization-screen": {
+    "title": "Editar Organização"
+  },
+  "home-screen": {
+    "map-tab": "Mapa",
+    "organization-tab": "Organizações",
+    "profile-tab": "Perfil"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "pt_BR": pt_BR};

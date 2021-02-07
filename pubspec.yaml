@@ -31,6 +31,7 @@ dependencies:
   data_connection_checker: ^0.3.4
   image: ^2.1.19
   uuid: ^2.2.2
+  cached_network_image: ^2.5.0
 
   # Firebase Deps
   firebase_core: "0.7.0"

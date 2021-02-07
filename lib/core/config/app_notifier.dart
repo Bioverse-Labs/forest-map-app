@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/core/notifiers/home_screen_notifier.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,9 @@ class AppNotifier extends StatelessWidget {
           create: (_) => GetIt.I(),
         ),
         ChangeNotifierProvider<UserNotifierImpl>(
+          create: (_) => GetIt.I(),
+        ),
+        ChangeNotifierProvider<HomeScreenNotifierImpl>(
           create: (_) => GetIt.I(),
         ),
       ],
