@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import '../../../../core/enums/organization_member_status.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../user/domain/entities/user.dart';

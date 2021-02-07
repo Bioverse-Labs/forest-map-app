@@ -1,13 +1,14 @@
 import 'dart:io';
-import 'package:forestMapApp/core/errors/failure.dart';
+
 import 'package:dartz/dartz.dart';
-import 'package:forestMapApp/core/usecases/usecase.dart';
-import 'package:forestMapApp/features/user/domain/entities/user.dart';
-import 'package:forestMapApp/features/user/domain/repository/user_repository.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import 'package:equatable/equatable.dart';
-import 'package:forestMapApp/features/organization/domain/entities/organization.dart';
+import '../../../../core/errors/failure.dart';
+import '../../../../core/usecases/usecase.dart';
+import '../../../organization/domain/entities/organization.dart';
+import '../entities/user.dart';
+import '../repository/user_repository.dart';
 
 class UpdateUserParams extends Equatable {
   final String id;
