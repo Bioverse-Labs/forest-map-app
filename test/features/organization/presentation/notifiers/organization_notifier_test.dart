@@ -5,7 +5,7 @@ import 'package:forestMapApp/core/enums/exception_origin_types.dart';
 import 'package:forestMapApp/core/enums/organization_member_status.dart';
 import 'package:forestMapApp/core/enums/organization_role_types.dart';
 import 'package:forestMapApp/core/errors/failure.dart';
-import 'package:forestMapApp/features/auth/domain/entities/user.dart';
+import 'package:forestMapApp/features/user/domain/entities/user.dart';
 import 'package:forestMapApp/features/organization/domain/entities/organization.dart';
 import 'package:forestMapApp/features/organization/domain/usecases/create_organization.dart';
 import 'package:forestMapApp/features/organization/domain/usecases/delete_organization.dart';

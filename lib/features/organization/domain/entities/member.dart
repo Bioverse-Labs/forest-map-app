@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 
 import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';
-import '../../../auth/domain/entities/user.dart';
+import '../../../user/domain/entities/user.dart';
 
 class Member extends User {
   final OrganizationMemberStatus status;

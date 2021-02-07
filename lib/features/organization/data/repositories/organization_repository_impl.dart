@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:forestMapApp/core/enums/organization_member_status.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failure.dart';
-import '../../../auth/domain/entities/user.dart';
+import '../../../user/domain/entities/user.dart';
 import '../../domain/entities/organization.dart';
 import '../../domain/repositories/organization_repository.dart';
 import '../datasources/organization_data_source.dart';
@@ -17,7 +17,7 @@ typedef Future<Organization> _DSExecutor();
 class OrganizationRepositoryImpl implements OrganizationRepository {
   final OrganizationDataSource dataSource;
 
-  OrganizationRepositoryImpl(this.dataSource);
+  OrganizationRepositoryImpl({@required this.dataSource});
 
   @override
   Future<Either<Failure, Organization>> createOrganization({

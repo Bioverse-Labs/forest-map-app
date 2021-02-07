@@ -1,0 +1,63 @@
+import 'package:dartz/dartz.dart';
+import 'package:faker/faker.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:forestMapApp/core/enums/exception_origin_types.dart';
+import 'package:forestMapApp/core/errors/failure.dart';
+import 'package:forestMapApp/features/user/domain/entities/user.dart';
+import 'package:forestMapApp/features/user/domain/repository/user_repository.dart';
+import 'package:forestMapApp/features/user/domain/usecases/get_user.dart';
+import 'package:mockito/mockito.dart';
+
+class MockUserRepository extends Mock implements UserRepository {}
+
+void main() {
+  MockUserRepository mockUserRepository;
+  GetUser getUser;
+
+  setUp(() {
+    mockUserRepository = MockUserRepository();
+    getUser = GetUser(mockUserRepository);
+  });
+
+  final tId = faker.guid.guid();
+  final tName = faker.person.name();
+  final tUser = User(id: tId, name: tName);
+
+  final tErrorMessage = faker.randomGenerator.string(20);
+  final tErrorCode = faker.randomGenerator.string(4);
+  final tFailure = ServerFailure(
+    tErrorMessage,
+    tErrorCode,
+    ExceptionOriginTypes.test,
+  );
+
+  test(
+    'should return [User] if repository succeed',
+    () async {
+      when(mockUserRepository.getUser(any)).thenAnswer(
+        (_) async => Right(tUser),
+      );
+
+      final result = await getUser(GetUserParams(tId));
+
+      expect(result, Right(tUser));
+      verify(mockUserRepository.getUser(tId));
+      verifyNoMoreInteractions(mockUserRepository);
+    },
+  );
+
+  test(
+    'should return [ServerFailure] when repository fails',
+    () async {
+      when(mockUserRepository.getUser(any)).thenAnswer(
+        (_) async => Left(tFailure),
+      );
+
+      final result = await getUser(GetUserParams(tId));
+
+      expect(result, Left(tFailure));
+      verify(mockUserRepository.getUser(tId));
+      verifyNoMoreInteractions(mockUserRepository);
+    },
+  );
+}

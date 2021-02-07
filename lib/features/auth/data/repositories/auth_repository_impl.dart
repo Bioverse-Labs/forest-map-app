@@ -1,10 +1,11 @@
 import 'package:dartz/dartz.dart';
+import 'package:meta/meta.dart';
 
 import '../../../../core/enums/social_login_types.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/platform/network_info.dart';
-import '../../domain/entities/user.dart';
+import '../../../user/domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_data_source.dart';
 
@@ -14,7 +15,10 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource dataSource;
   final NetworkInfo networkInfo;
 
-  AuthRepositoryImpl(this.dataSource, this.networkInfo);
+  AuthRepositoryImpl({
+    @required this.dataSource,
+    @required this.networkInfo,
+  });
 
   @override
   Future<Either<Failure, User>> signInWithEmailAndPassword(

@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../../../organization/domain/entities/organization.dart';
-import '../../domain/entities/user.dart';
+import '../../../user/domain/entities/user.dart';
 
 class UserModel extends User {
   UserModel({

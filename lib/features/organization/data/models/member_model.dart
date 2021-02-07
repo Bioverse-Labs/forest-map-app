@@ -1,6 +1,5 @@
-import 'package:forestMapApp/core/enums/organization_member_status.dart';
-import 'package:forestMapApp/core/enums/organization_role_types.dart';
-
+import '../../../../core/enums/organization_member_status.dart';
+import '../../../../core/enums/organization_role_types.dart';
 import '../../domain/entities/member.dart';
 
 class MemberModel extends Member {

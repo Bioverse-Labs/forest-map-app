@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 
 import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';
-import '../../../auth/domain/entities/user.dart';
+import '../../../user/domain/entities/user.dart';
 import '../../domain/entities/organization.dart';
 import '../../domain/usecases/create_organization.dart';
 import '../../domain/usecases/delete_organization.dart';

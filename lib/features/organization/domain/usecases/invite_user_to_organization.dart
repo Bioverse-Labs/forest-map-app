@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
-import '../../../auth/domain/entities/user.dart';
+import '../../../user/domain/entities/user.dart';
 import '../entities/organization.dart';
 import '../repositories/organization_repository.dart';
 

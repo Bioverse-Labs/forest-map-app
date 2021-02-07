@@ -13,7 +13,7 @@ import '../../../../core/errors/exceptions.dart';
 import '../../../../core/util/localized_string.dart';
 import '../../../../core/util/uuid_generator.dart';
 import '../../../auth/data/models/user_model.dart';
-import '../../../auth/domain/entities/user.dart';
+import '../../../user/domain/entities/user.dart';
 import '../models/member_model.dart';
 import '../models/organization_model.dart';
 
@@ -74,10 +74,10 @@ class OrganizationDataSourceImpl implements OrganizationDataSource {
   final UUIDGenerator uuidGenerator;
 
   OrganizationDataSourceImpl({
-    this.firestoreAdapter,
-    this.firebaseStorageAdapter,
-    this.localizedString,
-    this.uuidGenerator,
+    @required this.firestoreAdapter,
+    @required this.firebaseStorageAdapter,
+    @required this.localizedString,
+    @required this.uuidGenerator,
   });
 
   @override

@@ -23,7 +23,7 @@ void main() {
   setUp(() {
     mockOrganizationDataSource = MockOrganizationDataSource();
     organizationRepositoryImpl =
-        OrganizationRepositoryImpl(mockOrganizationDataSource);
+        OrganizationRepositoryImpl(dataSource: mockOrganizationDataSource);
   });
 
   final tId = faker.guid.guid();

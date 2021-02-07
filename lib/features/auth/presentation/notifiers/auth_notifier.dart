@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../../../core/enums/social_login_types.dart';
-import '../../domain/entities/user.dart';
+import '../../../user/domain/entities/user.dart';
 import '../../domain/usecases/sign_in_with_email_and_password.dart';
 import '../../domain/usecases/sign_in_with_social.dart';
 import '../../domain/usecases/sign_up.dart';

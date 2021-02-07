@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forestMapApp/features/auth/domain/entities/user.dart';
+import 'package:forestMapApp/features/user/domain/entities/user.dart';
 import 'package:forestMapApp/features/organization/domain/entities/organization.dart';
 import 'package:forestMapApp/features/organization/domain/repositories/organization_repository.dart';
 import 'package:forestMapApp/features/organization/domain/usecases/invite_user_to_organization.dart';

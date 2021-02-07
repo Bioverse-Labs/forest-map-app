@@ -8,7 +8,7 @@ import 'package:forestMapApp/core/platform/network_info.dart';
 import 'package:forestMapApp/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:forestMapApp/features/auth/data/models/user_model.dart';
 import 'package:forestMapApp/features/auth/data/repositories/auth_repository_impl.dart';
-import 'package:forestMapApp/features/auth/domain/entities/user.dart';
+import 'package:forestMapApp/features/user/domain/entities/user.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -24,7 +24,10 @@ void main() {
   setUp(() {
     dataSource = MockRemoteDataSource();
     networkInfo = MockNetworkInfo();
-    repository = AuthRepositoryImpl(dataSource, networkInfo);
+    repository = AuthRepositoryImpl(
+      dataSource: dataSource,
+      networkInfo: networkInfo,
+    );
   });
 
   final userId = faker.guid.guid();
