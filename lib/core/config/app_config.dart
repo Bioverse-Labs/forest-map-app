@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:forestMapApp/features/user/data/datasource/user_data_source.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
@@ -35,6 +34,12 @@ import '../../features/tracking/data/repositories/location_repository_impl.dart'
 import '../../features/tracking/domain/repositories/location_repository.dart';
 import '../../features/tracking/domain/usecases/track_user.dart';
 import '../../features/tracking/presentation/notifiers/location_notifier.dart';
+import '../../features/user/data/datasource/user_data_source.dart';
+import '../../features/user/data/repository/user_repository_impl.dart';
+import '../../features/user/domain/repository/user_repository.dart';
+import '../../features/user/domain/usecases/get_user.dart';
+import '../../features/user/domain/usecases/update_user.dart';
+import '../../features/user/presentation/notifiers/user_notifier.dart';
 import '../adapters/firebase_auth_adapter.dart';
 import '../adapters/firebase_storage_adapter.dart';
 import '../adapters/firestore_adapter.dart';
@@ -60,7 +65,7 @@ class AppConfig {
   }
 
   static void registerUtils() {
-    GetIt.I.registerLazySingleton<LocalizedStringImpl>(
+    GetIt.I.registerLazySingleton<LocalizedString>(
       () => LocalizedStringImpl(),
     );
     GetIt.I.registerLazySingleton<ImageUtilsImpl>(() => ImageUtilsImpl());
@@ -138,7 +143,7 @@ class AppConfig {
       () => AuthRemoteDataSourceImpl(
         GetIt.I<FirestoreAdapterImpl>(),
         GetIt.I<FirebaseAuthAdapterImpl>(),
-        GetIt.I<LocalizedStringImpl>(),
+        GetIt.I(),
       ),
     );
 
@@ -155,6 +160,14 @@ class AppConfig {
         firestoreAdapter: GetIt.I(),
         localizedString: GetIt.I(),
         uuidGenerator: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<UserDataSourceImpl>(
+      () => UserDataSourceImpl(
+        firestoreAdapter: GetIt.I(),
+        firebaseStorageAdapter: GetIt.I(),
+        localizedString: GetIt.I(),
       ),
     );
   }
@@ -177,6 +190,12 @@ class AppConfig {
     GetIt.I.registerLazySingleton<OrganizationRepository>(
       () => OrganizationRepositoryImpl(
         dataSource: GetIt.I<OrganizationDataSourceImpl>(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<UserRepository>(
+      () => UserRepositoryImpl(
+        dataSource: GetIt.I<UserDataSourceImpl>(),
       ),
     );
   }
@@ -243,6 +262,18 @@ class AppConfig {
         GetIt.I(),
       ),
     );
+
+    GetIt.I.registerLazySingleton<GetUser>(
+      () => GetUser(
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<UpdateUser>(
+      () => UpdateUser(
+        GetIt.I(),
+      ),
+    );
   }
 
   // * PRESENTATION LAYER SINGLETON'S //
@@ -262,7 +293,7 @@ class AppConfig {
       ),
     );
 
-    GetIt.I.registerFactory<OrganizationNotifier>(
+    GetIt.I.registerFactory<OrganizationNotifierImpl>(
       () => OrganizationNotifierImpl(
         createOrganizationUseCase: GetIt.I(),
         deleteOrganizationUseCase: GetIt.I(),
@@ -270,6 +301,13 @@ class AppConfig {
         removeMemberUseCase: GetIt.I(),
         updateMemberUseCase: GetIt.I(),
         updateOrganizationUseCase: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerFactory<UserNotifierImpl>(
+      () => UserNotifierImpl(
+        getUserUseCase: GetIt.I(),
+        updateUserUseCase: GetIt.I(),
       ),
     );
   }

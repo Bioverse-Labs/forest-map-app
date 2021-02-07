@@ -7,19 +7,17 @@ import '../../domain/usecases/sign_in_with_social.dart';
 import '../../domain/usecases/sign_up.dart';
 
 abstract class AuthNotifier {
-  Future<void> signInWithEmailAndPassword(String email, String password);
-  Future<void> signInWithSocial(SocialLoginType type);
-  Future<void> signUp(String name, String email, String password);
+  Future<User> signInWithEmailAndPassword(String email, String password);
+  Future<User> signInWithSocial(SocialLoginType type);
+  Future<User> signUp(String name, String email, String password);
 }
 
 class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
   final SignInWithEmailAndPassword signInWithEmailAndPasswordUseCase;
   final SignInWithSocial signInWithSocialUseCase;
   final SignUp signUpUseCase;
-  User _user;
   bool _loading = false;
 
-  User get user => _user;
   bool get isLoading => _loading;
 
   AuthNotifierImpl(
@@ -29,7 +27,7 @@ class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
   );
 
   @override
-  Future<void> signInWithEmailAndPassword(String email, String password) async {
+  Future<User> signInWithEmailAndPassword(String email, String password) async {
     this._loading = true;
     notifyListeners();
 
@@ -40,17 +38,16 @@ class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
     this._loading = false;
     notifyListeners();
 
-    failureOrUser.fold(
+    return failureOrUser.fold(
       (failure) => throw failure,
       (user) {
-        this._user = user;
-        notifyListeners();
+        return user;
       },
     );
   }
 
   @override
-  Future<void> signInWithSocial(SocialLoginType type) async {
+  Future<User> signInWithSocial(SocialLoginType type) async {
     this._loading = true;
     notifyListeners();
 
@@ -60,17 +57,16 @@ class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
     this._loading = false;
     notifyListeners();
 
-    failureOrUser.fold(
+    return failureOrUser.fold(
       (failure) => throw failure,
       (user) {
-        this._user = user;
-        notifyListeners();
+        return user;
       },
     );
   }
 
   @override
-  Future<void> signUp(String name, String email, String password) async {
+  Future<User> signUp(String name, String email, String password) async {
     this._loading = true;
     notifyListeners();
 
@@ -80,11 +76,10 @@ class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
     this._loading = false;
     notifyListeners();
 
-    failureOrUser.fold(
+    return failureOrUser.fold(
       (failure) => throw failure,
       (user) {
-        this._user = user;
-        notifyListeners();
+        return user;
       },
     );
   }

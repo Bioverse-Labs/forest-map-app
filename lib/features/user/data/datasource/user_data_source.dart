@@ -1,15 +1,15 @@
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:forestMapApp/core/adapters/firebase_storage_adapter.dart';
-import 'package:forestMapApp/features/organization/data/models/organization_model.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/adapters/firebase_storage_adapter.dart';
 import '../../../../core/adapters/firestore_adapter.dart';
 import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/util/localized_string.dart';
 import '../../../organization/data/models/member_model.dart';
+import '../../../organization/data/models/organization_model.dart';
 import '../../../organization/domain/entities/organization.dart';
 import '../models/user_model.dart';
 
@@ -48,7 +48,7 @@ class UserDataSourceImpl implements UserDataSource {
         );
       }
 
-      for (var orgId in userDoc.data()['organizations']) {
+      for (var orgId in userDoc.data()['organizations'] ?? []) {
         final organization = await _getOrganizations(orgId);
         organizations.add(organization);
       }

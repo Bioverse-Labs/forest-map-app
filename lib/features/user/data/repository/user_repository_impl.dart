@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:forestMapApp/core/errors/exceptions.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../organization/domain/entities/organization.dart';
 import '../../domain/entities/user.dart';

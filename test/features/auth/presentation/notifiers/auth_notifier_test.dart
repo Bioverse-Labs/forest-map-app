@@ -70,10 +70,6 @@ void main() {
               value: (notifier) => notifier.isLoading,
               matcher: false,
             ),
-            NotifierAssertParams(
-              value: (notifier) => notifier.user,
-              matcher: tUser,
-            ),
           ],
         );
 
@@ -120,10 +116,6 @@ void main() {
               value: (notifier) => notifier.isLoading,
               matcher: false,
             ),
-            NotifierAssertParams(
-              value: (notifier) => notifier.user,
-              matcher: tUser,
-            ),
           ],
         );
 
@@ -168,10 +160,6 @@ void main() {
             NotifierAssertParams(
               value: (notifier) => notifier.isLoading,
               matcher: false,
-            ),
-            NotifierAssertParams(
-              value: (notifier) => notifier.user,
-              matcher: tUser,
             ),
           ],
         );

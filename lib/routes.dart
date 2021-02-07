@@ -11,6 +11,7 @@ import 'features/auth/presentation/notifiers/auth_notifier.dart';
 import 'features/auth/presentation/screens/sign_in_screen.dart';
 import 'features/auth/presentation/screens/sign_up_screen.dart';
 import 'features/tracking/presentation/notifiers/location_notifier.dart';
+import 'features/user/presentation/notifiers/user_notifier.dart';
 
 Map<String, Widget Function(BuildContext)> routes = {
   '/': (_) => InitialScreen(
@@ -19,6 +20,7 @@ Map<String, Widget Function(BuildContext)> routes = {
       ),
   '/signIn': (ctx) => SignInScreen(
         authNotifierImpl: Provider.of<AuthNotifierImpl>(ctx, listen: false),
+        userNotifierImpl: Provider.of<UserNotifierImpl>(ctx, listen: false),
         localizedString: GetIt.I(),
         validationUtils: GetIt.I(),
         appTheme: GetIt.I(),
@@ -27,6 +29,7 @@ Map<String, Widget Function(BuildContext)> routes = {
       ),
   '/signUp': (ctx) => SignupScreen(
         authNotifierImpl: Provider.of<AuthNotifierImpl>(ctx, listen: false),
+        userNotifierImpl: Provider.of<UserNotifierImpl>(ctx, listen: false),
         localizedString: GetIt.I(),
         validationUtils: GetIt.I(),
         appTheme: GetIt.I(),
@@ -50,12 +53,12 @@ class _TempWidgetState extends State<TempWidget> {
   }
 
   Future<void> _startTracking(context) async {
-    final authNotifier = Provider.of<AuthNotifierImpl>(context, listen: false);
+    final userNotifier = Provider.of<UserNotifierImpl>(context, listen: false);
     final locationNotifier =
         Provider.of<LocationNotifierImpl>(context, listen: false);
 
     try {
-      await locationNotifier.startTracking(authNotifier.user.id);
+      await locationNotifier.startTracking(userNotifier.user.id);
     } on LocationFailure catch (failure) {
       GetIt.I<NotificationsUtils>().showErrorNotification(failure.message);
     }
