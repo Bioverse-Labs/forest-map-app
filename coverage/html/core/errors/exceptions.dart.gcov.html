@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2021-02-02 03:51:30</td>
+            <td class="headerValue">2021-02-06 22:50:28</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -61,9 +61,9 @@
 <pre class="sourceHeading">          Line data    Source code</pre>
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : import 'package:firebase_auth/firebase_auth.dart';</a>
-<a name="2"><span class="lineNum">       2 </span>            : import 'package:forestMapApp/core/util/localized_string.dart';</a>
-<a name="3"><span class="lineNum">       3 </span>            : </a>
-<a name="4"><span class="lineNum">       4 </span>            : import '../enums/exception_origin_types.dart';</a>
+<a name="2"><span class="lineNum">       2 </span>            : </a>
+<a name="3"><span class="lineNum">       3 </span>            : import '../enums/exception_origin_types.dart';</a>
+<a name="4"><span class="lineNum">       4 </span>            : import '../util/localized_string.dart';</a>
 <a name="5"><span class="lineNum">       5 </span>            : </a>
 <a name="6"><span class="lineNum">       6 </span>            : class ServerException implements Exception {</a>
 <a name="7"><span class="lineNum">       7 </span>            :   final String message;</a>
@@ -71,7 +71,7 @@
 <a name="9"><span class="lineNum">       9 </span>            :   final ExceptionOriginTypes origin;</a>
 <a name="10"><span class="lineNum">      10 </span>            :   final StackTrace stackTrace;</a>
 <a name="11"><span class="lineNum">      11 </span>            : </a>
-<a name="12"><span class="lineNum">      12 </span><span class="lineCov">          3 :   ServerException(this.message, this.code, this.origin, {this.stackTrace});</span></a>
+<a name="12"><span class="lineNum">      12 </span><span class="lineCov">          5 :   ServerException(this.message, this.code, this.origin, {this.stackTrace});</span></a>
 <a name="13"><span class="lineNum">      13 </span>            : }</a>
 <a name="14"><span class="lineNum">      14 </span>            : </a>
 <a name="15"><span class="lineNum">      15 </span>            : class LocalException implements Exception {</a>

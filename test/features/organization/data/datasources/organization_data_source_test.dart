@@ -115,8 +115,6 @@ void main() {
           user: tUserModel,
         );
 
-        print(result == tOrganizationModel);
-
         expect(result, tOrganizationModel);
         verify(mockFirestoreAdapter.addDocument(
           'organizations/$tId',
