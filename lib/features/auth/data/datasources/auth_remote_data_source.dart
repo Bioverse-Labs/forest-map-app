@@ -62,20 +62,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return firebaseAuthAdapter.signInWithEmailAndPassword(email, password);
     } on FirebaseAuthException catch (error) {
       throw getServerExceptionFromFirebaseAuth(error, localizedString);
-    } on FirebaseException catch (error) {
-      throw ServerException(
-        localizedString.getLocalizedString('database-exceptions.update-error'),
-        error.code,
-        ExceptionOriginTypes.firebaseFirestore,
-        stackTrace: error.stackTrace,
-      );
-    } catch (error) {
-      throw ServerException(
-        localizedString.getLocalizedString('generic-exception'),
-        'generic-error',
-        ExceptionOriginTypes.firebaseFirestore,
-        stackTrace: error.stackTrace,
-      );
     }
   }
 
@@ -111,12 +97,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
       );
-    } catch (error) {
-      throw ServerException(
-        localizedString.getLocalizedString('generic-exception'),
-        'generic-error',
-        ExceptionOriginTypes.firebaseFirestore,
-      );
     }
   }
 
@@ -141,13 +121,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw ServerException(
         localizedString.getLocalizedString('database-exceptions.get-error'),
         error.code,
-        ExceptionOriginTypes.firebaseFirestore,
-        stackTrace: error.stackTrace,
-      );
-    } catch (error) {
-      throw ServerException(
-        localizedString.getLocalizedString('generic-exception'),
-        'generic-error',
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,
       );

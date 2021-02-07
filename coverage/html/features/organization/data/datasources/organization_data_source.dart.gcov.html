@@ -31,13 +31,13 @@
             <td class="headerValue">lcov.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">111</td>
-            <td class="headerCovTableEntry">121</td>
-            <td class="headerCovTableEntryHi">91.7 %</td>
+            <td class="headerCovTableEntry">113</td>
+            <td class="headerCovTableEntry">123</td>
+            <td class="headerCovTableEntryHi">91.9 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2021-02-06 22:50:28</td>
+            <td class="headerValue">2021-02-07 15:28:18</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -74,7 +74,7 @@
 <a name="12"><span class="lineNum">      12 </span>            : import '../../../../core/errors/exceptions.dart';</a>
 <a name="13"><span class="lineNum">      13 </span>            : import '../../../../core/util/localized_string.dart';</a>
 <a name="14"><span class="lineNum">      14 </span>            : import '../../../../core/util/uuid_generator.dart';</a>
-<a name="15"><span class="lineNum">      15 </span>            : import '../../../auth/data/models/user_model.dart';</a>
+<a name="15"><span class="lineNum">      15 </span>            : import '../../../user/data/models/user_model.dart';</a>
 <a name="16"><span class="lineNum">      16 </span>            : import '../../../user/domain/entities/user.dart';</a>
 <a name="17"><span class="lineNum">      17 </span>            : import '../models/member_model.dart';</a>
 <a name="18"><span class="lineNum">      18 </span>            : import '../models/organization_model.dart';</a>
@@ -187,238 +187,240 @@
 <a name="125"><span class="lineNum">     125 </span><span class="lineCov">          2 :         'users/${user.id}',</span></a>
 <a name="126"><span class="lineNum">     126 </span><span class="lineCov">          1 :         {</span></a>
 <a name="127"><span class="lineNum">     127 </span><span class="lineCov">          1 :           'organizations': [</span></a>
-<a name="128"><span class="lineNum">     128 </span><span class="lineCov">          3 :             ...user.organizations.map((e) =&gt; e.id).toList(),</span></a>
-<a name="129"><span class="lineNum">     129 </span><span class="lineCov">          1 :             orgId,</span></a>
-<a name="130"><span class="lineNum">     130 </span>            :           ]</a>
-<a name="131"><span class="lineNum">     131 </span>            :         },</a>
-<a name="132"><span class="lineNum">     132 </span>            :       );</a>
-<a name="133"><span class="lineNum">     133 </span>            : </a>
-<a name="134"><span class="lineNum">     134 </span><span class="lineCov">          1 :       return OrganizationModel(</span></a>
-<a name="135"><span class="lineNum">     135 </span>            :         id: orgId,</a>
-<a name="136"><span class="lineNum">     136 </span>            :         name: name,</a>
-<a name="137"><span class="lineNum">     137 </span>            :         email: email,</a>
-<a name="138"><span class="lineNum">     138 </span>            :         phone: phone,</a>
-<a name="139"><span class="lineNum">     139 </span>            :         avatarUrl: avatarUrl,</a>
-<a name="140"><span class="lineNum">     140 </span><span class="lineCov">          1 :         members: [</span></a>
-<a name="141"><span class="lineNum">     141 </span><span class="lineCov">          2 :           MemberModel.fromMap({</span></a>
-<a name="142"><span class="lineNum">     142 </span><span class="lineCov">          1 :             ...user.toMap(),</span></a>
-<a name="143"><span class="lineNum">     143 </span><span class="lineCov">          2 :             'status': OrganizationMemberStatus.active.index,</span></a>
-<a name="144"><span class="lineNum">     144 </span><span class="lineCov">          2 :             'role': OrganizationRoleType.owner.index,</span></a>
-<a name="145"><span class="lineNum">     145 </span>            :           })</a>
-<a name="146"><span class="lineNum">     146 </span>            :         ],</a>
-<a name="147"><span class="lineNum">     147 </span>            :       );</a>
-<a name="148"><span class="lineNum">     148 </span><span class="lineCov">          1 :     } on FirebaseException catch (error) {</span></a>
-<a name="149"><span class="lineNum">     149 </span><span class="lineCov">          1 :       throw ServerException(</span></a>
-<a name="150"><span class="lineNum">     150 </span><span class="lineCov">          2 :         localizedString.getLocalizedString('database-exceptions.get-error'),</span></a>
-<a name="151"><span class="lineNum">     151 </span><span class="lineCov">          1 :         error.code,</span></a>
-<a name="152"><span class="lineNum">     152 </span>            :         ExceptionOriginTypes.firebaseFirestore,</a>
-<a name="153"><span class="lineNum">     153 </span><span class="lineCov">          1 :         stackTrace: error.stackTrace,</span></a>
-<a name="154"><span class="lineNum">     154 </span>            :       );</a>
-<a name="155"><span class="lineNum">     155 </span>            :     }</a>
-<a name="156"><span class="lineNum">     156 </span>            :   }</a>
-<a name="157"><span class="lineNum">     157 </span>            : </a>
-<a name="158"><span class="lineNum">     158 </span>            :   @override</a>
-<a name="159"><span class="lineNum">     159 </span><span class="lineCov">          1 :   Future&lt;void&gt; deleteOrganization(String id) async {</span></a>
-<a name="160"><span class="lineNum">     160 </span>            :     try {</a>
-<a name="161"><span class="lineNum">     161 </span><span class="lineCov">          4 :       await firestoreAdapter.deleteDocument('organizations/$id');</span></a>
-<a name="162"><span class="lineNum">     162 </span><span class="lineCov">          1 :     } on FirebaseException catch (error) {</span></a>
-<a name="163"><span class="lineNum">     163 </span><span class="lineCov">          1 :       throw ServerException(</span></a>
-<a name="164"><span class="lineNum">     164 </span><span class="lineCov">          2 :         localizedString.getLocalizedString('database-exceptions.get-error'),</span></a>
-<a name="165"><span class="lineNum">     165 </span><span class="lineCov">          1 :         error.code,</span></a>
-<a name="166"><span class="lineNum">     166 </span>            :         ExceptionOriginTypes.firebaseFirestore,</a>
-<a name="167"><span class="lineNum">     167 </span><span class="lineCov">          1 :         stackTrace: error.stackTrace,</span></a>
-<a name="168"><span class="lineNum">     168 </span>            :       );</a>
-<a name="169"><span class="lineNum">     169 </span>            :     }</a>
-<a name="170"><span class="lineNum">     170 </span>            :   }</a>
-<a name="171"><span class="lineNum">     171 </span>            : </a>
-<a name="172"><span class="lineNum">     172 </span>            :   @override</a>
-<a name="173"><span class="lineNum">     173 </span><span class="lineCov">          1 :   Future&lt;OrganizationModel&gt; getOrganization(String id) async {</span></a>
-<a name="174"><span class="lineNum">     174 </span>            :     try {</a>
-<a name="175"><span class="lineNum">     175 </span><span class="lineCov">          4 :       final orgDoc = await firestoreAdapter.getDocument('organizations/$id');</span></a>
-<a name="176"><span class="lineNum">     176 </span>            : </a>
-<a name="177"><span class="lineNum">     177 </span><span class="lineCov">          1 :       if (!orgDoc.exists) {</span></a>
-<a name="178"><span class="lineNum">     178 </span><span class="lineNoCov">          0 :         throw ServerException(</span></a>
-<a name="179"><span class="lineNum">     179 </span><span class="lineNoCov">          0 :           localizedString.getLocalizedString('database-exceptions.get-error'),</span></a>
-<a name="180"><span class="lineNum">     180 </span>            :           '404',</a>
-<a name="181"><span class="lineNum">     181 </span>            :           ExceptionOriginTypes.firebaseFirestore,</a>
-<a name="182"><span class="lineNum">     182 </span>            :         );</a>
-<a name="183"><span class="lineNum">     183 </span>            :       }</a>
-<a name="184"><span class="lineNum">     184 </span>            : </a>
-<a name="185"><span class="lineNum">     185 </span><span class="lineCov">          2 :       return OrganizationModel.fromMap({</span></a>
-<a name="186"><span class="lineNum">     186 </span><span class="lineCov">          1 :         ...orgDoc.data(),</span></a>
-<a name="187"><span class="lineNum">     187 </span><span class="lineCov">          3 :         'members': await _getMembers(id),</span></a>
-<a name="188"><span class="lineNum">     188 </span>            :       });</a>
-<a name="189"><span class="lineNum">     189 </span><span class="lineCov">          1 :     } on FirebaseException catch (error) {</span></a>
-<a name="190"><span class="lineNum">     190 </span><span class="lineCov">          1 :       throw ServerException(</span></a>
-<a name="191"><span class="lineNum">     191 </span><span class="lineCov">          2 :         localizedString.getLocalizedString('database-exceptions.get-error'),</span></a>
-<a name="192"><span class="lineNum">     192 </span><span class="lineCov">          1 :         error.code,</span></a>
-<a name="193"><span class="lineNum">     193 </span>            :         ExceptionOriginTypes.firebaseFirestore,</a>
-<a name="194"><span class="lineNum">     194 </span><span class="lineCov">          1 :         stackTrace: error.stackTrace,</span></a>
-<a name="195"><span class="lineNum">     195 </span>            :       );</a>
-<a name="196"><span class="lineNum">     196 </span>            :     }</a>
-<a name="197"><span class="lineNum">     197 </span>            :   }</a>
-<a name="198"><span class="lineNum">     198 </span>            : </a>
-<a name="199"><span class="lineNum">     199 </span><span class="lineNoCov">          0 :   @override</span></a>
-<a name="200"><span class="lineNum">     200 </span>            :   Future&lt;OrganizationModel&gt; inviteUserToOrganization({String id, User user}) {</a>
-<a name="201"><span class="lineNum">     201 </span>            :     // TODO: implement inviteUserToOrganization</a>
-<a name="202"><span class="lineNum">     202 </span><span class="lineNoCov">          0 :     throw UnimplementedError();</span></a>
-<a name="203"><span class="lineNum">     203 </span>            :   }</a>
-<a name="204"><span class="lineNum">     204 </span>            : </a>
-<a name="205"><span class="lineNum">     205 </span>            :   @override</a>
-<a name="206"><span class="lineNum">     206 </span><span class="lineCov">          1 :   Future&lt;OrganizationModel&gt; removeMember({</span></a>
-<a name="207"><span class="lineNum">     207 </span>            :     @required String id,</a>
-<a name="208"><span class="lineNum">     208 </span>            :     @required String userId,</a>
-<a name="209"><span class="lineNum">     209 </span>            :   }) async {</a>
-<a name="210"><span class="lineNum">     210 </span>            :     try {</a>
-<a name="211"><span class="lineNum">     211 </span><span class="lineCov">          3 :       await firestoreAdapter.deleteDocument(</span></a>
-<a name="212"><span class="lineNum">     212 </span><span class="lineCov">          1 :         'organizations/$id/members/$userId',</span></a>
-<a name="213"><span class="lineNum">     213 </span>            :       );</a>
-<a name="214"><span class="lineNum">     214 </span>            : </a>
-<a name="215"><span class="lineNum">     215 </span><span class="lineCov">          4 :       final userDoc = await firestoreAdapter.getDocument('users/$userId');</span></a>
-<a name="216"><span class="lineNum">     216 </span><span class="lineCov">          1 :       if (userDoc.exists) {</span></a>
-<a name="217"><span class="lineNum">     217 </span>            :         final List&lt;String&gt; organizations =</a>
-<a name="218"><span class="lineNum">     218 </span><span class="lineCov">          2 :             userDoc.data()['organizations'] as List&lt;String&gt;;</span></a>
-<a name="219"><span class="lineNum">     219 </span><span class="lineCov">          1 :         organizations.remove(id);</span></a>
-<a name="220"><span class="lineNum">     220 </span>            : </a>
-<a name="221"><span class="lineNum">     221 </span><span class="lineCov">          5 :         await firestoreAdapter.updateDocument('users/$userId', {</span></a>
-<a name="222"><span class="lineNum">     222 </span>            :           'organizations': organizations,</a>
-<a name="223"><span class="lineNum">     223 </span>            :         });</a>
-<a name="224"><span class="lineNum">     224 </span>            :       }</a>
-<a name="225"><span class="lineNum">     225 </span>            : </a>
-<a name="226"><span class="lineNum">     226 </span><span class="lineCov">          4 :       final orgDoc = await firestoreAdapter.getDocument('organizations/$id');</span></a>
-<a name="227"><span class="lineNum">     227 </span><span class="lineCov">          2 :       return OrganizationModel.fromMap({</span></a>
-<a name="228"><span class="lineNum">     228 </span><span class="lineCov">          1 :         ...orgDoc.data(),</span></a>
-<a name="229"><span class="lineNum">     229 </span><span class="lineCov">          3 :         'members': await _getMembers(id),</span></a>
-<a name="230"><span class="lineNum">     230 </span>            :       });</a>
-<a name="231"><span class="lineNum">     231 </span><span class="lineCov">          1 :     } on FirebaseException catch (error) {</span></a>
-<a name="232"><span class="lineNum">     232 </span><span class="lineCov">          1 :       throw ServerException(</span></a>
-<a name="233"><span class="lineNum">     233 </span><span class="lineCov">          2 :         localizedString.getLocalizedString('database-exceptions.get-error'),</span></a>
-<a name="234"><span class="lineNum">     234 </span><span class="lineCov">          1 :         error.code,</span></a>
-<a name="235"><span class="lineNum">     235 </span>            :         ExceptionOriginTypes.firebaseFirestore,</a>
-<a name="236"><span class="lineNum">     236 </span><span class="lineCov">          1 :         stackTrace: error.stackTrace,</span></a>
-<a name="237"><span class="lineNum">     237 </span>            :       );</a>
-<a name="238"><span class="lineNum">     238 </span>            :     }</a>
-<a name="239"><span class="lineNum">     239 </span>            :   }</a>
-<a name="240"><span class="lineNum">     240 </span>            : </a>
-<a name="241"><span class="lineNum">     241 </span>            :   @override</a>
-<a name="242"><span class="lineNum">     242 </span><span class="lineCov">          1 :   Future&lt;OrganizationModel&gt; updateMember({</span></a>
-<a name="243"><span class="lineNum">     243 </span>            :     String id,</a>
-<a name="244"><span class="lineNum">     244 </span>            :     String userId,</a>
-<a name="245"><span class="lineNum">     245 </span>            :     OrganizationRoleType role,</a>
-<a name="246"><span class="lineNum">     246 </span>            :     OrganizationMemberStatus status,</a>
-<a name="247"><span class="lineNum">     247 </span>            :   }) async {</a>
-<a name="248"><span class="lineNum">     248 </span>            :     try {</a>
-<a name="249"><span class="lineNum">     249 </span><span class="lineCov">          1 :       final map = &lt;String, dynamic&gt;{};</span></a>
-<a name="250"><span class="lineNum">     250 </span>            : </a>
-<a name="251"><span class="lineNum">     251 </span>            :       if (role != null) {</a>
-<a name="252"><span class="lineNum">     252 </span><span class="lineCov">          2 :         map['role'] = role.index;</span></a>
-<a name="253"><span class="lineNum">     253 </span>            :       }</a>
-<a name="254"><span class="lineNum">     254 </span>            : </a>
-<a name="255"><span class="lineNum">     255 </span>            :       if (status != null) {</a>
-<a name="256"><span class="lineNum">     256 </span><span class="lineNoCov">          0 :         map['status'] = status.index;</span></a>
-<a name="257"><span class="lineNum">     257 </span>            :       }</a>
-<a name="258"><span class="lineNum">     258 </span>            : </a>
-<a name="259"><span class="lineNum">     259 </span><span class="lineCov">          3 :       await firestoreAdapter.updateDocument(</span></a>
-<a name="260"><span class="lineNum">     260 </span><span class="lineCov">          1 :         'organizations/$id/members/$userId',</span></a>
-<a name="261"><span class="lineNum">     261 </span>            :         map,</a>
-<a name="262"><span class="lineNum">     262 </span>            :       );</a>
-<a name="263"><span class="lineNum">     263 </span>            : </a>
-<a name="264"><span class="lineNum">     264 </span><span class="lineCov">          4 :       final orgDoc = await firestoreAdapter.getDocument('organizations/$id');</span></a>
-<a name="265"><span class="lineNum">     265 </span><span class="lineCov">          2 :       return OrganizationModel.fromMap({</span></a>
-<a name="266"><span class="lineNum">     266 </span><span class="lineCov">          1 :         ...orgDoc.data(),</span></a>
-<a name="267"><span class="lineNum">     267 </span><span class="lineCov">          3 :         'members': await _getMembers(id),</span></a>
-<a name="268"><span class="lineNum">     268 </span>            :       });</a>
-<a name="269"><span class="lineNum">     269 </span><span class="lineNoCov">          0 :     } on FirebaseException catch (error) {</span></a>
-<a name="270"><span class="lineNum">     270 </span><span class="lineNoCov">          0 :       throw ServerException(</span></a>
-<a name="271"><span class="lineNum">     271 </span><span class="lineNoCov">          0 :         localizedString.getLocalizedString('database-exceptions.get-error'),</span></a>
-<a name="272"><span class="lineNum">     272 </span><span class="lineNoCov">          0 :         error.code,</span></a>
-<a name="273"><span class="lineNum">     273 </span>            :         ExceptionOriginTypes.firebaseFirestore,</a>
-<a name="274"><span class="lineNum">     274 </span><span class="lineNoCov">          0 :         stackTrace: error.stackTrace,</span></a>
-<a name="275"><span class="lineNum">     275 </span>            :       );</a>
-<a name="276"><span class="lineNum">     276 </span>            :     }</a>
-<a name="277"><span class="lineNum">     277 </span>            :   }</a>
-<a name="278"><span class="lineNum">     278 </span>            : </a>
-<a name="279"><span class="lineNum">     279 </span>            :   @override</a>
-<a name="280"><span class="lineNum">     280 </span><span class="lineCov">          1 :   Future&lt;OrganizationModel&gt; updateOrganization({</span></a>
-<a name="281"><span class="lineNum">     281 </span>            :     String id,</a>
-<a name="282"><span class="lineNum">     282 </span>            :     String name,</a>
-<a name="283"><span class="lineNum">     283 </span>            :     String email,</a>
-<a name="284"><span class="lineNum">     284 </span>            :     String phone,</a>
-<a name="285"><span class="lineNum">     285 </span>            :     File avatar,</a>
-<a name="286"><span class="lineNum">     286 </span>            :   }) async {</a>
-<a name="287"><span class="lineNum">     287 </span>            :     try {</a>
-<a name="288"><span class="lineNum">     288 </span><span class="lineCov">          1 :       final Map&lt;String, dynamic&gt; map = {};</span></a>
-<a name="289"><span class="lineNum">     289 </span>            : </a>
-<a name="290"><span class="lineNum">     290 </span>            :       if (id != null) {</a>
-<a name="291"><span class="lineNum">     291 </span><span class="lineCov">          1 :         map['id'] = id;</span></a>
-<a name="292"><span class="lineNum">     292 </span>            :       }</a>
-<a name="293"><span class="lineNum">     293 </span>            : </a>
-<a name="294"><span class="lineNum">     294 </span>            :       if (name != null) {</a>
-<a name="295"><span class="lineNum">     295 </span><span class="lineCov">          1 :         map['name'] = name;</span></a>
-<a name="296"><span class="lineNum">     296 </span>            :       }</a>
-<a name="297"><span class="lineNum">     297 </span>            : </a>
-<a name="298"><span class="lineNum">     298 </span>            :       if (email != null) {</a>
-<a name="299"><span class="lineNum">     299 </span><span class="lineCov">          1 :         map['email'] = email;</span></a>
-<a name="300"><span class="lineNum">     300 </span>            :       }</a>
-<a name="301"><span class="lineNum">     301 </span>            : </a>
-<a name="302"><span class="lineNum">     302 </span>            :       if (phone != null) {</a>
-<a name="303"><span class="lineNum">     303 </span><span class="lineCov">          1 :         map['phone'] = phone;</span></a>
-<a name="304"><span class="lineNum">     304 </span>            :       }</a>
-<a name="305"><span class="lineNum">     305 </span>            : </a>
-<a name="306"><span class="lineNum">     306 </span>            :       if (avatar != null) {</a>
-<a name="307"><span class="lineNum">     307 </span><span class="lineCov">          3 :         await firebaseStorageAdapter.uploadFile(</span></a>
-<a name="308"><span class="lineNum">     308 </span>            :           file: avatar,</a>
-<a name="309"><span class="lineNum">     309 </span><span class="lineCov">          1 :           storagePath: 'organizations/$id/avatar/avatar.png',</span></a>
-<a name="310"><span class="lineNum">     310 </span>            :         );</a>
-<a name="311"><span class="lineNum">     311 </span><span class="lineCov">          3 :         final avatarUrl = await firebaseStorageAdapter.getDownloadUrl(</span></a>
-<a name="312"><span class="lineNum">     312 </span><span class="lineCov">          1 :           'organizations/$id/avatar/avatar.png',</span></a>
-<a name="313"><span class="lineNum">     313 </span>            :         );</a>
-<a name="314"><span class="lineNum">     314 </span><span class="lineCov">          1 :         map['avatarUrl'] = avatarUrl;</span></a>
-<a name="315"><span class="lineNum">     315 </span>            :       }</a>
-<a name="316"><span class="lineNum">     316 </span>            : </a>
-<a name="317"><span class="lineNum">     317 </span><span class="lineCov">          3 :       final ref = await firestoreAdapter.updateDocument(</span></a>
-<a name="318"><span class="lineNum">     318 </span><span class="lineCov">          1 :         'organizations/$id',</span></a>
-<a name="319"><span class="lineNum">     319 </span>            :         map,</a>
-<a name="320"><span class="lineNum">     320 </span>            :       );</a>
-<a name="321"><span class="lineNum">     321 </span>            : </a>
-<a name="322"><span class="lineNum">     322 </span><span class="lineCov">          2 :       return OrganizationModel.fromMap({</span></a>
-<a name="323"><span class="lineNum">     323 </span><span class="lineCov">          3 :         ...(await ref.get()).data(),</span></a>
-<a name="324"><span class="lineNum">     324 </span><span class="lineCov">          3 :         'members': await _getMembers(id),</span></a>
-<a name="325"><span class="lineNum">     325 </span>            :       });</a>
-<a name="326"><span class="lineNum">     326 </span><span class="lineCov">          1 :     } on FirebaseException catch (error) {</span></a>
-<a name="327"><span class="lineNum">     327 </span><span class="lineCov">          1 :       throw ServerException(</span></a>
-<a name="328"><span class="lineNum">     328 </span><span class="lineCov">          2 :         localizedString.getLocalizedString('database-exceptions.get-error'),</span></a>
-<a name="329"><span class="lineNum">     329 </span><span class="lineCov">          1 :         error.code,</span></a>
-<a name="330"><span class="lineNum">     330 </span>            :         ExceptionOriginTypes.firebaseFirestore,</a>
-<a name="331"><span class="lineNum">     331 </span><span class="lineCov">          1 :         stackTrace: error.stackTrace,</span></a>
-<a name="332"><span class="lineNum">     332 </span>            :       );</a>
-<a name="333"><span class="lineNum">     333 </span>            :     }</a>
-<a name="334"><span class="lineNum">     334 </span>            :   }</a>
-<a name="335"><span class="lineNum">     335 </span>            : </a>
-<a name="336"><span class="lineNum">     336 </span><span class="lineCov">          1 :   Future&lt;List&lt;MemberModel&gt;&gt; _getMembers(String id) async {</span></a>
-<a name="337"><span class="lineNum">     337 </span><span class="lineCov">          1 :     List&lt;MemberModel&gt; members = &lt;MemberModel&gt;[];</span></a>
-<a name="338"><span class="lineNum">     338 </span>            : </a>
-<a name="339"><span class="lineNum">     339 </span><span class="lineCov">          3 :     final membersQuery = firestoreAdapter.firestore.collection(</span></a>
-<a name="340"><span class="lineNum">     340 </span><span class="lineCov">          1 :       'organizations/$id/members',</span></a>
-<a name="341"><span class="lineNum">     341 </span>            :     );</a>
-<a name="342"><span class="lineNum">     342 </span><span class="lineCov">          3 :     final membersDoc = await firestoreAdapter.runQuery(membersQuery);</span></a>
-<a name="343"><span class="lineNum">     343 </span><span class="lineCov">          1 :     if (membersDoc.isNotEmpty) {</span></a>
-<a name="344"><span class="lineNum">     344 </span><span class="lineCov">          2 :       for (var member in membersDoc) {</span></a>
-<a name="345"><span class="lineNum">     345 </span><span class="lineCov">          1 :         final userId = member.id;</span></a>
-<a name="346"><span class="lineNum">     346 </span><span class="lineCov">          4 :         final userDoc = await firestoreAdapter.getDocument('users/$userId');</span></a>
-<a name="347"><span class="lineNum">     347 </span>            : </a>
-<a name="348"><span class="lineNum">     348 </span><span class="lineCov">          1 :         if (userDoc.exists) {</span></a>
-<a name="349"><span class="lineNum">     349 </span><span class="lineCov">          3 :           members.add(MemberModel.fromMap({</span></a>
-<a name="350"><span class="lineNum">     350 </span><span class="lineCov">          1 :             ...userDoc.data(),</span></a>
-<a name="351"><span class="lineNum">     351 </span><span class="lineCov">          1 :             ...member.data(),</span></a>
-<a name="352"><span class="lineNum">     352 </span>            :           }));</a>
-<a name="353"><span class="lineNum">     353 </span>            :         }</a>
-<a name="354"><span class="lineNum">     354 </span>            :       }</a>
-<a name="355"><span class="lineNum">     355 </span>            :     }</a>
-<a name="356"><span class="lineNum">     356 </span>            : </a>
-<a name="357"><span class="lineNum">     357 </span>            :     return members;</a>
-<a name="358"><span class="lineNum">     358 </span>            :   }</a>
-<a name="359"><span class="lineNum">     359 </span>            : }</a>
+<a name="128"><span class="lineNum">     128 </span><span class="lineCov">          1 :             ...(user?.organizations != null</span></a>
+<a name="129"><span class="lineNum">     129 </span><span class="lineCov">          1 :                 ? user?.organizations?.map((e) =&gt; e.id)?.toList()</span></a>
+<a name="130"><span class="lineNum">     130 </span><span class="lineCov">          1 :                 : []),</span></a>
+<a name="131"><span class="lineNum">     131 </span><span class="lineCov">          1 :             orgId,</span></a>
+<a name="132"><span class="lineNum">     132 </span>            :           ]</a>
+<a name="133"><span class="lineNum">     133 </span>            :         },</a>
+<a name="134"><span class="lineNum">     134 </span>            :       );</a>
+<a name="135"><span class="lineNum">     135 </span>            : </a>
+<a name="136"><span class="lineNum">     136 </span><span class="lineCov">          1 :       return OrganizationModel(</span></a>
+<a name="137"><span class="lineNum">     137 </span>            :         id: orgId,</a>
+<a name="138"><span class="lineNum">     138 </span>            :         name: name,</a>
+<a name="139"><span class="lineNum">     139 </span>            :         email: email,</a>
+<a name="140"><span class="lineNum">     140 </span>            :         phone: phone,</a>
+<a name="141"><span class="lineNum">     141 </span>            :         avatarUrl: avatarUrl,</a>
+<a name="142"><span class="lineNum">     142 </span><span class="lineCov">          1 :         members: [</span></a>
+<a name="143"><span class="lineNum">     143 </span><span class="lineCov">          2 :           MemberModel.fromMap({</span></a>
+<a name="144"><span class="lineNum">     144 </span><span class="lineCov">          1 :             ...user.toMap(),</span></a>
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">          2 :             'status': OrganizationMemberStatus.active.index,</span></a>
+<a name="146"><span class="lineNum">     146 </span><span class="lineCov">          2 :             'role': OrganizationRoleType.owner.index,</span></a>
+<a name="147"><span class="lineNum">     147 </span>            :           })</a>
+<a name="148"><span class="lineNum">     148 </span>            :         ],</a>
+<a name="149"><span class="lineNum">     149 </span>            :       );</a>
+<a name="150"><span class="lineNum">     150 </span><span class="lineCov">          1 :     } on FirebaseException catch (error) {</span></a>
+<a name="151"><span class="lineNum">     151 </span><span class="lineCov">          1 :       throw ServerException(</span></a>
+<a name="152"><span class="lineNum">     152 </span><span class="lineCov">          2 :         localizedString.getLocalizedString('database-exceptions.get-error'),</span></a>
+<a name="153"><span class="lineNum">     153 </span><span class="lineCov">          1 :         error.code,</span></a>
+<a name="154"><span class="lineNum">     154 </span>            :         ExceptionOriginTypes.firebaseFirestore,</a>
+<a name="155"><span class="lineNum">     155 </span><span class="lineCov">          1 :         stackTrace: error.stackTrace,</span></a>
+<a name="156"><span class="lineNum">     156 </span>            :       );</a>
+<a name="157"><span class="lineNum">     157 </span>            :     }</a>
+<a name="158"><span class="lineNum">     158 </span>            :   }</a>
+<a name="159"><span class="lineNum">     159 </span>            : </a>
+<a name="160"><span class="lineNum">     160 </span>            :   @override</a>
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">          1 :   Future&lt;void&gt; deleteOrganization(String id) async {</span></a>
+<a name="162"><span class="lineNum">     162 </span>            :     try {</a>
+<a name="163"><span class="lineNum">     163 </span><span class="lineCov">          4 :       await firestoreAdapter.deleteDocument('organizations/$id');</span></a>
+<a name="164"><span class="lineNum">     164 </span><span class="lineCov">          1 :     } on FirebaseException catch (error) {</span></a>
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">          1 :       throw ServerException(</span></a>
+<a name="166"><span class="lineNum">     166 </span><span class="lineCov">          2 :         localizedString.getLocalizedString('database-exceptions.get-error'),</span></a>
+<a name="167"><span class="lineNum">     167 </span><span class="lineCov">          1 :         error.code,</span></a>
+<a name="168"><span class="lineNum">     168 </span>            :         ExceptionOriginTypes.firebaseFirestore,</a>
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">          1 :         stackTrace: error.stackTrace,</span></a>
+<a name="170"><span class="lineNum">     170 </span>            :       );</a>
+<a name="171"><span class="lineNum">     171 </span>            :     }</a>
+<a name="172"><span class="lineNum">     172 </span>            :   }</a>
+<a name="173"><span class="lineNum">     173 </span>            : </a>
+<a name="174"><span class="lineNum">     174 </span>            :   @override</a>
+<a name="175"><span class="lineNum">     175 </span><span class="lineCov">          1 :   Future&lt;OrganizationModel&gt; getOrganization(String id) async {</span></a>
+<a name="176"><span class="lineNum">     176 </span>            :     try {</a>
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">          4 :       final orgDoc = await firestoreAdapter.getDocument('organizations/$id');</span></a>
+<a name="178"><span class="lineNum">     178 </span>            : </a>
+<a name="179"><span class="lineNum">     179 </span><span class="lineCov">          1 :       if (!orgDoc.exists) {</span></a>
+<a name="180"><span class="lineNum">     180 </span><span class="lineNoCov">          0 :         throw ServerException(</span></a>
+<a name="181"><span class="lineNum">     181 </span><span class="lineNoCov">          0 :           localizedString.getLocalizedString('database-exceptions.get-error'),</span></a>
+<a name="182"><span class="lineNum">     182 </span>            :           '404',</a>
+<a name="183"><span class="lineNum">     183 </span>            :           ExceptionOriginTypes.firebaseFirestore,</a>
+<a name="184"><span class="lineNum">     184 </span>            :         );</a>
+<a name="185"><span class="lineNum">     185 </span>            :       }</a>
+<a name="186"><span class="lineNum">     186 </span>            : </a>
+<a name="187"><span class="lineNum">     187 </span><span class="lineCov">          2 :       return OrganizationModel.fromMap({</span></a>
+<a name="188"><span class="lineNum">     188 </span><span class="lineCov">          1 :         ...orgDoc.data(),</span></a>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">          3 :         'members': await _getMembers(id),</span></a>
+<a name="190"><span class="lineNum">     190 </span>            :       });</a>
+<a name="191"><span class="lineNum">     191 </span><span class="lineCov">          1 :     } on FirebaseException catch (error) {</span></a>
+<a name="192"><span class="lineNum">     192 </span><span class="lineCov">          1 :       throw ServerException(</span></a>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">          2 :         localizedString.getLocalizedString('database-exceptions.get-error'),</span></a>
+<a name="194"><span class="lineNum">     194 </span><span class="lineCov">          1 :         error.code,</span></a>
+<a name="195"><span class="lineNum">     195 </span>            :         ExceptionOriginTypes.firebaseFirestore,</a>
+<a name="196"><span class="lineNum">     196 </span><span class="lineCov">          1 :         stackTrace: error.stackTrace,</span></a>
+<a name="197"><span class="lineNum">     197 </span>            :       );</a>
+<a name="198"><span class="lineNum">     198 </span>            :     }</a>
+<a name="199"><span class="lineNum">     199 </span>            :   }</a>
+<a name="200"><span class="lineNum">     200 </span>            : </a>
+<a name="201"><span class="lineNum">     201 </span><span class="lineNoCov">          0 :   @override</span></a>
+<a name="202"><span class="lineNum">     202 </span>            :   Future&lt;OrganizationModel&gt; inviteUserToOrganization({String id, User user}) {</a>
+<a name="203"><span class="lineNum">     203 </span>            :     // TODO: implement inviteUserToOrganization</a>
+<a name="204"><span class="lineNum">     204 </span><span class="lineNoCov">          0 :     throw UnimplementedError();</span></a>
+<a name="205"><span class="lineNum">     205 </span>            :   }</a>
+<a name="206"><span class="lineNum">     206 </span>            : </a>
+<a name="207"><span class="lineNum">     207 </span>            :   @override</a>
+<a name="208"><span class="lineNum">     208 </span><span class="lineCov">          1 :   Future&lt;OrganizationModel&gt; removeMember({</span></a>
+<a name="209"><span class="lineNum">     209 </span>            :     @required String id,</a>
+<a name="210"><span class="lineNum">     210 </span>            :     @required String userId,</a>
+<a name="211"><span class="lineNum">     211 </span>            :   }) async {</a>
+<a name="212"><span class="lineNum">     212 </span>            :     try {</a>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">          3 :       await firestoreAdapter.deleteDocument(</span></a>
+<a name="214"><span class="lineNum">     214 </span><span class="lineCov">          1 :         'organizations/$id/members/$userId',</span></a>
+<a name="215"><span class="lineNum">     215 </span>            :       );</a>
+<a name="216"><span class="lineNum">     216 </span>            : </a>
+<a name="217"><span class="lineNum">     217 </span><span class="lineCov">          4 :       final userDoc = await firestoreAdapter.getDocument('users/$userId');</span></a>
+<a name="218"><span class="lineNum">     218 </span><span class="lineCov">          1 :       if (userDoc.exists) {</span></a>
+<a name="219"><span class="lineNum">     219 </span>            :         final List&lt;String&gt; organizations =</a>
+<a name="220"><span class="lineNum">     220 </span><span class="lineCov">          2 :             userDoc.data()['organizations'] as List&lt;String&gt;;</span></a>
+<a name="221"><span class="lineNum">     221 </span><span class="lineCov">          1 :         organizations.remove(id);</span></a>
+<a name="222"><span class="lineNum">     222 </span>            : </a>
+<a name="223"><span class="lineNum">     223 </span><span class="lineCov">          5 :         await firestoreAdapter.updateDocument('users/$userId', {</span></a>
+<a name="224"><span class="lineNum">     224 </span>            :           'organizations': organizations,</a>
+<a name="225"><span class="lineNum">     225 </span>            :         });</a>
+<a name="226"><span class="lineNum">     226 </span>            :       }</a>
+<a name="227"><span class="lineNum">     227 </span>            : </a>
+<a name="228"><span class="lineNum">     228 </span><span class="lineCov">          4 :       final orgDoc = await firestoreAdapter.getDocument('organizations/$id');</span></a>
+<a name="229"><span class="lineNum">     229 </span><span class="lineCov">          2 :       return OrganizationModel.fromMap({</span></a>
+<a name="230"><span class="lineNum">     230 </span><span class="lineCov">          1 :         ...orgDoc.data(),</span></a>
+<a name="231"><span class="lineNum">     231 </span><span class="lineCov">          3 :         'members': await _getMembers(id),</span></a>
+<a name="232"><span class="lineNum">     232 </span>            :       });</a>
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">          1 :     } on FirebaseException catch (error) {</span></a>
+<a name="234"><span class="lineNum">     234 </span><span class="lineCov">          1 :       throw ServerException(</span></a>
+<a name="235"><span class="lineNum">     235 </span><span class="lineCov">          2 :         localizedString.getLocalizedString('database-exceptions.get-error'),</span></a>
+<a name="236"><span class="lineNum">     236 </span><span class="lineCov">          1 :         error.code,</span></a>
+<a name="237"><span class="lineNum">     237 </span>            :         ExceptionOriginTypes.firebaseFirestore,</a>
+<a name="238"><span class="lineNum">     238 </span><span class="lineCov">          1 :         stackTrace: error.stackTrace,</span></a>
+<a name="239"><span class="lineNum">     239 </span>            :       );</a>
+<a name="240"><span class="lineNum">     240 </span>            :     }</a>
+<a name="241"><span class="lineNum">     241 </span>            :   }</a>
+<a name="242"><span class="lineNum">     242 </span>            : </a>
+<a name="243"><span class="lineNum">     243 </span>            :   @override</a>
+<a name="244"><span class="lineNum">     244 </span><span class="lineCov">          1 :   Future&lt;OrganizationModel&gt; updateMember({</span></a>
+<a name="245"><span class="lineNum">     245 </span>            :     String id,</a>
+<a name="246"><span class="lineNum">     246 </span>            :     String userId,</a>
+<a name="247"><span class="lineNum">     247 </span>            :     OrganizationRoleType role,</a>
+<a name="248"><span class="lineNum">     248 </span>            :     OrganizationMemberStatus status,</a>
+<a name="249"><span class="lineNum">     249 </span>            :   }) async {</a>
+<a name="250"><span class="lineNum">     250 </span>            :     try {</a>
+<a name="251"><span class="lineNum">     251 </span><span class="lineCov">          1 :       final map = &lt;String, dynamic&gt;{};</span></a>
+<a name="252"><span class="lineNum">     252 </span>            : </a>
+<a name="253"><span class="lineNum">     253 </span>            :       if (role != null) {</a>
+<a name="254"><span class="lineNum">     254 </span><span class="lineCov">          2 :         map['role'] = role.index;</span></a>
+<a name="255"><span class="lineNum">     255 </span>            :       }</a>
+<a name="256"><span class="lineNum">     256 </span>            : </a>
+<a name="257"><span class="lineNum">     257 </span>            :       if (status != null) {</a>
+<a name="258"><span class="lineNum">     258 </span><span class="lineNoCov">          0 :         map['status'] = status.index;</span></a>
+<a name="259"><span class="lineNum">     259 </span>            :       }</a>
+<a name="260"><span class="lineNum">     260 </span>            : </a>
+<a name="261"><span class="lineNum">     261 </span><span class="lineCov">          3 :       await firestoreAdapter.updateDocument(</span></a>
+<a name="262"><span class="lineNum">     262 </span><span class="lineCov">          1 :         'organizations/$id/members/$userId',</span></a>
+<a name="263"><span class="lineNum">     263 </span>            :         map,</a>
+<a name="264"><span class="lineNum">     264 </span>            :       );</a>
+<a name="265"><span class="lineNum">     265 </span>            : </a>
+<a name="266"><span class="lineNum">     266 </span><span class="lineCov">          4 :       final orgDoc = await firestoreAdapter.getDocument('organizations/$id');</span></a>
+<a name="267"><span class="lineNum">     267 </span><span class="lineCov">          2 :       return OrganizationModel.fromMap({</span></a>
+<a name="268"><span class="lineNum">     268 </span><span class="lineCov">          1 :         ...orgDoc.data(),</span></a>
+<a name="269"><span class="lineNum">     269 </span><span class="lineCov">          3 :         'members': await _getMembers(id),</span></a>
+<a name="270"><span class="lineNum">     270 </span>            :       });</a>
+<a name="271"><span class="lineNum">     271 </span><span class="lineNoCov">          0 :     } on FirebaseException catch (error) {</span></a>
+<a name="272"><span class="lineNum">     272 </span><span class="lineNoCov">          0 :       throw ServerException(</span></a>
+<a name="273"><span class="lineNum">     273 </span><span class="lineNoCov">          0 :         localizedString.getLocalizedString('database-exceptions.get-error'),</span></a>
+<a name="274"><span class="lineNum">     274 </span><span class="lineNoCov">          0 :         error.code,</span></a>
+<a name="275"><span class="lineNum">     275 </span>            :         ExceptionOriginTypes.firebaseFirestore,</a>
+<a name="276"><span class="lineNum">     276 </span><span class="lineNoCov">          0 :         stackTrace: error.stackTrace,</span></a>
+<a name="277"><span class="lineNum">     277 </span>            :       );</a>
+<a name="278"><span class="lineNum">     278 </span>            :     }</a>
+<a name="279"><span class="lineNum">     279 </span>            :   }</a>
+<a name="280"><span class="lineNum">     280 </span>            : </a>
+<a name="281"><span class="lineNum">     281 </span>            :   @override</a>
+<a name="282"><span class="lineNum">     282 </span><span class="lineCov">          1 :   Future&lt;OrganizationModel&gt; updateOrganization({</span></a>
+<a name="283"><span class="lineNum">     283 </span>            :     String id,</a>
+<a name="284"><span class="lineNum">     284 </span>            :     String name,</a>
+<a name="285"><span class="lineNum">     285 </span>            :     String email,</a>
+<a name="286"><span class="lineNum">     286 </span>            :     String phone,</a>
+<a name="287"><span class="lineNum">     287 </span>            :     File avatar,</a>
+<a name="288"><span class="lineNum">     288 </span>            :   }) async {</a>
+<a name="289"><span class="lineNum">     289 </span>            :     try {</a>
+<a name="290"><span class="lineNum">     290 </span><span class="lineCov">          1 :       final Map&lt;String, dynamic&gt; map = {};</span></a>
+<a name="291"><span class="lineNum">     291 </span>            : </a>
+<a name="292"><span class="lineNum">     292 </span>            :       if (id != null) {</a>
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">          1 :         map['id'] = id;</span></a>
+<a name="294"><span class="lineNum">     294 </span>            :       }</a>
+<a name="295"><span class="lineNum">     295 </span>            : </a>
+<a name="296"><span class="lineNum">     296 </span>            :       if (name != null) {</a>
+<a name="297"><span class="lineNum">     297 </span><span class="lineCov">          1 :         map['name'] = name;</span></a>
+<a name="298"><span class="lineNum">     298 </span>            :       }</a>
+<a name="299"><span class="lineNum">     299 </span>            : </a>
+<a name="300"><span class="lineNum">     300 </span>            :       if (email != null) {</a>
+<a name="301"><span class="lineNum">     301 </span><span class="lineCov">          1 :         map['email'] = email;</span></a>
+<a name="302"><span class="lineNum">     302 </span>            :       }</a>
+<a name="303"><span class="lineNum">     303 </span>            : </a>
+<a name="304"><span class="lineNum">     304 </span>            :       if (phone != null) {</a>
+<a name="305"><span class="lineNum">     305 </span><span class="lineCov">          1 :         map['phone'] = phone;</span></a>
+<a name="306"><span class="lineNum">     306 </span>            :       }</a>
+<a name="307"><span class="lineNum">     307 </span>            : </a>
+<a name="308"><span class="lineNum">     308 </span>            :       if (avatar != null) {</a>
+<a name="309"><span class="lineNum">     309 </span><span class="lineCov">          3 :         await firebaseStorageAdapter.uploadFile(</span></a>
+<a name="310"><span class="lineNum">     310 </span>            :           file: avatar,</a>
+<a name="311"><span class="lineNum">     311 </span><span class="lineCov">          1 :           storagePath: 'organizations/$id/avatar/avatar.png',</span></a>
+<a name="312"><span class="lineNum">     312 </span>            :         );</a>
+<a name="313"><span class="lineNum">     313 </span><span class="lineCov">          3 :         final avatarUrl = await firebaseStorageAdapter.getDownloadUrl(</span></a>
+<a name="314"><span class="lineNum">     314 </span><span class="lineCov">          1 :           'organizations/$id/avatar/avatar.png',</span></a>
+<a name="315"><span class="lineNum">     315 </span>            :         );</a>
+<a name="316"><span class="lineNum">     316 </span><span class="lineCov">          1 :         map['avatarUrl'] = avatarUrl;</span></a>
+<a name="317"><span class="lineNum">     317 </span>            :       }</a>
+<a name="318"><span class="lineNum">     318 </span>            : </a>
+<a name="319"><span class="lineNum">     319 </span><span class="lineCov">          3 :       final ref = await firestoreAdapter.updateDocument(</span></a>
+<a name="320"><span class="lineNum">     320 </span><span class="lineCov">          1 :         'organizations/$id',</span></a>
+<a name="321"><span class="lineNum">     321 </span>            :         map,</a>
+<a name="322"><span class="lineNum">     322 </span>            :       );</a>
+<a name="323"><span class="lineNum">     323 </span>            : </a>
+<a name="324"><span class="lineNum">     324 </span><span class="lineCov">          2 :       return OrganizationModel.fromMap({</span></a>
+<a name="325"><span class="lineNum">     325 </span><span class="lineCov">          3 :         ...(await ref.get()).data(),</span></a>
+<a name="326"><span class="lineNum">     326 </span><span class="lineCov">          3 :         'members': await _getMembers(id),</span></a>
+<a name="327"><span class="lineNum">     327 </span>            :       });</a>
+<a name="328"><span class="lineNum">     328 </span><span class="lineCov">          1 :     } on FirebaseException catch (error) {</span></a>
+<a name="329"><span class="lineNum">     329 </span><span class="lineCov">          1 :       throw ServerException(</span></a>
+<a name="330"><span class="lineNum">     330 </span><span class="lineCov">          2 :         localizedString.getLocalizedString('database-exceptions.get-error'),</span></a>
+<a name="331"><span class="lineNum">     331 </span><span class="lineCov">          1 :         error.code,</span></a>
+<a name="332"><span class="lineNum">     332 </span>            :         ExceptionOriginTypes.firebaseFirestore,</a>
+<a name="333"><span class="lineNum">     333 </span><span class="lineCov">          1 :         stackTrace: error.stackTrace,</span></a>
+<a name="334"><span class="lineNum">     334 </span>            :       );</a>
+<a name="335"><span class="lineNum">     335 </span>            :     }</a>
+<a name="336"><span class="lineNum">     336 </span>            :   }</a>
+<a name="337"><span class="lineNum">     337 </span>            : </a>
+<a name="338"><span class="lineNum">     338 </span><span class="lineCov">          1 :   Future&lt;List&lt;MemberModel&gt;&gt; _getMembers(String id) async {</span></a>
+<a name="339"><span class="lineNum">     339 </span><span class="lineCov">          1 :     List&lt;MemberModel&gt; members = &lt;MemberModel&gt;[];</span></a>
+<a name="340"><span class="lineNum">     340 </span>            : </a>
+<a name="341"><span class="lineNum">     341 </span><span class="lineCov">          3 :     final membersQuery = firestoreAdapter.firestore.collection(</span></a>
+<a name="342"><span class="lineNum">     342 </span><span class="lineCov">          1 :       'organizations/$id/members',</span></a>
+<a name="343"><span class="lineNum">     343 </span>            :     );</a>
+<a name="344"><span class="lineNum">     344 </span><span class="lineCov">          3 :     final membersDoc = await firestoreAdapter.runQuery(membersQuery);</span></a>
+<a name="345"><span class="lineNum">     345 </span><span class="lineCov">          1 :     if (membersDoc.isNotEmpty) {</span></a>
+<a name="346"><span class="lineNum">     346 </span><span class="lineCov">          2 :       for (var member in membersDoc) {</span></a>
+<a name="347"><span class="lineNum">     347 </span><span class="lineCov">          1 :         final userId = member.id;</span></a>
+<a name="348"><span class="lineNum">     348 </span><span class="lineCov">          4 :         final userDoc = await firestoreAdapter.getDocument('users/$userId');</span></a>
+<a name="349"><span class="lineNum">     349 </span>            : </a>
+<a name="350"><span class="lineNum">     350 </span><span class="lineCov">          1 :         if (userDoc.exists) {</span></a>
+<a name="351"><span class="lineNum">     351 </span><span class="lineCov">          3 :           members.add(MemberModel.fromMap({</span></a>
+<a name="352"><span class="lineNum">     352 </span><span class="lineCov">          1 :             ...userDoc.data(),</span></a>
+<a name="353"><span class="lineNum">     353 </span><span class="lineCov">          1 :             ...member.data(),</span></a>
+<a name="354"><span class="lineNum">     354 </span>            :           }));</a>
+<a name="355"><span class="lineNum">     355 </span>            :         }</a>
+<a name="356"><span class="lineNum">     356 </span>            :       }</a>
+<a name="357"><span class="lineNum">     357 </span>            :     }</a>
+<a name="358"><span class="lineNum">     358 </span>            : </a>
+<a name="359"><span class="lineNum">     359 </span>            :     return members;</a>
+<a name="360"><span class="lineNum">     360 </span>            :   }</a>
+<a name="361"><span class="lineNum">     361 </span>            : }</a>
 </pre>
       </td>
     </tr>

@@ -22,18 +22,4 @@ class Organization extends Equatable {
 
   @override
   List<Object> get props => [id, name, email, phone, avatarUrl, members];
-
-  @override
-  String toString() {
-    return '''
-      {
-        'id': $id,
-        'name': $name,
-        'email': $email,
-        'phone': $phone,
-        'avatarUrl': $avatarUrl,
-        'members': ${members.toString()}
-      }
-    ''';
-  }
 }

@@ -6,6 +6,7 @@ import 'package:forestMapApp/core/errors/exceptions.dart';
 import 'package:forestMapApp/core/errors/failure.dart';
 import 'package:forestMapApp/core/platform/network_info.dart';
 import 'package:forestMapApp/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:forestMapApp/features/user/data/datasource/user_data_source.dart';
 import 'package:forestMapApp/features/user/data/models/user_model.dart';
 import 'package:forestMapApp/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:forestMapApp/features/user/domain/entities/user.dart';
@@ -14,18 +15,23 @@ import 'package:flutter_test/flutter_test.dart';
 
 class MockRemoteDataSource extends Mock implements AuthRemoteDataSource {}
 
+class MockUserDataSource extends Mock implements UserDataSource {}
+
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 
 void main() {
   AuthRepositoryImpl repository;
   MockRemoteDataSource dataSource;
+  MockUserDataSource userDataSource;
   MockNetworkInfo networkInfo;
 
   setUp(() {
     dataSource = MockRemoteDataSource();
+    userDataSource = MockUserDataSource();
     networkInfo = MockNetworkInfo();
     repository = AuthRepositoryImpl(
-      dataSource: dataSource,
+      authDataSource: dataSource,
+      userDataSource: userDataSource,
       networkInfo: networkInfo,
     );
   });
@@ -68,6 +74,8 @@ void main() {
   group('signInWithEmailAndPassword', () {
     test('should check if device is online', () async {
       when(networkInfo.isConnected).thenAnswer((_) async => true);
+      when(dataSource.signInWithEmailAndPassword(any, any))
+          .thenAnswer((_) async => tUserModel);
 
       repository.signInWithEmailAndPassword(email, password);
       verify(networkInfo.isConnected);
@@ -79,6 +87,7 @@ void main() {
         () async {
           when(dataSource.signInWithEmailAndPassword(any, any))
               .thenAnswer((_) async => tUserModel);
+          when(userDataSource.getUser(any)).thenAnswer((_) async => tUserModel);
 
           final result = await repository.signInWithEmailAndPassword(
             email,
@@ -139,6 +148,8 @@ void main() {
   group('signInWithSocial', () {
     test('should check if device is online', () async {
       when(networkInfo.isConnected).thenAnswer((_) async => true);
+      when(dataSource.signInWithSocial(any))
+          .thenAnswer((_) async => tUserModel);
 
       repository.signInWithSocial(SocialLoginType.facebook);
       verify(networkInfo.isConnected);
@@ -150,6 +161,7 @@ void main() {
         () async {
           when(dataSource.signInWithSocial(any))
               .thenAnswer((_) async => tUserModel);
+          when(userDataSource.getUser(any)).thenAnswer((_) async => tUserModel);
 
           final result =
               await repository.signInWithSocial(SocialLoginType.facebook);
@@ -207,6 +219,8 @@ void main() {
   group('signUp', () {
     test('should check if device is online', () async {
       when(networkInfo.isConnected).thenAnswer((_) async => true);
+      when(dataSource.signUp(any, any, any))
+          .thenAnswer((_) async => tUserModel);
 
       repository.signUp(name, email, password);
       verify(networkInfo.isConnected);
@@ -218,6 +232,7 @@ void main() {
         () async {
           when(dataSource.signUp(any, any, any))
               .thenAnswer((_) async => tUserModel);
+          when(userDataSource.getUser(any)).thenAnswer((_) async => tUserModel);
 
           final result = await repository.signUp(name, email, password);
 

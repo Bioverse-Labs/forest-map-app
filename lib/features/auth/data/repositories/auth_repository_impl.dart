@@ -5,6 +5,7 @@ import '../../../../core/enums/social_login_types.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/platform/network_info.dart';
+import '../../../user/data/datasource/user_data_source.dart';
 import '../../../user/domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_data_source.dart';
@@ -12,11 +13,13 @@ import '../datasources/auth_remote_data_source.dart';
 typedef Future<User> _DSExecutor();
 
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthRemoteDataSource dataSource;
+  final AuthRemoteDataSource authDataSource;
+  final UserDataSource userDataSource;
   final NetworkInfo networkInfo;
 
   AuthRepositoryImpl({
-    @required this.dataSource,
+    @required this.authDataSource,
+    @required this.userDataSource,
     @required this.networkInfo,
   });
 
@@ -25,11 +28,13 @@ class AuthRepositoryImpl implements AuthRepository {
     String email,
     String password,
   ) async =>
-      _getUser(() => dataSource.signInWithEmailAndPassword(email, password));
+      _getUser(
+        () => authDataSource.signInWithEmailAndPassword(email, password),
+      );
 
   @override
   Future<Either<Failure, User>> signInWithSocial(SocialLoginType type) async =>
-      _getUser(() => dataSource.signInWithSocial(type));
+      _getUser(() => authDataSource.signInWithSocial(type));
 
   @override
   Future<Either<Failure, User>> signUp(
@@ -37,7 +42,7 @@ class AuthRepositoryImpl implements AuthRepository {
     String email,
     String password,
   ) async =>
-      _getUser(() => dataSource.signUp(name, email, password));
+      _getUser(() => authDataSource.signUp(name, email, password));
 
   Future<Either<Failure, User>> _getUser(_DSExecutor dataSourceExecutor) async {
     if (!await networkInfo.isConnected) {
@@ -45,7 +50,8 @@ class AuthRepositoryImpl implements AuthRepository {
     }
 
     try {
-      return Right(await dataSourceExecutor());
+      final authModel = await dataSourceExecutor();
+      return Right(await userDataSource.getUser(authModel.id));
     } on ServerException catch (error) {
       return Left(ServerFailure(
         error.message,
