@@ -5,10 +5,16 @@ import '../errors/exceptions.dart';
 
 class HiveAdapter<T> {
   final String boxName;
+  final HiveInterface hive;
   LazyBox<T> _box;
 
-  HiveAdapter(this.boxName) {
-    Hive.openLazyBox<T>(boxName).then((value) => _box = value);
+  HiveAdapter(this.boxName, this.hive) {
+    _init();
+  }
+
+  Future<void> _init() async {
+    final box = await hive.openLazyBox<T>(boxName);
+    _box = box;
   }
 
   Future<T> get(String id) async {

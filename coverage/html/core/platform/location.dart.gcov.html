@@ -31,13 +31,13 @@
             <td class="headerValue">lcov.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">32</td>
+            <td class="headerCovTableEntry">49</td>
             <td class="headerCovTableEntry">56</td>
-            <td class="headerCovTableEntryLo">57.1 %</td>
+            <td class="headerCovTableEntryMed">87.5 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2021-02-07 15:28:18</td>
+            <td class="headerValue">2021-02-08 15:34:12</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -100,11 +100,11 @@
 <a name="38"><span class="lineNum">      38 </span>            :         ExceptionOriginTypes.platform,</a>
 <a name="39"><span class="lineNum">      39 </span>            :       );</a>
 <a name="40"><span class="lineNum">      40 </span><span class="lineCov">          1 :     } on PlatformException catch (error) {</span></a>
-<a name="41"><span class="lineNum">      41 </span><span class="lineNoCov">          0 :       throw LocalException(</span></a>
-<a name="42"><span class="lineNum">      42 </span><span class="lineNoCov">          0 :         error.message,</span></a>
-<a name="43"><span class="lineNum">      43 </span><span class="lineNoCov">          0 :         error.code,</span></a>
+<a name="41"><span class="lineNum">      41 </span><span class="lineCov">          1 :       throw LocalException(</span></a>
+<a name="42"><span class="lineNum">      42 </span><span class="lineCov">          1 :         error.message,</span></a>
+<a name="43"><span class="lineNum">      43 </span><span class="lineCov">          1 :         error.code,</span></a>
 <a name="44"><span class="lineNum">      44 </span>            :         ExceptionOriginTypes.platform,</a>
-<a name="45"><span class="lineNum">      45 </span><span class="lineNoCov">          0 :         stackTrace: StackTrace.fromString(error.stacktrace),</span></a>
+<a name="45"><span class="lineNum">      45 </span><span class="lineCov">          2 :         stackTrace: StackTrace.fromString(error.stacktrace),</span></a>
 <a name="46"><span class="lineNum">      46 </span>            :       );</a>
 <a name="47"><span class="lineNum">      47 </span>            :     }</a>
 <a name="48"><span class="lineNum">      48 </span>            :   }</a>
@@ -145,17 +145,17 @@
 <a name="83"><span class="lineNum">      83 </span>            :       }</a>
 <a name="84"><span class="lineNum">      84 </span>            : </a>
 <a name="85"><span class="lineNum">      85 </span><span class="lineCov">          1 :       if (permission == LocationPermission.always ||</span></a>
-<a name="86"><span class="lineNum">      86 </span><span class="lineNoCov">          0 :           permission == LocationPermission.whileInUse) {</span></a>
+<a name="86"><span class="lineNum">      86 </span><span class="lineCov">          1 :           permission == LocationPermission.whileInUse) {</span></a>
 <a name="87"><span class="lineNum">      87 </span>            :         return true;</a>
 <a name="88"><span class="lineNum">      88 </span>            :       }</a>
 <a name="89"><span class="lineNum">      89 </span>            : </a>
 <a name="90"><span class="lineNum">      90 </span>            :       return true;</a>
 <a name="91"><span class="lineNum">      91 </span><span class="lineCov">          1 :     } on PlatformException catch (error) {</span></a>
-<a name="92"><span class="lineNum">      92 </span><span class="lineNoCov">          0 :       throw LocalException(</span></a>
-<a name="93"><span class="lineNum">      93 </span><span class="lineNoCov">          0 :         error.message,</span></a>
-<a name="94"><span class="lineNum">      94 </span><span class="lineNoCov">          0 :         error.code,</span></a>
+<a name="92"><span class="lineNum">      92 </span><span class="lineCov">          1 :       throw LocalException(</span></a>
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">          1 :         error.message,</span></a>
+<a name="94"><span class="lineNum">      94 </span><span class="lineCov">          1 :         error.code,</span></a>
 <a name="95"><span class="lineNum">      95 </span>            :         ExceptionOriginTypes.platform,</a>
-<a name="96"><span class="lineNum">      96 </span><span class="lineNoCov">          0 :         stackTrace: StackTrace.fromString(error.stacktrace),</span></a>
+<a name="96"><span class="lineNum">      96 </span><span class="lineCov">          2 :         stackTrace: StackTrace.fromString(error.stacktrace),</span></a>
 <a name="97"><span class="lineNum">      97 </span>            :       );</a>
 <a name="98"><span class="lineNum">      98 </span>            :     }</a>
 <a name="99"><span class="lineNum">      99 </span>            :   }</a>
@@ -177,11 +177,11 @@
 <a name="115"><span class="lineNum">     115 </span>            :         ExceptionOriginTypes.platform,</a>
 <a name="116"><span class="lineNum">     116 </span>            :       );</a>
 <a name="117"><span class="lineNum">     117 </span><span class="lineCov">          1 :     } on PlatformException catch (error) {</span></a>
-<a name="118"><span class="lineNum">     118 </span><span class="lineNoCov">          0 :       throw LocalException(</span></a>
-<a name="119"><span class="lineNum">     119 </span><span class="lineNoCov">          0 :         error.message,</span></a>
-<a name="120"><span class="lineNum">     120 </span><span class="lineNoCov">          0 :         error.code,</span></a>
+<a name="118"><span class="lineNum">     118 </span><span class="lineCov">          1 :       throw LocalException(</span></a>
+<a name="119"><span class="lineNum">     119 </span><span class="lineCov">          1 :         error.message,</span></a>
+<a name="120"><span class="lineNum">     120 </span><span class="lineCov">          1 :         error.code,</span></a>
 <a name="121"><span class="lineNum">     121 </span>            :         ExceptionOriginTypes.platform,</a>
-<a name="122"><span class="lineNum">     122 </span><span class="lineNoCov">          0 :         stackTrace: StackTrace.fromString(error.stacktrace),</span></a>
+<a name="122"><span class="lineNum">     122 </span><span class="lineCov">          2 :         stackTrace: StackTrace.fromString(error.stacktrace),</span></a>
 <a name="123"><span class="lineNum">     123 </span>            :       );</a>
 <a name="124"><span class="lineNum">     124 </span>            :     }</a>
 <a name="125"><span class="lineNum">     125 </span>            :   }</a>
@@ -205,11 +205,11 @@
 <a name="143"><span class="lineNum">     143 </span>            :         ExceptionOriginTypes.platform,</a>
 <a name="144"><span class="lineNum">     144 </span>            :       );</a>
 <a name="145"><span class="lineNum">     145 </span><span class="lineCov">          1 :     } on PlatformException catch (error) {</span></a>
-<a name="146"><span class="lineNum">     146 </span><span class="lineNoCov">          0 :       throw LocalException(</span></a>
-<a name="147"><span class="lineNum">     147 </span><span class="lineNoCov">          0 :         error.message,</span></a>
-<a name="148"><span class="lineNum">     148 </span><span class="lineNoCov">          0 :         error.code,</span></a>
+<a name="146"><span class="lineNum">     146 </span><span class="lineCov">          1 :       throw LocalException(</span></a>
+<a name="147"><span class="lineNum">     147 </span><span class="lineCov">          1 :         error.message,</span></a>
+<a name="148"><span class="lineNum">     148 </span><span class="lineCov">          1 :         error.code,</span></a>
 <a name="149"><span class="lineNum">     149 </span>            :         ExceptionOriginTypes.platform,</a>
-<a name="150"><span class="lineNum">     150 </span><span class="lineNoCov">          0 :         stackTrace: StackTrace.fromString(error.stacktrace),</span></a>
+<a name="150"><span class="lineNum">     150 </span><span class="lineCov">          2 :         stackTrace: StackTrace.fromString(error.stacktrace),</span></a>
 <a name="151"><span class="lineNum">     151 </span>            :       );</a>
 <a name="152"><span class="lineNum">     152 </span>            :     }</a>
 <a name="153"><span class="lineNum">     153 </span>            :   }</a>

@@ -3,6 +3,7 @@ import 'package:faker/faker.dart';
 import 'package:forestMapApp/core/enums/exception_origin_types.dart';
 import 'package:forestMapApp/core/enums/social_login_types.dart';
 import 'package:forestMapApp/core/errors/failure.dart';
+import 'package:forestMapApp/features/auth/domain/usecases/sign_out.dart';
 import 'package:forestMapApp/features/user/domain/entities/user.dart';
 import 'package:forestMapApp/features/auth/domain/usecases/sign_in_with_email_and_password.dart';
 import 'package:forestMapApp/features/auth/domain/usecases/sign_in_with_social.dart';
@@ -20,10 +21,13 @@ class MockSignInWithSocial extends Mock implements SignInWithSocial {}
 
 class MockSignUp extends Mock implements SignUp {}
 
+class MockSignOut extends Mock implements SignOut {}
+
 void main() {
   MockSignInWithEmailAndPassword mockSignInWithEmailAndPassword;
   MockSignInWithSocial mockSignInWithSocial;
   MockSignUp mockSignUp;
+  MockSignOut mockSignOut;
   AuthNotifierImpl authNotifierImpl;
 
   setUp(() {
@@ -35,6 +39,7 @@ void main() {
       mockSignInWithEmailAndPassword,
       mockSignInWithSocial,
       mockSignUp,
+      mockSignOut,
     );
   });
 

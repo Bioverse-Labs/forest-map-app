@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 import 'core/adapters/hive_adapter.dart';
@@ -21,7 +22,7 @@ Map<String, Widget Function(BuildContext)> routes = {
           ctx,
           listen: false,
         ),
-        orgHive: HiveAdapter<OrganizationHive>('organization'),
+        orgHive: HiveAdapter<OrganizationHive>('organization', Hive),
         appNavigator: GetIt.I(),
       ),
   '/signIn': (ctx) => SignInScreen(
@@ -31,7 +32,7 @@ Map<String, Widget Function(BuildContext)> routes = {
           ctx,
           listen: false,
         ),
-        orgHive: HiveAdapter<OrganizationHive>('organization'),
+        orgHive: HiveAdapter<OrganizationHive>('organization', Hive),
         localizedString: GetIt.I(),
         validationUtils: GetIt.I(),
         appTheme: GetIt.I(),

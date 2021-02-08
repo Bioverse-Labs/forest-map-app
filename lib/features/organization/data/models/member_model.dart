@@ -52,7 +52,7 @@ class MemberModel extends Member {
         'name': this.name,
         'email': this.email,
         'avatarUrl': this.avatarUrl,
-        'status': this.status,
-        'role': this.role,
+        'status': this.status.index,
+        'role': this.role.index,
       };
 }

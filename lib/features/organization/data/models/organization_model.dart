@@ -34,11 +34,9 @@ class OrganizationModel extends Organization {
   }
 
   factory OrganizationModel.fromHive(OrganizationHive orgHive) {
-    final _members = orgHive.members
-        .map(
-          (member) => MemberModel.fromHive(member),
-        )
-        .toList();
+    final _members = orgHive?.members
+        ?.map((member) => MemberModel.fromHive(member))
+        ?.toList();
 
     return OrganizationModel(
       id: orgHive.id,

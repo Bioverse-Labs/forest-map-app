@@ -158,8 +158,8 @@ class AppConfig {
         firestoreAdapter: GetIt.I<FirestoreAdapterImpl>(),
         firebaseAuthAdapter: GetIt.I<FirebaseAuthAdapterImpl>(),
         localizedString: GetIt.I(),
-        userHive: HiveAdapter<UserHive>('user'),
-        orgHive: HiveAdapter<OrganizationHive>('organization'),
+        userHive: HiveAdapter<UserHive>('user', Hive),
+        orgHive: HiveAdapter<OrganizationHive>('organization', Hive),
       ),
     );
 
@@ -193,8 +193,8 @@ class AppConfig {
       () => AuthRepositoryImpl(
         authDataSource: GetIt.I<AuthRemoteDataSourceImpl>(),
         userDataSource: GetIt.I<UserDataSourceImpl>(),
-        userHive: HiveAdapter<UserHive>('user'),
-        orgHive: HiveAdapter<OrganizationHive>('organization'),
+        userHive: HiveAdapter<UserHive>('user', Hive),
+        orgHive: HiveAdapter<OrganizationHive>('organization', Hive),
         networkInfo: GetIt.I<NetworkInfoImpl>(),
       ),
     );

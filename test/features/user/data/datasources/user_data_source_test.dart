@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,6 +9,7 @@ import 'package:forestMapApp/core/enums/organization_member_status.dart';
 import 'package:forestMapApp/core/enums/organization_role_types.dart';
 import 'package:forestMapApp/core/errors/exceptions.dart';
 import 'package:forestMapApp/core/util/localized_string.dart';
+import 'package:forestMapApp/features/organization/domain/entities/organization.dart';
 import 'package:forestMapApp/features/user/data/datasource/user_data_source.dart';
 import 'package:mockito/mockito.dart';
 
@@ -52,6 +55,13 @@ void main() {
   final tOrgName = faker.company.name();
   final tOrgEmail = faker.internet.email();
   final tOrgPhone = faker.randomGenerator.integer(9, min: 9).toString();
+  final tOrganization = Organization(
+    id: tOrgId,
+    name: tOrgName,
+    email: tOrgEmail,
+    phone: tOrgPhone,
+    avatarUrl: tAvatarUrl,
+  );
 
   final tUserDocSnapshot = MockDocumentSnapshot();
   final tOrgDocSnapshot = MockDocumentSnapshot();
@@ -183,12 +193,29 @@ void main() {
           'role': OrganizationRoleType.owner.index,
           'status': OrganizationMemberStatus.active.index,
         });
+        when(mockFirebaseStorageAdapter.uploadFile(
+          file: anyNamed('file'),
+          storagePath: anyNamed('storagePath'),
+        )).thenAnswer((_) => null);
+        when(mockFirebaseStorageAdapter.getDownloadUrl(any)).thenAnswer(
+          (_) async => tAvatarUrl,
+        );
 
-        await userDataSourceImpl.updateUser(id: tId, email: tEmail);
+        await userDataSourceImpl.updateUser(
+            id: tId,
+            name: tName,
+            email: tEmail,
+            avatar: File(tAvatarUrl),
+            organizations: [tOrganization]);
         verifyInOrder([
           mockFirestoreAdapter.updateDocument(
             'users/$tId',
-            {'email': tEmail},
+            {
+              'name': tName,
+              'email': tEmail,
+              'avatarUrl': tAvatarUrl,
+              'organizations': [tOrganization.id],
+            },
           ),
           mockFirestoreAdapter.getDocument('users/$tId'),
           mockFirestoreAdapter.getDocument('organizations/$tOrgId'),
@@ -203,14 +230,19 @@ void main() {
     test(
       'should throw [ServerException] if document does not exists',
       () async {
-        when(mockFirestoreAdapter.getDocument('users/$tId'))
+        when(mockFirestoreAdapter.getDocument(any))
             .thenAnswer((_) async => tUserDocSnapshot);
         when(tUserDocSnapshot.exists).thenReturn(false);
 
-        final call = userDataSourceImpl.getUser;
+        final call = userDataSourceImpl.updateUser;
 
-        expect(() => call(tId), throwsA(isInstanceOf<ServerException>()));
-        verify(mockFirestoreAdapter.getDocument('users/$tId'));
+        expect(() => call(id: tId, name: tName),
+            throwsA(isInstanceOf<ServerException>()));
+        verify(mockFirestoreAdapter.updateDocument(
+          'users/$tId',
+          {'name': tName},
+        ));
+
         verifyNoMoreInteractions(mockFirestoreAdapter);
       },
     );

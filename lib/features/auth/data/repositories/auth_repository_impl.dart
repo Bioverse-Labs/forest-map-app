@@ -71,8 +71,8 @@ class AuthRepositoryImpl implements AuthRepository {
       if (userModel.organizations != null &&
           userModel.organizations.length > 0) {
         final organizationObjects = userModel.organizations.map((organization) {
-          final members = organization.members
-              .map<MemberHive>(
+          final members = organization?.members
+              ?.map<MemberHive>(
                 (member) => MemberHive()
                   ..id = member.id
                   ..name = member.name
@@ -81,7 +81,7 @@ class AuthRepositoryImpl implements AuthRepository {
                   ..status = member.status
                   ..role = member.role,
               )
-              .toList();
+              ?.toList();
 
           return OrganizationHive()
             ..id = organization.id

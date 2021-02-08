@@ -157,6 +157,19 @@ void main() {
       );
     });
 
+    group('signOut', () {
+      test(
+        'should signOut',
+        () async {
+          when(mockFirebaseAuth.signOut()).thenAnswer((_) async => null);
+
+          await firebaseAuthAdapterImpl.signOut();
+
+          verify(mockFirebaseAuth.signOut());
+        },
+      );
+    });
+
     group('getGoogleAuthCredential', () {
       MockGoogleSignInAccount mockGoogleSignInAccount;
       MockGoogleSignInAuthentication mockGoogleSignInAuthentication;
