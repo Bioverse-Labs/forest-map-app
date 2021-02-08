@@ -40,4 +40,8 @@ abstract class OrganizationRepository {
     @required String id,
     @required String userId,
   });
+  Future<Either<Failure, void>> saveOrganizationLocally({
+    @required String id,
+    @required Organization organization,
+  });
 }

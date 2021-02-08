@@ -1,11 +1,13 @@
+import 'package:forestMapApp/core/models/model.dart';
+import 'package:forestMapApp/features/organization/domain/entities/member.dart';
 import 'package:meta/meta.dart';
 
-import '../../domain/entities/member.dart';
 import '../../domain/entities/organization.dart';
 import '../hive/organization.dart';
 import 'member_model.dart';
 
-class OrganizationModel extends Organization {
+class OrganizationModel extends Organization
+    implements Model<OrganizationModel, OrganizationHive> {
   OrganizationModel({
     @required id,
     @required name,
@@ -48,6 +50,18 @@ class OrganizationModel extends Organization {
     );
   }
 
+  factory OrganizationModel.fromEntity(Organization organization) {
+    return OrganizationModel(
+      id: organization.id,
+      name: organization.name,
+      email: organization.email,
+      phone: organization.phone,
+      avatarUrl: organization.avatarUrl,
+      members: organization.members,
+    );
+  }
+
+  @override
   Map<String, dynamic> toMap() => {
         'id': id,
         'name': name,
@@ -56,6 +70,19 @@ class OrganizationModel extends Organization {
         'avatarUrl': avatarUrl,
       };
 
+  @override
+  OrganizationHive toHiveAdapter() => OrganizationHive()
+    ..id = id
+    ..name = name
+    ..email = email
+    ..phone = phone
+    ..avatarUrl = avatarUrl
+    ..members = members
+            ?.map((member) => MemberModel.fromEntity(member).toHiveAdapter())
+            ?.toList() ??
+        [];
+
+  @override
   OrganizationModel copyWith({
     id,
     name,

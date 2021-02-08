@@ -20,7 +20,7 @@ import '../../features/auth/domain/usecases/sign_in_with_social.dart';
 import '../../features/auth/domain/usecases/sign_out.dart';
 import '../../features/auth/domain/usecases/sign_up.dart';
 import '../../features/auth/presentation/notifiers/auth_notifier.dart';
-import '../../features/organization/data/datasources/organization_data_source.dart';
+import '../../features/organization/data/datasources/organization_remote_data_source.dart';
 import '../../features/organization/data/hive/member.dart';
 import '../../features/organization/data/hive/organization.dart';
 import '../../features/organization/data/repositories/organization_repository_impl.dart';
@@ -188,8 +188,8 @@ class AppConfig {
       ),
     );
 
-    GetIt.I.registerLazySingleton<OrganizationDataSourceImpl>(
-      () => OrganizationDataSourceImpl(
+    GetIt.I.registerLazySingleton<OrganizationRemoteDataSourceImpl>(
+      () => OrganizationRemoteDataSourceImpl(
         firebaseStorageAdapter: GetIt.I(),
         firestoreAdapter: GetIt.I(),
         localizedString: GetIt.I(),
@@ -225,7 +225,7 @@ class AppConfig {
 
     GetIt.I.registerLazySingleton<OrganizationRepository>(
       () => OrganizationRepositoryImpl(
-        dataSource: GetIt.I<OrganizationDataSourceImpl>(),
+        remoteDataSource: GetIt.I<OrganizationRemoteDataSourceImpl>(),
       ),
     );
 

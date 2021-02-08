@@ -17,7 +17,7 @@ import '../../../user/domain/entities/user.dart';
 import '../models/member_model.dart';
 import '../models/organization_model.dart';
 
-abstract class OrganizationDataSource {
+abstract class OrganizationRemoteDataSource {
   /// creates new organization into organizations collection and adds
   /// user passed as params as [owner] of this new organization then
   /// adds an organization reference inside user [Document].
@@ -67,13 +67,13 @@ abstract class OrganizationDataSource {
   });
 }
 
-class OrganizationDataSourceImpl implements OrganizationDataSource {
+class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
   final FirestoreAdapterImpl firestoreAdapter;
   final FirebaseStorageAdapterImpl firebaseStorageAdapter;
   final LocalizedString localizedString;
   final UUIDGenerator uuidGenerator;
 
-  OrganizationDataSourceImpl({
+  OrganizationRemoteDataSourceImpl({
     @required this.firestoreAdapter,
     @required this.firebaseStorageAdapter,
     @required this.localizedString,

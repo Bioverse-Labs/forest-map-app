@@ -1,9 +1,11 @@
+import 'package:forestMapApp/core/models/model.dart';
+
 import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';
 import '../../domain/entities/member.dart';
 import '../hive/member.dart';
 
-class MemberModel extends Member {
+class MemberModel extends Member implements Model<MemberModel, MemberHive> {
   MemberModel({
     id,
     name,
@@ -46,6 +48,18 @@ class MemberModel extends Member {
     );
   }
 
+  factory MemberModel.fromEntity(Member member) {
+    return MemberModel(
+      id: member.id,
+      name: member.name,
+      email: member.email,
+      avatarUrl: member.avatarUrl,
+      role: member.role,
+      status: member.status,
+    );
+  }
+
+  @override
   Map<String, dynamic> toMap() => {
         'id': this.id,
         'name': this.name,
@@ -54,4 +68,32 @@ class MemberModel extends Member {
         'status': this.status.index,
         'role': this.role.index,
       };
+
+  @override
+  MemberHive toHiveAdapter() => MemberHive()
+    ..id = id
+    ..name = name
+    ..email = email
+    ..avatarUrl = avatarUrl
+    ..role = role
+    ..status = status;
+
+  @override
+  MemberModel copyWith({
+    String id,
+    String name,
+    String email,
+    String avatarUrl,
+    OrganizationMemberStatus status,
+    OrganizationRoleType role,
+  }) {
+    return MemberModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      status: status ?? this.status,
+      role: role ?? this.role,
+    );
+  }
 }

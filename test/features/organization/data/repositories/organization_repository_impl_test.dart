@@ -6,24 +6,32 @@ import 'package:forestMapApp/core/enums/exception_origin_types.dart';
 import 'package:forestMapApp/core/enums/organization_role_types.dart';
 import 'package:forestMapApp/core/errors/exceptions.dart';
 import 'package:forestMapApp/core/errors/failure.dart';
+import 'package:forestMapApp/features/organization/data/datasources/organization_local_data_source.dart';
 import 'package:forestMapApp/features/user/data/models/user_model.dart';
-import 'package:forestMapApp/features/organization/data/datasources/organization_data_source.dart';
+import 'package:forestMapApp/features/organization/data/datasources/organization_remote_data_source.dart';
 import 'package:forestMapApp/features/organization/data/models/organization_model.dart';
 import 'package:forestMapApp/features/organization/data/repositories/organization_repository_impl.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MockOrganizationDataSource extends Mock
-    implements OrganizationDataSource {}
+class MockOrganizationRemoteDataSource extends Mock
+    implements OrganizationRemoteDataSource {}
+
+class MockOrganizationLocalDataSource extends Mock
+    implements OrganizationLocalDataSource {}
 
 void main() {
-  MockOrganizationDataSource mockOrganizationDataSource;
+  MockOrganizationRemoteDataSource mockOrganizationDataSource;
+  MockOrganizationLocalDataSource mockOrganizationLocalDataSource;
   OrganizationRepositoryImpl organizationRepositoryImpl;
 
   setUp(() {
-    mockOrganizationDataSource = MockOrganizationDataSource();
-    organizationRepositoryImpl =
-        OrganizationRepositoryImpl(dataSource: mockOrganizationDataSource);
+    mockOrganizationDataSource = MockOrganizationRemoteDataSource();
+    mockOrganizationLocalDataSource = MockOrganizationLocalDataSource();
+    organizationRepositoryImpl = OrganizationRepositoryImpl(
+      remoteDataSource: mockOrganizationDataSource,
+      localDataSource: mockOrganizationLocalDataSource,
+    );
   });
 
   final tId = faker.guid.guid();
@@ -427,6 +435,64 @@ void main() {
           userId: tUserId,
         ));
         verifyNoMoreInteractions(mockOrganizationDataSource);
+      },
+    );
+  });
+
+  group('saveOrganizationLocally', () {
+    test(
+      'should save [Organization] local storage',
+      () async {
+        when(mockOrganizationLocalDataSource.saveOrganization(
+          id: anyNamed('id'),
+          organization: anyNamed('organization'),
+        ));
+
+        await organizationRepositoryImpl.saveOrganizationLocally(
+          id: tOrganizationModel.id,
+          organization: tOrganizationModel,
+        );
+
+        verify(mockOrganizationLocalDataSource.saveOrganization(
+          id: tOrganizationModel.id,
+          organization: tOrganizationModel,
+        ));
+        verifyNoMoreInteractions(mockOrganizationLocalDataSource);
+      },
+    );
+
+    test(
+      'should return [LocalFailure] if datasource fails',
+      () async {
+        when(mockOrganizationLocalDataSource.saveOrganization(
+          id: anyNamed('id'),
+          organization: anyNamed('organization'),
+        )).thenThrow(LocalException(
+          tErrorMessage,
+          tErrorCode,
+          tErrorOrigin,
+        ));
+
+        final result = await organizationRepositoryImpl.saveOrganizationLocally(
+          id: tOrganizationModel.id,
+          organization: tOrganizationModel,
+        );
+
+        expect(
+          result,
+          Left(
+            LocalFailure(
+              tErrorMessage,
+              tErrorCode,
+              tErrorOrigin,
+            ),
+          ),
+        );
+        verify(mockOrganizationLocalDataSource.saveOrganization(
+          id: tOrganizationModel.id,
+          organization: tOrganizationModel,
+        ));
+        verifyNoMoreInteractions(mockOrganizationLocalDataSource);
       },
     );
   });

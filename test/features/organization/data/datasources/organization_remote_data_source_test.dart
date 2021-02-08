@@ -12,7 +12,7 @@ import 'package:forestMapApp/core/errors/exceptions.dart';
 import 'package:forestMapApp/core/util/localized_string.dart';
 import 'package:forestMapApp/core/util/uuid_generator.dart';
 import 'package:forestMapApp/features/user/data/models/user_model.dart';
-import 'package:forestMapApp/features/organization/data/datasources/organization_data_source.dart';
+import 'package:forestMapApp/features/organization/data/datasources/organization_remote_data_source.dart';
 import 'package:forestMapApp/features/organization/data/models/member_model.dart';
 import 'package:forestMapApp/features/organization/data/models/organization_model.dart';
 import 'package:mockito/mockito.dart';
@@ -46,7 +46,7 @@ void main() {
   MockQueryDocumentSnapshot mockQueryDocumentSnapshot;
   MockCollectionReference mockCollectionReference;
   MockFirebaseFirestore mockFirebaseFirestore;
-  OrganizationDataSourceImpl organizationDataSourceImpl;
+  OrganizationRemoteDataSourceImpl organizationDataSourceImpl;
 
   setUp(() {
     mockFirestoreAdapter = MockFirestoreAdapter();
@@ -58,7 +58,7 @@ void main() {
     mockQueryDocumentSnapshot = MockQueryDocumentSnapshot();
     mockCollectionReference = MockCollectionReference();
     mockFirebaseFirestore = MockFirebaseFirestore();
-    organizationDataSourceImpl = OrganizationDataSourceImpl(
+    organizationDataSourceImpl = OrganizationRemoteDataSourceImpl(
       firestoreAdapter: mockFirestoreAdapter,
       firebaseStorageAdapter: mockFirebaseStorageAdapter,
       localizedString: mockLocalizedString,
