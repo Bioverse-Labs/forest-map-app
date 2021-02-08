@@ -1,8 +1,7 @@
-import '../hive/member.dart';
-
 import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';
 import '../../domain/entities/member.dart';
+import '../hive/member.dart';
 
 class MemberModel extends Member {
   MemberModel({

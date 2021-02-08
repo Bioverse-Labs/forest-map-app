@@ -19,8 +19,19 @@ class Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (url == null) {
+      return ImageContainer(
+        size: size,
+        child: Icon(
+          canEdit ? Icons.add_a_photo_outlined : Icons.camera_alt_outlined,
+          color: Colors.grey.shade400,
+          size: 80,
+        ),
+      );
+    }
+
     return CachedNetworkImage(
-      imageUrl: url ?? '',
+      imageUrl: url,
       placeholder: (context, url) => ImageContainer(
         size: size,
         child: Icon(

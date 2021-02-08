@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/adapters/hive_adapter.dart';
-import 'package:forestMapApp/features/organization/data/hive/organization.dart';
-import 'package:forestMapApp/features/organization/data/models/organization_model.dart';
-import 'package:forestMapApp/features/organization/presentation/notifiers/organizations_notifier.dart';
 import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
 
+import '../../../../core/adapters/hive_adapter.dart';
 import '../../../../core/enums/social_login_types.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failure.dart';
@@ -15,6 +11,9 @@ import '../../../../core/util/localized_string.dart';
 import '../../../../core/util/notifications.dart';
 import '../../../../core/util/validations.dart';
 import '../../../../core/widgets/screen.dart';
+import '../../../organization/data/hive/organization.dart';
+import '../../../organization/data/models/organization_model.dart';
+import '../../../organization/presentation/notifiers/organizations_notifier.dart';
 import '../../../user/presentation/notifiers/user_notifier.dart';
 import '../notifiers/auth_notifier.dart';
 import '../widgets/social_login_button.dart';
