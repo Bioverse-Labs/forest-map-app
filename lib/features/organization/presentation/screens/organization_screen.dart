@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/enums/organization_role_types.dart';
-import 'package:forestMapApp/features/organization/domain/entities/organization.dart';
-import 'package:forestMapApp/features/organization/presentation/widgets/empty_organizations.dart';
-import 'package:forestMapApp/features/organization/presentation/widgets/organization_info.dart';
-import 'package:forestMapApp/features/user/domain/entities/user.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/enums/organization_role_types.dart';
+import '../../../../core/navigation/app_navigator.dart';
 import '../../../../core/util/localized_string.dart';
 import '../../../../core/widgets/screen.dart';
+import '../../../user/domain/entities/user.dart';
 import '../../../user/presentation/notifiers/user_notifier.dart';
+import '../../domain/entities/organization.dart';
 import '../notifiers/organizations_notifier.dart';
+import '../widgets/empty_organizations.dart';
+import '../widgets/organization_info.dart';
 
 class OrganizationScreen extends StatelessWidget {
   final LocalizedString localizedString;
   final OrganizationNotifierImpl organizationNotifier;
+  final AppNavigator appNavigator;
   final UserNotifierImpl userNotifier;
 
   const OrganizationScreen({
@@ -21,6 +23,7 @@ class OrganizationScreen extends StatelessWidget {
     @required this.localizedString,
     @required this.organizationNotifier,
     @required this.userNotifier,
+    @required this.appNavigator,
   }) : super(key: key);
 
   OrganizationRoleType _getRole(User user, Organization organization) =>
@@ -28,7 +31,29 @@ class OrganizationScreen extends StatelessWidget {
           ?.firstWhere((e) => e.id == user.id, orElse: null)
           ?.role;
 
-  Widget _renderBody() {
+  void _changeOrganization(BuildContext context) => showModalBottomSheet(
+        context: context,
+        builder: (ctx) {
+          return Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height * .6,
+            child: ListView(
+              children: userNotifier.user.organizations
+                  .map(
+                    (e) => ListTile(
+                      title: Text(e.name),
+                      onTap: () {
+                        appNavigator.pop();
+                      },
+                    ),
+                  )
+                  .toList(),
+            ),
+          );
+        },
+      );
+
+  Widget _renderBody(BuildContext context) {
     final user = userNotifier.user;
 
     if (user.organizations == null || user.organizations.length <= 0) {
@@ -47,6 +72,7 @@ class OrganizationScreen extends StatelessWidget {
               localizedString: localizedString,
               canEdit: role == OrganizationRoleType.owner ||
                   role == OrganizationRoleType.admin,
+              onChangeOrganizationPress: () => _changeOrganization(context),
             ),
           ],
         ),
@@ -57,7 +83,7 @@ class OrganizationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenWidget(
-      body: _renderBody(),
+      body: _renderBody(context),
       floatingActionButton: Consumer<OrganizationNotifierImpl>(
         builder: (ctx, state, _) {
           final role = _getRole(userNotifier.user, state.organization);

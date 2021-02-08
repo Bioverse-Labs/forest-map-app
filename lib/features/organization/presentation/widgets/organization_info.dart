@@ -8,12 +8,16 @@ class OrganizationInfo extends StatelessWidget {
   final Organization organization;
   final LocalizedString localizedString;
   final bool canEdit;
+  final Function onAvatarPress;
+  final Function onChangeOrganizationPress;
 
   const OrganizationInfo({
     Key key,
     @required this.organization,
     this.localizedString,
     this.canEdit = false,
+    this.onAvatarPress,
+    this.onChangeOrganizationPress,
   }) : super(key: key);
 
   @override
@@ -22,15 +26,38 @@ class OrganizationInfo extends StatelessWidget {
       padding: const EdgeInsets.all(32.0),
       child: Column(
         children: [
-          Avatar(
-            url: organization?.avatarUrl,
-            canEdit: canEdit,
+          GestureDetector(
+            onTap: canEdit ? onAvatarPress : null,
+            child: Avatar(
+              url: organization?.avatarUrl,
+              canEdit: canEdit,
+            ),
           ),
           if (organization?.name != null) SizedBox(height: 12),
           if (organization?.name != null)
-            Text(
-              organization?.name ?? '',
-              style: Theme.of(context).textTheme.headline4,
+            GestureDetector(
+              onTap: canEdit ? onChangeOrganizationPress : null,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Text(
+                      organization?.name ?? '',
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  RotatedBox(
+                    quarterTurns: 3,
+                    child: Icon(
+                      Icons.chevron_left_outlined,
+                      size: 30,
+                      color: Theme.of(context).textTheme.headline4.color,
+                    ),
+                  ),
+                ],
+              ),
             ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
@@ -54,20 +81,25 @@ class OrganizationInfo extends StatelessWidget {
                 ),
                 value: organization?.members?.length.toString() ?? '',
               ),
-              if (canEdit)
-                RaisedButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.edit),
-                  label: Text(
-                    localizedString.getLocalizedString(
-                      'organization-screen.edit-button',
-                    ),
-                  ),
-                ),
+              // if (canEdit)
+              //   RaisedButton.icon(
+              //     onPressed: () {},
+              //     icon: Icon(Icons.edit),
+              //     label: Text(
+              //       localizedString.getLocalizedString(
+              //         'organization-screen.edit-button',
+              //       ),
+              //     ),
+              //   ),
+              // Padding(
+              //   padding: canEdit
+              //       ? const EdgeInsets.only(top: 0, bottom: 8)
+              //       : const EdgeInsets.symmetric(vertical: 8),
+              //   child: Divider(),
+              // ),
+              // ! REMOVE THIS WIDGET ONCE EDIT BUTTON IS BACK
               Padding(
-                padding: canEdit
-                    ? const EdgeInsets.only(top: 0, bottom: 8)
-                    : const EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Divider(),
               ),
             ],

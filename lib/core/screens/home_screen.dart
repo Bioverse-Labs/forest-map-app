@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/notifiers/home_screen_notifier.dart';
-import 'package:forestMapApp/core/util/localized_string.dart';
-import 'package:forestMapApp/features/organization/presentation/notifiers/organizations_notifier.dart';
-import 'package:forestMapApp/features/organization/presentation/screens/organization_screen.dart';
-import 'package:forestMapApp/features/user/presentation/notifiers/user_notifier.dart';
 import 'package:provider/provider.dart';
+
+import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
+import '../../features/organization/presentation/screens/organization_screen.dart';
+import '../../features/user/presentation/notifiers/user_notifier.dart';
+import '../navigation/app_navigator.dart';
+import '../notifiers/home_screen_notifier.dart';
+import '../util/localized_string.dart';
 
 class HomeScreen extends StatefulWidget {
   final LocalizedString localizedString;
   final HomeScreenNotifierImpl homeScreenNotifier;
   final OrganizationNotifierImpl organizationNotifier;
   final UserNotifierImpl userNotifierImpl;
+  final AppNavigator appNavigator;
 
   const HomeScreen({
     Key key,
@@ -18,6 +21,7 @@ class HomeScreen extends StatefulWidget {
     @required this.homeScreenNotifier,
     @required this.organizationNotifier,
     @required this.userNotifierImpl,
+    @required this.appNavigator,
   }) : super(key: key);
 
   @override
@@ -35,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
         localizedString: widget.localizedString,
         organizationNotifier: widget.organizationNotifier,
         userNotifier: widget.userNotifierImpl,
+        appNavigator: widget.appNavigator,
       ),
       Placeholder(),
     ];

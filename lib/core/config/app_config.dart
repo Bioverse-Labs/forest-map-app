@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:forestMapApp/core/notifiers/home_screen_notifier.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
@@ -21,6 +20,8 @@ import '../../features/auth/domain/usecases/sign_in_with_social.dart';
 import '../../features/auth/domain/usecases/sign_up.dart';
 import '../../features/auth/presentation/notifiers/auth_notifier.dart';
 import '../../features/organization/data/datasources/organization_data_source.dart';
+import '../../features/organization/data/hive/member.dart';
+import '../../features/organization/data/hive/organization.dart';
 import '../../features/organization/data/repositories/organization_repository_impl.dart';
 import '../../features/organization/domain/repositories/organization_repository.dart';
 import '../../features/organization/domain/usecases/create_organization.dart';
@@ -36,6 +37,7 @@ import '../../features/tracking/domain/repositories/location_repository.dart';
 import '../../features/tracking/domain/usecases/track_user.dart';
 import '../../features/tracking/presentation/notifiers/location_notifier.dart';
 import '../../features/user/data/datasource/user_data_source.dart';
+import '../../features/user/data/hive/user.dart';
 import '../../features/user/data/repository/user_repository_impl.dart';
 import '../../features/user/domain/repository/user_repository.dart';
 import '../../features/user/domain/usecases/get_user.dart';
@@ -44,7 +46,10 @@ import '../../features/user/presentation/notifiers/user_notifier.dart';
 import '../adapters/firebase_auth_adapter.dart';
 import '../adapters/firebase_storage_adapter.dart';
 import '../adapters/firestore_adapter.dart';
+import '../enums/organization_member_status.dart';
+import '../enums/organization_role_types.dart';
 import '../navigation/app_navigator.dart';
+import '../notifiers/home_screen_notifier.dart';
 import '../platform/camera.dart';
 import '../platform/location.dart';
 import '../platform/network_info.dart';
@@ -63,6 +68,12 @@ class AppConfig {
 
   static void registerHiveAdapters() {
     // * Register all hiver adapters
+
+    Hive.registerAdapter(OrganizationRoleTypeAdapter());
+    Hive.registerAdapter(OrganizationMemberStatusAdapter());
+    Hive.registerAdapter(MemberHiveAdapter());
+    Hive.registerAdapter(OrganizationHiveAdapter());
+    Hive.registerAdapter(UserHiveAdapter());
   }
 
   static void registerUtils() {

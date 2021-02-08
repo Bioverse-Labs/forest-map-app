@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/notifiers/home_screen_notifier.dart';
-import 'package:forestMapApp/core/screens/home_screen.dart';
-import 'package:forestMapApp/features/organization/presentation/notifiers/organizations_notifier.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
-import 'core/adapters/firebase_auth_adapter.dart';
-import 'core/errors/failure.dart';
-import 'core/navigation/app_navigator.dart';
+import 'core/notifiers/home_screen_notifier.dart';
+import 'core/screens/home_screen.dart';
 import 'core/screens/initial_screen.dart';
-import 'core/util/notifications.dart';
 import 'features/auth/presentation/notifiers/auth_notifier.dart';
 import 'features/auth/presentation/screens/sign_in_screen.dart';
 import 'features/auth/presentation/screens/sign_up_screen.dart';
-import 'features/tracking/presentation/notifiers/location_notifier.dart';
+import 'features/organization/presentation/notifiers/organizations_notifier.dart';
 import 'features/user/presentation/notifiers/user_notifier.dart';
 
 Map<String, Widget Function(BuildContext)> routes = {
@@ -50,5 +45,6 @@ Map<String, Widget Function(BuildContext)> routes = {
           listen: false,
         ),
         userNotifierImpl: Provider.of<UserNotifierImpl>(ctx, listen: false),
+        appNavigator: GetIt.I(),
       ),
 };
