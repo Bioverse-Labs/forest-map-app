@@ -446,7 +446,7 @@ void main() {
         when(mockOrganizationLocalDataSource.saveOrganization(
           id: anyNamed('id'),
           organization: anyNamed('organization'),
-        ));
+        )).thenAnswer((_) async => null);
 
         await organizationRepositoryImpl.saveOrganizationLocally(
           id: tOrganizationModel.id,

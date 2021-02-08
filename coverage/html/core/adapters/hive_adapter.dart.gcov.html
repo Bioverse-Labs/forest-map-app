@@ -31,13 +31,13 @@
             <td class="headerValue">lcov.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">36</td>
             <td class="headerCovTableEntry">37</td>
-            <td class="headerCovTableEntry">37</td>
-            <td class="headerCovTableEntryHi">100.0 %</td>
+            <td class="headerCovTableEntryHi">97.3 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2021-02-08 15:34:12</td>
+            <td class="headerValue">2021-02-08 20:34:43</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -70,14 +70,14 @@
 <a name="8"><span class="lineNum">       8 </span>            :   final HiveInterface hive;</a>
 <a name="9"><span class="lineNum">       9 </span>            :   LazyBox&lt;T&gt; _box;</a>
 <a name="10"><span class="lineNum">      10 </span>            : </a>
-<a name="11"><span class="lineNum">      11 </span><span class="lineCov">          1 :   HiveAdapter(this.boxName, this.hive) {</span></a>
-<a name="12"><span class="lineNum">      12 </span><span class="lineCov">          1 :     _init();</span></a>
-<a name="13"><span class="lineNum">      13 </span>            :   }</a>
-<a name="14"><span class="lineNum">      14 </span>            : </a>
-<a name="15"><span class="lineNum">      15 </span><span class="lineCov">          1 :   Future&lt;void&gt; _init() async {</span></a>
-<a name="16"><span class="lineNum">      16 </span><span class="lineCov">          4 :     final box = await hive.openLazyBox&lt;T&gt;(boxName);</span></a>
-<a name="17"><span class="lineNum">      17 </span><span class="lineCov">          1 :     _box = box;</span></a>
-<a name="18"><span class="lineNum">      18 </span>            :   }</a>
+<a name="11"><span class="lineNum">      11 </span><span class="lineCov">          1 :   HiveAdapter(this.boxName, this.hive);</span></a>
+<a name="12"><span class="lineNum">      12 </span>            : </a>
+<a name="13"><span class="lineNum">      13 </span><span class="lineCov">          1 :   Future&lt;void&gt; init() async {</span></a>
+<a name="14"><span class="lineNum">      14 </span><span class="lineCov">          4 :     final box = await hive.openLazyBox&lt;T&gt;(boxName);</span></a>
+<a name="15"><span class="lineNum">      15 </span><span class="lineCov">          1 :     _box = box;</span></a>
+<a name="16"><span class="lineNum">      16 </span>            :   }</a>
+<a name="17"><span class="lineNum">      17 </span>            : </a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineNoCov">          0 :   Future&lt;void&gt; close() =&gt; _box.close();</span></a>
 <a name="19"><span class="lineNum">      19 </span>            : </a>
 <a name="20"><span class="lineNum">      20 </span><span class="lineCov">          1 :   Future&lt;T&gt; get(String id) async {</span></a>
 <a name="21"><span class="lineNum">      21 </span>            :     try {</a>

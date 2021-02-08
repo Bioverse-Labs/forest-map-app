@@ -34,6 +34,7 @@ void main() {
     test(
       'should return [UserHive]',
       () async {
+        await hiveAdapter.init();
         when(mockLazyBox.get(any)).thenAnswer((_) async => tUser);
 
         final result = await hiveAdapter.get(tId);
@@ -47,6 +48,7 @@ void main() {
     test(
       'should throw [LocalException] if hive fails',
       () async {
+        await hiveAdapter.init();
         when(mockLazyBox.get(any)).thenThrow(HiveError(
           faker.randomGenerator.string(20),
         ));
@@ -64,6 +66,7 @@ void main() {
     test(
       'should return list keys',
       () async {
+        await hiveAdapter.init();
         when(mockLazyBox.keys).thenReturn([tId]);
 
         final result = hiveAdapter.getKeys();
@@ -77,6 +80,7 @@ void main() {
     test(
       'should throw [LocalException] if hive fails',
       () async {
+        await hiveAdapter.init();
         when(mockLazyBox.keys).thenThrow(HiveError(
           faker.randomGenerator.string(20),
         ));
@@ -94,6 +98,7 @@ void main() {
     test(
       'should return save [User]',
       () async {
+        await hiveAdapter.init();
         when(mockLazyBox.put(any, any)).thenAnswer((_) async => null);
 
         await hiveAdapter.put(tId, tUser);
@@ -106,6 +111,7 @@ void main() {
     test(
       'should throw [LocalException] if hive fails',
       () async {
+        await hiveAdapter.init();
         when(mockLazyBox.put(any, any)).thenThrow(HiveError(
           faker.randomGenerator.string(20),
         ));
@@ -123,6 +129,7 @@ void main() {
     test(
       'should return save [User]',
       () async {
+        await hiveAdapter.init();
         when(mockLazyBox.delete(any)).thenAnswer((_) async => null);
 
         await hiveAdapter.delete(tId);
@@ -135,6 +142,7 @@ void main() {
     test(
       'should throw [LocalException] if hive fails',
       () async {
+        await hiveAdapter.init();
         when(mockLazyBox.delete(any)).thenThrow(HiveError(
           faker.randomGenerator.string(20),
         ));
@@ -152,6 +160,7 @@ void main() {
     test(
       'should return delete [User]',
       () async {
+        await hiveAdapter.init();
         when(mockLazyBox.keys).thenReturn([tId]);
         when(mockLazyBox.delete(any)).thenAnswer((_) async => null);
 
@@ -166,6 +175,7 @@ void main() {
     test(
       'should throw [LocalException] if hive fails',
       () async {
+        await hiveAdapter.init();
         when(mockLazyBox.keys).thenThrow(HiveError(
           faker.randomGenerator.string(20),
         ));

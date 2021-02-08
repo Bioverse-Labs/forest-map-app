@@ -47,6 +47,15 @@ void main() {
   test(
     'should return [MemberModel] if [MemberHive] is valid',
     () async {
+      final model = MemberModel.fromEntity(tMemberModel);
+
+      expect(model, isInstanceOf<MemberModel>());
+    },
+  );
+
+  test(
+    'should return [MemberModel] if [Member] is valid',
+    () async {
       final model = MemberModel.fromHive(tMemberHive);
 
       expect(model, isInstanceOf<MemberModel>());
@@ -59,6 +68,24 @@ void main() {
       final map = tMemberModel.toMap();
 
       expect(map, tMap);
+    },
+  );
+
+  test(
+    'should return [MemberHive] from model',
+    () {
+      final result = tMemberModel.toHiveAdapter();
+
+      expect(result, isInstanceOf<MemberHive>());
+    },
+  );
+
+  test(
+    'should return new instance of [MemberHive]',
+    () {
+      final result = tMemberModel.copyWith(name: faker.person.name());
+
+      expect(result, isNot(tMemberModel));
     },
   );
 }
