@@ -20,7 +20,7 @@ class Avatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: "http://via.placeholder.com/350x150",
+      imageUrl: url ?? '',
       placeholder: (context, url) => ImageContainer(
         size: size,
         child: Icon(
@@ -32,9 +32,14 @@ class Avatar extends StatelessWidget {
       errorWidget: (context, url, error) => ImageContainer(
         size: size,
         child: Icon(
-          Icons.error_outline,
-          color: Colors.redAccent,
+          canEdit ? Icons.add_a_photo_outlined : Icons.camera_alt_outlined,
+          size: 80,
+          color: Colors.grey.shade400,
         ),
+      ),
+      imageBuilder: (_, imageProvider) => ImageContainer(
+        size: size,
+        imageProvider: imageProvider,
       ),
     );
   }
@@ -43,8 +48,14 @@ class Avatar extends StatelessWidget {
 class ImageContainer extends StatelessWidget {
   final Widget child;
   final Size size;
+  final ImageProvider imageProvider;
 
-  const ImageContainer({Key key, this.child, this.size}) : super(key: key);
+  const ImageContainer({
+    Key key,
+    this.child,
+    this.size,
+    this.imageProvider,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +63,9 @@ class ImageContainer extends StatelessWidget {
       width: size.width,
       height: size.height,
       decoration: BoxDecoration(
+        image: imageProvider != null
+            ? DecorationImage(image: imageProvider, fit: BoxFit.fill)
+            : null,
         color: Colors.white,
         borderRadius: BorderRadius.circular(size.width / 2),
         boxShadow: [

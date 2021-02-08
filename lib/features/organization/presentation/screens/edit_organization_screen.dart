@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/util/localized_string.dart';
-import 'package:forestMapApp/core/util/notifications.dart';
-import 'package:forestMapApp/core/widgets/screen.dart';
-import 'package:forestMapApp/features/organization/presentation/notifiers/organizations_notifier.dart';
+
+import '../../../../core/util/localized_string.dart';
+import '../../../../core/util/notifications.dart';
+import '../../../../core/widgets/screen.dart';
+import '../notifiers/organizations_notifier.dart';
 
 class EditOrganizationScreen extends StatelessWidget {
   final OrganizationNotifierImpl organizationNotifier;

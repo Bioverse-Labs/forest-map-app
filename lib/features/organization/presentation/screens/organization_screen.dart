@@ -55,12 +55,13 @@ class OrganizationScreen extends StatelessWidget {
 
   Widget _renderBody(BuildContext context) {
     final user = userNotifier.user;
+    final organization = organizationNotifier.organization;
 
     if (user.organizations == null || user.organizations.length <= 0) {
       return EmptyOrganizations(localizedString: localizedString);
     }
 
-    final role = _getRole(user, user.organizations.first);
+    final role = _getRole(user, organization);
 
     return Center(
       child: SingleChildScrollView(
@@ -68,7 +69,7 @@ class OrganizationScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             OrganizationInfo(
-              organization: user.organizations.first,
+              organization: organization,
               localizedString: localizedString,
               canEdit: role == OrganizationRoleType.owner ||
                   role == OrganizationRoleType.admin,

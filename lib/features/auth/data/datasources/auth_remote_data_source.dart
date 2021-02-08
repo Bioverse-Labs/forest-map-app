@@ -1,12 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:meta/meta.dart';
 
 import '../../../../core/adapters/firebase_auth_adapter.dart';
 import '../../../../core/adapters/firestore_adapter.dart';
+import '../../../../core/adapters/hive_adapter.dart';
 import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/enums/social_login_types.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/util/localized_string.dart';
+import '../../../organization/data/hive/organization.dart';
+import '../../../user/data/hive/user.dart';
 import '../../../user/data/models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -40,18 +44,23 @@ abstract class AuthRemoteDataSource {
     String email,
     String password,
   );
+
+  Future<void> signOut();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirestoreAdapter firestoreAdapter;
   final FirebaseAuthAdapter firebaseAuthAdapter;
   final LocalizedString localizedString;
-
-  AuthRemoteDataSourceImpl(
-    this.firestoreAdapter,
-    this.firebaseAuthAdapter,
-    this.localizedString,
-  );
+  final HiveAdapter<UserHive> userHive;
+  final HiveAdapter<OrganizationHive> orgHive;
+  AuthRemoteDataSourceImpl({
+    @required this.firestoreAdapter,
+    @required this.firebaseAuthAdapter,
+    @required this.localizedString,
+    @required this.userHive,
+    @required this.orgHive,
+  });
 
   @override
   Future<UserModel> signInWithEmailAndPassword(
@@ -124,6 +133,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,
       );
+    }
+  }
+
+  @override
+  Future<void> signOut() async {
+    try {
+      await firebaseAuthAdapter.signOut();
+      await userHive.deleteAll();
+      await orgHive.deleteAll();
+    } on FirebaseAuthException catch (error) {
+      throw getServerExceptionFromFirebaseAuth(error, localizedString);
     }
   }
 }

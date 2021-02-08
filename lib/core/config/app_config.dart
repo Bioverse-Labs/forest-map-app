@@ -17,6 +17,7 @@ import '../../features/auth/data/repositories/auth_repository_impl.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
 import '../../features/auth/domain/usecases/sign_in_with_email_and_password.dart';
 import '../../features/auth/domain/usecases/sign_in_with_social.dart';
+import '../../features/auth/domain/usecases/sign_out.dart';
 import '../../features/auth/domain/usecases/sign_up.dart';
 import '../../features/auth/presentation/notifiers/auth_notifier.dart';
 import '../../features/organization/data/datasources/organization_data_source.dart';
@@ -46,6 +47,7 @@ import '../../features/user/presentation/notifiers/user_notifier.dart';
 import '../adapters/firebase_auth_adapter.dart';
 import '../adapters/firebase_storage_adapter.dart';
 import '../adapters/firestore_adapter.dart';
+import '../adapters/hive_adapter.dart';
 import '../enums/organization_member_status.dart';
 import '../enums/organization_role_types.dart';
 import '../navigation/app_navigator.dart';
@@ -153,9 +155,11 @@ class AppConfig {
 
     GetIt.I.registerLazySingleton<AuthRemoteDataSourceImpl>(
       () => AuthRemoteDataSourceImpl(
-        GetIt.I<FirestoreAdapterImpl>(),
-        GetIt.I<FirebaseAuthAdapterImpl>(),
-        GetIt.I(),
+        firestoreAdapter: GetIt.I<FirestoreAdapterImpl>(),
+        firebaseAuthAdapter: GetIt.I<FirebaseAuthAdapterImpl>(),
+        localizedString: GetIt.I(),
+        userHive: HiveAdapter<UserHive>('user'),
+        orgHive: HiveAdapter<OrganizationHive>('organization'),
       ),
     );
 
@@ -189,6 +193,8 @@ class AppConfig {
       () => AuthRepositoryImpl(
         authDataSource: GetIt.I<AuthRemoteDataSourceImpl>(),
         userDataSource: GetIt.I<UserDataSourceImpl>(),
+        userHive: HiveAdapter<UserHive>('user'),
+        orgHive: HiveAdapter<OrganizationHive>('organization'),
         networkInfo: GetIt.I<NetworkInfoImpl>(),
       ),
     );
@@ -229,6 +235,12 @@ class AppConfig {
 
     GetIt.I.registerLazySingleton<SignUp>(
       () => SignUp(
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<SignOut>(
+      () => SignOut(
         GetIt.I(),
       ),
     );
@@ -293,6 +305,7 @@ class AppConfig {
   static void registerNotifiers() {
     GetIt.I.registerFactory<AuthNotifierImpl>(
       () => AuthNotifierImpl(
+        GetIt.I(),
         GetIt.I(),
         GetIt.I(),
         GetIt.I(),

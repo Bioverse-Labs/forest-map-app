@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/core/adapters/hive_adapter.dart';
+import 'package:forestMapApp/features/organization/data/hive/organization.dart';
+import 'package:forestMapApp/features/organization/data/models/organization_model.dart';
+import 'package:forestMapApp/features/organization/presentation/notifiers/organizations_notifier.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
@@ -15,9 +19,11 @@ import '../../../user/presentation/notifiers/user_notifier.dart';
 import '../notifiers/auth_notifier.dart';
 import '../widgets/social_login_button.dart';
 
-class SignInScreen extends StatelessWidget {
-  final AuthNotifierImpl authNotifierImpl;
-  final UserNotifierImpl userNotifierImpl;
+class SignInScreen extends StatefulWidget {
+  final AuthNotifierImpl authNotifier;
+  final UserNotifierImpl userNotifier;
+  final OrganizationNotifierImpl organizationNotifier;
+  final HiveAdapter<OrganizationHive> orgHive;
   final LocalizedString localizedString;
   final ValidationUtils validationUtils;
   final NotificationsUtils notificationsUtils;
@@ -26,8 +32,10 @@ class SignInScreen extends StatelessWidget {
 
   SignInScreen({
     Key key,
-    @required this.authNotifierImpl,
-    @required this.userNotifierImpl,
+    @required this.authNotifier,
+    @required this.userNotifier,
+    @required this.organizationNotifier,
+    @required this.orgHive,
     @required this.localizedString,
     @required this.validationUtils,
     @required this.notificationsUtils,
@@ -35,44 +43,82 @@ class SignInScreen extends StatelessWidget {
     @required this.appNavigator,
   }) : super(key: key);
 
+  @override
+  _SignInScreenState createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   String _getString(String matcher) =>
-      localizedString.getLocalizedString(matcher);
+      widget.localizedString.getLocalizedString(matcher);
 
   InputDecoration _getInputDecoration(String title) =>
-      appTheme.inputDecoration(_getString(title));
+      widget.appTheme.inputDecoration(_getString(title));
 
   void _gotToSignUpScreen() => GetIt.I<AppNavigator>().push('/signUp');
 
   Future<void> _signIn() async {
     if (_formKey.currentState.validate()) {
       try {
-        final result = await authNotifierImpl.signInWithEmailAndPassword(
+        setState(() {
+          _isLoading = true;
+        });
+        final result = await widget.authNotifier.signInWithEmailAndPassword(
           _emailController.text,
           _passwordController.text,
         );
-        await userNotifierImpl.getUser(result.id);
-        appNavigator.pushAndReplace('/home');
+
+        final hiveOrg = await widget.orgHive.get('currOrg');
+        if (hiveOrg != null) {
+          widget.organizationNotifier
+              .setOrganization(OrganizationModel.fromHive(hiveOrg));
+        }
+
+        await widget.userNotifier.getUser(result.id);
+        widget.appNavigator.pushAndReplace('/home');
       } on ServerFailure catch (failure) {
-        notificationsUtils.showErrorNotification(failure.message);
+        widget.notificationsUtils.showErrorNotification(failure.message);
       } on ServerException catch (exception) {
-        notificationsUtils.showErrorNotification(exception.message);
+        widget.notificationsUtils.showErrorNotification(exception.message);
+      } on LocalFailure catch (failure) {
+        widget.notificationsUtils.showErrorNotification(failure.message);
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
     }
   }
 
   Future<void> _signInWithSocial(SocialLoginType type) async {
     try {
-      final result = await authNotifierImpl.signInWithSocial(type);
-      await userNotifierImpl.getUser(result.id);
-      appNavigator.pushAndReplace('/');
+      setState(() {
+        _isLoading = true;
+      });
+      final result = await widget.authNotifier.signInWithSocial(type);
+
+      final hiveOrg = await widget.orgHive.get('currOrg');
+      if (hiveOrg != null) {
+        widget.organizationNotifier
+            .setOrganization(OrganizationModel.fromHive(hiveOrg));
+      }
+
+      await widget.userNotifier.getUser(result.id);
+      widget.appNavigator.pushAndReplace('/home');
     } on ServerFailure catch (failure) {
-      notificationsUtils.showErrorNotification(failure.message);
+      widget.notificationsUtils.showErrorNotification(failure.message);
     } on ServerException catch (exception) {
-      notificationsUtils.showErrorNotification(exception.message);
+      widget.notificationsUtils.showErrorNotification(exception.message);
+    } on LocalFailure catch (failure) {
+      widget.notificationsUtils.showErrorNotification(failure.message);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -134,7 +180,7 @@ class SignInScreen extends StatelessWidget {
                             return _getString('input-validations.required');
                           }
 
-                          if (!validationUtils.validateEmail(value)) {
+                          if (!widget.validationUtils.validateEmail(value)) {
                             return _getString(
                                 'input-validations.invalid-email');
                           }
@@ -185,7 +231,7 @@ class SignInScreen extends StatelessWidget {
           ),
         ),
       ),
-      isLoading: Provider.of<AuthNotifierImpl>(context).isLoading,
+      isLoading: _isLoading,
     );
   }
 }

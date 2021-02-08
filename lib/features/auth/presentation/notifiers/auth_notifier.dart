@@ -1,21 +1,25 @@
 import 'package:flutter/foundation.dart';
 
 import '../../../../core/enums/social_login_types.dart';
+import '../../../../core/usecases/usecase.dart';
 import '../../../user/domain/entities/user.dart';
 import '../../domain/usecases/sign_in_with_email_and_password.dart';
 import '../../domain/usecases/sign_in_with_social.dart';
+import '../../domain/usecases/sign_out.dart';
 import '../../domain/usecases/sign_up.dart';
 
 abstract class AuthNotifier {
   Future<User> signInWithEmailAndPassword(String email, String password);
   Future<User> signInWithSocial(SocialLoginType type);
   Future<User> signUp(String name, String email, String password);
+  Future<void> signOut();
 }
 
 class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
   final SignInWithEmailAndPassword signInWithEmailAndPasswordUseCase;
   final SignInWithSocial signInWithSocialUseCase;
   final SignUp signUpUseCase;
+  final SignOut signOutUseCase;
   bool _loading = false;
 
   bool get isLoading => _loading;
@@ -24,6 +28,7 @@ class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
     this.signInWithEmailAndPasswordUseCase,
     this.signInWithSocialUseCase,
     this.signUpUseCase,
+    this.signOutUseCase,
   );
 
   @override
@@ -81,6 +86,16 @@ class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
       (user) {
         return user;
       },
+    );
+  }
+
+  @override
+  Future<void> signOut() async {
+    final failureOrVoid = await signOutUseCase(NoParams());
+
+    failureOrVoid?.fold(
+      (failure) => throw failure,
+      (r) => r,
     );
   }
 }

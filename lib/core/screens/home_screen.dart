@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../features/auth/presentation/notifiers/auth_notifier.dart';
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/organization/presentation/screens/organization_screen.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
+import '../../features/user/presentation/screen/profile_screen.dart';
 import '../navigation/app_navigator.dart';
 import '../notifiers/home_screen_notifier.dart';
 import '../util/localized_string.dart';
+import '../util/notifications.dart';
 
 class HomeScreen extends StatefulWidget {
   final LocalizedString localizedString;
   final HomeScreenNotifierImpl homeScreenNotifier;
   final OrganizationNotifierImpl organizationNotifier;
-  final UserNotifierImpl userNotifierImpl;
+  final UserNotifierImpl userNotifier;
+  final AuthNotifierImpl authNotifier;
   final AppNavigator appNavigator;
+  final NotificationsUtils notificationsUtils;
 
   const HomeScreen({
     Key key,
     @required this.localizedString,
     @required this.homeScreenNotifier,
     @required this.organizationNotifier,
-    @required this.userNotifierImpl,
     @required this.appNavigator,
+    @required this.userNotifier,
+    @required this.authNotifier,
+    @required this.notificationsUtils,
   }) : super(key: key);
 
   @override
@@ -38,10 +45,14 @@ class _HomeScreenState extends State<HomeScreen> {
       OrganizationScreen(
         localizedString: widget.localizedString,
         organizationNotifier: widget.organizationNotifier,
-        userNotifier: widget.userNotifierImpl,
+        userNotifier: widget.userNotifier,
         appNavigator: widget.appNavigator,
       ),
-      Placeholder(),
+      ProfileScreen(
+        authNotifier: widget.authNotifier,
+        appNavigator: widget.appNavigator,
+        notificationsUtils: widget.notificationsUtils,
+      ),
     ];
     super.initState();
   }

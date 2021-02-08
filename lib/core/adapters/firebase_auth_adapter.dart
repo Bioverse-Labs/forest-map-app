@@ -13,6 +13,7 @@ abstract class FirebaseAuthAdapter {
   );
   Future<AuthCredential> getGoogleAuthCredential();
   Future<AuthCredential> getFacebookAuthCredential();
+  Future<void> signOut();
 }
 
 class FirebaseAuthAdapterImpl implements FirebaseAuthAdapter {
@@ -93,6 +94,9 @@ class FirebaseAuthAdapterImpl implements FirebaseAuthAdapter {
       avatarUrl: result.user.photoURL ?? '',
     );
   }
+
+  @override
+  Future<void> signOut() => firebaseAuth.signOut();
 }
 
 abstract class SocialCredentialAdapter {

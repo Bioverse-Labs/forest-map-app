@@ -1,20 +1,29 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
+import '../../features/organization/data/hive/organization.dart';
+import '../../features/organization/data/models/organization_model.dart';
+import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
 import '../adapters/firebase_auth_adapter.dart';
+import '../adapters/hive_adapter.dart';
 import '../navigation/app_navigator.dart';
 import 'splash_screen.dart';
 
 class InitialScreen extends StatelessWidget {
   final FirebaseAuthAdapterImpl firebaseAuthAdapterImpl;
   final AppNavigator appNavigator;
+  final UserNotifierImpl userNotifier;
+  final OrganizationNotifierImpl organizationNotifier;
+  final HiveAdapter<OrganizationHive> orgHive;
 
   InitialScreen({
     Key key,
     @required this.firebaseAuthAdapterImpl,
     @required this.appNavigator,
+    @required this.userNotifier,
+    @required this.orgHive,
+    @required this.organizationNotifier,
   }) : super(key: key);
 
   Future<void> _handleStateChange(BuildContext context, User user) async {
@@ -23,7 +32,11 @@ class InitialScreen extends StatelessWidget {
       return;
     }
 
-    final userNotifier = Provider.of<UserNotifierImpl>(context, listen: false);
+    final hiveOrg = await orgHive.get('currOrg');
+    if (hiveOrg != null) {
+      organizationNotifier.setOrganization(OrganizationModel.fromHive(hiveOrg));
+    }
+
     await userNotifier.getUser(user?.uid);
 
     appNavigator.pushAndReplace('/home');

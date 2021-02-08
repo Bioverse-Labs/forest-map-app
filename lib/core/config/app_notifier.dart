@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/notifiers/home_screen_notifier.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +7,7 @@ import '../../features/auth/presentation/notifiers/auth_notifier.dart';
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/tracking/presentation/notifiers/location_notifier.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
+import '../notifiers/home_screen_notifier.dart';
 
 class AppNotifier extends StatelessWidget {
   final Widget widget;

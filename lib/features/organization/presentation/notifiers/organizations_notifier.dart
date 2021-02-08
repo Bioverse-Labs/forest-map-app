@@ -231,4 +231,9 @@ class OrganizationNotifierImpl extends ChangeNotifier
       },
     );
   }
+
+  void setOrganization(Organization org) {
+    _organization = org;
+    notifyListeners();
+  }
 }

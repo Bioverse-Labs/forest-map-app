@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/util/localized_string.dart';
-import 'package:forestMapApp/core/widgets/avatar.dart';
-import 'package:forestMapApp/core/widgets/text_with_label.dart';
-import 'package:forestMapApp/features/organization/domain/entities/organization.dart';
+
+import '../../../../core/util/localized_string.dart';
+import '../../../../core/widgets/avatar.dart';
+import '../../../../core/widgets/text_with_label.dart';
+import '../../domain/entities/organization.dart';
 
 class OrganizationInfo extends StatelessWidget {
   final Organization organization;

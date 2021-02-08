@@ -2,6 +2,8 @@ import 'package:meta/meta.dart';
 
 import '../../domain/entities/member.dart';
 import '../../domain/entities/organization.dart';
+import '../hive/organization.dart';
+import 'member_model.dart';
 
 class OrganizationModel extends Organization {
   OrganizationModel({
@@ -28,6 +30,23 @@ class OrganizationModel extends Organization {
       phone: map['phone'],
       avatarUrl: map['avatarUrl'],
       members: map['members'],
+    );
+  }
+
+  factory OrganizationModel.fromHive(OrganizationHive orgHive) {
+    final _members = orgHive.members
+        .map(
+          (member) => MemberModel.fromHive(member),
+        )
+        .toList();
+
+    return OrganizationModel(
+      id: orgHive.id,
+      name: orgHive.name,
+      email: orgHive.email,
+      phone: orgHive.phone,
+      avatarUrl: orgHive.avatarUrl,
+      members: _members,
     );
   }
 

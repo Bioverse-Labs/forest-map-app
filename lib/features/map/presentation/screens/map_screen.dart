@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/util/localized_string.dart';
-import 'package:forestMapApp/core/widgets/screen.dart';
+
+import '../../../../core/util/localized_string.dart';
+import '../../../../core/widgets/screen.dart';
 
 class MapScreen extends StatelessWidget {
   final LocalizedString localizedString;

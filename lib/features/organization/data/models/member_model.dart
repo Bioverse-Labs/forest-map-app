@@ -1,3 +1,5 @@
+import '../hive/member.dart';
+
 import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';
 import '../../domain/entities/member.dart';
@@ -31,6 +33,17 @@ class MemberModel extends Member {
       role: map['role'] != null
           ? OrganizationRoleType.values[map['role'] as int]
           : null,
+    );
+  }
+
+  factory MemberModel.fromHive(MemberHive memberHive) {
+    return MemberModel(
+      id: memberHive.id,
+      name: memberHive.name,
+      email: memberHive.email,
+      avatarUrl: memberHive.avatarUrl,
+      role: memberHive.role,
+      status: memberHive.status,
     );
   }
 
