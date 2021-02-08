@@ -1,12 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../features/organization/data/hive/organization.dart';
-import '../../features/organization/data/models/organization_model.dart';
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
 import '../adapters/firebase_auth_adapter.dart';
-import '../adapters/hive_adapter.dart';
 import '../navigation/app_navigator.dart';
 import 'splash_screen.dart';
 
@@ -15,14 +12,12 @@ class InitialScreen extends StatelessWidget {
   final AppNavigator appNavigator;
   final UserNotifierImpl userNotifier;
   final OrganizationNotifierImpl organizationNotifier;
-  final HiveAdapter<OrganizationHive> orgHive;
 
   InitialScreen({
     Key key,
     @required this.firebaseAuthAdapterImpl,
     @required this.appNavigator,
     @required this.userNotifier,
-    @required this.orgHive,
     @required this.organizationNotifier,
   }) : super(key: key);
 
@@ -32,12 +27,8 @@ class InitialScreen extends StatelessWidget {
       return;
     }
 
-    final hiveOrg = await orgHive.get('currOrg');
-    if (hiveOrg != null) {
-      organizationNotifier.setOrganization(OrganizationModel.fromHive(hiveOrg));
-    }
-
     await userNotifier.getUser(user?.uid);
+    await organizationNotifier.fetchFromStorage();
 
     appNavigator.pushAndReplace('/home');
   }

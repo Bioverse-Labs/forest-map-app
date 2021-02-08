@@ -326,6 +326,7 @@ class AppConfig {
         removeMemberUseCase: GetIt.I(),
         updateMemberUseCase: GetIt.I(),
         updateOrganizationUseCase: GetIt.I(),
+        orgHive: HiveAdapter<OrganizationHive>('organization', Hive),
       ),
     );
 

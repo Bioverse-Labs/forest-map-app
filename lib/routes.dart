@@ -22,7 +22,6 @@ Map<String, Widget Function(BuildContext)> routes = {
           ctx,
           listen: false,
         ),
-        orgHive: HiveAdapter<OrganizationHive>('organization', Hive),
         appNavigator: GetIt.I(),
       ),
   '/signIn': (ctx) => SignInScreen(

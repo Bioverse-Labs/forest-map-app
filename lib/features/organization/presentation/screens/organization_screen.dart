@@ -40,9 +40,10 @@ class OrganizationScreen extends StatelessWidget {
             child: ListView(
               children: userNotifier.user.organizations
                   .map(
-                    (e) => ListTile(
-                      title: Text(e.name),
+                    (organization) => ListTile(
+                      title: Text(organization.name),
                       onTap: () {
+                        organizationNotifier.setOrganization(organization);
                         appNavigator.pop();
                       },
                     ),
@@ -54,26 +55,31 @@ class OrganizationScreen extends StatelessWidget {
       );
 
   Widget _renderBody(BuildContext context) {
-    final user = userNotifier.user;
-    final organization = organizationNotifier.organization;
-
-    if (user.organizations == null || user.organizations.length <= 0) {
-      return EmptyOrganizations(localizedString: localizedString);
-    }
-
-    final role = _getRole(user, organization);
-
     return Center(
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            OrganizationInfo(
-              organization: organization,
-              localizedString: localizedString,
-              canEdit: role == OrganizationRoleType.owner ||
-                  role == OrganizationRoleType.admin,
-              onChangeOrganizationPress: () => _changeOrganization(context),
+            Consumer<OrganizationNotifierImpl>(
+              builder: (ctx, state, _) {
+                final user = userNotifier.user;
+                final organization = organizationNotifier.organization;
+
+                if (user.organizations == null ||
+                    user.organizations.length <= 0) {
+                  return EmptyOrganizations(localizedString: localizedString);
+                }
+
+                final role = _getRole(user, organization);
+
+                return OrganizationInfo(
+                  organization: organization,
+                  localizedString: localizedString,
+                  canEdit: role == OrganizationRoleType.owner ||
+                      role == OrganizationRoleType.admin,
+                  onChangeOrganizationPress: () => _changeOrganization(context),
+                );
+              },
             ),
           ],
         ),

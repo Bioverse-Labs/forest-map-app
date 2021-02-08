@@ -1,6 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/core/adapters/hive_adapter.dart';
+import 'package:forestMapApp/features/organization/data/hive/member.dart';
+import 'package:forestMapApp/features/organization/data/hive/organization.dart';
+import 'package:forestMapApp/features/organization/data/models/organization_model.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/enums/organization_member_status.dart';
@@ -50,6 +54,7 @@ class OrganizationNotifierImpl extends ChangeNotifier
   final GetOrganization getOrganizationUseCase;
   final UpdateOrganization updateOrganizationUseCase;
   final DeleteOrganization deleteOrganizationUseCase;
+  final HiveAdapter<OrganizationHive> orgHive;
   final UpdateMember updateMemberUseCase;
   final RemoveMember removeMemberUseCase;
 
@@ -64,6 +69,7 @@ class OrganizationNotifierImpl extends ChangeNotifier
     @required this.deleteOrganizationUseCase,
     @required this.updateMemberUseCase,
     @required this.removeMemberUseCase,
+    @required this.orgHive,
   });
 
   Organization get organization => _organization;
@@ -234,6 +240,34 @@ class OrganizationNotifierImpl extends ChangeNotifier
 
   void setOrganization(Organization org) {
     _organization = org;
+    final payload = OrganizationHive()
+      ..id = org.id
+      ..name = org.name
+      ..email = org.email
+      ..phone = org.phone
+      ..avatarUrl = org.avatarUrl
+      ..members = org?.members
+              ?.map(
+                (e) => MemberHive()
+                  ..id = e.id
+                  ..name = e.name
+                  ..email = e.email
+                  ..avatarUrl = e.avatarUrl
+                  ..role = e.role
+                  ..status = e.status,
+              )
+              ?.toList() ??
+          [];
+    orgHive.put('currOrg', payload);
     notifyListeners();
+  }
+
+  Future<void> fetchFromStorage() async {
+    final org = await orgHive.get('currOrg');
+
+    if (org != null) {
+      _organization = OrganizationModel.fromHive(org);
+      notifyListeners();
+    }
   }
 }

@@ -37,7 +37,7 @@ class OrganizationInfo extends StatelessWidget {
           if (organization?.name != null) SizedBox(height: 12),
           if (organization?.name != null)
             GestureDetector(
-              onTap: canEdit ? onChangeOrganizationPress : null,
+              onTap: onChangeOrganizationPress,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
