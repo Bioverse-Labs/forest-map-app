@@ -11,9 +11,14 @@ void main() {
   runApp(ForestMap());
 }
 
-class ForestMap extends StatelessWidget {
+class ForestMap extends StatefulWidget {
   const ForestMap({Key key}) : super(key: key);
 
+  @override
+  _ForestMapState createState() => _ForestMapState();
+}
+
+class _ForestMapState extends State<ForestMap> {
   Future<void> _initApp() async {
     await AppConfig.initEssentialServices();
     AppConfig.registerHiveAdapters();
@@ -22,10 +27,17 @@ class ForestMap extends StatelessWidget {
     AppConfig.registerStyles();
     AppConfig.registerNavigation();
     AppConfig.registerAdapters();
+    await AppConfig.initHiveAdapters();
     AppConfig.registerDatasources();
     AppConfig.registerRepositories();
     AppConfig.registerUseCases();
     AppConfig.registerNotifiers();
+  }
+
+  @override
+  void dispose() {
+    AppConfig.disposeHiveAdapters();
+    super.dispose();
   }
 
   @override

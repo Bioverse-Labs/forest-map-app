@@ -8,6 +8,7 @@ import '../../features/user/presentation/notifiers/user_notifier.dart';
 import '../../features/user/presentation/screen/profile_screen.dart';
 import '../navigation/app_navigator.dart';
 import '../notifiers/home_screen_notifier.dart';
+import '../platform/camera.dart';
 import '../util/localized_string.dart';
 import '../util/notifications.dart';
 
@@ -19,6 +20,7 @@ class HomeScreen extends StatefulWidget {
   final AuthNotifierImpl authNotifier;
   final AppNavigator appNavigator;
   final NotificationsUtils notificationsUtils;
+  final CameraImpl cameraImpl;
 
   const HomeScreen({
     Key key,
@@ -29,6 +31,7 @@ class HomeScreen extends StatefulWidget {
     @required this.userNotifier,
     @required this.authNotifier,
     @required this.notificationsUtils,
+    @required this.cameraImpl,
   }) : super(key: key);
 
   @override
@@ -47,6 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
         organizationNotifier: widget.organizationNotifier,
         userNotifier: widget.userNotifier,
         appNavigator: widget.appNavigator,
+        cameraImpl: widget.cameraImpl,
+        notificationsUtils: widget.notificationsUtils,
       ),
       ProfileScreen(
         authNotifier: widget.authNotifier,

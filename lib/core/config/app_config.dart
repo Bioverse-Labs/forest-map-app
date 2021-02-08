@@ -94,7 +94,7 @@ class AppConfig {
     GetIt.I.registerLazySingleton<CameraImpl>(
       () => CameraImpl(
         ImagePicker(),
-        GetIt.I<ImageUtils>(),
+        GetIt.I<ImageUtilsImpl>(),
       ),
     );
 
@@ -146,6 +146,24 @@ class AppConfig {
     GetIt.I.registerLazySingleton<FirebaseStorageAdapterImpl>(
       () => FirebaseStorageAdapterImpl(FirebaseStorage.instance),
     );
+
+    GetIt.I.registerLazySingleton<HiveAdapter<OrganizationHive>>(
+      () => HiveAdapter<OrganizationHive>('organization', Hive),
+    );
+
+    GetIt.I.registerLazySingleton<HiveAdapter<UserHive>>(
+      () => HiveAdapter<UserHive>('user', Hive),
+    );
+  }
+
+  static Future<void> initHiveAdapters() async {
+    await GetIt.I<HiveAdapter<OrganizationHive>>().init();
+    await GetIt.I<HiveAdapter<UserHive>>().init();
+  }
+
+  static Future<void> disposeHiveAdapters() async {
+    await GetIt.I<HiveAdapter<OrganizationHive>>().close();
+    await GetIt.I<HiveAdapter<UserHive>>().close();
   }
 
   // * DATA LAYER SINGLETON'S //
@@ -158,8 +176,8 @@ class AppConfig {
         firestoreAdapter: GetIt.I<FirestoreAdapterImpl>(),
         firebaseAuthAdapter: GetIt.I<FirebaseAuthAdapterImpl>(),
         localizedString: GetIt.I(),
-        userHive: HiveAdapter<UserHive>('user', Hive),
-        orgHive: HiveAdapter<OrganizationHive>('organization', Hive),
+        userHive: GetIt.I(),
+        orgHive: GetIt.I(),
       ),
     );
 
@@ -193,8 +211,8 @@ class AppConfig {
       () => AuthRepositoryImpl(
         authDataSource: GetIt.I<AuthRemoteDataSourceImpl>(),
         userDataSource: GetIt.I<UserDataSourceImpl>(),
-        userHive: HiveAdapter<UserHive>('user', Hive),
-        orgHive: HiveAdapter<OrganizationHive>('organization', Hive),
+        userHive: GetIt.I(),
+        orgHive: GetIt.I(),
         networkInfo: GetIt.I<NetworkInfoImpl>(),
       ),
     );
@@ -326,7 +344,7 @@ class AppConfig {
         removeMemberUseCase: GetIt.I(),
         updateMemberUseCase: GetIt.I(),
         updateOrganizationUseCase: GetIt.I(),
-        orgHive: HiveAdapter<OrganizationHive>('organization', Hive),
+        orgHive: GetIt.I(),
       ),
     );
 

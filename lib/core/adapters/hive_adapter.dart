@@ -8,14 +8,14 @@ class HiveAdapter<T> {
   final HiveInterface hive;
   LazyBox<T> _box;
 
-  HiveAdapter(this.boxName, this.hive) {
-    _init();
-  }
+  HiveAdapter(this.boxName, this.hive);
 
-  Future<void> _init() async {
+  Future<void> init() async {
     final box = await hive.openLazyBox<T>(boxName);
     _box = box;
   }
+
+  Future<void> close() => _box.close();
 
   Future<T> get(String id) async {
     try {

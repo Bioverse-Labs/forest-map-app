@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/enums/organization_role_types.dart';
+import '../../../../core/errors/failure.dart';
 import '../../../../core/navigation/app_navigator.dart';
+import '../../../../core/platform/camera.dart';
 import '../../../../core/util/localized_string.dart';
+import '../../../../core/util/notifications.dart';
 import '../../../../core/widgets/screen.dart';
 import '../../../user/domain/entities/user.dart';
 import '../../../user/presentation/notifiers/user_notifier.dart';
@@ -17,6 +20,8 @@ class OrganizationScreen extends StatelessWidget {
   final OrganizationNotifierImpl organizationNotifier;
   final AppNavigator appNavigator;
   final UserNotifierImpl userNotifier;
+  final CameraImpl cameraImpl;
+  final NotificationsUtils notificationsUtils;
 
   const OrganizationScreen({
     Key key,
@@ -24,6 +29,8 @@ class OrganizationScreen extends StatelessWidget {
     @required this.organizationNotifier,
     @required this.userNotifier,
     @required this.appNavigator,
+    @required this.cameraImpl,
+    @required this.notificationsUtils,
   }) : super(key: key);
 
   OrganizationRoleType _getRole(User user, Organization organization) =>
@@ -54,6 +61,23 @@ class OrganizationScreen extends StatelessWidget {
         },
       );
 
+  Future<void> _handleAvatarPress() async {
+    try {
+      final failureOrCameraResponse = await cameraImpl.takePicture();
+      failureOrCameraResponse.fold(
+        (failure) => notificationsUtils.showErrorNotification(
+          localizedString.getLocalizedString('generic-exception'),
+        ),
+        (resp) => organizationNotifier.updateOrganization(
+          id: organizationNotifier.organization.id,
+          avatar: resp.file,
+        ),
+      );
+    } on ServerFailure catch (failure) {
+      notificationsUtils.showErrorNotification(failure.message);
+    }
+  }
+
   Widget _renderBody(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
@@ -78,6 +102,7 @@ class OrganizationScreen extends StatelessWidget {
                   canEdit: role == OrganizationRoleType.owner ||
                       role == OrganizationRoleType.admin,
                   onChangeOrganizationPress: () => _changeOrganization(context),
+                  onAvatarPress: () => _handleAvatarPress(),
                 );
               },
             ),
@@ -110,6 +135,7 @@ class OrganizationScreen extends StatelessWidget {
           return Container();
         },
       ),
+      isLoading: Provider.of<OrganizationNotifierImpl>(context).isLoading,
     );
   }
 }

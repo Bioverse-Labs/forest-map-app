@@ -1,15 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/adapters/hive_adapter.dart';
-import 'package:forestMapApp/features/organization/data/hive/member.dart';
-import 'package:forestMapApp/features/organization/data/hive/organization.dart';
-import 'package:forestMapApp/features/organization/data/models/organization_model.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/adapters/hive_adapter.dart';
 import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';
 import '../../../user/domain/entities/user.dart';
+import '../../data/hive/member.dart';
+import '../../data/hive/organization.dart';
+import '../../data/models/organization_model.dart';
 import '../../domain/entities/organization.dart';
 import '../../domain/usecases/create_organization.dart';
 import '../../domain/usecases/delete_organization.dart';
@@ -60,7 +60,7 @@ class OrganizationNotifierImpl extends ChangeNotifier
 
   Organization _organization;
   String _invitationLink;
-  bool _loading;
+  bool _loading = false;
 
   OrganizationNotifierImpl({
     @required this.createOrganizationUseCase,
@@ -102,6 +102,7 @@ class OrganizationNotifierImpl extends ChangeNotifier
       (failure) => throw failure,
       (organization) {
         _organization = organization;
+        orgHive.put('currOrg', _toHiveOrg(organization));
         notifyListeners();
       },
     );
@@ -148,6 +149,7 @@ class OrganizationNotifierImpl extends ChangeNotifier
       (failure) => throw failure,
       (organization) {
         _organization = organization;
+        orgHive.put(id, _toHiveOrg(organization));
         notifyListeners();
       },
     );
@@ -173,6 +175,7 @@ class OrganizationNotifierImpl extends ChangeNotifier
       (failure) => throw failure,
       (organization) {
         _organization = organization;
+        orgHive.put('currOrg', _toHiveOrg(organization));
         notifyListeners();
       },
     );
@@ -202,6 +205,7 @@ class OrganizationNotifierImpl extends ChangeNotifier
       (failure) => throw failure,
       (organization) {
         _organization = organization;
+        orgHive.put('currOrg', _toHiveOrg(organization));
         notifyListeners();
       },
     );
@@ -233,6 +237,7 @@ class OrganizationNotifierImpl extends ChangeNotifier
       (failure) => throw failure,
       (organization) {
         _organization = organization;
+        orgHive.put('currOrg', _toHiveOrg(organization));
         notifyListeners();
       },
     );
@@ -240,7 +245,21 @@ class OrganizationNotifierImpl extends ChangeNotifier
 
   void setOrganization(Organization org) {
     _organization = org;
-    final payload = OrganizationHive()
+    orgHive.put('currOrg', _toHiveOrg(org));
+    notifyListeners();
+  }
+
+  Future<void> fetchFromStorage() async {
+    final org = await orgHive?.get('currOrg');
+
+    if (org != null) {
+      _organization = OrganizationModel.fromHive(org);
+      notifyListeners();
+    }
+  }
+
+  OrganizationHive _toHiveOrg(Organization org) {
+    return OrganizationHive()
       ..id = org.id
       ..name = org.name
       ..email = org.email
@@ -258,16 +277,5 @@ class OrganizationNotifierImpl extends ChangeNotifier
               )
               ?.toList() ??
           [];
-    orgHive.put('currOrg', payload);
-    notifyListeners();
-  }
-
-  Future<void> fetchFromStorage() async {
-    final org = await orgHive.get('currOrg');
-
-    if (org != null) {
-      _organization = OrganizationModel.fromHive(org);
-      notifyListeners();
-    }
   }
 }
