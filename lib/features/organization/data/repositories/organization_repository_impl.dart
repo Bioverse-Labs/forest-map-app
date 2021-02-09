@@ -1,17 +1,17 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:forestMapApp/core/platform/network_info.dart';
-import 'package:forestMapApp/features/organization/data/datasources/organization_local_data_source.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failure.dart';
+import '../../../../core/platform/network_info.dart';
 import '../../../user/domain/entities/user.dart';
 import '../../domain/entities/organization.dart';
 import '../../domain/repositories/organization_repository.dart';
+import '../datasources/organization_local_data_source.dart';
 import '../datasources/organization_remote_data_source.dart';
 
 typedef Future<Organization> _DSExecutor();

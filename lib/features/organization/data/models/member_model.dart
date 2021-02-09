@@ -1,7 +1,6 @@
-import 'package:forestMapApp/core/models/model.dart';
-
 import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';
+import '../../../../core/models/model.dart';
 import '../../domain/entities/member.dart';
 import '../hive/member.dart';
 

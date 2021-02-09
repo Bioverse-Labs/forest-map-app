@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/features/organization/domain/usecases/save_organization_locally.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/enums/organization_member_status.dart';
@@ -12,6 +11,7 @@ import '../../domain/usecases/create_organization.dart';
 import '../../domain/usecases/delete_organization.dart';
 import '../../domain/usecases/get_organization.dart';
 import '../../domain/usecases/remove_member.dart';
+import '../../domain/usecases/save_organization_locally.dart';
 import '../../domain/usecases/update_member.dart';
 import '../../domain/usecases/update_organization.dart';
 

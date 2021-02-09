@@ -1,7 +1,7 @@
-import 'package:forestMapApp/core/models/model.dart';
-import 'package:forestMapApp/features/organization/domain/entities/member.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/models/model.dart';
+import '../../domain/entities/member.dart';
 import '../../domain/entities/organization.dart';
 import '../hive/organization.dart';
 import 'member_model.dart';
