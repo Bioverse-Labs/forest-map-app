@@ -7,7 +7,10 @@ import '../../../organization/domain/entities/organization.dart';
 import '../entities/user.dart';
 
 abstract class UserRepository {
-  Future<Either<Failure, User>> getUser(String id);
+  Future<Either<Failure, User>> getUser({
+    String id,
+    bool searchLocally,
+  });
   Future<Either<Failure, User>> updateUser({
     String id,
     String name,

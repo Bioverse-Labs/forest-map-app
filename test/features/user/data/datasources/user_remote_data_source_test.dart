@@ -10,7 +10,7 @@ import 'package:forestMapApp/core/enums/organization_role_types.dart';
 import 'package:forestMapApp/core/errors/exceptions.dart';
 import 'package:forestMapApp/core/util/localized_string.dart';
 import 'package:forestMapApp/features/organization/domain/entities/organization.dart';
-import 'package:forestMapApp/features/user/data/datasource/user_data_source.dart';
+import 'package:forestMapApp/features/user/data/datasource/user_remote_data_source.dart';
 import 'package:mockito/mockito.dart';
 
 class MockFirestoreAdapter extends Mock implements FirestoreAdapterImpl {}
@@ -33,14 +33,14 @@ void main() {
   MockFirebaseStorageAdapter mockFirebaseStorageAdapter;
   MockLocalizedString mockLocalizedString;
   MockFirestore mockFirestore;
-  UserDataSourceImpl userDataSourceImpl;
+  UserRemoteDataSourceImpl userDataSourceImpl;
 
   setUp(() {
     mockFirestoreAdapter = MockFirestoreAdapter();
     mockFirebaseStorageAdapter = MockFirebaseStorageAdapter();
     mockFirestore = MockFirestore();
     mockLocalizedString = MockLocalizedString();
-    userDataSourceImpl = UserDataSourceImpl(
+    userDataSourceImpl = UserRemoteDataSourceImpl(
       firestoreAdapter: mockFirestoreAdapter,
       firebaseStorageAdapter: mockFirebaseStorageAdapter,
       localizedString: mockLocalizedString,

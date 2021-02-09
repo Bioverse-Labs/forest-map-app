@@ -47,7 +47,7 @@ void main() {
 
         await expectToNotifiyListener<UserNotifierImpl>(
           userNotifierImpl,
-          () => userNotifierImpl.getUser(tId),
+          () => userNotifierImpl.getUser(id: tId),
           [
             NotifierAssertParams(
               value: (notifier) => notifier.isLoading,
@@ -64,7 +64,10 @@ void main() {
           ],
         );
 
-        verify(mockGetUserUseCase(GetUserParams(tId)));
+        verify(mockGetUserUseCase(GetUserParams(
+          id: tId,
+          searchLocally: false,
+        )));
         verifyNoMoreInteractions(mockGetUserUseCase);
       },
     );
@@ -77,11 +80,14 @@ void main() {
         final call = userNotifierImpl.getUser;
 
         expect(
-          () => call(tId),
+          () => call(id: tId),
           throwsA(isInstanceOf<ServerFailure>()),
         );
 
-        verify(mockGetUserUseCase(GetUserParams(tId)));
+        verify(mockGetUserUseCase(GetUserParams(
+          id: tId,
+          searchLocally: false,
+        )));
         verifyNoMoreInteractions(mockGetUserUseCase);
       },
     );

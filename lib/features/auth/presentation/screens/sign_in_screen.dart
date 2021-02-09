@@ -66,7 +66,7 @@ class _SignInScreenState extends State<SignInScreen> {
           _passwordController.text,
         );
 
-        await widget.userNotifier.getUser(result.id);
+        await widget.userNotifier.getUser(id: result.id);
         widget.appNavigator.pushAndReplace('/home');
       } on ServerFailure catch (failure) {
         widget.notificationsUtils.showErrorNotification(failure.message);
@@ -89,7 +89,7 @@ class _SignInScreenState extends State<SignInScreen> {
       });
       final result = await widget.authNotifier.signInWithSocial(type);
 
-      await widget.userNotifier.getUser(result.id);
+      await widget.userNotifier.getUser(id: result.id);
       widget.appNavigator.pushAndReplace('/home');
     } on ServerFailure catch (failure) {
       widget.notificationsUtils.showErrorNotification(failure.message);

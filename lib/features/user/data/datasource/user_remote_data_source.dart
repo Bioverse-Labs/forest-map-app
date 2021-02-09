@@ -13,7 +13,7 @@ import '../../../organization/data/models/organization_model.dart';
 import '../../../organization/domain/entities/organization.dart';
 import '../models/user_model.dart';
 
-abstract class UserDataSource {
+abstract class UserRemoteDataSource {
   Future<UserModel> getUser(String id);
   Future<UserModel> updateUser({
     @required String id,
@@ -24,12 +24,12 @@ abstract class UserDataSource {
   });
 }
 
-class UserDataSourceImpl implements UserDataSource {
+class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final FirestoreAdapterImpl firestoreAdapter;
   final FirebaseStorageAdapterImpl firebaseStorageAdapter;
   final LocalizedString localizedString;
 
-  UserDataSourceImpl({
+  UserRemoteDataSourceImpl({
     @required this.firestoreAdapter,
     @required this.firebaseStorageAdapter,
     @required this.localizedString,

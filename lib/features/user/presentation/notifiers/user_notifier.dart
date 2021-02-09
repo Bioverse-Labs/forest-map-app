@@ -9,7 +9,10 @@ import '../../domain/usecases/get_user.dart';
 import '../../domain/usecases/update_user.dart';
 
 abstract class UserNotifier {
-  Future<void> getUser(String id);
+  Future<void> getUser({
+    @required String id,
+    bool searchLocally,
+  });
   Future<void> updateUser({
     String id,
     String name,
@@ -35,11 +38,17 @@ class UserNotifierImpl extends ChangeNotifier implements UserNotifier {
   });
 
   @override
-  Future<void> getUser(String id) async {
+  Future<void> getUser({
+    @required String id,
+    bool searchLocally = false,
+  }) async {
     _loading = true;
     notifyListeners();
 
-    final failureOrUser = await getUserUseCase(GetUserParams(id));
+    final failureOrUser = await getUserUseCase(GetUserParams(
+      id: id,
+      searchLocally: searchLocally,
+    ));
 
     _loading = false;
     notifyListeners();

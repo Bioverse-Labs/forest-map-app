@@ -34,14 +34,23 @@ void main() {
   test(
     'should return [User] if repository succeed',
     () async {
-      when(mockUserRepository.getUser(any)).thenAnswer(
+      when(mockUserRepository.getUser(
+        id: anyNamed('id'),
+        searchLocally: anyNamed('searchLocally'),
+      )).thenAnswer(
         (_) async => Right(tUser),
       );
 
-      final result = await getUser(GetUserParams(tId));
+      final result = await getUser(GetUserParams(
+        id: tId,
+        searchLocally: false,
+      ));
 
       expect(result, Right(tUser));
-      verify(mockUserRepository.getUser(tId));
+      verify(mockUserRepository.getUser(
+        id: tId,
+        searchLocally: false,
+      ));
       verifyNoMoreInteractions(mockUserRepository);
     },
   );
@@ -49,14 +58,23 @@ void main() {
   test(
     'should return [ServerFailure] when repository fails',
     () async {
-      when(mockUserRepository.getUser(any)).thenAnswer(
+      when(mockUserRepository.getUser(
+        id: anyNamed('id'),
+        searchLocally: anyNamed('searchLocally'),
+      )).thenAnswer(
         (_) async => Left(tFailure),
       );
 
-      final result = await getUser(GetUserParams(tId));
+      final result = await getUser(GetUserParams(
+        id: tId,
+        searchLocally: false,
+      ));
 
       expect(result, Left(tFailure));
-      verify(mockUserRepository.getUser(tId));
+      verify(mockUserRepository.getUser(
+        id: tId,
+        searchLocally: false,
+      ));
       verifyNoMoreInteractions(mockUserRepository);
     },
   );

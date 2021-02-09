@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:forestMapApp/features/organization/data/datasources/organization_local_data_source.dart';
 import 'package:forestMapApp/features/organization/domain/usecases/save_organization_locally.dart';
+import 'package:forestMapApp/features/user/data/datasource/user_local_data_source.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
@@ -39,7 +40,7 @@ import '../../features/tracking/data/repositories/location_repository_impl.dart'
 import '../../features/tracking/domain/repositories/location_repository.dart';
 import '../../features/tracking/domain/usecases/track_user.dart';
 import '../../features/tracking/presentation/notifiers/location_notifier.dart';
-import '../../features/user/data/datasource/user_data_source.dart';
+import '../../features/user/data/datasource/user_remote_data_source.dart';
 import '../../features/user/data/hive/user.dart';
 import '../../features/user/data/repository/user_repository_impl.dart';
 import '../../features/user/domain/repository/user_repository.dart';
@@ -205,11 +206,17 @@ class AppConfig {
       ),
     );
 
-    GetIt.I.registerLazySingleton<UserDataSourceImpl>(
-      () => UserDataSourceImpl(
+    GetIt.I.registerLazySingleton<UserRemoteDataSource>(
+      () => UserRemoteDataSourceImpl(
         firestoreAdapter: GetIt.I(),
         firebaseStorageAdapter: GetIt.I(),
         localizedString: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<UserLocalDataSource>(
+      () => UserLocalDataSourceImpl(
+        userHive: GetIt.I(),
       ),
     );
   }
@@ -220,7 +227,7 @@ class AppConfig {
     GetIt.I.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(
         authDataSource: GetIt.I<AuthRemoteDataSourceImpl>(),
-        userDataSource: GetIt.I<UserDataSourceImpl>(),
+        userDataSource: GetIt.I(),
         userHive: GetIt.I(),
         orgHive: GetIt.I(),
         networkInfo: GetIt.I<NetworkInfoImpl>(),
@@ -243,7 +250,8 @@ class AppConfig {
 
     GetIt.I.registerLazySingleton<UserRepository>(
       () => UserRepositoryImpl(
-        dataSource: GetIt.I<UserDataSourceImpl>(),
+        remoteDataSource: GetIt.I(),
+        localDataSource: GetIt.I(),
       ),
     );
   }

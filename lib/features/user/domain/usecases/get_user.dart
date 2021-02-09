@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
@@ -8,8 +9,12 @@ import '../repository/user_repository.dart';
 
 class GetUserParams extends Equatable {
   final String id;
+  final bool searchLocally;
 
-  GetUserParams(this.id);
+  GetUserParams({
+    @required this.id,
+    @required this.searchLocally,
+  });
 
   @override
   List<Object> get props => [id];
@@ -22,6 +27,9 @@ class GetUser implements UseCase<User, GetUserParams> {
 
   @override
   Future<Either<Failure, User>> call(GetUserParams params) {
-    return repository.getUser(params.id);
+    return repository.getUser(
+      id: params.id,
+      searchLocally: params.searchLocally,
+    );
   }
 }

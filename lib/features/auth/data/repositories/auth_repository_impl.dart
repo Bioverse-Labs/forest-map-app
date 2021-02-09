@@ -8,7 +8,7 @@ import '../../../../core/errors/failure.dart';
 import '../../../../core/platform/network_info.dart';
 import '../../../organization/data/hive/member.dart';
 import '../../../organization/data/hive/organization.dart';
-import '../../../user/data/datasource/user_data_source.dart';
+import '../../../user/data/datasource/user_remote_data_source.dart';
 import '../../../user/data/hive/user.dart';
 import '../../../user/domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -18,7 +18,7 @@ typedef Future<User> _DSExecutor();
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authDataSource;
-  final UserDataSource userDataSource;
+  final UserRemoteDataSource userDataSource;
   final HiveAdapter<UserHive> userHive;
   final HiveAdapter<OrganizationHive> orgHive;
   final NetworkInfo networkInfo;

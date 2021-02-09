@@ -5,24 +5,43 @@ import 'package:meta/meta.dart';
 
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failure.dart';
+import '../../../../core/platform/network_info.dart';
 import '../../../organization/domain/entities/organization.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repository/user_repository.dart';
-import '../datasource/user_data_source.dart';
+import '../datasource/user_local_data_source.dart';
+import '../datasource/user_remote_data_source.dart';
 
 class UserRepositoryImpl implements UserRepository {
-  final UserDataSource dataSource;
+  final UserRemoteDataSource remoteDataSource;
+  final UserLocalDataSource localDataSource;
+  final NetworkInfo networkInfo;
 
   UserRepositoryImpl({
-    @required this.dataSource,
+    @required this.remoteDataSource,
+    @required this.localDataSource,
+    @required this.networkInfo,
   });
 
   @override
-  Future<Either<Failure, User>> getUser(String id) async {
+  Future<Either<Failure, User>> getUser({
+    @required String id,
+    @required bool searchLocally,
+  }) async {
     try {
-      return Right(await dataSource.getUser(id));
+      if (searchLocally || !await networkInfo.isConnected) {
+        return Right(await localDataSource.getUser(id));
+      }
+      return Right(await remoteDataSource.getUser(id));
     } on ServerException catch (error) {
       return Left(ServerFailure(
+        error.message,
+        error.code,
+        error.origin,
+        stackTrace: error.stackTrace,
+      ));
+    } on LocalException catch (error) {
+      return Left(LocalFailure(
         error.message,
         error.code,
         error.origin,
@@ -40,7 +59,11 @@ class UserRepositoryImpl implements UserRepository {
     File avatar,
   }) async {
     try {
-      return Right(await dataSource.updateUser(
+      if (!await networkInfo.isConnected) {
+        return Left(NoInternetFailure());
+      }
+
+      return Right(await remoteDataSource.updateUser(
         id: id,
         name: name,
         email: email,

@@ -50,7 +50,7 @@ class SignupScreen extends StatelessWidget {
           _emailController.text,
           _passwordController.text,
         );
-        await userNotifierImpl.getUser(result.id);
+        await userNotifierImpl.getUser(id: result.id);
         appNavigator.pushAndReplace('/');
       } on ServerFailure catch (failure) {
         print(failure.stackTrace);

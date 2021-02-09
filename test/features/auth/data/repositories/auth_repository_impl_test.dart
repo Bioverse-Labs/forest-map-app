@@ -12,7 +12,7 @@ import 'package:forestMapApp/features/auth/data/datasources/auth_remote_data_sou
 import 'package:forestMapApp/features/organization/data/hive/organization.dart';
 import 'package:forestMapApp/features/organization/data/models/member_model.dart';
 import 'package:forestMapApp/features/organization/data/models/organization_model.dart';
-import 'package:forestMapApp/features/user/data/datasource/user_data_source.dart';
+import 'package:forestMapApp/features/user/data/datasource/user_remote_data_source.dart';
 import 'package:forestMapApp/features/user/data/hive/user.dart';
 import 'package:forestMapApp/features/user/data/models/user_model.dart';
 import 'package:forestMapApp/features/auth/data/repositories/auth_repository_impl.dart';
@@ -22,7 +22,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 class MockRemoteDataSource extends Mock implements AuthRemoteDataSource {}
 
-class MockUserDataSource extends Mock implements UserDataSource {}
+class MockUserDataSource extends Mock implements UserRemoteDataSource {}
 
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 

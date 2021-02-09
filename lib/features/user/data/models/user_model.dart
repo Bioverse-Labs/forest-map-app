@@ -1,9 +1,12 @@
 import 'package:meta/meta.dart';
 
+import '../../../../core/models/model.dart';
+import '../../../organization/data/models/organization_model.dart';
 import '../../../organization/domain/entities/organization.dart';
 import '../../domain/entities/user.dart';
+import '../hive/user.dart';
 
-class UserModel extends User {
+class UserModel extends User implements Model<UserModel, UserHive> {
   UserModel({
     @required String id,
     @required String name,
@@ -33,6 +36,30 @@ class UserModel extends User {
     );
   }
 
+  factory UserModel.fromHive(UserHive userHive) {
+    return UserModel(
+      id: userHive.id,
+      name: userHive.name,
+      email: userHive.email,
+      avatarUrl: userHive.avatarUrl,
+      organizations: userHive?.organizations
+              ?.map((organization) => OrganizationModel.fromHive(organization))
+              ?.toList() ??
+          [],
+    );
+  }
+
+  factory UserModel.fromEntity(User user) {
+    return UserModel(
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      avatarUrl: user.avatarUrl,
+      organizations: user.organizations,
+    );
+  }
+
+  @override
   Map<String, dynamic> toMap() => {
         'id': id,
         'name': name,
@@ -41,6 +68,7 @@ class UserModel extends User {
         'avatarUrl': avatarUrl,
       };
 
+  @override
   UserModel copyWith({
     String id,
     String name,
@@ -55,4 +83,20 @@ class UserModel extends User {
         avatarUrl: avatarUrl ?? this.avatarUrl,
         organizations: organizations ?? this.organizations,
       );
+
+  @override
+  UserHive toHiveAdapter() {
+    return UserHive()
+      ..id = id
+      ..name = name
+      ..email = email
+      ..avatarUrl = avatarUrl
+      ..organizations = organizations
+              ?.map(
+                (organization) =>
+                    OrganizationModel.fromEntity(organization).toHiveAdapter(),
+              )
+              ?.toList() ??
+          [];
+  }
 }
