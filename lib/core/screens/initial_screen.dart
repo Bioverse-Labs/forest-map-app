@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/core/platform/network_info.dart';
 
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
@@ -12,6 +13,7 @@ class InitialScreen extends StatelessWidget {
   final AppNavigator appNavigator;
   final UserNotifierImpl userNotifier;
   final OrganizationNotifierImpl organizationNotifier;
+  final NetworkInfo networkInfo;
 
   InitialScreen({
     Key key,
@@ -19,6 +21,7 @@ class InitialScreen extends StatelessWidget {
     @required this.appNavigator,
     @required this.userNotifier,
     @required this.organizationNotifier,
+    @required this.networkInfo,
   }) : super(key: key);
 
   Future<void> _handleStateChange(BuildContext context, User user) async {
@@ -27,8 +30,16 @@ class InitialScreen extends StatelessWidget {
       return;
     }
 
-    await userNotifier.getUser(id: user?.uid);
-    // await organizationNotifier.fetchFromStorage();
+    final isConnected = await networkInfo.isConnected;
+
+    await userNotifier.getUser(
+      id: isConnected ? user?.uid : 'currUser',
+      searchLocally: !isConnected,
+    );
+    await organizationNotifier.getOrganization(
+      id: 'currOrg',
+      searchLocally: true,
+    );
 
     appNavigator.pushAndReplace('/home');
   }

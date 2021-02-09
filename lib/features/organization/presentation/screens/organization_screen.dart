@@ -20,7 +20,7 @@ class OrganizationScreen extends StatelessWidget {
   final OrganizationNotifierImpl organizationNotifier;
   final AppNavigator appNavigator;
   final UserNotifierImpl userNotifier;
-  final CameraImpl cameraImpl;
+  final Camera camera;
   final NotificationsUtils notificationsUtils;
 
   const OrganizationScreen({
@@ -29,7 +29,7 @@ class OrganizationScreen extends StatelessWidget {
     @required this.organizationNotifier,
     @required this.userNotifier,
     @required this.appNavigator,
-    @required this.cameraImpl,
+    @required this.camera,
     @required this.notificationsUtils,
   }) : super(key: key);
 
@@ -66,7 +66,7 @@ class OrganizationScreen extends StatelessWidget {
 
   Future<void> _handleAvatarPress() async {
     try {
-      final failureOrCameraResponse = await cameraImpl.takePicture();
+      final failureOrCameraResponse = await camera.takePicture();
       failureOrCameraResponse.fold(
         (failure) => notificationsUtils.showErrorNotification(
           localizedString.getLocalizedString('generic-exception'),

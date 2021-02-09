@@ -20,6 +20,7 @@ Map<String, Widget Function(BuildContext)> routes = {
           listen: false,
         ),
         appNavigator: GetIt.I(),
+        networkInfo: GetIt.I(),
       ),
   '/signIn': (ctx) => SignInScreen(
         authNotifier: Provider.of<AuthNotifierImpl>(ctx, listen: false),
@@ -57,6 +58,6 @@ Map<String, Widget Function(BuildContext)> routes = {
         authNotifier: Provider.of<AuthNotifierImpl>(ctx, listen: false),
         appNavigator: GetIt.I(),
         notificationsUtils: GetIt.I(),
-        cameraImpl: GetIt.I(),
+        camera: GetIt.I(),
       ),
 };

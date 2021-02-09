@@ -230,7 +230,7 @@ class AppConfig {
         userRemoteDataSource: GetIt.I(),
         userLocalDataSource: GetIt.I(),
         organizationLocalDataSource: GetIt.I(),
-        networkInfo: GetIt.I<NetworkInfoImpl>(),
+        networkInfo: GetIt.I(),
       ),
     );
 

@@ -20,7 +20,7 @@ class HomeScreen extends StatefulWidget {
   final AuthNotifierImpl authNotifier;
   final AppNavigator appNavigator;
   final NotificationsUtils notificationsUtils;
-  final CameraImpl cameraImpl;
+  final Camera camera;
 
   const HomeScreen({
     Key key,
@@ -31,7 +31,7 @@ class HomeScreen extends StatefulWidget {
     @required this.userNotifier,
     @required this.authNotifier,
     @required this.notificationsUtils,
-    @required this.cameraImpl,
+    @required this.camera,
   }) : super(key: key);
 
   @override
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         organizationNotifier: widget.organizationNotifier,
         userNotifier: widget.userNotifier,
         appNavigator: widget.appNavigator,
-        cameraImpl: widget.cameraImpl,
+        camera: widget.camera,
         notificationsUtils: widget.notificationsUtils,
       ),
       ProfileScreen(

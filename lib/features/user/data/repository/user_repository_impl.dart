@@ -32,7 +32,12 @@ class UserRepositoryImpl implements UserRepository {
       if (searchLocally || !await networkInfo.isConnected) {
         return Right(await localDataSource.getUser(id));
       }
-      return Right(await remoteDataSource.getUser(id));
+      final userModel = await remoteDataSource.getUser(id);
+      await localDataSource.saveUser(
+        id: 'currUser',
+        user: userModel,
+      );
+      return Right(userModel);
     } on ServerException catch (error) {
       return Left(ServerFailure(
         error.message,

@@ -61,12 +61,16 @@ class _SignInScreenState extends State<SignInScreen> {
         setState(() {
           _isLoading = true;
         });
-        final result = await widget.authNotifier.signInWithEmailAndPassword(
+        await widget.authNotifier.signInWithEmailAndPassword(
           _emailController.text,
           _passwordController.text,
         );
 
-        await widget.userNotifier.getUser(id: result.id);
+        await widget.userNotifier.getUser(id: 'currUser', searchLocally: true);
+        await widget.organizationNotifier.getOrganization(
+          id: 'currOrg',
+          searchLocally: true,
+        );
         widget.appNavigator.pushAndReplace('/home');
       } on ServerFailure catch (failure) {
         widget.notificationsUtils.showErrorNotification(failure.message);
@@ -87,9 +91,13 @@ class _SignInScreenState extends State<SignInScreen> {
       setState(() {
         _isLoading = true;
       });
-      final result = await widget.authNotifier.signInWithSocial(type);
+      await widget.authNotifier.signInWithSocial(type);
 
-      await widget.userNotifier.getUser(id: result.id);
+      await widget.userNotifier.getUser(id: 'currUser', searchLocally: true);
+      await widget.organizationNotifier.getOrganization(
+        id: 'currOrg',
+        searchLocally: true,
+      );
       widget.appNavigator.pushAndReplace('/home');
     } on ServerFailure catch (failure) {
       widget.notificationsUtils.showErrorNotification(failure.message);
