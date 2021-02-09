@@ -50,7 +50,10 @@ class OrganizationScreen extends StatelessWidget {
                     (organization) => ListTile(
                       title: Text(organization.name),
                       onTap: () {
-                        organizationNotifier.setOrganization(organization);
+                        organizationNotifier.setOrganization(
+                          id: 'currOrg',
+                          organization: organization,
+                        );
                         appNavigator.pop();
                       },
                     ),

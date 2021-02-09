@@ -1,15 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/features/organization/domain/usecases/save_organization_locally.dart';
 import 'package:meta/meta.dart';
 
-import '../../../../core/adapters/hive_adapter.dart';
 import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';
 import '../../../user/domain/entities/user.dart';
-import '../../data/hive/member.dart';
-import '../../data/hive/organization.dart';
-import '../../data/models/organization_model.dart';
 import '../../domain/entities/organization.dart';
 import '../../domain/usecases/create_organization.dart';
 import '../../domain/usecases/delete_organization.dart';
@@ -46,6 +43,7 @@ abstract class OrganizationNotifier {
     String id,
     String userId,
   });
+  Future<void> setOrganization({String id, Organization organization});
 }
 
 class OrganizationNotifierImpl extends ChangeNotifier
@@ -54,7 +52,7 @@ class OrganizationNotifierImpl extends ChangeNotifier
   final GetOrganization getOrganizationUseCase;
   final UpdateOrganization updateOrganizationUseCase;
   final DeleteOrganization deleteOrganizationUseCase;
-  final HiveAdapter<OrganizationHive> orgHive;
+  final SaveOrganizationLocally saveOrganizationLocallyUseCase;
   final UpdateMember updateMemberUseCase;
   final RemoveMember removeMemberUseCase;
 
@@ -67,9 +65,9 @@ class OrganizationNotifierImpl extends ChangeNotifier
     @required this.getOrganizationUseCase,
     @required this.updateOrganizationUseCase,
     @required this.deleteOrganizationUseCase,
+    @required this.saveOrganizationLocallyUseCase,
     @required this.updateMemberUseCase,
     @required this.removeMemberUseCase,
-    @required this.orgHive,
   });
 
   Organization get organization => _organization;
@@ -102,7 +100,6 @@ class OrganizationNotifierImpl extends ChangeNotifier
       (failure) => throw failure,
       (organization) {
         _organization = organization;
-        orgHive.put('currOrg', _toHiveOrg(organization));
         notifyListeners();
       },
     );
@@ -149,7 +146,6 @@ class OrganizationNotifierImpl extends ChangeNotifier
       (failure) => throw failure,
       (organization) {
         _organization = organization;
-        orgHive.put(id, _toHiveOrg(organization));
         notifyListeners();
       },
     );
@@ -175,7 +171,6 @@ class OrganizationNotifierImpl extends ChangeNotifier
       (failure) => throw failure,
       (organization) {
         _organization = organization;
-        orgHive.put('currOrg', _toHiveOrg(organization));
         notifyListeners();
       },
     );
@@ -205,7 +200,6 @@ class OrganizationNotifierImpl extends ChangeNotifier
       (failure) => throw failure,
       (organization) {
         _organization = organization;
-        orgHive.put('currOrg', _toHiveOrg(organization));
         notifyListeners();
       },
     );
@@ -237,45 +231,29 @@ class OrganizationNotifierImpl extends ChangeNotifier
       (failure) => throw failure,
       (organization) {
         _organization = organization;
-        orgHive.put('currOrg', _toHiveOrg(organization));
         notifyListeners();
       },
     );
   }
 
-  void setOrganization(Organization org) {
-    _organization = org;
-    orgHive.put('currOrg', _toHiveOrg(org));
+  @override
+  Future<void> setOrganization({
+    @required String id,
+    @required Organization organization,
+  }) async {
+    _organization = organization;
     notifyListeners();
-  }
 
-  Future<void> fetchFromStorage() async {
-    final org = await orgHive?.get('currOrg');
+    final failureOrOrganization = await saveOrganizationLocallyUseCase(
+      SaveOrganizationLocallyParams(
+        id: id,
+        organization: organization,
+      ),
+    );
 
-    if (org != null) {
-      _organization = OrganizationModel.fromHive(org);
-      notifyListeners();
-    }
-  }
-
-  OrganizationHive _toHiveOrg(Organization org) {
-    return OrganizationHive()
-      ..id = org.id
-      ..name = org.name
-      ..email = org.email
-      ..phone = org.phone
-      ..avatarUrl = org.avatarUrl
-      ..members = org?.members
-              ?.map(
-                (e) => MemberHive()
-                  ..id = e.id
-                  ..name = e.name
-                  ..email = e.email
-                  ..avatarUrl = e.avatarUrl
-                  ..role = e.role
-                  ..status = e.status,
-              )
-              ?.toList() ??
-          [];
+    failureOrOrganization.fold(
+      (failure) => throw failure,
+      (_) {},
+    );
   }
 }

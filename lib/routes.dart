@@ -28,7 +28,6 @@ Map<String, Widget Function(BuildContext)> routes = {
           ctx,
           listen: false,
         ),
-        orgHive: GetIt.I(),
         localizedString: GetIt.I(),
         validationUtils: GetIt.I(),
         appTheme: GetIt.I(),

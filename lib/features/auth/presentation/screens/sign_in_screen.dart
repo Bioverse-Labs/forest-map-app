@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../../../core/adapters/hive_adapter.dart';
 import '../../../../core/enums/social_login_types.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failure.dart';
@@ -11,8 +10,6 @@ import '../../../../core/util/localized_string.dart';
 import '../../../../core/util/notifications.dart';
 import '../../../../core/util/validations.dart';
 import '../../../../core/widgets/screen.dart';
-import '../../../organization/data/hive/organization.dart';
-import '../../../organization/data/models/organization_model.dart';
 import '../../../organization/presentation/notifiers/organizations_notifier.dart';
 import '../../../user/presentation/notifiers/user_notifier.dart';
 import '../notifiers/auth_notifier.dart';
@@ -22,7 +19,6 @@ class SignInScreen extends StatefulWidget {
   final AuthNotifierImpl authNotifier;
   final UserNotifierImpl userNotifier;
   final OrganizationNotifierImpl organizationNotifier;
-  final HiveAdapter<OrganizationHive> orgHive;
   final LocalizedString localizedString;
   final ValidationUtils validationUtils;
   final NotificationsUtils notificationsUtils;
@@ -34,7 +30,6 @@ class SignInScreen extends StatefulWidget {
     @required this.authNotifier,
     @required this.userNotifier,
     @required this.organizationNotifier,
-    @required this.orgHive,
     @required this.localizedString,
     @required this.validationUtils,
     @required this.notificationsUtils,
@@ -71,12 +66,6 @@ class _SignInScreenState extends State<SignInScreen> {
           _passwordController.text,
         );
 
-        final hiveOrg = await widget.orgHive.get('currOrg');
-        if (hiveOrg != null) {
-          widget.organizationNotifier
-              .setOrganization(OrganizationModel.fromHive(hiveOrg));
-        }
-
         await widget.userNotifier.getUser(result.id);
         widget.appNavigator.pushAndReplace('/home');
       } on ServerFailure catch (failure) {
@@ -99,12 +88,6 @@ class _SignInScreenState extends State<SignInScreen> {
         _isLoading = true;
       });
       final result = await widget.authNotifier.signInWithSocial(type);
-
-      final hiveOrg = await widget.orgHive.get('currOrg');
-      if (hiveOrg != null) {
-        widget.organizationNotifier
-            .setOrganization(OrganizationModel.fromHive(hiveOrg));
-      }
 
       await widget.userNotifier.getUser(result.id);
       widget.appNavigator.pushAndReplace('/home');

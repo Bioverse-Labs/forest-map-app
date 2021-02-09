@@ -1,12 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forestMapApp/core/adapters/hive_adapter.dart';
 import 'package:forestMapApp/core/enums/exception_origin_types.dart';
 import 'package:forestMapApp/core/enums/organization_member_status.dart';
 import 'package:forestMapApp/core/enums/organization_role_types.dart';
 import 'package:forestMapApp/core/errors/failure.dart';
-import 'package:forestMapApp/features/organization/data/hive/organization.dart';
+import 'package:forestMapApp/features/organization/domain/usecases/save_organization_locally.dart';
 import 'package:forestMapApp/features/user/domain/entities/user.dart';
 import 'package:forestMapApp/features/organization/domain/entities/organization.dart';
 import 'package:forestMapApp/features/organization/domain/usecases/create_organization.dart';
@@ -32,7 +31,8 @@ class MockUpdateMember extends Mock implements UpdateMember {}
 
 class MockRemoveMember extends Mock implements RemoveMember {}
 
-class MockOrgHive extends Mock implements HiveAdapter<OrganizationHive> {}
+class MockSaveOrganizationLocally extends Mock
+    implements SaveOrganizationLocally {}
 
 void main() {
   MockCreateOrganization mockCreateOrganization;
@@ -41,7 +41,7 @@ void main() {
   MockDeleteOrganization mockDeleteOrganization;
   MockUpdateMember mockUpdateMember;
   MockRemoveMember mockRemoveMember;
-  MockOrgHive mockOrgHive;
+  MockSaveOrganizationLocally mockSaveOrganizationLocally;
   OrganizationNotifierImpl organizationNotifierImpl;
 
   setUp(() {
@@ -51,7 +51,7 @@ void main() {
     mockDeleteOrganization = MockDeleteOrganization();
     mockUpdateMember = MockUpdateMember();
     mockRemoveMember = MockRemoveMember();
-    mockOrgHive = MockOrgHive();
+    mockSaveOrganizationLocally = MockSaveOrganizationLocally();
     organizationNotifierImpl = OrganizationNotifierImpl(
       createOrganizationUseCase: mockCreateOrganization,
       getOrganizationUseCase: mockGetOrganization,
@@ -59,7 +59,7 @@ void main() {
       deleteOrganizationUseCase: mockDeleteOrganization,
       updateMemberUseCase: mockUpdateMember,
       removeMemberUseCase: mockRemoveMember,
-      orgHive: mockOrgHive,
+      saveOrganizationLocallyUseCase: mockSaveOrganizationLocally,
     );
   });
 
@@ -81,6 +81,11 @@ void main() {
   final tErrorMessage = faker.randomGenerator.string(20);
   final tErrorCode = faker.randomGenerator.string(20);
   final tFailure = ServerFailure(
+    tErrorMessage,
+    tErrorCode,
+    ExceptionOriginTypes.test,
+  );
+  final tLocalFailure = LocalFailure(
     tErrorMessage,
     tErrorCode,
     ExceptionOriginTypes.test,
@@ -442,6 +447,61 @@ void main() {
         verify(mockRemoveMember(RemoveMemberParams(
           id: tId,
           userId: tUserId,
+        )));
+        verifyNoMoreInteractions(mockRemoveMember);
+      },
+    );
+  });
+
+  group('setOrganization', () {
+    test(
+      'should set [Organization] and notify all listeners if useCase succeed',
+      () async {
+        when(mockSaveOrganizationLocally(any)).thenAnswer(
+          (_) async => Right(null),
+        );
+
+        await expectToNotifiyListener<OrganizationNotifierImpl>(
+          organizationNotifierImpl,
+          () => organizationNotifierImpl.setOrganization(
+            id: tId,
+            organization: tOrganization,
+          ),
+          [
+            NotifierAssertParams(
+              value: (notifier) => notifier.organization,
+              matcher: tOrganization,
+            ),
+          ],
+        );
+        verify(mockSaveOrganizationLocally(SaveOrganizationLocallyParams(
+          id: tId,
+          organization: tOrganization,
+        )));
+        verifyNoMoreInteractions(mockRemoveMember);
+      },
+    );
+
+    test(
+      'should throw [Failure] if useCase fails',
+      () async {
+        when(mockSaveOrganizationLocally(any)).thenAnswer(
+          (_) async => Left(tLocalFailure),
+        );
+
+        final call = organizationNotifierImpl.setOrganization;
+
+        expect(
+          () => call(
+            id: tId,
+            organization: tOrganization,
+          ),
+          throwsA(isInstanceOf<LocalFailure>()),
+        );
+
+        verify(mockSaveOrganizationLocally(SaveOrganizationLocallyParams(
+          id: tId,
+          organization: tOrganization,
         )));
         verifyNoMoreInteractions(mockRemoveMember);
       },

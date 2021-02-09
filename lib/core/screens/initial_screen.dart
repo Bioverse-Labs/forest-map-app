@@ -28,7 +28,7 @@ class InitialScreen extends StatelessWidget {
     }
 
     await userNotifier.getUser(user?.uid);
-    await organizationNotifier.fetchFromStorage();
+    // await organizationNotifier.fetchFromStorage();
 
     appNavigator.pushAndReplace('/home');
   }

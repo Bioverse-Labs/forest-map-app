@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:forestMapApp/features/organization/data/datasources/organization_local_data_source.dart';
+import 'package:forestMapApp/features/organization/domain/usecases/save_organization_locally.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
@@ -304,6 +305,12 @@ class AppConfig {
       ),
     );
 
+    GetIt.I.registerLazySingleton<SaveOrganizationLocally>(
+      () => SaveOrganizationLocally(
+        GetIt.I(),
+      ),
+    );
+
     GetIt.I.registerLazySingleton<UpdateMember>(
       () => UpdateMember(
         GetIt.I(),
@@ -355,7 +362,7 @@ class AppConfig {
         removeMemberUseCase: GetIt.I(),
         updateMemberUseCase: GetIt.I(),
         updateOrganizationUseCase: GetIt.I(),
-        orgHive: GetIt.I(),
+        saveOrganizationLocallyUseCase: GetIt.I(),
       ),
     );
 
