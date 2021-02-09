@@ -23,7 +23,7 @@ abstract class OrganizationNotifier {
     String phone,
     File avatar,
   });
-  Future<void> getOrganization(String id);
+  Future<void> getOrganization({String id, bool searchLocally});
   Future<void> updateOrganization({
     String id,
     String name,
@@ -132,11 +132,14 @@ class OrganizationNotifierImpl extends ChangeNotifier
   }
 
   @override
-  Future<void> getOrganization(String id) async {
+  Future<void> getOrganization({
+    @required String id,
+    bool searchLocally = false,
+  }) async {
     _loading = true;
     notifyListeners();
     final failureOrOrganization = await getOrganizationUseCase(
-      GetOrganizationParams(id),
+      GetOrganizationParams(id: id, searchLocally: searchLocally),
     );
 
     _loading = false;

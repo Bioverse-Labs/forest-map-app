@@ -169,7 +169,7 @@ void main() {
 
         await expectToNotifiyListener<OrganizationNotifierImpl>(
           organizationNotifierImpl,
-          () => organizationNotifierImpl.getOrganization(tId),
+          () => organizationNotifierImpl.getOrganization(id: tId),
           [
             NotifierAssertParams(
               value: (notifier) => notifier.isLoading,
@@ -185,7 +185,10 @@ void main() {
             ),
           ],
         );
-        verify(mockGetOrganization(GetOrganizationParams(tId)));
+        verify(mockGetOrganization(GetOrganizationParams(
+          id: tId,
+          searchLocally: false,
+        )));
         verifyNoMoreInteractions(mockGetOrganization);
       },
     );
@@ -198,11 +201,14 @@ void main() {
         final call = organizationNotifierImpl.getOrganization;
 
         expect(
-          () => call(tId),
+          () => call(id: tId),
           throwsA(isInstanceOf<ServerFailure>()),
         );
 
-        verify(mockGetOrganization(GetOrganizationParams(tId)));
+        verify(mockGetOrganization(GetOrganizationParams(
+          id: tId,
+          searchLocally: false,
+        )));
         verifyNoMoreInteractions(mockGetOrganization);
       },
     );

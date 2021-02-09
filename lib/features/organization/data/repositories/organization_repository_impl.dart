@@ -63,9 +63,12 @@ class OrganizationRepositoryImpl implements OrganizationRepository {
   }
 
   @override
-  Future<Either<Failure, Organization>> getOrganization(String id) async {
+  Future<Either<Failure, Organization>> getOrganization({
+    @required String id,
+    @required bool searchLocally,
+  }) async {
     try {
-      if (!await networkInfo.isConnected) {
+      if (searchLocally || !await networkInfo.isConnected) {
         return Right(await localDataSource.getOrganization(id));
       }
 

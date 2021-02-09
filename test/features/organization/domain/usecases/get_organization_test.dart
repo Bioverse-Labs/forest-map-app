@@ -33,13 +33,21 @@ void main() {
   test(
     'should return [Organization] when repository succeed',
     () async {
-      when(mockOrganizationRepository.getOrganization(any))
-          .thenAnswer((_) async => Right(tOrganization));
+      when(mockOrganizationRepository.getOrganization(
+        id: anyNamed('id'),
+        searchLocally: anyNamed('searchLocally'),
+      )).thenAnswer((_) async => Right(tOrganization));
 
-      final result = await useCase(GetOrganizationParams(tId));
+      final result = await useCase(GetOrganizationParams(
+        id: tId,
+        searchLocally: false,
+      ));
 
       expect(result, Right(tOrganization));
-      verify(mockOrganizationRepository.getOrganization(tId));
+      verify(mockOrganizationRepository.getOrganization(
+        id: tId,
+        searchLocally: false,
+      ));
       verifyNoMoreInteractions(mockOrganizationRepository);
     },
   );

@@ -17,7 +17,10 @@ abstract class OrganizationRepository {
     @required String phone,
     File avatar,
   });
-  Future<Either<Failure, Organization>> getOrganization(String id);
+  Future<Either<Failure, Organization>> getOrganization({
+    @required String id,
+    @required bool searchLocally,
+  });
   Future<Either<Failure, Organization>> updateOrganization({
     @required String id,
     String name,

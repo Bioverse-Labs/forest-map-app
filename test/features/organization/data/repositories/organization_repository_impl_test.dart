@@ -188,10 +188,30 @@ void main() {
           when(mockOrganizationDataSource.getOrganization(any))
               .thenAnswer((_) async => tOrganizationModel);
 
-          final result = await organizationRepositoryImpl.getOrganization(tId);
+          final result = await organizationRepositoryImpl.getOrganization(
+            id: tId,
+            searchLocally: false,
+          );
 
           expect(result, Right(tOrganizationModel));
           verify(mockOrganizationDataSource.getOrganization(tId));
+          verifyNoMoreInteractions(mockOrganizationDataSource);
+        },
+      );
+
+      test(
+        'should return [Organization] from local when datasource succeed',
+        () async {
+          when(mockOrganizationLocalDataSource.getOrganization(any))
+              .thenAnswer((_) async => tOrganizationModel);
+
+          final result = await organizationRepositoryImpl.getOrganization(
+            id: tId,
+            searchLocally: true,
+          );
+
+          expect(result, Right(tOrganizationModel));
+          verify(mockOrganizationLocalDataSource.getOrganization(tId));
           verifyNoMoreInteractions(mockOrganizationDataSource);
         },
       );
@@ -202,7 +222,10 @@ void main() {
           when(mockOrganizationDataSource.getOrganization(any))
               .thenThrow(tServerException);
 
-          final result = await organizationRepositoryImpl.getOrganization(tId);
+          final result = await organizationRepositoryImpl.getOrganization(
+            id: tId,
+            searchLocally: false,
+          );
 
           expect(
             result,
@@ -225,7 +248,10 @@ void main() {
           when(mockOrganizationLocalDataSource.getOrganization(any))
               .thenAnswer((_) async => tOrganizationModel);
 
-          final result = await organizationRepositoryImpl.getOrganization(tId);
+          final result = await organizationRepositoryImpl.getOrganization(
+            id: tId,
+            searchLocally: false,
+          );
 
           expect(result, Right(tOrganizationModel));
           verify(mockOrganizationLocalDataSource.getOrganization(tId));
@@ -244,7 +270,10 @@ void main() {
             ),
           );
 
-          final result = await organizationRepositoryImpl.getOrganization(tId);
+          final result = await organizationRepositoryImpl.getOrganization(
+            id: tId,
+            searchLocally: false,
+          );
 
           expect(
             result,
