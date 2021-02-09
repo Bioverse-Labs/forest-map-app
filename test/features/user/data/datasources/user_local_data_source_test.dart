@@ -48,4 +48,21 @@ void main() {
       verifyNoMoreInteractions(mockHiveAdapter);
     },
   );
+
+  group('saveOrganization', () {
+    test(
+      'should save to storage',
+      () async {
+        when(mockHiveAdapter.put(any, any)).thenAnswer((_) => null);
+
+        await userLocalDataSourceImpl.saveUser(
+          id: tUserModel.id,
+          user: tUserModel,
+        );
+
+        verify(mockHiveAdapter.put(tUserModel.id, any));
+        verifyNoMoreInteractions(mockHiveAdapter);
+      },
+    );
+  });
 }

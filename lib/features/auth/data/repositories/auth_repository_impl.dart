@@ -1,15 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 
-import '../../../../core/adapters/hive_adapter.dart';
 import '../../../../core/enums/social_login_types.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/platform/network_info.dart';
-import '../../../organization/data/hive/member.dart';
-import '../../../organization/data/hive/organization.dart';
+import '../../../organization/data/datasources/organization_local_data_source.dart';
+import '../../../user/data/datasource/user_local_data_source.dart';
 import '../../../user/data/datasource/user_remote_data_source.dart';
-import '../../../user/data/hive/user.dart';
 import '../../../user/domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_data_source.dart';
@@ -18,17 +16,17 @@ typedef Future<User> _DSExecutor();
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authDataSource;
-  final UserRemoteDataSource userDataSource;
-  final HiveAdapter<UserHive> userHive;
-  final HiveAdapter<OrganizationHive> orgHive;
+  final UserRemoteDataSource userRemoteDataSource;
+  final UserLocalDataSource userLocalDataSource;
+  final OrganizationLocalDataSource organizationLocalDataSource;
   final NetworkInfo networkInfo;
 
   AuthRepositoryImpl({
     @required this.authDataSource,
-    @required this.userDataSource,
+    @required this.userRemoteDataSource,
+    @required this.userLocalDataSource,
+    @required this.organizationLocalDataSource,
     @required this.networkInfo,
-    @required this.userHive,
-    @required this.orgHive,
   });
 
   @override
@@ -59,45 +57,17 @@ class AuthRepositoryImpl implements AuthRepository {
 
     try {
       final authModel = await dataSourceExecutor();
-      final userModel = await userDataSource.getUser(authModel.id);
+      final userModel = await userRemoteDataSource.getUser(authModel.id);
 
-      // SAVE USER TO HIVE
-      final userObject = UserHive()
-        ..id = userModel.id
-        ..name = userModel.name
-        ..email = userModel.email
-        ..avatarUrl = userModel.avatarUrl;
+      await userLocalDataSource.saveUser(id: 'currUser', user: userModel);
 
       if (userModel.organizations != null &&
           userModel.organizations.length > 0) {
-        final organizationObjects = userModel.organizations.map((organization) {
-          final members = organization?.members
-              ?.map<MemberHive>(
-                (member) => MemberHive()
-                  ..id = member.id
-                  ..name = member.name
-                  ..email = member.email
-                  ..avatarUrl = member.avatarUrl
-                  ..status = member.status
-                  ..role = member.role,
-              )
-              ?.toList();
-
-          return OrganizationHive()
-            ..id = organization.id
-            ..name = organization.name
-            ..email = organization.email
-            ..phone = organization.phone
-            ..avatarUrl = organization.avatarUrl
-            ..members = members;
-        }).toList();
-        await orgHive.put(
-          'currOrg',
-          organizationObjects.first,
+        await organizationLocalDataSource.saveOrganization(
+          id: 'currOrg',
+          organization: userModel.organizations.first,
         );
-        userObject..organizations = organizationObjects;
       }
-      await userHive.put(userModel.id, userObject);
 
       return Right(userModel);
     } on ServerException catch (error) {

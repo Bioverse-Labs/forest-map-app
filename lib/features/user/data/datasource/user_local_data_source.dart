@@ -1,11 +1,16 @@
 import 'package:meta/meta.dart';
 
 import '../../../../core/adapters/hive_adapter.dart';
+import '../../domain/entities/user.dart';
 import '../hive/user.dart';
 import '../models/user_model.dart';
 
 abstract class UserLocalDataSource {
   Future<UserModel> getUser(String id);
+  Future<void> saveUser({
+    String id,
+    User user,
+  });
 }
 
 class UserLocalDataSourceImpl implements UserLocalDataSource {
@@ -24,5 +29,10 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
     }
 
     return null;
+  }
+
+  @override
+  Future<void> saveUser({String id, User user}) {
+    return userHive.put(id, UserModel.fromEntity(user).toHiveAdapter());
   }
 }

@@ -227,9 +227,9 @@ class AppConfig {
     GetIt.I.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(
         authDataSource: GetIt.I<AuthRemoteDataSourceImpl>(),
-        userDataSource: GetIt.I(),
-        userHive: GetIt.I(),
-        orgHive: GetIt.I(),
+        userRemoteDataSource: GetIt.I(),
+        userLocalDataSource: GetIt.I(),
+        organizationLocalDataSource: GetIt.I(),
         networkInfo: GetIt.I<NetworkInfoImpl>(),
       ),
     );
@@ -252,6 +252,7 @@ class AppConfig {
       () => UserRepositoryImpl(
         remoteDataSource: GetIt.I(),
         localDataSource: GetIt.I(),
+        networkInfo: GetIt.I(),
       ),
     );
   }

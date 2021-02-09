@@ -9,9 +9,11 @@ import 'package:forestMapApp/core/errors/exceptions.dart';
 import 'package:forestMapApp/core/errors/failure.dart';
 import 'package:forestMapApp/core/platform/network_info.dart';
 import 'package:forestMapApp/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:forestMapApp/features/organization/data/datasources/organization_local_data_source.dart';
 import 'package:forestMapApp/features/organization/data/hive/organization.dart';
 import 'package:forestMapApp/features/organization/data/models/member_model.dart';
 import 'package:forestMapApp/features/organization/data/models/organization_model.dart';
+import 'package:forestMapApp/features/user/data/datasource/user_local_data_source.dart';
 import 'package:forestMapApp/features/user/data/datasource/user_remote_data_source.dart';
 import 'package:forestMapApp/features/user/data/hive/user.dart';
 import 'package:forestMapApp/features/user/data/models/user_model.dart';
@@ -22,7 +24,12 @@ import 'package:flutter_test/flutter_test.dart';
 
 class MockRemoteDataSource extends Mock implements AuthRemoteDataSource {}
 
-class MockUserDataSource extends Mock implements UserRemoteDataSource {}
+class MockUserRemoteDataSource extends Mock implements UserRemoteDataSource {}
+
+class MockUserLocalDataSource extends Mock implements UserLocalDataSource {}
+
+class MockOrganizationLocalDataSource extends Mock
+    implements OrganizationLocalDataSource {}
 
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 
@@ -33,23 +40,23 @@ class MockOrgHive extends Mock implements HiveAdapter<OrganizationHive> {}
 void main() {
   AuthRepositoryImpl repository;
   MockRemoteDataSource dataSource;
-  MockUserDataSource userDataSource;
+  MockUserRemoteDataSource userRemoteDataSource;
+  MockUserLocalDataSource userLocalDataSource;
+  MockOrganizationLocalDataSource mockOrganizationLocalDataSource;
   MockNetworkInfo networkInfo;
-  MockUserHive mockUserHive;
-  MockOrgHive mockOrgHive;
 
   setUp(() {
     dataSource = MockRemoteDataSource();
-    userDataSource = MockUserDataSource();
+    userRemoteDataSource = MockUserRemoteDataSource();
+    userLocalDataSource = MockUserLocalDataSource();
+    mockOrganizationLocalDataSource = MockOrganizationLocalDataSource();
     networkInfo = MockNetworkInfo();
-    mockUserHive = MockUserHive();
-    mockOrgHive = MockOrgHive();
     repository = AuthRepositoryImpl(
       authDataSource: dataSource,
-      userDataSource: userDataSource,
+      userRemoteDataSource: userRemoteDataSource,
+      userLocalDataSource: userLocalDataSource,
+      organizationLocalDataSource: mockOrganizationLocalDataSource,
       networkInfo: networkInfo,
-      userHive: mockUserHive,
-      orgHive: mockOrgHive,
     );
   });
 
@@ -109,7 +116,8 @@ void main() {
       when(networkInfo.isConnected).thenAnswer((_) async => true);
       when(dataSource.signInWithEmailAndPassword(any, any))
           .thenAnswer((_) async => tUserModel);
-      when(userDataSource.getUser(any)).thenAnswer((_) async => tUserModel);
+      when(userRemoteDataSource.getUser(any))
+          .thenAnswer((_) async => tUserModel);
 
       repository.signInWithEmailAndPassword(email, password);
       verify(networkInfo.isConnected);
@@ -121,7 +129,8 @@ void main() {
         () async {
           when(dataSource.signInWithEmailAndPassword(any, any))
               .thenAnswer((_) async => tUserModel);
-          when(userDataSource.getUser(any)).thenAnswer((_) async => tUserModel);
+          when(userRemoteDataSource.getUser(any))
+              .thenAnswer((_) async => tUserModel);
 
           final result = await repository.signInWithEmailAndPassword(
             email,
@@ -184,7 +193,8 @@ void main() {
       when(networkInfo.isConnected).thenAnswer((_) async => true);
       when(dataSource.signInWithSocial(any))
           .thenAnswer((_) async => tUserModel);
-      when(userDataSource.getUser(any)).thenAnswer((_) async => tUserModel);
+      when(userRemoteDataSource.getUser(any))
+          .thenAnswer((_) async => tUserModel);
 
       repository.signInWithSocial(SocialLoginType.facebook);
       verify(networkInfo.isConnected);
@@ -196,7 +206,8 @@ void main() {
         () async {
           when(dataSource.signInWithSocial(any))
               .thenAnswer((_) async => tUserModel);
-          when(userDataSource.getUser(any)).thenAnswer((_) async => tUserModel);
+          when(userRemoteDataSource.getUser(any))
+              .thenAnswer((_) async => tUserModel);
 
           final result =
               await repository.signInWithSocial(SocialLoginType.facebook);
@@ -236,40 +247,6 @@ void main() {
           verifyNoMoreInteractions(dataSource);
         },
       );
-
-      test(
-        'should return LocalFailure when remote data source is unsuccessful',
-        () async {
-          when(dataSource.signInWithSocial(any))
-              .thenAnswer((_) async => tUserModel);
-          when(userDataSource.getUser(any)).thenAnswer((_) async => tUserModel);
-          when(mockUserHive.put(any, any)).thenThrow(
-            LocalException(
-              errorMessage,
-              errorCode,
-              ExceptionOriginTypes.test,
-            ),
-          );
-
-          final result =
-              await repository.signInWithSocial(SocialLoginType.google);
-
-          verify(dataSource.signInWithSocial(SocialLoginType.google));
-          expect(
-            result,
-            equals(
-              Left(
-                LocalFailure(
-                  errorMessage,
-                  errorCode,
-                  ExceptionOriginTypes.test,
-                ),
-              ),
-            ),
-          );
-          verifyNoMoreInteractions(dataSource);
-        },
-      );
     });
 
     runTestOffline(() {
@@ -290,7 +267,8 @@ void main() {
       when(networkInfo.isConnected).thenAnswer((_) async => true);
       when(dataSource.signUp(any, any, any))
           .thenAnswer((_) async => tUserModel);
-      when(userDataSource.getUser(any)).thenAnswer((_) async => tUserModel);
+      when(userRemoteDataSource.getUser(any))
+          .thenAnswer((_) async => tUserModel);
 
       repository.signUp(name, email, password);
       verify(networkInfo.isConnected);
@@ -302,7 +280,8 @@ void main() {
         () async {
           when(dataSource.signUp(any, any, any))
               .thenAnswer((_) async => tUserModel);
-          when(userDataSource.getUser(any)).thenAnswer((_) async => tUserModel);
+          when(userRemoteDataSource.getUser(any))
+              .thenAnswer((_) async => tUserModel);
 
           final result = await repository.signUp(name, email, password);
 
