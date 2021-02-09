@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:forestMapApp/features/organization/data/datasources/organization_local_data_source.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
@@ -91,21 +92,21 @@ class AppConfig {
   }
 
   static void registerPlatformServices() {
-    GetIt.I.registerLazySingleton<CameraImpl>(
+    GetIt.I.registerLazySingleton<Camera>(
       () => CameraImpl(
         ImagePicker(),
         GetIt.I<ImageUtilsImpl>(),
       ),
     );
 
-    GetIt.I.registerLazySingleton<LocationUtilsImpl>(
+    GetIt.I.registerLazySingleton<LocationUtils>(
       () => LocationUtilsImpl(
         GetIt.I<LocalizedStringImpl>(),
         LocationSource(),
       ),
     );
 
-    GetIt.I.registerLazySingleton<NetworkInfoImpl>(
+    GetIt.I.registerLazySingleton<NetworkInfo>(
       () => NetworkInfoImpl(
         DataConnectionChecker(),
         Connectivity(),
@@ -188,12 +189,18 @@ class AppConfig {
       ),
     );
 
-    GetIt.I.registerLazySingleton<OrganizationRemoteDataSourceImpl>(
+    GetIt.I.registerLazySingleton<OrganizationRemoteDataSource>(
       () => OrganizationRemoteDataSourceImpl(
         firebaseStorageAdapter: GetIt.I(),
         firestoreAdapter: GetIt.I(),
         localizedString: GetIt.I(),
         uuidGenerator: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<OrganizationLocalDataSource>(
+      () => OrganizationLocalDataSourceImpl(
+        orgHive: GetIt.I(),
       ),
     );
 
@@ -207,6 +214,8 @@ class AppConfig {
   }
 
   static void registerRepositories() {
+    // * REGISTER REPOSITORES HERE
+
     GetIt.I.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(
         authDataSource: GetIt.I<AuthRemoteDataSourceImpl>(),
@@ -225,7 +234,9 @@ class AppConfig {
 
     GetIt.I.registerLazySingleton<OrganizationRepository>(
       () => OrganizationRepositoryImpl(
-        remoteDataSource: GetIt.I<OrganizationRemoteDataSourceImpl>(),
+        remoteDataSource: GetIt.I(),
+        localDataSource: GetIt.I(),
+        networkInfo: GetIt.I(),
       ),
     );
 

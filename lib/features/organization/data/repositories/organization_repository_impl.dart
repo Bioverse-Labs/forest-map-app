@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:forestMapApp/core/platform/network_info.dart';
 import 'package:forestMapApp/features/organization/data/datasources/organization_local_data_source.dart';
 import 'package:meta/meta.dart';
 
@@ -18,10 +19,12 @@ typedef Future<Organization> _DSExecutor();
 class OrganizationRepositoryImpl implements OrganizationRepository {
   final OrganizationRemoteDataSource remoteDataSource;
   final OrganizationLocalDataSource localDataSource;
+  final NetworkInfo networkInfo;
 
   OrganizationRepositoryImpl({
     @required this.remoteDataSource,
     @required this.localDataSource,
+    @required this.networkInfo,
   });
 
   @override
@@ -44,6 +47,10 @@ class OrganizationRepositoryImpl implements OrganizationRepository {
   @override
   Future<Either<Failure, void>> deleteOrganization(String id) async {
     try {
+      if (!await networkInfo.isConnected) {
+        return Left(NoInternetFailure());
+      }
+
       return Right(await remoteDataSource.deleteOrganization(id));
     } on ServerException catch (error) {
       return Left(ServerFailure(
@@ -56,8 +63,28 @@ class OrganizationRepositoryImpl implements OrganizationRepository {
   }
 
   @override
-  Future<Either<Failure, Organization>> getOrganization(String id) {
-    return _getOrganization(() => remoteDataSource.getOrganization(id));
+  Future<Either<Failure, Organization>> getOrganization(String id) async {
+    try {
+      if (!await networkInfo.isConnected) {
+        return Right(await localDataSource.getOrganization(id));
+      }
+
+      return Right(await remoteDataSource.getOrganization(id));
+    } on ServerException catch (error) {
+      return Left(ServerFailure(
+        error.message,
+        error.code,
+        error.origin,
+        stackTrace: error.stackTrace,
+      ));
+    } on LocalException catch (error) {
+      return Left(LocalFailure(
+        error.message,
+        error.code,
+        error.origin,
+        stackTrace: error.stackTrace,
+      ));
+    }
   }
 
   @override
@@ -118,6 +145,10 @@ class OrganizationRepositoryImpl implements OrganizationRepository {
     _DSExecutor dataSourceExecutor,
   ) async {
     try {
+      if (!await networkInfo.isConnected) {
+        return Left(NoInternetFailure());
+      }
+
       return Right(await dataSourceExecutor());
     } on ServerException catch (error) {
       return Left(ServerFailure(
