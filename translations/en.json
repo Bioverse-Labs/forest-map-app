@@ -64,6 +64,10 @@
   "edit-organization-screen": {
     "title": "Edit Organization"
   },
+  "profile-screen": {
+    "organization-counter": "Organizations",
+    "logout-button": "Sign Out"
+  },
   "home-screen": {
     "map-tab": "Map",
     "organization-tab": "Organizations",

@@ -64,6 +64,10 @@
   "edit-organization-screen": {
     "title": "Editar Organização"
   },
+  "profile-screen": {
+    "organization-counter": "Organizações",
+    "logout-button": "Sair"
+  },
   "home-screen": {
     "map-tab": "Mapa",
     "organization-tab": "Organizações",

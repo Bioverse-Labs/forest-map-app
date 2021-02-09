@@ -55,6 +55,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       ProfileScreen(
         authNotifier: widget.authNotifier,
+        userNotifier: widget.userNotifier,
+        camera: widget.camera,
+        localizedString: widget.localizedString,
         appNavigator: widget.appNavigator,
         notificationsUtils: widget.notificationsUtils,
       ),

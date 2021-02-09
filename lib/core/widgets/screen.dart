@@ -5,6 +5,7 @@ import 'loading_wall.dart';
 class ScreenWidget<T extends ChangeNotifier> extends StatelessWidget {
   final PreferredSizeWidget appBar;
   final Widget body;
+  final List<Widget> children;
   final Widget floatingActionButton;
   final FloatingActionButtonLocation floatingActionButtonLocation;
   final bool isLoading;
@@ -13,6 +14,7 @@ class ScreenWidget<T extends ChangeNotifier> extends StatelessWidget {
     Key key,
     this.appBar,
     this.body,
+    this.children = const <Widget>[],
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.isLoading = false,
@@ -24,7 +26,8 @@ class ScreenWidget<T extends ChangeNotifier> extends StatelessWidget {
       appBar: appBar,
       body: Stack(
         children: [
-          body,
+          if (body != null) body,
+          ...children,
           if (isLoading) LoadingWall(),
         ],
       ),

@@ -80,6 +80,10 @@ class CodegenLoader extends AssetLoader{
   "edit-organization-screen": {
     "title": "Edit Organization"
   },
+  "profile-screen": {
+    "organization-counter": "Organizations",
+    "logout-button": "Sign Out"
+  },
   "home-screen": {
     "map-tab": "Map",
     "organization-tab": "Organizations",
@@ -151,6 +155,10 @@ static const Map<String,dynamic> pt_BR = {
   },
   "edit-organization-screen": {
     "title": "Editar Organização"
+  },
+  "profile-screen": {
+    "organization-counter": "Organizações",
+    "logout-button": "Sair"
   },
   "home-screen": {
     "map-tab": "Mapa",
