@@ -236,14 +236,19 @@ void main() {
       test(
         'should return [LocalFailure] when datasource fails',
         () async {
-          when(mockOrganizationLocalDataSource.getOrganization(any))
-              .thenThrow(tServerException);
+          when(mockOrganizationLocalDataSource.getOrganization(any)).thenThrow(
+            LocalException(
+              tServerException.message,
+              tServerException.code,
+              tServerException.origin,
+            ),
+          );
 
           final result = await organizationRepositoryImpl.getOrganization(tId);
 
           expect(
             result,
-            Left(ServerFailure(
+            Left(LocalFailure(
               tErrorMessage,
               tErrorCode,
               tErrorOrigin,
