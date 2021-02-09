@@ -34,11 +34,7 @@ class Avatar extends StatelessWidget {
       imageUrl: url,
       placeholder: (context, url) => ImageContainer(
         size: size,
-        child: Icon(
-          canEdit ? Icons.add_a_photo_outlined : Icons.camera_alt_outlined,
-          color: Colors.grey.shade400,
-          size: 80,
-        ),
+        child: CircularProgressIndicator(),
       ),
       errorWidget: (context, url, error) => ImageContainer(
         size: size,

@@ -56,21 +56,6 @@ class ProfileScreen extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return ScreenWidget(
-      // body: Center(
-      //   child: RaisedButton(
-      //     onPressed: () {
-      //       try {
-      //         authNotifier.signOut();
-      //         appNavigator.pushAndReplace('/');
-      //       } on ServerFailure catch (failure) {
-      //         notificationsUtils.showErrorNotification(failure.message);
-      //       } on LocalFailure catch (failure) {
-      //         notificationsUtils.showErrorNotification(failure.message);
-      //       }
-      //     },
-      //     child: Text('Sign Out'),
-      //   ),
-      // ),
       children: [
         Center(
           child: SingleChildScrollView(
@@ -92,8 +77,9 @@ class ProfileScreen extends StatelessWidget {
           bottom: 16,
           child: RaisedButton(
             onPressed: _signOut,
-            child: Text(localizedString
-                .getLocalizedString('profile-screen.logout-button')),
+            child: Text(localizedString.getLocalizedString(
+              'profile-screen.logout-button',
+            )),
           ),
         )
       ],
