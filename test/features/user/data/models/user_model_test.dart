@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:forestMapApp/features/user/data/hive/user.dart';
 import 'package:forestMapApp/features/user/domain/entities/user.dart';
 import 'package:forestMapApp/features/user/data/models/user_model.dart';
 
@@ -68,4 +69,22 @@ void main() {
       },
     );
   });
+
+  test(
+    'should return [UserModel] if [User] is valid',
+    () async {
+      final model = UserModel.fromEntity(tUserModel);
+
+      expect(model, isInstanceOf<UserModel>());
+    },
+  );
+
+  test(
+    'should return [MemberModel] if [MemberHive] is valid',
+    () async {
+      final adapter = tUserModel.toHiveAdapter();
+
+      expect(adapter, isInstanceOf<UserHive>());
+    },
+  );
 }

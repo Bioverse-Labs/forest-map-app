@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2021-02-08 21:26:56</td>
+            <td class="headerValue">2021-02-08 22:36:48</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -70,7 +70,7 @@
 <a name="8"><span class="lineNum">       8 </span>            : import '../../../../core/platform/network_info.dart';</a>
 <a name="9"><span class="lineNum">       9 </span>            : import '../../../organization/data/hive/member.dart';</a>
 <a name="10"><span class="lineNum">      10 </span>            : import '../../../organization/data/hive/organization.dart';</a>
-<a name="11"><span class="lineNum">      11 </span>            : import '../../../user/data/datasource/user_data_source.dart';</a>
+<a name="11"><span class="lineNum">      11 </span>            : import '../../../user/data/datasource/user_remote_data_source.dart';</a>
 <a name="12"><span class="lineNum">      12 </span>            : import '../../../user/data/hive/user.dart';</a>
 <a name="13"><span class="lineNum">      13 </span>            : import '../../../user/domain/entities/user.dart';</a>
 <a name="14"><span class="lineNum">      14 </span>            : import '../../domain/repositories/auth_repository.dart';</a>
@@ -80,7 +80,7 @@
 <a name="18"><span class="lineNum">      18 </span>            : </a>
 <a name="19"><span class="lineNum">      19 </span>            : class AuthRepositoryImpl implements AuthRepository {</a>
 <a name="20"><span class="lineNum">      20 </span>            :   final AuthRemoteDataSource authDataSource;</a>
-<a name="21"><span class="lineNum">      21 </span>            :   final UserDataSource userDataSource;</a>
+<a name="21"><span class="lineNum">      21 </span>            :   final UserRemoteDataSource userDataSource;</a>
 <a name="22"><span class="lineNum">      22 </span>            :   final HiveAdapter&lt;UserHive&gt; userHive;</a>
 <a name="23"><span class="lineNum">      23 </span>            :   final HiveAdapter&lt;OrganizationHive&gt; orgHive;</a>
 <a name="24"><span class="lineNum">      24 </span>            :   final NetworkInfo networkInfo;</a>

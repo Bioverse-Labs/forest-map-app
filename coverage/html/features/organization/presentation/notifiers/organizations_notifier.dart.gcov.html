@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2021-02-08 21:26:56</td>
+            <td class="headerValue">2021-02-08 22:36:48</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -85,7 +85,7 @@
 <a name="23"><span class="lineNum">      23 </span>            :     String phone,</a>
 <a name="24"><span class="lineNum">      24 </span>            :     File avatar,</a>
 <a name="25"><span class="lineNum">      25 </span>            :   });</a>
-<a name="26"><span class="lineNum">      26 </span>            :   Future&lt;void&gt; getOrganization(String id);</a>
+<a name="26"><span class="lineNum">      26 </span>            :   Future&lt;void&gt; getOrganization({String id, bool searchLocally});</a>
 <a name="27"><span class="lineNum">      27 </span>            :   Future&lt;void&gt; updateOrganization({</a>
 <a name="28"><span class="lineNum">      28 </span>            :     String id,</a>
 <a name="29"><span class="lineNum">      29 </span>            :     String name,</a>
@@ -194,131 +194,134 @@
 <a name="132"><span class="lineNum">     132 </span>            :   }</a>
 <a name="133"><span class="lineNum">     133 </span>            : </a>
 <a name="134"><span class="lineNum">     134 </span>            :   @override</a>
-<a name="135"><span class="lineNum">     135 </span><span class="lineCov">          1 :   Future&lt;void&gt; getOrganization(String id) async {</span></a>
-<a name="136"><span class="lineNum">     136 </span><span class="lineCov">          1 :     _loading = true;</span></a>
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
-<a name="138"><span class="lineNum">     138 </span><span class="lineCov">          3 :     final failureOrOrganization = await getOrganizationUseCase(</span></a>
-<a name="139"><span class="lineNum">     139 </span><span class="lineCov">          1 :       GetOrganizationParams(id),</span></a>
-<a name="140"><span class="lineNum">     140 </span>            :     );</a>
-<a name="141"><span class="lineNum">     141 </span>            : </a>
-<a name="142"><span class="lineNum">     142 </span><span class="lineCov">          1 :     _loading = false;</span></a>
-<a name="143"><span class="lineNum">     143 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
+<a name="135"><span class="lineNum">     135 </span><span class="lineCov">          1 :   Future&lt;void&gt; getOrganization({</span></a>
+<a name="136"><span class="lineNum">     136 </span>            :     @required String id,</a>
+<a name="137"><span class="lineNum">     137 </span>            :     bool searchLocally = false,</a>
+<a name="138"><span class="lineNum">     138 </span>            :   }) async {</a>
+<a name="139"><span class="lineNum">     139 </span><span class="lineCov">          1 :     _loading = true;</span></a>
+<a name="140"><span class="lineNum">     140 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
+<a name="141"><span class="lineNum">     141 </span><span class="lineCov">          3 :     final failureOrOrganization = await getOrganizationUseCase(</span></a>
+<a name="142"><span class="lineNum">     142 </span><span class="lineCov">          1 :       GetOrganizationParams(id: id, searchLocally: searchLocally),</span></a>
+<a name="143"><span class="lineNum">     143 </span>            :     );</a>
 <a name="144"><span class="lineNum">     144 </span>            : </a>
-<a name="145"><span class="lineNum">     145 </span><span class="lineCov">          1 :     failureOrOrganization.fold(</span></a>
-<a name="146"><span class="lineNum">     146 </span><span class="lineCov">          1 :       (failure) =&gt; throw failure,</span></a>
-<a name="147"><span class="lineNum">     147 </span><span class="lineCov">          1 :       (organization) {</span></a>
-<a name="148"><span class="lineNum">     148 </span><span class="lineCov">          1 :         _organization = organization;</span></a>
-<a name="149"><span class="lineNum">     149 </span><span class="lineCov">          1 :         notifyListeners();</span></a>
-<a name="150"><span class="lineNum">     150 </span>            :       },</a>
-<a name="151"><span class="lineNum">     151 </span>            :     );</a>
-<a name="152"><span class="lineNum">     152 </span>            :   }</a>
-<a name="153"><span class="lineNum">     153 </span>            : </a>
-<a name="154"><span class="lineNum">     154 </span>            :   @override</a>
-<a name="155"><span class="lineNum">     155 </span><span class="lineCov">          1 :   Future&lt;void&gt; removeMember({</span></a>
-<a name="156"><span class="lineNum">     156 </span>            :     @required String id,</a>
-<a name="157"><span class="lineNum">     157 </span>            :     @required String userId,</a>
-<a name="158"><span class="lineNum">     158 </span>            :   }) async {</a>
-<a name="159"><span class="lineNum">     159 </span><span class="lineCov">          1 :     _loading = true;</span></a>
-<a name="160"><span class="lineNum">     160 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
-<a name="161"><span class="lineNum">     161 </span>            : </a>
-<a name="162"><span class="lineNum">     162 </span><span class="lineCov">          4 :     final failureOrOrganization = await removeMemberUseCase(RemoveMemberParams(</span></a>
-<a name="163"><span class="lineNum">     163 </span>            :       id: id,</a>
-<a name="164"><span class="lineNum">     164 </span>            :       userId: userId,</a>
-<a name="165"><span class="lineNum">     165 </span>            :     ));</a>
-<a name="166"><span class="lineNum">     166 </span>            : </a>
-<a name="167"><span class="lineNum">     167 </span><span class="lineCov">          1 :     _loading = false;</span></a>
-<a name="168"><span class="lineNum">     168 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">          1 :     _loading = false;</span></a>
+<a name="146"><span class="lineNum">     146 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
+<a name="147"><span class="lineNum">     147 </span>            : </a>
+<a name="148"><span class="lineNum">     148 </span><span class="lineCov">          1 :     failureOrOrganization.fold(</span></a>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">          1 :       (failure) =&gt; throw failure,</span></a>
+<a name="150"><span class="lineNum">     150 </span><span class="lineCov">          1 :       (organization) {</span></a>
+<a name="151"><span class="lineNum">     151 </span><span class="lineCov">          1 :         _organization = organization;</span></a>
+<a name="152"><span class="lineNum">     152 </span><span class="lineCov">          1 :         notifyListeners();</span></a>
+<a name="153"><span class="lineNum">     153 </span>            :       },</a>
+<a name="154"><span class="lineNum">     154 </span>            :     );</a>
+<a name="155"><span class="lineNum">     155 </span>            :   }</a>
+<a name="156"><span class="lineNum">     156 </span>            : </a>
+<a name="157"><span class="lineNum">     157 </span>            :   @override</a>
+<a name="158"><span class="lineNum">     158 </span><span class="lineCov">          1 :   Future&lt;void&gt; removeMember({</span></a>
+<a name="159"><span class="lineNum">     159 </span>            :     @required String id,</a>
+<a name="160"><span class="lineNum">     160 </span>            :     @required String userId,</a>
+<a name="161"><span class="lineNum">     161 </span>            :   }) async {</a>
+<a name="162"><span class="lineNum">     162 </span><span class="lineCov">          1 :     _loading = true;</span></a>
+<a name="163"><span class="lineNum">     163 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
+<a name="164"><span class="lineNum">     164 </span>            : </a>
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">          4 :     final failureOrOrganization = await removeMemberUseCase(RemoveMemberParams(</span></a>
+<a name="166"><span class="lineNum">     166 </span>            :       id: id,</a>
+<a name="167"><span class="lineNum">     167 </span>            :       userId: userId,</a>
+<a name="168"><span class="lineNum">     168 </span>            :     ));</a>
 <a name="169"><span class="lineNum">     169 </span>            : </a>
-<a name="170"><span class="lineNum">     170 </span><span class="lineCov">          1 :     failureOrOrganization.fold(</span></a>
-<a name="171"><span class="lineNum">     171 </span><span class="lineCov">          1 :       (failure) =&gt; throw failure,</span></a>
-<a name="172"><span class="lineNum">     172 </span><span class="lineCov">          1 :       (organization) {</span></a>
-<a name="173"><span class="lineNum">     173 </span><span class="lineCov">          1 :         _organization = organization;</span></a>
-<a name="174"><span class="lineNum">     174 </span><span class="lineCov">          1 :         notifyListeners();</span></a>
-<a name="175"><span class="lineNum">     175 </span>            :       },</a>
-<a name="176"><span class="lineNum">     176 </span>            :     );</a>
-<a name="177"><span class="lineNum">     177 </span>            :   }</a>
-<a name="178"><span class="lineNum">     178 </span>            : </a>
-<a name="179"><span class="lineNum">     179 </span>            :   @override</a>
-<a name="180"><span class="lineNum">     180 </span><span class="lineCov">          1 :   Future&lt;void&gt; updateMember({</span></a>
-<a name="181"><span class="lineNum">     181 </span>            :     @required String id,</a>
-<a name="182"><span class="lineNum">     182 </span>            :     @required String userId,</a>
-<a name="183"><span class="lineNum">     183 </span>            :     OrganizationRoleType role,</a>
-<a name="184"><span class="lineNum">     184 </span>            :     OrganizationMemberStatus status,</a>
-<a name="185"><span class="lineNum">     185 </span>            :   }) async {</a>
-<a name="186"><span class="lineNum">     186 </span><span class="lineCov">          1 :     _loading = true;</span></a>
-<a name="187"><span class="lineNum">     187 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
-<a name="188"><span class="lineNum">     188 </span>            : </a>
-<a name="189"><span class="lineNum">     189 </span><span class="lineCov">          4 :     final failureOrOrganization = await updateMemberUseCase(UpdateMemberParams(</span></a>
-<a name="190"><span class="lineNum">     190 </span>            :       id: id,</a>
-<a name="191"><span class="lineNum">     191 </span>            :       userId: userId,</a>
-<a name="192"><span class="lineNum">     192 </span>            :       role: role,</a>
-<a name="193"><span class="lineNum">     193 </span>            :       status: status,</a>
-<a name="194"><span class="lineNum">     194 </span>            :     ));</a>
-<a name="195"><span class="lineNum">     195 </span>            : </a>
-<a name="196"><span class="lineNum">     196 </span><span class="lineCov">          1 :     _loading = false;</span></a>
-<a name="197"><span class="lineNum">     197 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
+<a name="170"><span class="lineNum">     170 </span><span class="lineCov">          1 :     _loading = false;</span></a>
+<a name="171"><span class="lineNum">     171 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
+<a name="172"><span class="lineNum">     172 </span>            : </a>
+<a name="173"><span class="lineNum">     173 </span><span class="lineCov">          1 :     failureOrOrganization.fold(</span></a>
+<a name="174"><span class="lineNum">     174 </span><span class="lineCov">          1 :       (failure) =&gt; throw failure,</span></a>
+<a name="175"><span class="lineNum">     175 </span><span class="lineCov">          1 :       (organization) {</span></a>
+<a name="176"><span class="lineNum">     176 </span><span class="lineCov">          1 :         _organization = organization;</span></a>
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">          1 :         notifyListeners();</span></a>
+<a name="178"><span class="lineNum">     178 </span>            :       },</a>
+<a name="179"><span class="lineNum">     179 </span>            :     );</a>
+<a name="180"><span class="lineNum">     180 </span>            :   }</a>
+<a name="181"><span class="lineNum">     181 </span>            : </a>
+<a name="182"><span class="lineNum">     182 </span>            :   @override</a>
+<a name="183"><span class="lineNum">     183 </span><span class="lineCov">          1 :   Future&lt;void&gt; updateMember({</span></a>
+<a name="184"><span class="lineNum">     184 </span>            :     @required String id,</a>
+<a name="185"><span class="lineNum">     185 </span>            :     @required String userId,</a>
+<a name="186"><span class="lineNum">     186 </span>            :     OrganizationRoleType role,</a>
+<a name="187"><span class="lineNum">     187 </span>            :     OrganizationMemberStatus status,</a>
+<a name="188"><span class="lineNum">     188 </span>            :   }) async {</a>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">          1 :     _loading = true;</span></a>
+<a name="190"><span class="lineNum">     190 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
+<a name="191"><span class="lineNum">     191 </span>            : </a>
+<a name="192"><span class="lineNum">     192 </span><span class="lineCov">          4 :     final failureOrOrganization = await updateMemberUseCase(UpdateMemberParams(</span></a>
+<a name="193"><span class="lineNum">     193 </span>            :       id: id,</a>
+<a name="194"><span class="lineNum">     194 </span>            :       userId: userId,</a>
+<a name="195"><span class="lineNum">     195 </span>            :       role: role,</a>
+<a name="196"><span class="lineNum">     196 </span>            :       status: status,</a>
+<a name="197"><span class="lineNum">     197 </span>            :     ));</a>
 <a name="198"><span class="lineNum">     198 </span>            : </a>
-<a name="199"><span class="lineNum">     199 </span><span class="lineCov">          1 :     failureOrOrganization.fold(</span></a>
-<a name="200"><span class="lineNum">     200 </span><span class="lineCov">          1 :       (failure) =&gt; throw failure,</span></a>
-<a name="201"><span class="lineNum">     201 </span><span class="lineCov">          1 :       (organization) {</span></a>
-<a name="202"><span class="lineNum">     202 </span><span class="lineCov">          1 :         _organization = organization;</span></a>
-<a name="203"><span class="lineNum">     203 </span><span class="lineCov">          1 :         notifyListeners();</span></a>
-<a name="204"><span class="lineNum">     204 </span>            :       },</a>
-<a name="205"><span class="lineNum">     205 </span>            :     );</a>
-<a name="206"><span class="lineNum">     206 </span>            :   }</a>
-<a name="207"><span class="lineNum">     207 </span>            : </a>
-<a name="208"><span class="lineNum">     208 </span>            :   @override</a>
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">          1 :   Future&lt;void&gt; updateOrganization({</span></a>
-<a name="210"><span class="lineNum">     210 </span>            :     @required String id,</a>
-<a name="211"><span class="lineNum">     211 </span>            :     String name,</a>
-<a name="212"><span class="lineNum">     212 </span>            :     String email,</a>
-<a name="213"><span class="lineNum">     213 </span>            :     String phone,</a>
-<a name="214"><span class="lineNum">     214 </span>            :     File avatar,</a>
-<a name="215"><span class="lineNum">     215 </span>            :   }) async {</a>
-<a name="216"><span class="lineNum">     216 </span><span class="lineCov">          1 :     _loading = true;</span></a>
-<a name="217"><span class="lineNum">     217 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
-<a name="218"><span class="lineNum">     218 </span>            :     final failureOrOrganization =</a>
-<a name="219"><span class="lineNum">     219 </span><span class="lineCov">          4 :         await updateOrganizationUseCase(UpdateOrganizationParams(</span></a>
-<a name="220"><span class="lineNum">     220 </span>            :       id: id,</a>
-<a name="221"><span class="lineNum">     221 </span>            :       name: name,</a>
-<a name="222"><span class="lineNum">     222 </span>            :       email: email,</a>
-<a name="223"><span class="lineNum">     223 </span>            :       phone: phone,</a>
-<a name="224"><span class="lineNum">     224 </span>            :       avatar: avatar,</a>
-<a name="225"><span class="lineNum">     225 </span>            :     ));</a>
-<a name="226"><span class="lineNum">     226 </span>            : </a>
-<a name="227"><span class="lineNum">     227 </span><span class="lineCov">          1 :     _loading = false;</span></a>
-<a name="228"><span class="lineNum">     228 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
+<a name="199"><span class="lineNum">     199 </span><span class="lineCov">          1 :     _loading = false;</span></a>
+<a name="200"><span class="lineNum">     200 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
+<a name="201"><span class="lineNum">     201 </span>            : </a>
+<a name="202"><span class="lineNum">     202 </span><span class="lineCov">          1 :     failureOrOrganization.fold(</span></a>
+<a name="203"><span class="lineNum">     203 </span><span class="lineCov">          1 :       (failure) =&gt; throw failure,</span></a>
+<a name="204"><span class="lineNum">     204 </span><span class="lineCov">          1 :       (organization) {</span></a>
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">          1 :         _organization = organization;</span></a>
+<a name="206"><span class="lineNum">     206 </span><span class="lineCov">          1 :         notifyListeners();</span></a>
+<a name="207"><span class="lineNum">     207 </span>            :       },</a>
+<a name="208"><span class="lineNum">     208 </span>            :     );</a>
+<a name="209"><span class="lineNum">     209 </span>            :   }</a>
+<a name="210"><span class="lineNum">     210 </span>            : </a>
+<a name="211"><span class="lineNum">     211 </span>            :   @override</a>
+<a name="212"><span class="lineNum">     212 </span><span class="lineCov">          1 :   Future&lt;void&gt; updateOrganization({</span></a>
+<a name="213"><span class="lineNum">     213 </span>            :     @required String id,</a>
+<a name="214"><span class="lineNum">     214 </span>            :     String name,</a>
+<a name="215"><span class="lineNum">     215 </span>            :     String email,</a>
+<a name="216"><span class="lineNum">     216 </span>            :     String phone,</a>
+<a name="217"><span class="lineNum">     217 </span>            :     File avatar,</a>
+<a name="218"><span class="lineNum">     218 </span>            :   }) async {</a>
+<a name="219"><span class="lineNum">     219 </span><span class="lineCov">          1 :     _loading = true;</span></a>
+<a name="220"><span class="lineNum">     220 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
+<a name="221"><span class="lineNum">     221 </span>            :     final failureOrOrganization =</a>
+<a name="222"><span class="lineNum">     222 </span><span class="lineCov">          4 :         await updateOrganizationUseCase(UpdateOrganizationParams(</span></a>
+<a name="223"><span class="lineNum">     223 </span>            :       id: id,</a>
+<a name="224"><span class="lineNum">     224 </span>            :       name: name,</a>
+<a name="225"><span class="lineNum">     225 </span>            :       email: email,</a>
+<a name="226"><span class="lineNum">     226 </span>            :       phone: phone,</a>
+<a name="227"><span class="lineNum">     227 </span>            :       avatar: avatar,</a>
+<a name="228"><span class="lineNum">     228 </span>            :     ));</a>
 <a name="229"><span class="lineNum">     229 </span>            : </a>
-<a name="230"><span class="lineNum">     230 </span><span class="lineCov">          1 :     failureOrOrganization.fold(</span></a>
-<a name="231"><span class="lineNum">     231 </span><span class="lineCov">          1 :       (failure) =&gt; throw failure,</span></a>
-<a name="232"><span class="lineNum">     232 </span><span class="lineCov">          1 :       (organization) {</span></a>
-<a name="233"><span class="lineNum">     233 </span><span class="lineCov">          1 :         _organization = organization;</span></a>
-<a name="234"><span class="lineNum">     234 </span><span class="lineCov">          1 :         notifyListeners();</span></a>
-<a name="235"><span class="lineNum">     235 </span>            :       },</a>
-<a name="236"><span class="lineNum">     236 </span>            :     );</a>
-<a name="237"><span class="lineNum">     237 </span>            :   }</a>
-<a name="238"><span class="lineNum">     238 </span>            : </a>
-<a name="239"><span class="lineNum">     239 </span>            :   @override</a>
-<a name="240"><span class="lineNum">     240 </span><span class="lineCov">          1 :   Future&lt;void&gt; setOrganization({</span></a>
-<a name="241"><span class="lineNum">     241 </span>            :     @required String id,</a>
-<a name="242"><span class="lineNum">     242 </span>            :     @required Organization organization,</a>
-<a name="243"><span class="lineNum">     243 </span>            :   }) async {</a>
-<a name="244"><span class="lineNum">     244 </span><span class="lineCov">          1 :     _organization = organization;</span></a>
-<a name="245"><span class="lineNum">     245 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
-<a name="246"><span class="lineNum">     246 </span>            : </a>
-<a name="247"><span class="lineNum">     247 </span><span class="lineCov">          3 :     final failureOrOrganization = await saveOrganizationLocallyUseCase(</span></a>
-<a name="248"><span class="lineNum">     248 </span><span class="lineCov">          1 :       SaveOrganizationLocallyParams(</span></a>
-<a name="249"><span class="lineNum">     249 </span>            :         id: id,</a>
-<a name="250"><span class="lineNum">     250 </span>            :         organization: organization,</a>
-<a name="251"><span class="lineNum">     251 </span>            :       ),</a>
-<a name="252"><span class="lineNum">     252 </span>            :     );</a>
-<a name="253"><span class="lineNum">     253 </span>            : </a>
-<a name="254"><span class="lineNum">     254 </span><span class="lineCov">          1 :     failureOrOrganization.fold(</span></a>
-<a name="255"><span class="lineNum">     255 </span><span class="lineCov">          1 :       (failure) =&gt; throw failure,</span></a>
-<a name="256"><span class="lineNum">     256 </span><span class="lineCov">          1 :       (_) {},</span></a>
-<a name="257"><span class="lineNum">     257 </span>            :     );</a>
-<a name="258"><span class="lineNum">     258 </span>            :   }</a>
-<a name="259"><span class="lineNum">     259 </span>            : }</a>
+<a name="230"><span class="lineNum">     230 </span><span class="lineCov">          1 :     _loading = false;</span></a>
+<a name="231"><span class="lineNum">     231 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
+<a name="232"><span class="lineNum">     232 </span>            : </a>
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">          1 :     failureOrOrganization.fold(</span></a>
+<a name="234"><span class="lineNum">     234 </span><span class="lineCov">          1 :       (failure) =&gt; throw failure,</span></a>
+<a name="235"><span class="lineNum">     235 </span><span class="lineCov">          1 :       (organization) {</span></a>
+<a name="236"><span class="lineNum">     236 </span><span class="lineCov">          1 :         _organization = organization;</span></a>
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">          1 :         notifyListeners();</span></a>
+<a name="238"><span class="lineNum">     238 </span>            :       },</a>
+<a name="239"><span class="lineNum">     239 </span>            :     );</a>
+<a name="240"><span class="lineNum">     240 </span>            :   }</a>
+<a name="241"><span class="lineNum">     241 </span>            : </a>
+<a name="242"><span class="lineNum">     242 </span>            :   @override</a>
+<a name="243"><span class="lineNum">     243 </span><span class="lineCov">          1 :   Future&lt;void&gt; setOrganization({</span></a>
+<a name="244"><span class="lineNum">     244 </span>            :     @required String id,</a>
+<a name="245"><span class="lineNum">     245 </span>            :     @required Organization organization,</a>
+<a name="246"><span class="lineNum">     246 </span>            :   }) async {</a>
+<a name="247"><span class="lineNum">     247 </span><span class="lineCov">          1 :     _organization = organization;</span></a>
+<a name="248"><span class="lineNum">     248 </span><span class="lineCov">          1 :     notifyListeners();</span></a>
+<a name="249"><span class="lineNum">     249 </span>            : </a>
+<a name="250"><span class="lineNum">     250 </span><span class="lineCov">          3 :     final failureOrOrganization = await saveOrganizationLocallyUseCase(</span></a>
+<a name="251"><span class="lineNum">     251 </span><span class="lineCov">          1 :       SaveOrganizationLocallyParams(</span></a>
+<a name="252"><span class="lineNum">     252 </span>            :         id: id,</a>
+<a name="253"><span class="lineNum">     253 </span>            :         organization: organization,</a>
+<a name="254"><span class="lineNum">     254 </span>            :       ),</a>
+<a name="255"><span class="lineNum">     255 </span>            :     );</a>
+<a name="256"><span class="lineNum">     256 </span>            : </a>
+<a name="257"><span class="lineNum">     257 </span><span class="lineCov">          1 :     failureOrOrganization.fold(</span></a>
+<a name="258"><span class="lineNum">     258 </span><span class="lineCov">          1 :       (failure) =&gt; throw failure,</span></a>
+<a name="259"><span class="lineNum">     259 </span><span class="lineCov">          1 :       (_) {},</span></a>
+<a name="260"><span class="lineNum">     260 </span>            :     );</a>
+<a name="261"><span class="lineNum">     261 </span>            :   }</a>
+<a name="262"><span class="lineNum">     262 </span>            : }</a>
 </pre>
       </td>
     </tr>
