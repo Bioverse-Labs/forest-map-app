@@ -1,3 +1,4 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
@@ -37,6 +38,7 @@ import '../../features/organization/presentation/notifiers/organizations_notifie
 import '../../features/tracking/data/datasources/location_data_source.dart';
 import '../../features/tracking/data/repositories/location_repository_impl.dart';
 import '../../features/tracking/domain/repositories/location_repository.dart';
+import '../../features/tracking/domain/usecases/get_current_location.dart';
 import '../../features/tracking/domain/usecases/track_user.dart';
 import '../../features/tracking/presentation/notifiers/location_notifier.dart';
 import '../../features/user/data/datasource/user_local_data_source.dart';
@@ -103,7 +105,7 @@ class AppConfig {
 
     GetIt.I.registerLazySingleton<LocationUtils>(
       () => LocationUtilsImpl(
-        GetIt.I<LocalizedStringImpl>(),
+        GetIt.I(),
         LocationSource(),
       ),
     );
@@ -113,6 +115,10 @@ class AppConfig {
         DataConnectionChecker(),
         Connectivity(),
       ),
+    );
+
+    GetIt.I.registerLazySingleton<AppSettings>(
+      () => AppSettings(),
     );
   }
 
@@ -290,6 +296,12 @@ class AppConfig {
       ),
     );
 
+    GetIt.I.registerLazySingleton<GetCurrentLocation>(
+      () => GetCurrentLocation(
+        GetIt.I(),
+      ),
+    );
+
     GetIt.I.registerLazySingleton<CreateOrganization>(
       () => CreateOrganization(
         GetIt.I(),
@@ -359,7 +371,8 @@ class AppConfig {
 
     GetIt.I.registerFactory<LocationNotifierImpl>(
       () => LocationNotifierImpl(
-        GetIt.I(),
+        trackUserUseCase: GetIt.I(),
+        getCurrentLocationUseCase: GetIt.I(),
       ),
     );
 

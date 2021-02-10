@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/features/tracking/presentation/notifiers/location_notifier.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
@@ -56,8 +57,10 @@ Map<String, Widget Function(BuildContext)> routes = {
         ),
         userNotifier: Provider.of<UserNotifierImpl>(ctx, listen: false),
         authNotifier: Provider.of<AuthNotifierImpl>(ctx, listen: false),
+        locationNotifier: Provider.of<LocationNotifierImpl>(ctx, listen: false),
         appNavigator: GetIt.I(),
         notificationsUtils: GetIt.I(),
         camera: GetIt.I(),
+        appSettings: GetIt.I(),
       ),
 };

@@ -125,6 +125,7 @@ class OrganizationScreen extends StatelessWidget {
           if (role == OrganizationRoleType.owner ||
               role == OrganizationRoleType.admin) {
             return FloatingActionButton.extended(
+              heroTag: 'inviteUserFloatingButton',
               onPressed: () {},
               icon: Icon(Icons.person_add_alt_1_outlined),
               label: Text(localizedString.getLocalizedString(

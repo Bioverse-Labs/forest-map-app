@@ -193,4 +193,66 @@ void main() {
       },
     );
   });
+
+  group('getCurrentLocation', () {
+    test(
+      'should return [LocationModel] if datasource succeed',
+      () async {
+        when(mockLocationDataSource.getCurrentLocation())
+            .thenAnswer((_) async => tLocationModel);
+
+        final result = await locationRepositoryImpl.getCurrentLocation();
+
+        expect(result, Right(tLocationModel));
+        verify(mockLocationDataSource.getCurrentLocation());
+        verifyNoMoreInteractions(mockLocationDataSource);
+      },
+    );
+
+    test(
+      'should throw [LocationException] if datasource fails',
+      () async {
+        when(mockLocationDataSource.getCurrentLocation()).thenThrow(
+          tLocationException,
+        );
+
+        final result = await locationRepositoryImpl.getCurrentLocation();
+
+        expect(
+          result,
+          Left(LocationFailure(
+            tLocationException.message,
+            tLocationException.hasPermission,
+            tLocationException.isGpsEnabled,
+            stackTrace: tLocationException.stackTrace,
+          )),
+        );
+        verify(mockLocationDataSource.getCurrentLocation());
+        verifyNoMoreInteractions(mockLocationDataSource);
+      },
+    );
+
+    test(
+      'should throw [LocationException] if datasource fails',
+      () async {
+        when(mockLocationDataSource.getCurrentLocation()).thenThrow(
+          tLocalException,
+        );
+
+        final result = await locationRepositoryImpl.getCurrentLocation();
+
+        expect(
+          result,
+          Left(LocalFailure(
+            tLocalException.message,
+            tLocalException.code,
+            tLocalException.origin,
+            stackTrace: tLocalException.stackTrace,
+          )),
+        );
+        verify(mockLocationDataSource.getCurrentLocation());
+        verifyNoMoreInteractions(mockLocationDataSource);
+      },
+    );
+  });
 }

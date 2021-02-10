@@ -32,6 +32,7 @@ dependencies:
   image: ^2.1.19
   uuid: ^2.2.2
   cached_network_image: ^2.5.0
+  app_settings: ^4.0.4
 
   # Firebase Deps
   firebase_core: "0.7.0"

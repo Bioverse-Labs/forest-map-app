@@ -18,10 +18,12 @@ abstract class LocationDataSource {
     String userId,
     Map<String, dynamic> payload,
   );
+
+  Future<LocationModel> getCurrentLocation();
 }
 
 class LocationDataSourceImpl implements LocationDataSource {
-  final LocationUtilsImpl locationUtils;
+  final LocationUtils locationUtils;
   final FirestoreAdapterImpl firestoreAdapter;
 
   LocationDataSourceImpl({
@@ -45,5 +47,11 @@ class LocationDataSourceImpl implements LocationDataSource {
       payload,
     );
     return LocationModel.fromMap(payload);
+  }
+
+  @override
+  Future<LocationModel> getCurrentLocation() async {
+    final hasPermission = await locationUtils.checkLocationPermission();
+    return locationUtils.getCurrentPosition(hasPermission);
   }
 }

@@ -1,9 +1,12 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../features/auth/presentation/notifiers/auth_notifier.dart';
+import '../../features/map/presentation/screens/map_screen.dart';
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/organization/presentation/screens/organization_screen.dart';
+import '../../features/tracking/presentation/notifiers/location_notifier.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
 import '../../features/user/presentation/screen/profile_screen.dart';
 import '../navigation/app_navigator.dart';
@@ -16,22 +19,26 @@ class HomeScreen extends StatefulWidget {
   final LocalizedString localizedString;
   final HomeScreenNotifierImpl homeScreenNotifier;
   final OrganizationNotifierImpl organizationNotifier;
+  final LocationNotifierImpl locationNotifier;
   final UserNotifierImpl userNotifier;
   final AuthNotifierImpl authNotifier;
   final AppNavigator appNavigator;
   final NotificationsUtils notificationsUtils;
   final Camera camera;
+  final AppSettings appSettings;
 
   const HomeScreen({
     Key key,
     @required this.localizedString,
     @required this.homeScreenNotifier,
     @required this.organizationNotifier,
+    @required this.locationNotifier,
     @required this.appNavigator,
     @required this.userNotifier,
     @required this.authNotifier,
     @required this.notificationsUtils,
     @required this.camera,
+    @required this.appSettings,
   }) : super(key: key);
 
   @override
@@ -44,7 +51,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     _widgetOptions = <Widget>[
-      Placeholder(),
+      MapScreen(
+        locationNotifier: widget.locationNotifier,
+        userNotifier: widget.userNotifier,
+        localizedString: widget.localizedString,
+        notificationsUtils: widget.notificationsUtils,
+        appNavigator: widget.appNavigator,
+        appSettings: widget.appSettings,
+      ),
       OrganizationScreen(
         localizedString: widget.localizedString,
         organizationNotifier: widget.organizationNotifier,
@@ -68,8 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _widgetOptions.elementAt(
-        Provider.of<HomeScreenNotifierImpl>(context).activeTabIndex,
+      body: IndexedStack(
+        index: Provider.of<HomeScreenNotifierImpl>(context).activeTabIndex,
+        children: _widgetOptions,
       ),
       bottomNavigationBar: Consumer<HomeScreenNotifierImpl>(
         builder: (ctx, state, _) {

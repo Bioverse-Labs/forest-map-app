@@ -11,4 +11,6 @@ abstract class LocationRepository {
     String userId,
     LocationModel location,
   );
+
+  Future<Either<Failure, Location>> getCurrentLocation();
 }

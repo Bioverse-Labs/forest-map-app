@@ -74,48 +74,93 @@ void main() {
     speedAccuracy: faker.randomGenerator.decimal(),
   );
 
-  hasPermission(() {
-    final tLocationStream = StreamController<Location>();
+  group('getPositionStream', () {
+    hasPermission(() {
+      final tLocationStream = StreamController<Location>();
 
-    test(
-      'should return [Stream] if utils succeed',
-      () async {
-        when(mockLocationUtilsImpl.getLocationStream(any))
-            .thenAnswer((_) async => tLocationStream.stream);
+      test(
+        'should return [Stream] if utils succeed',
+        () async {
+          when(mockLocationUtilsImpl.getLocationStream(any))
+              .thenAnswer((_) async => tLocationStream.stream);
 
-        final result = await locationDataSourceImpl.getPositionStream();
-        expect(result, tLocationStream.stream);
-        verify(mockLocationUtilsImpl.checkLocationPermission());
-        verify(mockLocationUtilsImpl.getLocationStream(true));
-        verifyNoMoreInteractions(mockLocationUtilsImpl);
-        tLocationStream.close();
-      },
-    );
+          final result = await locationDataSourceImpl.getPositionStream();
+          expect(result, tLocationStream.stream);
+          verify(mockLocationUtilsImpl.checkLocationPermission());
+          verify(mockLocationUtilsImpl.getLocationStream(true));
+          verifyNoMoreInteractions(mockLocationUtilsImpl);
+          tLocationStream.close();
+        },
+      );
+    });
+
+    doesNotHavePermission(() {
+      test(
+        'should throw [LocalException] if user does not have permission',
+        () async {
+          when(mockLocationUtilsImpl.getLocationStream(any)).thenThrow(
+            LocalException(
+              'no permission',
+              '403',
+              ExceptionOriginTypes.test,
+            ),
+          );
+
+          try {
+            await locationDataSourceImpl.getPositionStream();
+          } catch (error) {
+            expect(error, isInstanceOf<LocalException>());
+          }
+
+          verify(mockLocationUtilsImpl.checkLocationPermission());
+          verify(mockLocationUtilsImpl.getLocationStream(false));
+          verifyNoMoreInteractions(mockLocationUtilsImpl);
+        },
+      );
+    });
   });
 
-  doesNotHavePermission(() {
-    test(
-      'should throw [LocalException] if user does not have permission',
-      () async {
-        when(mockLocationUtilsImpl.getLocationStream(any)).thenThrow(
-          LocalException(
-            'no permission',
-            '403',
-            ExceptionOriginTypes.test,
-          ),
-        );
+  group('getCurrentLocation', () {
+    hasPermission(() {
+      test(
+        'should return [LocatioModel] if utils succeed',
+        () async {
+          when(mockLocationUtilsImpl.getCurrentPosition(any))
+              .thenAnswer((_) async => tLocationModel);
 
-        try {
-          await locationDataSourceImpl.getPositionStream();
-        } catch (error) {
-          expect(error, isInstanceOf<LocalException>());
-        }
+          final result = await locationDataSourceImpl.getCurrentLocation();
+          expect(result, tLocationModel);
+          verify(mockLocationUtilsImpl.checkLocationPermission());
+          verify(mockLocationUtilsImpl.getCurrentPosition(true));
+          verifyNoMoreInteractions(mockLocationUtilsImpl);
+        },
+      );
+    });
 
-        verify(mockLocationUtilsImpl.checkLocationPermission());
-        verify(mockLocationUtilsImpl.getLocationStream(false));
-        verifyNoMoreInteractions(mockLocationUtilsImpl);
-      },
-    );
+    doesNotHavePermission(() {
+      test(
+        'should throw [LocalException] if user does not have permission',
+        () async {
+          when(mockLocationUtilsImpl.getCurrentPosition(any)).thenThrow(
+            LocalException(
+              'no permission',
+              '403',
+              ExceptionOriginTypes.test,
+            ),
+          );
+
+          try {
+            await locationDataSourceImpl.getCurrentLocation();
+          } catch (error) {
+            expect(error, isInstanceOf<LocalException>());
+          }
+
+          verify(mockLocationUtilsImpl.checkLocationPermission());
+          verify(mockLocationUtilsImpl.getCurrentPosition(false));
+          verifyNoMoreInteractions(mockLocationUtilsImpl);
+        },
+      );
+    });
   });
 
   group('saveLocation', () {

@@ -40,7 +40,6 @@ class InitialScreen extends StatelessWidget {
       id: 'currOrg',
       searchLocally: true,
     );
-
     appNavigator.pushAndReplace('/home');
   }
 
