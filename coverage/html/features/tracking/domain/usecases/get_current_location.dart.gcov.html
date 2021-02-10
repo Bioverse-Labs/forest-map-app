@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - lcov.info - features/auth/domain/usecases/sign_out.dart</title>
+  <title>LCOV - lcov.info - features/tracking/domain/usecases/get_current_location.dart</title>
   <link rel="stylesheet" type="text/css" href="../../../../gcov.css">
 </head>
 
@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../../../../index.html">top level</a> - <a href="index.html">features/auth/domain/usecases</a> - sign_out.dart<span style="font-size: 80%;"> (source / <a href="sign_out.dart.func-sort-c.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../../../../index.html">top level</a> - <a href="index.html">features/tracking/domain/usecases</a> - get_current_location.dart<span style="font-size: 80%;"> (source / <a href="get_current_location.dart.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -62,20 +62,21 @@
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : import 'package:dartz/dartz.dart';</a>
 <a name="2"><span class="lineNum">       2 </span>            : </a>
-<a name="3"><span class="lineNum">       3 </span>            : import '../../../../core/errors/failure.dart';</a>
-<a name="4"><span class="lineNum">       4 </span>            : import '../../../../core/usecases/usecase.dart';</a>
-<a name="5"><span class="lineNum">       5 </span>            : import '../repositories/auth_repository.dart';</a>
-<a name="6"><span class="lineNum">       6 </span>            : </a>
-<a name="7"><span class="lineNum">       7 </span>            : class SignOut extends UseCase&lt;void, NoParams&gt; {</a>
-<a name="8"><span class="lineNum">       8 </span>            :   final AuthRepository repository;</a>
-<a name="9"><span class="lineNum">       9 </span>            : </a>
-<a name="10"><span class="lineNum">      10 </span><span class="lineCov">          1 :   SignOut(this.repository);</span></a>
-<a name="11"><span class="lineNum">      11 </span>            : </a>
-<a name="12"><span class="lineNum">      12 </span><span class="lineCov">          1 :   @override</span></a>
-<a name="13"><span class="lineNum">      13 </span>            :   Future&lt;Either&lt;Failure, void&gt;&gt; call(NoParams params) {</a>
-<a name="14"><span class="lineNum">      14 </span><span class="lineCov">          2 :     return repository.signOut();</span></a>
-<a name="15"><span class="lineNum">      15 </span>            :   }</a>
-<a name="16"><span class="lineNum">      16 </span>            : }</a>
+<a name="3"><span class="lineNum">       3 </span>            : import '../repositories/location_repository.dart';</a>
+<a name="4"><span class="lineNum">       4 </span>            : import '../../../../core/errors/failure.dart';</a>
+<a name="5"><span class="lineNum">       5 </span>            : import '../../../../core/usecases/usecase.dart';</a>
+<a name="6"><span class="lineNum">       6 </span>            : import '../entities/location.dart';</a>
+<a name="7"><span class="lineNum">       7 </span>            : </a>
+<a name="8"><span class="lineNum">       8 </span>            : class GetCurrentLocation implements UseCase&lt;Location, NoParams&gt; {</a>
+<a name="9"><span class="lineNum">       9 </span>            :   final LocationRepository repository;</a>
+<a name="10"><span class="lineNum">      10 </span>            : </a>
+<a name="11"><span class="lineNum">      11 </span><span class="lineCov">          1 :   GetCurrentLocation(this.repository);</span></a>
+<a name="12"><span class="lineNum">      12 </span>            : </a>
+<a name="13"><span class="lineNum">      13 </span><span class="lineCov">          1 :   @override</span></a>
+<a name="14"><span class="lineNum">      14 </span>            :   Future&lt;Either&lt;Failure, Location&gt;&gt; call(NoParams params) {</a>
+<a name="15"><span class="lineNum">      15 </span><span class="lineCov">          2 :     return repository.getCurrentLocation();</span></a>
+<a name="16"><span class="lineNum">      16 </span>            :   }</a>
+<a name="17"><span class="lineNum">      17 </span>            : }</a>
 </pre>
       </td>
     </tr>
