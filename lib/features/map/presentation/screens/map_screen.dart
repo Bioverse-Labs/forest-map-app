@@ -86,19 +86,27 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   void _askPermission(BuildContext context) {
     widget.notificationsUtils.showAlertDialog(
       context: context,
-      title: Text('Atention!'),
+      title: Text(
+        widget.localizedString.getLocalizedString('map-screen.alert-title'),
+      ),
       content: Text(
-        'To use map this feature, wee need access to device location',
+        widget.localizedString.getLocalizedString(
+          'map-screen.alert-description',
+        ),
       ),
       buttons: [
         AlertButtonParams(
-          title: 'Cancel',
+          title: widget.localizedString.getLocalizedString(
+            'map-screen.alert-cancel-button',
+          ),
           action: () {
             widget.appNavigator.pop();
           },
         ),
         AlertButtonParams(
-          title: 'Allow Location',
+          title: widget.localizedString.getLocalizedString(
+            'map-screen.alert-confirm-button',
+          ),
           action: () async {
             await AppSettings.openAppSettings();
             widget.appNavigator.pop();
@@ -147,14 +155,18 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Please allow location access or enable device GPS',
+                      widget.localizedString.getLocalizedString(
+                        'map-screen.location-permission-title',
+                      ),
                       style: Theme.of(context).textTheme.headline5,
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 8),
                     RaisedButton(
                       onPressed: () => _askPermission(context),
-                      child: Text('Allow/Enable Location'),
+                      child: Text(widget.localizedString.getLocalizedString(
+                        'map-screen.location-permission-button',
+                      )),
                     )
                   ],
                 ),

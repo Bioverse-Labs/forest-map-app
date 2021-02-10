@@ -66,7 +66,14 @@ class CodegenLoader extends AssetLoader{
     "title": "Preview",
     "submit-button": "Save"
   },
-  "map-screen": {},
+  "map-screen": {
+    "alert-title": "Atention!",
+    "alert-description": "To use this feature, wee need access to device location",
+    "alert-cancel-button": "Cancel",
+    "alert-confirm-button": "Allow Location",
+    "location-permission-title": "Please allow location access or enable device GPS",
+    "location-permission-button": "Allow/Enable Location"
+  },
   "organization-screen": {
     "title": "Organizations",
     "empty-state-title": "Currently you are not assined to any organization... :/",
@@ -142,7 +149,14 @@ static const Map<String,dynamic> pt_BR = {
     "title": "Pré Visualização",
     "submit-button": "Salvar"
   },
-  "map-screen": {},
+  "map-screen": {
+    "alert-title": "Atenção!",
+    "alert-description": "Para utilizar essa funcionalidade, permita o acesso ao GPS do aparelho",
+    "alert-cancel-button": "Cancelar",
+    "alert-confirm-button": "Permitir Localização",
+    "location-permission-title": "Por Favor permita o acesso ao GPS do aparelho",
+    "location-permission-button": "Permitir/Habilitar Localização"
+  },
   "organization-screen": {
     "title": "Organizações",
     "empty-state-title": "Atualmente você não faz parte de nenhum organização :/",

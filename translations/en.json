@@ -50,7 +50,14 @@
     "title": "Preview",
     "submit-button": "Save"
   },
-  "map-screen": {},
+  "map-screen": {
+    "alert-title": "Atention!",
+    "alert-description": "To use this feature, wee need access to device location",
+    "alert-cancel-button": "Cancel",
+    "alert-confirm-button": "Allow Location",
+    "location-permission-title": "Please allow location access or enable device GPS",
+    "location-permission-button": "Allow/Enable Location"
+  },
   "organization-screen": {
     "title": "Organizations",
     "empty-state-title": "Currently you are not assined to any organization... :/",
