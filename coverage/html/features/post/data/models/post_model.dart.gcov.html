@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2021-02-11 02:46:39</td>
+            <td class="headerValue">2021-02-11 04:13:05</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -69,7 +69,7 @@
 <a name="7"><span class="lineNum">       7 </span>            : import '../hive/post.dart';</a>
 <a name="8"><span class="lineNum">       8 </span>            : </a>
 <a name="9"><span class="lineNum">       9 </span>            : class PostModel extends Post implements Model&lt;PostModel, PostHive&gt; {</a>
-<a name="10"><span class="lineNum">      10 </span><span class="lineCov">          2 :   PostModel({</span></a>
+<a name="10"><span class="lineNum">      10 </span><span class="lineCov">          3 :   PostModel({</span></a>
 <a name="11"><span class="lineNum">      11 </span>            :     @required String id,</a>
 <a name="12"><span class="lineNum">      12 </span>            :     @required String specie,</a>
 <a name="13"><span class="lineNum">      13 </span>            :     @required String imageUrl,</a>
@@ -77,7 +77,7 @@
 <a name="15"><span class="lineNum">      15 </span>            :     @required Location location,</a>
 <a name="16"><span class="lineNum">      16 </span>            :     @required String userId,</a>
 <a name="17"><span class="lineNum">      17 </span>            :     @required String organizationId,</a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineCov">          2 :   }) : super(</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">          3 :   }) : super(</span></a>
 <a name="19"><span class="lineNum">      19 </span>            :           id: id,</a>
 <a name="20"><span class="lineNum">      20 </span>            :           userId: userId,</a>
 <a name="21"><span class="lineNum">      21 </span>            :           specie: specie,</a>
@@ -110,15 +110,15 @@
 <a name="48"><span class="lineNum">      48 </span>            :     );</a>
 <a name="49"><span class="lineNum">      49 </span>            :   }</a>
 <a name="50"><span class="lineNum">      50 </span>            : </a>
-<a name="51"><span class="lineNum">      51 </span><span class="lineCov">          1 :   factory PostModel.fromHive(PostHive postHive) {</span></a>
-<a name="52"><span class="lineNum">      52 </span><span class="lineCov">          1 :     return PostModel(</span></a>
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">          1 :       id: postHive.id,</span></a>
-<a name="54"><span class="lineNum">      54 </span><span class="lineCov">          1 :       userId: postHive.userId,</span></a>
-<a name="55"><span class="lineNum">      55 </span><span class="lineCov">          1 :       specie: postHive.specie,</span></a>
-<a name="56"><span class="lineNum">      56 </span><span class="lineCov">          1 :       imageUrl: postHive.imageUrl,</span></a>
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">          1 :       timestamp: postHive.timestamp,</span></a>
-<a name="58"><span class="lineNum">      58 </span><span class="lineCov">          2 :       location: LocationModel.fromHive(postHive.location),</span></a>
-<a name="59"><span class="lineNum">      59 </span><span class="lineCov">          1 :       organizationId: postHive.organizationId,</span></a>
+<a name="51"><span class="lineNum">      51 </span><span class="lineCov">          2 :   factory PostModel.fromHive(PostHive postHive) {</span></a>
+<a name="52"><span class="lineNum">      52 </span><span class="lineCov">          2 :     return PostModel(</span></a>
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">          2 :       id: postHive.id,</span></a>
+<a name="54"><span class="lineNum">      54 </span><span class="lineCov">          2 :       userId: postHive.userId,</span></a>
+<a name="55"><span class="lineNum">      55 </span><span class="lineCov">          2 :       specie: postHive.specie,</span></a>
+<a name="56"><span class="lineNum">      56 </span><span class="lineCov">          2 :       imageUrl: postHive.imageUrl,</span></a>
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">          2 :       timestamp: postHive.timestamp,</span></a>
+<a name="58"><span class="lineNum">      58 </span><span class="lineCov">          4 :       location: LocationModel.fromHive(postHive.location),</span></a>
+<a name="59"><span class="lineNum">      59 </span><span class="lineCov">          2 :       organizationId: postHive.organizationId,</span></a>
 <a name="60"><span class="lineNum">      60 </span>            :     );</a>
 <a name="61"><span class="lineNum">      61 </span>            :   }</a>
 <a name="62"><span class="lineNum">      62 </span>            : </a>
