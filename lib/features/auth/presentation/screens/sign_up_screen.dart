@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/features/organization/presentation/notifiers/organizations_notifier.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/errors/exceptions.dart';
@@ -15,6 +16,7 @@ import '../notifiers/auth_notifier.dart';
 class SignupScreen extends StatelessWidget {
   final AuthNotifierImpl authNotifierImpl;
   final UserNotifierImpl userNotifierImpl;
+  final OrganizationNotifierImpl organizationNotifier;
   final LocalizedString localizedString;
   final ValidationUtils validationUtils;
   final AppTheme appTheme;
@@ -29,6 +31,7 @@ class SignupScreen extends StatelessWidget {
     Key key,
     @required this.authNotifierImpl,
     @required this.userNotifierImpl,
+    @required this.organizationNotifier,
     @required this.localizedString,
     @required this.validationUtils,
     @required this.appTheme,
@@ -45,13 +48,17 @@ class SignupScreen extends StatelessWidget {
   Future<void> _signUp() async {
     if (_formKey.currentState.validate()) {
       try {
-        final result = await authNotifierImpl.signUp(
+        await authNotifierImpl.signUp(
           _nameController.text,
           _emailController.text,
           _passwordController.text,
         );
-        await userNotifierImpl.getUser(id: result.id);
-        appNavigator.pushAndReplace('/');
+        await userNotifierImpl.getUser(id: 'currUser', searchLocally: true);
+        await organizationNotifier.getOrganization(
+          id: 'currOrg',
+          searchLocally: true,
+        );
+        appNavigator.pushAndReplace('/home');
       } on ServerFailure catch (failure) {
         print(failure.stackTrace);
         notificationsUtils.showErrorNotification(failure.message);

@@ -20,6 +20,7 @@ Map<String, Widget Function(BuildContext)> routes = {
           ctx,
           listen: false,
         ),
+        firestoreAdapterImpl: GetIt.I(),
         appNavigator: GetIt.I(),
         networkInfo: GetIt.I(),
       ),
