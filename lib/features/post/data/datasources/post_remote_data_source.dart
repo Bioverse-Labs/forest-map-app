@@ -56,7 +56,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       );
 
       await firestoreAdapter.addDocument(
-        'organizations/$organizationId/posts/$id.png',
+        'organizations/$organizationId/posts/$id',
         {
           ...LocationModel.fromEntity(location).toMap(),
           'id': id,
