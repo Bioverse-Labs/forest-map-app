@@ -6,12 +6,14 @@ import '../../features/auth/presentation/notifiers/auth_notifier.dart';
 import '../../features/map/presentation/screens/map_screen.dart';
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/organization/presentation/screens/organization_screen.dart';
+import '../../features/post/presentation/notifier/post_notifier.dart';
 import '../../features/tracking/presentation/notifiers/location_notifier.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
 import '../../features/user/presentation/screen/profile_screen.dart';
 import '../navigation/app_navigator.dart';
 import '../notifiers/home_screen_notifier.dart';
 import '../platform/camera.dart';
+import '../style/theme.dart';
 import '../util/localized_string.dart';
 import '../util/notifications.dart';
 
@@ -22,10 +24,12 @@ class HomeScreen extends StatefulWidget {
   final LocationNotifierImpl locationNotifier;
   final UserNotifierImpl userNotifier;
   final AuthNotifierImpl authNotifier;
+  final PostNotifierImpl postNotifier;
   final AppNavigator appNavigator;
   final NotificationsUtils notificationsUtils;
   final Camera camera;
   final AppSettings appSettings;
+  final AppTheme appTheme;
 
   const HomeScreen({
     Key key,
@@ -36,9 +40,11 @@ class HomeScreen extends StatefulWidget {
     @required this.appNavigator,
     @required this.userNotifier,
     @required this.authNotifier,
+    @required this.postNotifier,
     @required this.notificationsUtils,
     @required this.camera,
     @required this.appSettings,
+    @required this.appTheme,
   }) : super(key: key);
 
   @override
@@ -58,6 +64,10 @@ class _HomeScreenState extends State<HomeScreen> {
         notificationsUtils: widget.notificationsUtils,
         appNavigator: widget.appNavigator,
         appSettings: widget.appSettings,
+        camera: widget.camera,
+        organizationNotifier: widget.organizationNotifier,
+        postNotifier: widget.postNotifier,
+        appTheme: widget.appTheme,
       ),
       OrganizationScreen(
         localizedString: widget.localizedString,

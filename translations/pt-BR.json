@@ -56,7 +56,12 @@
     "alert-cancel-button": "Cancelar",
     "alert-confirm-button": "Permitir Localização",
     "location-permission-title": "Por Favor permita o acesso ao GPS do aparelho",
-    "location-permission-button": "Permitir/Habilitar Localização"
+    "location-permission-button": "Permitir/Habilitar Localização",
+    "input-label": "Especie/Nome",
+    "input-placeholder": "Castanheira",
+    "save-button": "Salvar",
+    "post-success": "Dado salvo!",
+    "start-saving": "Dado começou a ser salvo"
   },
   "organization-screen": {
     "title": "Organizações",

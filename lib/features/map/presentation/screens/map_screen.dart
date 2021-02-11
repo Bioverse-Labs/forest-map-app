@@ -8,9 +8,14 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/navigation/app_navigator.dart';
+import '../../../../core/platform/camera.dart';
+import '../../../../core/style/theme.dart';
 import '../../../../core/util/localized_string.dart';
 import '../../../../core/util/notifications.dart';
 import '../../../../core/widgets/screen.dart';
+import '../../../organization/presentation/notifiers/organizations_notifier.dart';
+import '../../../post/presentation/notifier/post_notifier.dart';
+import '../../../post/presentation/widgets/save_post_dialog.dart';
 import '../../../tracking/domain/entities/location.dart';
 import '../../../tracking/presentation/notifiers/location_notifier.dart';
 import '../../../user/presentation/notifiers/user_notifier.dart';
@@ -19,18 +24,26 @@ class MapScreen extends StatefulWidget {
   final LocalizedString localizedString;
   final LocationNotifierImpl locationNotifier;
   final UserNotifierImpl userNotifier;
+  final PostNotifierImpl postNotifier;
+  final OrganizationNotifierImpl organizationNotifier;
   final NotificationsUtils notificationsUtils;
+  final Camera camera;
   final AppNavigator appNavigator;
   final AppSettings appSettings;
+  final AppTheme appTheme;
 
   MapScreen({
     Key key,
     @required this.localizedString,
     @required this.locationNotifier,
     @required this.userNotifier,
+    @required this.postNotifier,
     @required this.notificationsUtils,
     @required this.appNavigator,
     @required this.appSettings,
+    @required this.organizationNotifier,
+    @required this.camera,
+    @required this.appTheme,
   }) : super(key: key);
 
   @override
@@ -66,7 +79,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
 
   Future<void> _fetchLocation() async {
     try {
-      print(_initalPosition);
       await widget.locationNotifier.trackUser(widget.userNotifier.user.id);
 
       final location = await widget.locationNotifier.getCurrentLocation();
@@ -134,47 +146,94 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     }
   }
 
+  Future<void> _savePost(String specie, CameraResponse cameraResponse) async {
+    try {
+      widget.notificationsUtils.showInfoNotification(
+        widget.localizedString.getLocalizedString('map-screen.start-saving'),
+      );
+      await widget.postNotifier.savePost(
+        file: cameraResponse.file,
+        organizationId: widget.organizationNotifier?.organization?.id,
+        userId: widget.userNotifier?.user?.id,
+        specie: specie,
+      );
+      widget.notificationsUtils.showSuccessNotification(
+        widget.localizedString.getLocalizedString('map-screen.post-success'),
+      );
+    } on ServerFailure catch (failure) {
+      widget.notificationsUtils.showErrorNotification(failure.message);
+    } on LocalFailure catch (failure) {
+      widget.notificationsUtils.showErrorNotification(failure.message);
+    } on LocationFailure catch (failure) {
+      widget.notificationsUtils.showErrorNotification(failure.message);
+    }
+  }
+
+  Future<void> _takePicture(BuildContext context) async {
+    final failureOrCameraResp = await widget.camera.takePicture(isTemp: false);
+
+    failureOrCameraResp.fold(
+      (failure) => widget.notificationsUtils.showErrorNotification(
+        widget.localizedString.getLocalizedString('generic-exception'),
+      ),
+      (cameraResp) => showDialog(
+        context: context,
+        builder: (ctx) => SavePostDialog(
+          ctx: ctx,
+          cameraResponse: cameraResp,
+          appTheme: widget.appTheme,
+          localizedString: widget.localizedString,
+          onSave: (name) {
+            widget.appNavigator.pop();
+            _savePost(name, cameraResp);
+          },
+          onCancel: widget.appNavigator.pop,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ScreenWidget(
-      body: FutureBuilder(
-        future: _fetchLocation(),
-        builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+    return FutureBuilder(
+      future: _fetchLocation(),
+      builder: (ctx, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-          if (snapshot.data is LocationFailure) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      widget.localizedString.getLocalizedString(
-                        'map-screen.location-permission-title',
-                      ),
-                      style: Theme.of(context).textTheme.headline5,
-                      textAlign: TextAlign.center,
+        if (snapshot.data is LocationFailure) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.localizedString.getLocalizedString(
+                      'map-screen.location-permission-title',
                     ),
-                    SizedBox(height: 8),
-                    RaisedButton(
-                      onPressed: () => _askPermission(context),
-                      child: Text(widget.localizedString.getLocalizedString(
-                        'map-screen.location-permission-button',
-                      )),
-                    )
-                  ],
-                ),
+                    style: Theme.of(context).textTheme.headline5,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 8),
+                  RaisedButton(
+                    onPressed: () => _askPermission(context),
+                    child: Text(widget.localizedString.getLocalizedString(
+                      'map-screen.location-permission-button',
+                    )),
+                  )
+                ],
               ),
-            );
-          }
+            ),
+          );
+        }
 
-          return Consumer<LocationNotifierImpl>(
+        return ScreenWidget(
+          body: Consumer<LocationNotifierImpl>(
             builder: (ctx, state, child) {
               _updateMapPosition(state.currentLocation);
 
@@ -185,17 +244,18 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
               onMapCreated: _handleMapCreation,
               myLocationEnabled: true,
             ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'mapPhotoActionButton',
-        onPressed: () {
-          // TODO take picture of tree with name
-        },
-        child: Icon(Icons.add_a_photo_outlined),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          ),
+          floatingActionButton: snapshot.data is LocationFailure
+              ? Container()
+              : FloatingActionButton(
+                  heroTag: 'mapPhotoActionButton',
+                  onPressed: () => _takePicture(context),
+                  child: Icon(Icons.add_a_photo_outlined),
+                ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+        );
+      },
     );
   }
 }

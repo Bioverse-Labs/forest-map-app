@@ -9,6 +9,7 @@ import 'features/auth/presentation/notifiers/auth_notifier.dart';
 import 'features/auth/presentation/screens/sign_in_screen.dart';
 import 'features/auth/presentation/screens/sign_up_screen.dart';
 import 'features/organization/presentation/notifiers/organizations_notifier.dart';
+import 'features/post/presentation/notifier/post_notifier.dart';
 import 'features/tracking/presentation/notifiers/location_notifier.dart';
 import 'features/user/presentation/notifiers/user_notifier.dart';
 
@@ -63,9 +64,11 @@ Map<String, Widget Function(BuildContext)> routes = {
         userNotifier: Provider.of<UserNotifierImpl>(ctx, listen: false),
         authNotifier: Provider.of<AuthNotifierImpl>(ctx, listen: false),
         locationNotifier: Provider.of<LocationNotifierImpl>(ctx, listen: false),
+        postNotifier: Provider.of<PostNotifierImpl>(ctx, listen: false),
         appNavigator: GetIt.I(),
         notificationsUtils: GetIt.I(),
         camera: GetIt.I(),
         appSettings: GetIt.I(),
+        appTheme: GetIt.I(),
       ),
 };

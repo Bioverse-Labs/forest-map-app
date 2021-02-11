@@ -60,7 +60,6 @@ class SignupScreen extends StatelessWidget {
         );
         appNavigator.pushAndReplace('/home');
       } on ServerFailure catch (failure) {
-        print(failure.stackTrace);
         notificationsUtils.showErrorNotification(failure.message);
       } on ServerException catch (exception) {
         notificationsUtils.showErrorNotification(exception.message);

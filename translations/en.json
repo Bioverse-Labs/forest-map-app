@@ -56,7 +56,12 @@
     "alert-cancel-button": "Cancel",
     "alert-confirm-button": "Allow Location",
     "location-permission-title": "Please allow location access or enable device GPS",
-    "location-permission-button": "Allow/Enable Location"
+    "location-permission-button": "Allow/Enable Location",
+    "input-label": "Specie/Nome",
+    "input-placeholder": "Castanheira",
+    "save-button": "Save",
+    "post-success": "Data saved!",
+    "start-saving": "Data started to being saved"
   },
   "organization-screen": {
     "title": "Organizations",

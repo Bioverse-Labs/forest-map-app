@@ -245,8 +245,8 @@ class AppConfig {
 
     GetIt.I.registerLazySingleton<PostRemoteDataSource>(
       () => PostRemoteDataSourceImpl(
-        firebaseStorageAdapter: GetIt.I(),
-        firestoreAdapter: GetIt.I(),
+        firebaseStorageAdapter: GetIt.I<FirebaseStorageAdapterImpl>(),
+        firestoreAdapter: GetIt.I<FirestoreAdapterImpl>(),
         localizedString: GetIt.I(),
         uuidGenerator: GetIt.I(),
       ),

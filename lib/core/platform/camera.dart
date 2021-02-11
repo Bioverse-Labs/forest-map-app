@@ -65,7 +65,7 @@ class CameraImpl implements Camera {
       final size = imageUtils.getImageSize(image);
 
       if (!isTemp) {
-        final appDir = await getApplicationDocumentsDirectory();
+        final appDir = (await getApplicationDocumentsDirectory()).path;
         final date = DateTime.now().toIso8601String();
         file = await file.copy('$appDir/$date.jpeg');
       }
@@ -79,6 +79,7 @@ class CameraImpl implements Camera {
         source: source,
       ));
     } catch (_) {
+      print(_);
       return Left(CameraFailure());
     }
   }
