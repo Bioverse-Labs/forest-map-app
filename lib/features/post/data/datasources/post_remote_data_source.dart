@@ -8,7 +8,6 @@ abstract class PostRemoteDataSource {
     String userId,
     String specie,
     File file,
-    DateTime timestamp,
     Location location,
   });
 }

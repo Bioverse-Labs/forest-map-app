@@ -9,7 +9,6 @@ abstract class PostLocalDataSource {
     String userId,
     String specie,
     File file,
-    DateTime timestamp,
     Location location,
   });
 

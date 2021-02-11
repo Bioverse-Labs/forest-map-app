@@ -8,7 +8,6 @@ import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/platform/location.dart';
 import '../../../../core/platform/network_info.dart';
-import '../../../organization/domain/entities/organization.dart';
 import '../../domain/entities/post.dart';
 import '../../domain/repositories/post_repository.dart';
 import '../datasources/post_local_data_source.dart';
@@ -31,7 +30,6 @@ class PostRepositoryImpl implements PostRepository {
   Future<Either<Failure, void>> savePost({
     @required String organizationId,
     @required String userId,
-    @required Organization organization,
     @required File file,
     @required String specie,
   }) async {
@@ -45,6 +43,7 @@ class PostRepositoryImpl implements PostRepository {
           organizationId: organizationId,
           file: file,
           location: location,
+          specie: specie,
         ));
       }
 
@@ -53,6 +52,7 @@ class PostRepositoryImpl implements PostRepository {
         organizationId: organizationId,
         file: file,
         location: location,
+        specie: specie,
       ));
     } on LocationException catch (exception) {
       return Left(LocationFailure(
@@ -88,7 +88,7 @@ class PostRepositoryImpl implements PostRepository {
 
       for (var post in posts) {
         if (!await networkInfo.isConnected) {
-          streamController.sink.addError(Left(NoInternetFailure()));
+          streamController.sink.add(Left(NoInternetFailure()));
           break;
         }
 
@@ -98,20 +98,12 @@ class PostRepositoryImpl implements PostRepository {
           file: File(post.imageUrl),
           location: post.location,
           specie: post.specie,
-          timestamp: post.timestamp,
         );
 
         streamController.sink.add(Right(post));
       }
 
       return Right(streamController);
-    } on LocationException catch (exception) {
-      return Left(LocationFailure(
-        exception.message,
-        exception.hasPermission,
-        exception.isGpsEnabled,
-        stackTrace: exception.stackTrace,
-      ));
     } on LocalException catch (exception) {
       return Left(LocalFailure(
         exception.message,
