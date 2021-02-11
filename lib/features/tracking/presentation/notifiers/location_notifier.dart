@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:forestMapApp/core/usecases/usecase.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/usecases/usecase.dart';
 import '../../domain/entities/location.dart';
 import '../../domain/usecases/get_current_location.dart';
 import '../../domain/usecases/track_user.dart';

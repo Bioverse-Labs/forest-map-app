@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/features/tracking/presentation/notifiers/location_notifier.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +9,7 @@ import 'features/auth/presentation/notifiers/auth_notifier.dart';
 import 'features/auth/presentation/screens/sign_in_screen.dart';
 import 'features/auth/presentation/screens/sign_up_screen.dart';
 import 'features/organization/presentation/notifiers/organizations_notifier.dart';
+import 'features/tracking/presentation/notifiers/location_notifier.dart';
 import 'features/user/presentation/notifiers/user_notifier.dart';
 
 Map<String, Widget Function(BuildContext)> routes = {

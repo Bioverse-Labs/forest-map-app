@@ -6,8 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:forestMapApp/features/post/data/hive/post.dart';
-import 'package:forestMapApp/features/tracking/data/hive/location.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
@@ -37,7 +35,16 @@ import '../../features/organization/domain/usecases/save_organization_locally.da
 import '../../features/organization/domain/usecases/update_member.dart';
 import '../../features/organization/domain/usecases/update_organization.dart';
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
+import '../../features/post/data/datasources/post_local_data_source.dart';
+import '../../features/post/data/datasources/post_remote_data_source.dart';
+import '../../features/post/data/hive/post.dart';
+import '../../features/post/data/repositories/post_repository_impl.dart';
+import '../../features/post/domain/repositories/post_repository.dart';
+import '../../features/post/domain/usecases/save_post.dart';
+import '../../features/post/domain/usecases/upload_cached_post.dart';
+import '../../features/post/presentation/notifier/post_notifier.dart';
 import '../../features/tracking/data/datasources/location_data_source.dart';
+import '../../features/tracking/data/hive/location.dart';
 import '../../features/tracking/data/repositories/location_repository_impl.dart';
 import '../../features/tracking/domain/repositories/location_repository.dart';
 import '../../features/tracking/domain/usecases/get_current_location.dart';
@@ -182,6 +189,7 @@ class AppConfig {
   static Future<void> disposeHiveAdapters() async {
     await GetIt.I<HiveAdapter<OrganizationHive>>().close();
     await GetIt.I<HiveAdapter<UserHive>>().close();
+    await GetIt.I<HiveAdapter<PostHive>>().close();
   }
 
   // * DATA LAYER SINGLETON'S //
@@ -234,6 +242,22 @@ class AppConfig {
         userHive: GetIt.I(),
       ),
     );
+
+    GetIt.I.registerLazySingleton<PostRemoteDataSource>(
+      () => PostRemoteDataSourceImpl(
+        firebaseStorageAdapter: GetIt.I(),
+        firestoreAdapter: GetIt.I(),
+        localizedString: GetIt.I(),
+        uuidGenerator: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<PostLocalDataSource>(
+      () => PostLocalDataSourceImpl(
+        hiveAdapter: GetIt.I(),
+        uuidGenerator: GetIt.I(),
+      ),
+    );
   }
 
   static void registerRepositories() {
@@ -268,6 +292,15 @@ class AppConfig {
         remoteDataSource: GetIt.I(),
         localDataSource: GetIt.I(),
         networkInfo: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<PostRepository>(
+      () => PostRepositoryImpl(
+        remoteDataSource: GetIt.I(),
+        localDataSource: GetIt.I(),
+        networkInfo: GetIt.I(),
+        locationUtils: GetIt.I(),
       ),
     );
   }
@@ -364,6 +397,18 @@ class AppConfig {
         GetIt.I(),
       ),
     );
+
+    GetIt.I.registerLazySingleton<SavePost>(
+      () => SavePost(
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<UploadCachedPost>(
+      () => UploadCachedPost(
+        GetIt.I(),
+      ),
+    );
   }
 
   // * PRESENTATION LAYER SINGLETON'S //
@@ -406,6 +451,13 @@ class AppConfig {
 
     GetIt.I.registerFactory<HomeScreenNotifierImpl>(
       () => HomeScreenNotifierImpl(),
+    );
+
+    GetIt.I.registerFactory<PostNotifierImpl>(
+      () => PostNotifierImpl(
+        savePostUseCase: GetIt.I(),
+        uploadCachedPostUseCase: GetIt.I(),
+      ),
     );
   }
 }
