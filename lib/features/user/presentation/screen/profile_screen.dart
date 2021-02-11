@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/navigation/app_navigator.dart';
+import '../../../../core/notifiers/home_screen_notifier.dart';
 import '../../../../core/platform/camera.dart';
 import '../../../../core/util/localized_string.dart';
 import '../../../../core/util/notifications.dart';
@@ -14,6 +15,7 @@ import '../widgets/user_info.dart';
 class ProfileScreen extends StatelessWidget {
   final AuthNotifierImpl authNotifier;
   final UserNotifierImpl userNotifier;
+  final HomeScreenNotifierImpl homeScreenNotifierImpl;
   final AppNavigator appNavigator;
   final NotificationsUtils notificationsUtils;
   final LocalizedString localizedString;
@@ -22,6 +24,7 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({
     Key key,
     @required this.authNotifier,
+    @required this.homeScreenNotifierImpl,
     @required this.appNavigator,
     @required this.notificationsUtils,
     @required this.userNotifier,
@@ -33,6 +36,7 @@ class ProfileScreen extends StatelessWidget {
     try {
       authNotifier.signOut();
       appNavigator.pushAndReplace('/');
+      homeScreenNotifierImpl.setActiveTab(0);
     } on ServerFailure catch (failure) {
       notificationsUtils.showErrorNotification(failure.message);
     } on LocalFailure catch (failure) {

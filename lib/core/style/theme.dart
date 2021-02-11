@@ -20,8 +20,10 @@ class AppTheme {
   ThemeData get getMainTheme => mainTheme;
   ThemeData get getDarkTheme => darkTheme;
 
-  InputDecoration inputDecoration(String label) => InputDecoration(
+  InputDecoration inputDecoration(String label, {String placeholder}) =>
+      InputDecoration(
         labelText: label,
         border: UnderlineInputBorder(),
+        hintText: placeholder,
       );
 }

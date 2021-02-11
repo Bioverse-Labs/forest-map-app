@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/features/organization/presentation/notifiers/organizations_notifier.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/errors/exceptions.dart';
@@ -10,6 +9,7 @@ import '../../../../core/util/localized_string.dart';
 import '../../../../core/util/notifications.dart';
 import '../../../../core/util/validations.dart';
 import '../../../../core/widgets/screen.dart';
+import '../../../organization/presentation/notifiers/organizations_notifier.dart';
 import '../../../user/presentation/notifiers/user_notifier.dart';
 import '../notifiers/auth_notifier.dart';
 
@@ -60,7 +60,6 @@ class SignupScreen extends StatelessWidget {
         );
         appNavigator.pushAndReplace('/home');
       } on ServerFailure catch (failure) {
-        print(failure.stackTrace);
         notificationsUtils.showErrorNotification(failure.message);
       } on ServerException catch (exception) {
         notificationsUtils.showErrorNotification(exception.message);

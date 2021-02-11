@@ -28,6 +28,10 @@ On the first release, Forest Map TM will allow local cooperatives to use the abu
 
 # Prepare your environment
 
+# Tests
+ ## Coverage Report
+     https://bioverse-labs.github.io/forest-map-app/
+
 # Examples
 
 # TODO-list

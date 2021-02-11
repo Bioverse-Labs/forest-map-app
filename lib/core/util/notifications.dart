@@ -26,7 +26,19 @@ class NotificationsUtils {
     BotToast.showCustomNotification(
       duration: duration,
       toastBuilder: (cancel) {
-        return NotificationWidget.error(message, cancel);
+        return NotificationWidget.success(message, cancel);
+      },
+    );
+  }
+
+  void showInfoNotification(
+    String message, {
+    Duration duration = const Duration(seconds: 3),
+  }) {
+    BotToast.showCustomNotification(
+      duration: duration,
+      toastBuilder: (cancel) {
+        return NotificationWidget.info(message, cancel);
       },
     );
   }

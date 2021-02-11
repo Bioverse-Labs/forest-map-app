@@ -6,7 +6,7 @@ abstract class HomeScreenNotifier {
 
 class HomeScreenNotifierImpl extends ChangeNotifier
     implements HomeScreenNotifier {
-  int _index = 1;
+  int _index = 0;
 
   int get activeTabIndex => _index;
 

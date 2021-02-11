@@ -72,7 +72,12 @@ class CodegenLoader extends AssetLoader{
     "alert-cancel-button": "Cancel",
     "alert-confirm-button": "Allow Location",
     "location-permission-title": "Please allow location access or enable device GPS",
-    "location-permission-button": "Allow/Enable Location"
+    "location-permission-button": "Allow/Enable Location",
+    "input-label": "Specie/Nome",
+    "input-placeholder": "Castanheira",
+    "save-button": "Save",
+    "post-success": "Data saved!",
+    "start-saving": "Data started to being saved"
   },
   "organization-screen": {
     "title": "Organizations",
@@ -155,7 +160,12 @@ static const Map<String,dynamic> pt_BR = {
     "alert-cancel-button": "Cancelar",
     "alert-confirm-button": "Permitir Localização",
     "location-permission-title": "Por Favor permita o acesso ao GPS do aparelho",
-    "location-permission-button": "Permitir/Habilitar Localização"
+    "location-permission-button": "Permitir/Habilitar Localização",
+    "input-label": "Especie/Nome",
+    "input-placeholder": "Castanheira",
+    "save-button": "Salvar",
+    "post-success": "Dado salvo!",
+    "start-saving": "Dado começou a ser salvo"
   },
   "organization-screen": {
     "title": "Organizações",

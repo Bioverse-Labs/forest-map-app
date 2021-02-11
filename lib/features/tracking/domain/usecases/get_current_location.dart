@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 
-import '../repositories/location_repository.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entities/location.dart';
+import '../repositories/location_repository.dart';
 
 class GetCurrentLocation implements UseCase<Location, NoParams> {
   final LocationRepository repository;

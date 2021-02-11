@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
-import '../../../organization/domain/entities/organization.dart';
 import '../repositories/post_repository.dart';
 
 class SavePostParams extends Equatable {

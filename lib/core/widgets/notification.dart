@@ -32,7 +32,17 @@ class NotificationWidget extends StatelessWidget {
       onCancel: onCancel,
       textColor: Colors.white,
       backgroundColor: Colors.green,
-      icon: Icons.error_outline,
+      icon: Icons.check,
+    );
+  }
+
+  factory NotificationWidget.info(String message, Function onCancel) {
+    return NotificationWidget(
+      message: message,
+      onCancel: onCancel,
+      textColor: Colors.black,
+      backgroundColor: Colors.white,
+      icon: Icons.info_outline,
     );
   }
 
