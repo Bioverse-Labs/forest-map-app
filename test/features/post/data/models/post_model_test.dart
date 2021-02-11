@@ -91,4 +91,15 @@ void main() {
       expect(adapter, isInstanceOf<PostHive>());
     },
   );
+
+  group('fromHive', () {
+    test(
+      'should return [PostModel] if [PostHive] is valid',
+      () async {
+        final model = PostModel.fromHive(tPostModel.toHiveAdapter());
+
+        expect(model, isInstanceOf<PostModel>());
+      },
+    );
+  });
 }

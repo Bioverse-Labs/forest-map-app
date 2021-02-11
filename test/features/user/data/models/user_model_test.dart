@@ -17,6 +17,12 @@ void main() {
     avatarUrl: avatarUrl,
   );
 
+  final tUserHive = UserHive()
+    ..id = userId
+    ..name = name
+    ..email = email
+    ..avatarUrl = avatarUrl;
+
   test('should be subclass of User entity', () async {
     expect(tUserModel, isA<User>());
   });
@@ -85,6 +91,15 @@ void main() {
       final adapter = tUserModel.toHiveAdapter();
 
       expect(adapter, isInstanceOf<UserHive>());
+    },
+  );
+
+  test(
+    'should return [UserModel] if [UserHive] is valid',
+    () async {
+      final model = UserModel.fromHive(tUserHive);
+
+      expect(model, isInstanceOf<UserModel>());
     },
   );
 }
