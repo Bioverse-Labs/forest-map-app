@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:forestMapApp/features/post/data/hive/post.dart';
+import 'package:forestMapApp/features/tracking/data/hive/location.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
@@ -81,6 +83,8 @@ class AppConfig {
     Hive.registerAdapter(MemberHiveAdapter());
     Hive.registerAdapter(OrganizationHiveAdapter());
     Hive.registerAdapter(UserHiveAdapter());
+    Hive.registerAdapter(LocationHiveAdapter());
+    Hive.registerAdapter(PostHiveAdapter());
   }
 
   static void registerUtils() {
@@ -163,11 +167,16 @@ class AppConfig {
     GetIt.I.registerLazySingleton<HiveAdapter<UserHive>>(
       () => HiveAdapter<UserHive>('user', Hive),
     );
+
+    GetIt.I.registerLazySingleton<HiveAdapter<PostHive>>(
+      () => HiveAdapter<PostHive>('posts', Hive),
+    );
   }
 
   static Future<void> initHiveAdapters() async {
     await GetIt.I<HiveAdapter<OrganizationHive>>().init();
     await GetIt.I<HiveAdapter<UserHive>>().init();
+    await GetIt.I<HiveAdapter<PostHive>>().init();
   }
 
   static Future<void> disposeHiveAdapters() async {
