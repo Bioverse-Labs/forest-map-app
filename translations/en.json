@@ -49,5 +49,35 @@
   "preview-screen": {
     "title": "Preview",
     "submit-button": "Save"
+  },
+  "map-screen": {
+    "alert-title": "Atention!",
+    "alert-description": "To use this feature, wee need access to device location",
+    "alert-cancel-button": "Cancel",
+    "alert-confirm-button": "Allow Location",
+    "location-permission-title": "Please allow location access or enable device GPS",
+    "location-permission-button": "Allow/Enable Location"
+  },
+  "organization-screen": {
+    "title": "Organizations",
+    "empty-state-title": "Currently you are not assined to any organization... :/",
+    "empty-state-button": "New organization",
+    "members-counter": "Members",
+    "invite-member-button": "Invite Members",
+    "invite-member-button-tooltip": "Generate link to invite an User",
+    "edit-button": "Edit data",
+    "data-section-title": "Tree Locations Data"
+  },
+  "edit-organization-screen": {
+    "title": "Edit Organization"
+  },
+  "profile-screen": {
+    "organization-counter": "Organizations",
+    "logout-button": "Sign Out"
+  },
+  "home-screen": {
+    "map-tab": "Map",
+    "organization-tab": "Organizations",
+    "profile-tab": "Profile"
   }
 }

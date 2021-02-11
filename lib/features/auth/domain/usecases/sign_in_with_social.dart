@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/enums/social_login_types.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
-import '../entities/user.dart';
+import '../../../user/domain/entities/user.dart';
 import '../repositories/auth_repository.dart';
 
 class SignInWithSocial implements UseCase<User, SignInWithSocialParams> {

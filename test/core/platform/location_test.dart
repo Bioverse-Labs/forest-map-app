@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:faker/faker.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:forestMapApp/core/errors/exceptions.dart';
 import 'package:forestMapApp/core/platform/location.dart';
@@ -55,6 +56,21 @@ void main() {
         verifyZeroInteractions(mockLocationSource);
       },
     );
+
+    test(
+      'should throw [LocalException] location fails',
+      () async {
+        when(mockLocationSource.getLastKnowPosition()).thenThrow(
+          PlatformException(code: faker.randomGenerator.string(20)),
+        );
+
+        final call = locationUtilsImpl.getLastKnowPosition;
+
+        expect(() => call(true), throwsA(isInstanceOf<LocalException>()));
+        verify(mockLocationSource.getLastKnowPosition());
+        verifyNoMoreInteractions(mockLocationSource);
+      },
+    );
   });
 
   group('getCurrentPosition', () {
@@ -78,6 +94,21 @@ void main() {
         final call = locationUtilsImpl.getCurrentPosition;
         expect(() => call(false), throwsA(isInstanceOf<LocalException>()));
         verifyZeroInteractions(mockLocationSource);
+      },
+    );
+
+    test(
+      'should throw [LocalException] location fails',
+      () async {
+        when(mockLocationSource.getCurrentPosition()).thenThrow(
+          PlatformException(code: faker.randomGenerator.string(20)),
+        );
+
+        final call = locationUtilsImpl.getCurrentPosition;
+
+        expect(() => call(true), throwsA(isInstanceOf<LocalException>()));
+        verify(mockLocationSource.getCurrentPosition());
+        verifyNoMoreInteractions(mockLocationSource);
       },
     );
   });
@@ -107,6 +138,21 @@ void main() {
         verifyZeroInteractions(mockLocationSource);
       },
     );
+
+    test(
+      'should throw [LocalException] location fails',
+      () async {
+        when(mockLocationSource.getPositionStream()).thenThrow(
+          PlatformException(code: faker.randomGenerator.string(20)),
+        );
+
+        final call = locationUtilsImpl.getLocationStream;
+
+        expect(() => call(true), throwsA(isInstanceOf<LocalException>()));
+        verify(mockLocationSource.getPositionStream());
+        verifyNoMoreInteractions(mockLocationSource);
+      },
+    );
   });
 
   group('checkLocationPermission', () {
@@ -117,6 +163,23 @@ void main() {
             .thenAnswer((_) async => true);
         when(mockLocationSource.getPermission())
             .thenAnswer((_) async => LocationPermission.always);
+
+        final result = await locationUtilsImpl.checkLocationPermission();
+
+        expect(result, true);
+        verify(mockLocationSource.isLocationServiceEnabled);
+        verify(mockLocationSource.getPermission());
+        verifyNoMoreInteractions(mockLocationSource);
+      },
+    );
+
+    test(
+      'should return [true] if permission is granted',
+      () async {
+        when(mockLocationSource.isLocationServiceEnabled)
+            .thenAnswer((_) async => true);
+        when(mockLocationSource.getPermission())
+            .thenAnswer((_) async => LocationPermission.whileInUse);
 
         final result = await locationUtilsImpl.checkLocationPermission();
 
@@ -178,6 +241,26 @@ void main() {
         verify(mockLocationSource.isLocationServiceEnabled);
         verify(mockLocationSource.getPermission());
         verifyNoMoreInteractions(mockLocationSource);
+      },
+    );
+
+    test(
+      'should throw [LocalException] location fails',
+      () async {
+        when(mockLocationSource.isLocationServiceEnabled)
+            .thenAnswer((_) async => true);
+        when(mockLocationSource.getPermission()).thenThrow(
+          PlatformException(code: faker.randomGenerator.string(20)),
+        );
+
+        try {
+          await locationUtilsImpl.checkLocationPermission();
+        } catch (error) {
+          expect(error, isInstanceOf<LocalException>());
+        }
+
+        verify(mockLocationSource.isLocationServiceEnabled);
+        verify(mockLocationSource.getPermission());
       },
     );
   });

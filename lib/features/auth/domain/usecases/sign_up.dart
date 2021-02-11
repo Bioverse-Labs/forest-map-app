@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
-import '../entities/user.dart';
+import '../../../user/domain/entities/user.dart';
 import '../repositories/auth_repository.dart';
 
 class SignUp implements UseCase<User, SignUpParams> {

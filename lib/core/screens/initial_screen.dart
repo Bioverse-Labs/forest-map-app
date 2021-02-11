@@ -1,25 +1,50 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/features/auth/data/models/user_model.dart';
-import 'package:forestMapApp/features/auth/presentation/notifiers/auth_notifier.dart';
-import 'package:provider/provider.dart';
 
+import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
+import '../../features/user/presentation/notifiers/user_notifier.dart';
 import '../adapters/firebase_auth_adapter.dart';
 import '../adapters/firestore_adapter.dart';
 import '../navigation/app_navigator.dart';
+import '../platform/network_info.dart';
 import 'splash_screen.dart';
 
 class InitialScreen extends StatelessWidget {
   final FirebaseAuthAdapterImpl firebaseAuthAdapterImpl;
   final FirestoreAdapterImpl firestoreAdapterImpl;
   final AppNavigator appNavigator;
+  final UserNotifierImpl userNotifier;
+  final OrganizationNotifierImpl organizationNotifier;
+  final NetworkInfo networkInfo;
 
   InitialScreen({
     Key key,
     @required this.firebaseAuthAdapterImpl,
     @required this.firestoreAdapterImpl,
     @required this.appNavigator,
+    @required this.userNotifier,
+    @required this.organizationNotifier,
+    @required this.networkInfo,
   }) : super(key: key);
+
+  Future<void> _handleStateChange(BuildContext context, User user) async {
+    if (user == null) {
+      appNavigator.pushAndReplace('/signIn');
+      return;
+    }
+
+    final isConnected = await networkInfo.isConnected;
+
+    await userNotifier.getUser(
+      id: isConnected ? user?.uid : 'currUser',
+      searchLocally: !isConnected,
+    );
+    await organizationNotifier.getOrganization(
+      id: 'currOrg',
+      searchLocally: true,
+    );
+    appNavigator.pushAndReplace('/home');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +54,7 @@ class InitialScreen extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.active) {
           Future.delayed(
             const Duration(milliseconds: 300),
-            () async {
-              if (snapshot.data == null) {
-                appNavigator.pushAndReplace('/signIn');
-              } else {
-                final doc = await firestoreAdapterImpl
-                    .getDocument('users/${snapshot.data.uid}');
-                final user = UserModel.fromMap(doc.data());
-
-                Provider.of<AuthNotifierImpl>(context, listen: false)
-                    .setUser(user);
-                appNavigator.pushAndReplace('/home');
-              }
-            },
+            () => _handleStateChange(context, snapshot.data),
           );
         }
 

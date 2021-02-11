@@ -59,4 +59,25 @@ class LocationRepositoryImpl implements LocationRepository {
       ));
     }
   }
+
+  @override
+  Future<Either<Failure, Location>> getCurrentLocation() async {
+    try {
+      return Right(await dataSource.getCurrentLocation());
+    } on LocationException catch (error) {
+      return Left(LocationFailure(
+        error.message,
+        error.hasPermission,
+        error.isGpsEnabled,
+        stackTrace: error.stackTrace,
+      ));
+    } on LocalException catch (error) {
+      return Left(LocalFailure(
+        error.message,
+        error.code,
+        error.origin,
+        stackTrace: error.stackTrace,
+      ));
+    }
+  }
 }

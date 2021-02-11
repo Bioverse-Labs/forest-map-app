@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/features/organization/presentation/notifiers/organizations_notifier.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/errors/exceptions.dart';
@@ -8,12 +9,15 @@ import '../../../../core/style/theme.dart';
 import '../../../../core/util/localized_string.dart';
 import '../../../../core/util/notifications.dart';
 import '../../../../core/util/validations.dart';
-import '../../../../core/widgets/loading_wall.dart';
+import '../../../../core/widgets/screen.dart';
+import '../../../user/presentation/notifiers/user_notifier.dart';
 import '../notifiers/auth_notifier.dart';
 
 class SignupScreen extends StatelessWidget {
   final AuthNotifierImpl authNotifierImpl;
-  final LocalizedStringImpl localizedString;
+  final UserNotifierImpl userNotifierImpl;
+  final OrganizationNotifierImpl organizationNotifier;
+  final LocalizedString localizedString;
   final ValidationUtils validationUtils;
   final AppTheme appTheme;
   final NotificationsUtils notificationsUtils;
@@ -26,6 +30,8 @@ class SignupScreen extends StatelessWidget {
   SignupScreen({
     Key key,
     @required this.authNotifierImpl,
+    @required this.userNotifierImpl,
+    @required this.organizationNotifier,
     @required this.localizedString,
     @required this.validationUtils,
     @required this.appTheme,
@@ -47,6 +53,11 @@ class SignupScreen extends StatelessWidget {
           _emailController.text,
           _passwordController.text,
         );
+        await userNotifierImpl.getUser(id: 'currUser', searchLocally: true);
+        await organizationNotifier.getOrganization(
+          id: 'currOrg',
+          searchLocally: true,
+        );
         appNavigator.pushAndReplace('/home');
       } on ServerFailure catch (failure) {
         print(failure.stackTrace);
@@ -59,91 +70,78 @@ class SignupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScreenWidget(
       appBar: AppBar(title: Text(_getString('signup-screen.title'))),
-      body: Stack(
-        children: [
-          Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-              child: Form(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: Column(
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+          child: Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  decoration: _getInputDecoration('labels.name'),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return _getString('input-validations.required');
+                    }
+
+                    return null;
+                  },
+                ),
+                SizedBox(height: 10),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: _getInputDecoration('labels.email'),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return _getString('input-validations.required');
+                    }
+
+                    if (!validationUtils.validateEmail(value)) {
+                      return _getString('input-validations.invalid-email');
+                    }
+
+                    return null;
+                  },
+                ),
+                SizedBox(height: 10),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: _getInputDecoration('labels.password'),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return _getString('input-validations.required');
+                    }
+
+                    if (value.length < 8) {
+                      return _getString('input-validations.invalid-password');
+                    }
+
+                    return null;
+                  },
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: _getInputDecoration('labels.name'),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return _getString('input-validations.required');
-                        }
-
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: _getInputDecoration('labels.email'),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return _getString('input-validations.required');
-                        }
-
-                        if (!validationUtils.validateEmail(value)) {
-                          return _getString('input-validations.invalid-email');
-                        }
-
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      controller: _passwordController,
-                      decoration: _getInputDecoration('labels.password'),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return _getString('input-validations.required');
-                        }
-
-                        if (value.length < 8) {
-                          return _getString(
-                              'input-validations.invalid-password');
-                        }
-
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        RaisedButton(
-                          onPressed: _signUp,
-                          child: Text(
-                            _getString('signup-screen.submit-button'),
-                          ),
-                        ),
-                      ],
+                    RaisedButton(
+                      onPressed: _signUp,
+                      child: Text(
+                        _getString('signup-screen.submit-button'),
+                      ),
                     ),
                   ],
                 ),
-              ),
+              ],
             ),
           ),
-          Consumer<AuthNotifierImpl>(
-            builder: (ctx, state, _) {
-              if (state.isLoading) {
-                return LoadingWall();
-              }
-
-              return Container();
-            },
-          ),
-        ],
+        ),
       ),
+      isLoading: Provider.of<AuthNotifierImpl>(context).isLoading,
     );
   }
 }

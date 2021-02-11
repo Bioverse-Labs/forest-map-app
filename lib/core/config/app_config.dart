@@ -1,28 +1,62 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../features/auth/data/datasources/auth_remote_data_source.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
+import '../../features/auth/domain/repositories/auth_repository.dart';
 import '../../features/auth/domain/usecases/sign_in_with_email_and_password.dart';
 import '../../features/auth/domain/usecases/sign_in_with_social.dart';
+import '../../features/auth/domain/usecases/sign_out.dart';
 import '../../features/auth/domain/usecases/sign_up.dart';
 import '../../features/auth/presentation/notifiers/auth_notifier.dart';
+import '../../features/organization/data/datasources/organization_local_data_source.dart';
+import '../../features/organization/data/datasources/organization_remote_data_source.dart';
+import '../../features/organization/data/hive/member.dart';
+import '../../features/organization/data/hive/organization.dart';
+import '../../features/organization/data/repositories/organization_repository_impl.dart';
+import '../../features/organization/domain/repositories/organization_repository.dart';
+import '../../features/organization/domain/usecases/create_organization.dart';
+import '../../features/organization/domain/usecases/delete_organization.dart';
+import '../../features/organization/domain/usecases/get_organization.dart';
+import '../../features/organization/domain/usecases/remove_member.dart';
+import '../../features/organization/domain/usecases/save_organization_locally.dart';
+import '../../features/organization/domain/usecases/update_member.dart';
+import '../../features/organization/domain/usecases/update_organization.dart';
+import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/tracking/data/datasources/location_data_source.dart';
 import '../../features/tracking/data/repositories/location_repository_impl.dart';
+import '../../features/tracking/domain/repositories/location_repository.dart';
+import '../../features/tracking/domain/usecases/get_current_location.dart';
 import '../../features/tracking/domain/usecases/track_user.dart';
 import '../../features/tracking/presentation/notifiers/location_notifier.dart';
+import '../../features/user/data/datasource/user_local_data_source.dart';
+import '../../features/user/data/datasource/user_remote_data_source.dart';
+import '../../features/user/data/hive/user.dart';
+import '../../features/user/data/repository/user_repository_impl.dart';
+import '../../features/user/domain/repository/user_repository.dart';
+import '../../features/user/domain/usecases/get_user.dart';
+import '../../features/user/domain/usecases/update_user.dart';
+import '../../features/user/presentation/notifiers/user_notifier.dart';
 import '../adapters/firebase_auth_adapter.dart';
+import '../adapters/firebase_storage_adapter.dart';
 import '../adapters/firestore_adapter.dart';
+import '../adapters/hive_adapter.dart';
+import '../enums/organization_member_status.dart';
+import '../enums/organization_role_types.dart';
 import '../navigation/app_navigator.dart';
+import '../notifiers/home_screen_notifier.dart';
 import '../platform/camera.dart';
 import '../platform/location.dart';
 import '../platform/network_info.dart';
@@ -30,6 +64,7 @@ import '../style/theme.dart';
 import '../util/image.dart';
 import '../util/localized_string.dart';
 import '../util/notifications.dart';
+import '../util/uuid_generator.dart';
 import '../util/validations.dart';
 
 class AppConfig {
@@ -40,10 +75,16 @@ class AppConfig {
 
   static void registerHiveAdapters() {
     // * Register all hiver adapters
+
+    Hive.registerAdapter(OrganizationRoleTypeAdapter());
+    Hive.registerAdapter(OrganizationMemberStatusAdapter());
+    Hive.registerAdapter(MemberHiveAdapter());
+    Hive.registerAdapter(OrganizationHiveAdapter());
+    Hive.registerAdapter(UserHiveAdapter());
   }
 
   static void registerUtils() {
-    GetIt.I.registerLazySingleton<LocalizedStringImpl>(
+    GetIt.I.registerLazySingleton<LocalizedString>(
       () => LocalizedStringImpl(),
     );
     GetIt.I.registerLazySingleton<ImageUtilsImpl>(() => ImageUtilsImpl());
@@ -51,28 +92,33 @@ class AppConfig {
       () => NotificationsUtils(),
     );
     GetIt.I.registerLazySingleton<ValidationUtils>(() => ValidationUtils());
+    GetIt.I.registerLazySingleton<UUIDGenerator>(() => UUIDGenerator(Uuid()));
   }
 
   static void registerPlatformServices() {
-    GetIt.I.registerLazySingleton<CameraImpl>(
+    GetIt.I.registerLazySingleton<Camera>(
       () => CameraImpl(
         ImagePicker(),
-        GetIt.I<ImageUtils>(),
+        GetIt.I<ImageUtilsImpl>(),
       ),
     );
 
-    GetIt.I.registerLazySingleton<LocationUtilsImpl>(
+    GetIt.I.registerLazySingleton<LocationUtils>(
       () => LocationUtilsImpl(
-        GetIt.I<LocalizedStringImpl>(),
+        GetIt.I(),
         LocationSource(),
       ),
     );
 
-    GetIt.I.registerLazySingleton<NetworkInfoImpl>(
+    GetIt.I.registerLazySingleton<NetworkInfo>(
       () => NetworkInfoImpl(
         DataConnectionChecker(),
         Connectivity(),
       ),
+    );
+
+    GetIt.I.registerLazySingleton<AppSettings>(
+      () => AppSettings(),
     );
   }
 
@@ -105,6 +151,28 @@ class AppConfig {
         FirebaseFirestore.instance,
       ),
     );
+
+    GetIt.I.registerLazySingleton<FirebaseStorageAdapterImpl>(
+      () => FirebaseStorageAdapterImpl(FirebaseStorage.instance),
+    );
+
+    GetIt.I.registerLazySingleton<HiveAdapter<OrganizationHive>>(
+      () => HiveAdapter<OrganizationHive>('organization', Hive),
+    );
+
+    GetIt.I.registerLazySingleton<HiveAdapter<UserHive>>(
+      () => HiveAdapter<UserHive>('user', Hive),
+    );
+  }
+
+  static Future<void> initHiveAdapters() async {
+    await GetIt.I<HiveAdapter<OrganizationHive>>().init();
+    await GetIt.I<HiveAdapter<UserHive>>().init();
+  }
+
+  static Future<void> disposeHiveAdapters() async {
+    await GetIt.I<HiveAdapter<OrganizationHive>>().close();
+    await GetIt.I<HiveAdapter<UserHive>>().close();
   }
 
   // * DATA LAYER SINGLETON'S //
@@ -114,9 +182,11 @@ class AppConfig {
 
     GetIt.I.registerLazySingleton<AuthRemoteDataSourceImpl>(
       () => AuthRemoteDataSourceImpl(
-        GetIt.I<FirestoreAdapterImpl>(),
-        GetIt.I<FirebaseAuthAdapterImpl>(),
-        GetIt.I<LocalizedStringImpl>(),
+        firestoreAdapter: GetIt.I<FirestoreAdapterImpl>(),
+        firebaseAuthAdapter: GetIt.I<FirebaseAuthAdapterImpl>(),
+        localizedString: GetIt.I(),
+        userHive: GetIt.I(),
+        orgHive: GetIt.I(),
       ),
     );
 
@@ -126,19 +196,69 @@ class AppConfig {
         locationUtils: GetIt.I(),
       ),
     );
-  }
 
-  static void registerRepositories() {
-    GetIt.I.registerLazySingleton<AuthRepositoryImpl>(
-      () => AuthRepositoryImpl(
-        GetIt.I<AuthRemoteDataSourceImpl>(),
-        GetIt.I<NetworkInfoImpl>(),
+    GetIt.I.registerLazySingleton<OrganizationRemoteDataSource>(
+      () => OrganizationRemoteDataSourceImpl(
+        firebaseStorageAdapter: GetIt.I(),
+        firestoreAdapter: GetIt.I(),
+        localizedString: GetIt.I(),
+        uuidGenerator: GetIt.I(),
       ),
     );
 
-    GetIt.I.registerLazySingleton<LocationRepositoryImpl>(
+    GetIt.I.registerLazySingleton<OrganizationLocalDataSource>(
+      () => OrganizationLocalDataSourceImpl(
+        orgHive: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<UserRemoteDataSource>(
+      () => UserRemoteDataSourceImpl(
+        firestoreAdapter: GetIt.I(),
+        firebaseStorageAdapter: GetIt.I(),
+        localizedString: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<UserLocalDataSource>(
+      () => UserLocalDataSourceImpl(
+        userHive: GetIt.I(),
+      ),
+    );
+  }
+
+  static void registerRepositories() {
+    // * REGISTER REPOSITORES HERE
+
+    GetIt.I.registerLazySingleton<AuthRepository>(
+      () => AuthRepositoryImpl(
+        authDataSource: GetIt.I<AuthRemoteDataSourceImpl>(),
+        userRemoteDataSource: GetIt.I(),
+        userLocalDataSource: GetIt.I(),
+        organizationLocalDataSource: GetIt.I(),
+        networkInfo: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<LocationRepository>(
       () => LocationRepositoryImpl(
         dataSource: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<OrganizationRepository>(
+      () => OrganizationRepositoryImpl(
+        remoteDataSource: GetIt.I(),
+        localDataSource: GetIt.I(),
+        networkInfo: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<UserRepository>(
+      () => UserRepositoryImpl(
+        remoteDataSource: GetIt.I(),
+        localDataSource: GetIt.I(),
+        networkInfo: GetIt.I(),
       ),
     );
   }
@@ -148,25 +268,91 @@ class AppConfig {
   static void registerUseCases() {
     GetIt.I.registerLazySingleton<SignInWithEmailAndPassword>(
       () => SignInWithEmailAndPassword(
-        GetIt.I<AuthRepositoryImpl>(),
+        GetIt.I(),
       ),
     );
 
     GetIt.I.registerLazySingleton<SignInWithSocial>(
       () => SignInWithSocial(
-        GetIt.I<AuthRepositoryImpl>(),
+        GetIt.I(),
       ),
     );
 
     GetIt.I.registerLazySingleton<SignUp>(
       () => SignUp(
-        GetIt.I<AuthRepositoryImpl>(),
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<SignOut>(
+      () => SignOut(
+        GetIt.I(),
       ),
     );
 
     GetIt.I.registerLazySingleton<TrackUser>(
       () => TrackUser(
-        GetIt.I<LocationRepositoryImpl>(),
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<GetCurrentLocation>(
+      () => GetCurrentLocation(
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<CreateOrganization>(
+      () => CreateOrganization(
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<GetOrganization>(
+      () => GetOrganization(
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<UpdateOrganization>(
+      () => UpdateOrganization(
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<DeleteOrganization>(
+      () => DeleteOrganization(
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<SaveOrganizationLocally>(
+      () => SaveOrganizationLocally(
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<UpdateMember>(
+      () => UpdateMember(
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<RemoveMember>(
+      () => RemoveMember(
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<GetUser>(
+      () => GetUser(
+        GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<UpdateUser>(
+      () => UpdateUser(
+        GetIt.I(),
       ),
     );
   }
@@ -179,13 +365,38 @@ class AppConfig {
         GetIt.I(),
         GetIt.I(),
         GetIt.I(),
+        GetIt.I(),
       ),
     );
 
     GetIt.I.registerFactory<LocationNotifierImpl>(
       () => LocationNotifierImpl(
-        GetIt.I(),
+        trackUserUseCase: GetIt.I(),
+        getCurrentLocationUseCase: GetIt.I(),
       ),
+    );
+
+    GetIt.I.registerFactory<OrganizationNotifierImpl>(
+      () => OrganizationNotifierImpl(
+        createOrganizationUseCase: GetIt.I(),
+        deleteOrganizationUseCase: GetIt.I(),
+        getOrganizationUseCase: GetIt.I(),
+        removeMemberUseCase: GetIt.I(),
+        updateMemberUseCase: GetIt.I(),
+        updateOrganizationUseCase: GetIt.I(),
+        saveOrganizationLocallyUseCase: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerFactory<UserNotifierImpl>(
+      () => UserNotifierImpl(
+        getUserUseCase: GetIt.I(),
+        updateUserUseCase: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerFactory<HomeScreenNotifierImpl>(
+      () => HomeScreenNotifierImpl(),
     );
   }
 }

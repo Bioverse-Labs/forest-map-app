@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
-import 'package:forestMapApp/features/auth/domain/entities/user.dart';
+import 'package:forestMapApp/features/user/domain/entities/user.dart';
 import 'package:forestMapApp/core/enums/social_login_types.dart';
 import 'package:forestMapApp/features/auth/domain/repositories/auth_repository.dart';
 import 'package:forestMapApp/features/auth/domain/usecases/sign_in_with_social.dart';

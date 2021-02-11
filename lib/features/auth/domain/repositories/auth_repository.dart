@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../core/enums/social_login_types.dart';
 import '../../../../core/errors/failure.dart';
-import '../entities/user.dart';
+import '../../../user/domain/entities/user.dart';
 
 abstract class AuthRepository {
   Future<Either<Failure, User>> signInWithEmailAndPassword(
@@ -15,4 +15,5 @@ abstract class AuthRepository {
     String email,
     String password,
   );
+  Future<Either<Failure, void>> signOut();
 }
