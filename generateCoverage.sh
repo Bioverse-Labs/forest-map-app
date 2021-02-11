@@ -1,4 +1,4 @@
 #!/bin/bash
 
 flutter test --coverage
-genhtml coverage/lcov.info -o coverage/html
+genhtml coverage/lcov.info -o docs/
