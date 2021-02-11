@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/notifiers/home_screen_notifier.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/navigation/app_navigator.dart';
+import '../../../../core/notifiers/home_screen_notifier.dart';
 import '../../../../core/platform/camera.dart';
 import '../../../../core/util/localized_string.dart';
 import '../../../../core/util/notifications.dart';
