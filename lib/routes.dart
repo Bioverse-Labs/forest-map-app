@@ -40,6 +40,10 @@ Map<String, Widget Function(BuildContext)> routes = {
   '/signUp': (ctx) => SignupScreen(
         authNotifierImpl: Provider.of<AuthNotifierImpl>(ctx, listen: false),
         userNotifierImpl: Provider.of<UserNotifierImpl>(ctx, listen: false),
+        organizationNotifier: Provider.of<OrganizationNotifierImpl>(
+          ctx,
+          listen: false,
+        ),
         localizedString: GetIt.I(),
         validationUtils: GetIt.I(),
         appTheme: GetIt.I(),
