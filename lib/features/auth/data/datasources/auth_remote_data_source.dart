@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/adapters/firebase_auth_adapter.dart';
@@ -100,6 +101,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return authResult;
     } on FirebaseAuthException catch (error) {
       throw getServerExceptionFromFirebaseAuth(error, localizedString);
+    } on FacebookAuthException catch (error) {
+      if (error.errorCode != "CANCELLED") {
+        throw ServerException(
+          localizedString.getLocalizedString('generic-exception'),
+          error.errorCode,
+          ExceptionOriginTypes.firebaseAuth,
+        );
+      }
     } on FirebaseException catch (error) {
       throw ServerException(
         localizedString.getLocalizedString('database-exceptions.get-error'),
@@ -107,6 +116,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         ExceptionOriginTypes.firebaseFirestore,
       );
     }
+
+    return null;
   }
 
   @override

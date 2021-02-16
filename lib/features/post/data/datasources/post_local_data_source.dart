@@ -20,6 +20,7 @@ abstract class PostLocalDataSource {
     File file,
     Location location,
   });
+  Future<void> deletePost(String id);
 
   Future<List<PostModel>> getAllPosts();
 }
@@ -81,5 +82,13 @@ class PostLocalDataSourceImpl implements PostLocalDataSource {
         ExceptionOriginTypes.hive,
       );
     }
+  }
+
+  @override
+  Future<void> deletePost(String id) async {
+    final postObject = await hiveAdapter.get(id);
+
+    File(postObject.imageUrl).deleteSync();
+    await hiveAdapter.delete(id);
   }
 }

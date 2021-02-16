@@ -173,9 +173,13 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     final failureOrCameraResp = await widget.camera.takePicture(isTemp: false);
 
     failureOrCameraResp.fold(
-      (failure) => widget.notificationsUtils.showErrorNotification(
-        widget.localizedString.getLocalizedString('generic-exception'),
-      ),
+      (failure) {
+        if (!(failure is CameraCancelFailure)) {
+          widget.notificationsUtils.showErrorNotification(
+            widget.localizedString.getLocalizedString('generic-exception'),
+          );
+        }
+      },
       (cameraResp) => showDialog(
         context: context,
         builder: (ctx) => SavePostDialog(

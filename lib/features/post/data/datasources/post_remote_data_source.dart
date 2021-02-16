@@ -73,6 +73,13 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,
       );
+    } catch (error) {
+      throw ServerException(
+        localizedString.getLocalizedString('generic-exception'),
+        error.code,
+        ExceptionOriginTypes.firebaseFirestore,
+        stackTrace: error.stackTrace,
+      );
     }
   }
 }

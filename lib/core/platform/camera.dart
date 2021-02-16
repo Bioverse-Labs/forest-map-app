@@ -79,7 +79,6 @@ class CameraImpl implements Camera {
         source: source,
       ));
     } catch (_) {
-      print(_);
       return Left(CameraFailure());
     }
   }

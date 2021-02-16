@@ -3,9 +3,11 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
+import 'package:forestMapApp/core/adapters/hive_adapter.dart';
 import 'package:forestMapApp/core/enums/exception_origin_types.dart';
 import 'package:forestMapApp/core/errors/failure.dart';
 import 'package:forestMapApp/core/usecases/usecase.dart';
+import 'package:forestMapApp/features/post/data/hive/post.dart';
 import 'package:forestMapApp/features/post/domain/entities/post.dart';
 import 'package:forestMapApp/features/post/domain/usecases/save_post.dart';
 import 'package:forestMapApp/features/post/domain/usecases/upload_cached_post.dart';
@@ -19,17 +21,22 @@ class MockSavePost extends Mock implements SavePost {}
 
 class MockUploadCachedPost extends Mock implements UploadCachedPost {}
 
+class MockHiveAdapter extends Mock implements HiveAdapter<PostHive> {}
+
 void main() {
   MockSavePost mockSavePost;
   MockUploadCachedPost mockUploadCachedPost;
+  MockHiveAdapter mockHiveAdapter;
   PostNotifierImpl postNotifierImpl;
 
   setUp(() {
     mockSavePost = MockSavePost();
     mockUploadCachedPost = MockUploadCachedPost();
+    mockHiveAdapter = MockHiveAdapter();
     postNotifierImpl = PostNotifierImpl(
       savePostUseCase: mockSavePost,
       uploadCachedPostUseCase: mockUploadCachedPost,
+      postHive: mockHiveAdapter,
     );
   });
 
@@ -112,6 +119,10 @@ void main() {
   });
 
   group('uploadCachedPost', () {
+    setUp(() {
+      when(mockHiveAdapter.getKeys()).thenReturn([faker.guid.guid()]);
+    });
+
     test(
       'should set [User] and notifiy all listeners if usecase succeed',
       () async {
@@ -138,6 +149,8 @@ void main() {
           ],
         );
 
+        tStreamController.close();
+
         verify(mockUploadCachedPost(NoParams()));
         verifyNoMoreInteractions(mockSavePost);
       },
@@ -162,6 +175,8 @@ void main() {
           () => call(),
           throwsA(isInstanceOf<ServerFailure>()),
         );
+
+        tStreamController.close();
 
         verify(mockUploadCachedPost(NoParams()));
         verifyNoMoreInteractions(mockSavePost);

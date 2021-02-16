@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:app_settings/app_settings.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/core/errors/failure.dart';
 import 'package:provider/provider.dart';
 
 import '../../features/auth/presentation/notifiers/auth_notifier.dart';
@@ -7,12 +11,14 @@ import '../../features/map/presentation/screens/map_screen.dart';
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/organization/presentation/screens/organization_screen.dart';
 import '../../features/post/presentation/notifier/post_notifier.dart';
+import '../../features/post/presentation/widgets/cached_post_upload_modal.dart';
 import '../../features/tracking/presentation/notifiers/location_notifier.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
 import '../../features/user/presentation/screen/profile_screen.dart';
 import '../navigation/app_navigator.dart';
 import '../notifiers/home_screen_notifier.dart';
 import '../platform/camera.dart';
+import '../platform/network_info.dart';
 import '../style/theme.dart';
 import '../util/localized_string.dart';
 import '../util/notifications.dart';
@@ -30,6 +36,7 @@ class HomeScreen extends StatefulWidget {
   final Camera camera;
   final AppSettings appSettings;
   final AppTheme appTheme;
+  final NetworkInfo networkInfo;
 
   const HomeScreen({
     Key key,
@@ -45,6 +52,7 @@ class HomeScreen extends StatefulWidget {
     @required this.camera,
     @required this.appSettings,
     @required this.appTheme,
+    @required this.networkInfo,
   }) : super(key: key);
 
   @override
@@ -53,6 +61,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _widgetOptions;
+  StreamSubscription<DataConnectionStatus> _connectionStream;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _connectionStream?.cancel();
+  }
 
   @override
   void initState() {
@@ -87,15 +102,66 @@ class _HomeScreenState extends State<HomeScreen> {
         notificationsUtils: widget.notificationsUtils,
       ),
     ];
+
+    _connectionStream =
+        widget.networkInfo.connectionStatusStream.asBroadcastStream().listen(
+      (status) {
+        if (status == DataConnectionStatus.connected) {
+          try {
+            widget.postNotifier.uploadCachedPost();
+          } catch (error) {
+            if (error is ServerFailure) {
+              widget.notificationsUtils.showErrorNotification(error.message);
+            }
+
+            if (error is LocalFailure) {
+              widget.notificationsUtils.showErrorNotification(error.message);
+              return;
+            }
+
+            if (error is LocationFailure) {
+              widget.notificationsUtils.showErrorNotification(error.message);
+              return;
+            }
+
+            widget.notificationsUtils.showErrorNotification(error.toString());
+          }
+        } else {
+          widget.postNotifier.cancelUpload();
+        }
+      },
+    );
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: Provider.of<HomeScreenNotifierImpl>(context).activeTabIndex,
-        children: _widgetOptions,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          IndexedStack(
+            index: Provider.of<HomeScreenNotifierImpl>(context).activeTabIndex,
+            children: _widgetOptions,
+          ),
+          Consumer<PostNotifierImpl>(
+            builder: (ctx, state, child) {
+              if (state.cachedPostsAmount != state.postsAmount) {
+                return child;
+              }
+
+              return Container();
+            },
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: CachedPostUploadModal(
+                appTheme: widget.appTheme,
+                size: MediaQuery.of(context).size,
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: Consumer<HomeScreenNotifierImpl>(
         builder: (ctx, state, _) {

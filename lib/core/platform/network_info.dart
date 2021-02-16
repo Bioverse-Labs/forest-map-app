@@ -4,6 +4,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 abstract class NetworkInfo {
   Future<bool> get isConnected;
   Future<bool> get isWifi;
+  Stream<DataConnectionStatus> get connectionStatusStream;
 }
 
 class NetworkInfoImpl implements NetworkInfo {
@@ -18,4 +19,8 @@ class NetworkInfoImpl implements NetworkInfo {
   @override
   Future<bool> get isWifi async =>
       (await connectivity.checkConnectivity()) == ConnectivityResult.wifi;
+
+  @override
+  Stream<DataConnectionStatus> get connectionStatusStream =>
+      connectionChecker.onStatusChange;
 }

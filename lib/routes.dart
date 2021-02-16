@@ -70,5 +70,6 @@ Map<String, Widget Function(BuildContext)> routes = {
         camera: GetIt.I(),
         appSettings: GetIt.I(),
         appTheme: GetIt.I(),
+        networkInfo: GetIt.I(),
       ),
 };

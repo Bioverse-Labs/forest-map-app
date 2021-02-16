@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/errors/exceptions.dart';
@@ -87,20 +88,20 @@ class PostRepositoryImpl implements PostRepository {
       final streamController = StreamController<Either<Failure, Post>>();
 
       for (var post in posts) {
-        if (!await networkInfo.isConnected) {
-          streamController.sink.add(Left(NoInternetFailure()));
-          break;
-        }
-
-        await remoteDataSource.savePost(
-          userId: post.userId,
-          organizationId: post.organizationId,
-          file: File(post.imageUrl),
-          location: post.location,
-          specie: post.specie,
+        _uploadInIsolate(post).then(
+          (failureOrBool) => failureOrBool.fold(
+            (failure) {
+              if (!streamController.isClosed) {
+                streamController?.sink?.add(Left(failure));
+              }
+            },
+            (resp) {
+              if (!streamController.isClosed) {
+                streamController?.sink?.add(Right(resp));
+              }
+            },
+          ),
         );
-
-        streamController.sink.add(Right(post));
       }
 
       return Right(streamController);
@@ -118,6 +119,37 @@ class PostRepositoryImpl implements PostRepository {
         exception.origin,
         stackTrace: exception.stackTrace,
       ));
+    }
+  }
+
+  Future<Either<Failure, Post>> _uploadInIsolate(post) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure());
+    }
+
+    try {
+      await remoteDataSource.savePost(
+        userId: post.userId,
+        organizationId: post.organizationId,
+        file: File(post.imageUrl),
+        location: post.location,
+        specie: post.specie,
+      );
+
+      await localDataSource.deletePost(post?.id);
+
+      return Right(post);
+    } on ServerException catch (exception) {
+      return Left(ServerFailure(
+        exception.message,
+        exception.code,
+        exception.origin,
+        stackTrace: exception.stackTrace,
+      ));
+    } on NoInternetFailure catch (failure) {
+      return Left(failure);
+    } catch (error) {
+      return Left(NoInternetFailure());
     }
   }
 }

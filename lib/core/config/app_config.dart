@@ -181,9 +181,11 @@ class AppConfig {
   }
 
   static Future<void> initHiveAdapters() async {
-    await GetIt.I<HiveAdapter<OrganizationHive>>().init();
-    await GetIt.I<HiveAdapter<UserHive>>().init();
-    await GetIt.I<HiveAdapter<PostHive>>().init();
+    try {
+      await GetIt.I<HiveAdapter<OrganizationHive>>().init();
+      await GetIt.I<HiveAdapter<UserHive>>().init();
+      await GetIt.I<HiveAdapter<PostHive>>().init();
+    } catch (error) {}
   }
 
   static Future<void> disposeHiveAdapters() async {
@@ -457,6 +459,7 @@ class AppConfig {
       () => PostNotifierImpl(
         savePostUseCase: GetIt.I(),
         uploadCachedPostUseCase: GetIt.I(),
+        postHive: GetIt.I(),
       ),
     );
   }
