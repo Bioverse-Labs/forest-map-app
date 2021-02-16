@@ -265,7 +265,7 @@ void main() {
       );
 
       test(
-        'should return [ServerFailure] if datasource succeed',
+        'should return [ServerFailure] if datasource fails',
         () async {
           when(mockPostLocalDataSource.getAllPosts())
               .thenAnswer((_) async => [PostModel.fromEntity(tPost)]);
@@ -279,13 +279,20 @@ void main() {
 
           final result = await postRepositoryImpl.uploadCachedPost();
 
-          expect(
-            result,
-            Left(ServerFailure(
-              tServerException.message,
-              tServerException.code,
-              tServerException.origin,
-            )),
+          result.fold(
+            (l) => null,
+            (controller) => controller.stream.listen(expectAsync1((event) {
+              expect(
+                event,
+                Left(
+                  ServerFailure(
+                    tServerException.message,
+                    tServerException.code,
+                    tServerException.origin,
+                  ),
+                ),
+              );
+            })),
           );
           verify(mockPostLocalDataSource.getAllPosts());
           verifyNoMoreInteractions(mockPostLocalDataSource);
