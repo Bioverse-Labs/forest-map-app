@@ -152,7 +152,13 @@ class OrganizationRepositoryImpl implements OrganizationRepository {
         return Left(NoInternetFailure());
       }
 
-      return Right(await dataSourceExecutor());
+      final organization = await dataSourceExecutor();
+      await localDataSource.saveOrganization(
+        id: 'currOrg',
+        organization: organization,
+      );
+
+      return Right(organization);
     } on ServerException catch (error) {
       return Left(ServerFailure(
         error.message,

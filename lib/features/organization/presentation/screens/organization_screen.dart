@@ -13,6 +13,7 @@ import '../../../user/presentation/notifiers/user_notifier.dart';
 import '../../domain/entities/organization.dart';
 import '../notifiers/organizations_notifier.dart';
 import '../widgets/empty_organizations.dart';
+import '../widgets/members_list.dart';
 import '../widgets/organization_info.dart';
 
 class OrganizationScreen extends StatelessWidget {
@@ -90,7 +91,7 @@ class OrganizationScreen extends StatelessWidget {
             Consumer<OrganizationNotifierImpl>(
               builder: (ctx, state, _) {
                 final user = userNotifier.user;
-                final organization = organizationNotifier.organization;
+                final organization = state.organization;
 
                 if (user.organizations == null ||
                     user.organizations.length <= 0) {
@@ -107,6 +108,41 @@ class OrganizationScreen extends StatelessWidget {
                   onChangeOrganizationPress: () => _changeOrganization(context),
                   onAvatarPress: () => _handleAvatarPress(),
                 );
+              },
+            ),
+            Consumer<OrganizationNotifierImpl>(
+              builder: (ctx, state, _) {
+                final user = userNotifier.user;
+                final organization = state.organization;
+                final role = _getRole(user, organization);
+
+                if (role == OrganizationRoleType.owner ||
+                    role == OrganizationRoleType.admin) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
+                    child: ListBody(
+                      children: [
+                        Text(
+                          localizedString.getLocalizedString(
+                            'organization-screen.members-list',
+                          ),
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        SizedBox(height: 16),
+                        MemberList(
+                          organization: organizationNotifier.organization,
+                          organizationNotifier: organizationNotifier,
+                          notificationsUtils: notificationsUtils,
+                          appNavigator: appNavigator,
+                          localizedString: localizedString,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                return Container();
               },
             ),
           ],

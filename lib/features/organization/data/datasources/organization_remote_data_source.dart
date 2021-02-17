@@ -218,7 +218,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
       if (userDoc.exists) {
         final List<String> organizations =
             userDoc.data()['organizations'] as List<String>;
-        organizations.remove(id);
+        organizations?.remove(id);
 
         await firestoreAdapter.updateDocument('users/$userId', {
           'organizations': organizations,

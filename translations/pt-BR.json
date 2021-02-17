@@ -24,6 +24,7 @@
     "invalid-phone": "Por favor digite um número de celular valido!",
     "invalid-password": "A senha deve conter no mínimo 8 caracteres"
   },
+  "members-role-validation": "A Organização precisa ter ao menos um dono",
   "location-permission": {
     "disabled": "O GPS está desativado.",
     "denied-permantly": "As permissões de localização do aparelho estão permanentemente negadas, por favor ative a localização para continuar.",
@@ -34,6 +35,11 @@
   },
   "home-drawer": {
     "logout": "Sair"
+  },
+  "members-role": {
+    "owner": "Dono",
+    "admin": "Administrador",
+    "member": "Membro"
   },
   "signup-screen": {
     "title": "Cadastrar",
@@ -71,7 +77,8 @@
     "invite-member-button": "Convidar membros",
     "invite-member-button-tooltip": "Gera um link para convidar um usuário",
     "edit-button": "Editar info",
-    "data-section-title": "Localizações das árvores"
+    "data-section-title": "Localizações das árvores",
+    "members-list": "Membros"
   },
   "edit-organization-screen": {
     "title": "Editar Organização"

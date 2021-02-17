@@ -40,6 +40,7 @@ class CodegenLoader extends AssetLoader{
     "invalid-phone": "Please input an valid phone number!",
     "invalid-password": "The password must contain at least 8 characters"
   },
+  "members-role-validation": "Organization must have at least one owner",
   "location-permission": {
     "disabled": "Location services are disabled.",
     "denied-permantly": "Location permissions are permantly denied, we cannot request permissions.",
@@ -50,6 +51,11 @@ class CodegenLoader extends AssetLoader{
   },
   "home-drawer": {
     "logout": "Logout"
+  },
+  "members-role": {
+    "owner": "Owner",
+    "admin": "Administrator",
+    "member": "Member"
   },
   "signup-screen": {
     "title": "Sign-up",
@@ -87,7 +93,8 @@ class CodegenLoader extends AssetLoader{
     "invite-member-button": "Invite Members",
     "invite-member-button-tooltip": "Generate link to invite an User",
     "edit-button": "Edit data",
-    "data-section-title": "Tree Locations Data"
+    "data-section-title": "Tree Locations Data",
+    "members-list": "Members"
   },
   "edit-organization-screen": {
     "title": "Edit Organization"
@@ -128,6 +135,7 @@ static const Map<String,dynamic> pt_BR = {
     "invalid-phone": "Por favor digite um número de celular valido!",
     "invalid-password": "A senha deve conter no mínimo 8 caracteres"
   },
+  "members-role-validation": "A Organização precisa ter ao menos um dono",
   "location-permission": {
     "disabled": "O GPS está desativado.",
     "denied-permantly": "As permissões de localização do aparelho estão permanentemente negadas, por favor ative a localização para continuar.",
@@ -138,6 +146,11 @@ static const Map<String,dynamic> pt_BR = {
   },
   "home-drawer": {
     "logout": "Sair"
+  },
+  "members-role": {
+    "owner": "Dono",
+    "admin": "Administrador",
+    "member": "Membro"
   },
   "signup-screen": {
     "title": "Cadastrar",
@@ -175,7 +188,8 @@ static const Map<String,dynamic> pt_BR = {
     "invite-member-button": "Convidar membros",
     "invite-member-button-tooltip": "Gera um link para convidar um usuário",
     "edit-button": "Editar info",
-    "data-section-title": "Localizações das árvores"
+    "data-section-title": "Localizações das árvores",
+    "members-list": "Membros"
   },
   "edit-organization-screen": {
     "title": "Editar Organização"

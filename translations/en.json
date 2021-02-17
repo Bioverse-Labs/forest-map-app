@@ -24,6 +24,7 @@
     "invalid-phone": "Please input an valid phone number!",
     "invalid-password": "The password must contain at least 8 characters"
   },
+  "members-role-validation": "Organization must have at least one owner",
   "location-permission": {
     "disabled": "Location services are disabled.",
     "denied-permantly": "Location permissions are permantly denied, we cannot request permissions.",
@@ -34,6 +35,11 @@
   },
   "home-drawer": {
     "logout": "Logout"
+  },
+  "members-role": {
+    "owner": "Owner",
+    "admin": "Administrator",
+    "member": "Member"
   },
   "signup-screen": {
     "title": "Sign-up",
@@ -71,7 +77,8 @@
     "invite-member-button": "Invite Members",
     "invite-member-button-tooltip": "Generate link to invite an User",
     "edit-button": "Edit data",
-    "data-section-title": "Tree Locations Data"
+    "data-section-title": "Tree Locations Data",
+    "members-list": "Members"
   },
   "edit-organization-screen": {
     "title": "Edit Organization"

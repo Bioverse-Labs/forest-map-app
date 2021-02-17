@@ -24,7 +24,7 @@ class OrganizationInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(32.0),
+      padding: const EdgeInsets.fromLTRB(32, 32, 32, 0),
       child: Column(
         children: [
           GestureDetector(
@@ -102,21 +102,6 @@ class OrganizationInfo extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Divider(),
-              ),
-            ],
-          ),
-          Text(
-            localizedString.getLocalizedString(
-              'organization-screen.data-section-title',
-            ),
-            style: Theme.of(context).textTheme.headline6,
-          ),
-          ListBody(
-            children: [
-              SizedBox(height: 16),
-              Container(
-                height: 100,
-                child: Placeholder(),
               ),
             ],
           ),
