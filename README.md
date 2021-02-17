@@ -19,15 +19,22 @@ Designed to serve traditional communities of the amazon rain forest, the Forest 
 On the first release, Forest Map TM will allow local cooperatives to use the abundance maps to locate Brazil Nut Tree (Bertholletia excelsa) and Palm Trees. Tree species that contribute to the economic resilience of the riverine communities can be added to future projects when it meets sustainability criteria contributing to increase the value of standing and productive forests.
 
 1. [Setting up your environment](#1-Setting-up-your-environment)
-2. [Prepare your environment](#2-Prepare-your-environment)
-3. [Examples ](#3-Examples)
-4. [TODO-list](#4-TODO-list)
+2. [Run](#2-Run)
+3. [Test ](#3-Test)
+4. [Architecture ](#3-Architecture)
+5. [TODO-list](#5-TODO-list)
 
 
 # Setting up your environment
    <p>
      <a href="https://flutter.dev/docs/get-started/install">https://flutter.dev/docs/get-started/install</a>
    </p>
+   
+# Run
+
+```
+    flutter run lib/main.dart
+ ```
 
 # Tests
 
