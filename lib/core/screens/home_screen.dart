@@ -112,6 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
           } catch (error) {
             if (error is ServerFailure) {
               widget.notificationsUtils.showErrorNotification(error.message);
+              return;
             }
 
             if (error is LocalFailure) {

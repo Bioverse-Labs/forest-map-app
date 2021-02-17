@@ -59,7 +59,6 @@ void main() {
     plugin: 'firestore',
     message: faker.randomGenerator.string(20),
   );
-  final tUploadTask = MockUploadTask();
 
   group('savePost', () {
     test(
