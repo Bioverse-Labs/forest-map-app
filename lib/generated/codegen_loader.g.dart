@@ -49,6 +49,10 @@ class CodegenLoader extends AssetLoader{
   "masks": {
     "phone": "(99) 999 99-99"
   },
+  "invitation-link": {
+    "title": "Welcome to Forest Map",
+    "description": "{name} has invited you to be an member"
+  },
   "home-drawer": {
     "logout": "Logout"
   },
@@ -143,6 +147,10 @@ static const Map<String,dynamic> pt_BR = {
   },
   "masks": {
     "phone": "(99) 99999-9999"
+  },
+  "invitation-link": {
+    "title": "Bem-Vindo ao Forest Map",
+    "description": "{name} te convidou para fazer parte da equipe!"
   },
   "home-drawer": {
     "logout": "Sair"

@@ -1,5 +1,6 @@
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/core/util/generate_invite_link.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
@@ -85,31 +86,14 @@ class OrganizationScreen extends StatelessWidget {
   }
 
   Future<void> _inviteMember() async {
-    final DynamicLinkParameters parameters = DynamicLinkParameters(
-      uriPrefix: 'https://forestmap.page.link/',
-      link: Uri.parse(
-        'https://forestmap.page.link/add-member?orgId=${organizationNotifier.organization.id}',
-      ),
-      androidParameters: AndroidParameters(
-        packageName: 'com.bioverselabs.forestmap',
-        minimumVersion: 000001,
-      ),
-      iosParameters: IosParameters(
-        bundleId: 'com.bioverselabs.forestmap',
-        minimumVersion: '1.0.1',
-        appStoreId: '',
-      ),
-      socialMetaTagParameters: SocialMetaTagParameters(
-        title: 'Example of a Dynamic Link',
-        description: 'This link works whether app is installed or not!',
-      ),
-      dynamicLinkParametersOptions: DynamicLinkParametersOptions(
-        shortDynamicLinkPathLength: ShortDynamicLinkPathLength.short,
-      ),
+    final failureOrUlr = await generateInviteLink(
+      organizationNotifier.organization,
     );
 
-    final dynamicUrl = await parameters.buildShortLink();
-    Share.share(dynamicUrl.shortUrl.toString());
+    failureOrUlr.fold(
+      (failure) => notificationsUtils.showErrorNotification(failure.message),
+      (url) => Share.share(url.toString()),
+    );
   }
 
   Widget _renderBody(BuildContext context) {

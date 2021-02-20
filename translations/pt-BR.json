@@ -33,6 +33,10 @@
   "masks": {
     "phone": "(99) 99999-9999"
   },
+  "invitation-link": {
+    "title": "Bem-Vindo ao Forest Map",
+    "description": "{name} te convidou para fazer parte da equipe!"
+  },
   "home-drawer": {
     "logout": "Sair"
   },

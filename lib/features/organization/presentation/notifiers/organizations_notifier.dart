@@ -32,7 +32,6 @@ abstract class OrganizationNotifier {
     File avatar,
   });
   Future<void> deleteOrganization(String id);
-  Future<void> generateInvitationLink(String id);
   Future<void> updateMember({
     String id,
     String userId,
@@ -123,12 +122,6 @@ class OrganizationNotifierImpl extends ChangeNotifier
         notifyListeners();
       },
     );
-  }
-
-  @override
-  Future<void> generateInvitationLink(String id) {
-    // TODO: implement generateInvitationLink
-    throw UnimplementedError();
   }
 
   @override
