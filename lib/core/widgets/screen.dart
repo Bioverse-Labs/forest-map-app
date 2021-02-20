@@ -34,12 +34,14 @@ class ScreenWidget<T extends ChangeNotifier> extends StatelessWidget {
       ),
       child: Scaffold(
         appBar: appBar,
-        body: Stack(
-          children: [
-            if (body != null) body,
-            ...children,
-            if (isLoading) LoadingWall(),
-          ],
+        body: SafeArea(
+          child: Stack(
+            children: [
+              if (body != null) body,
+              ...children,
+              if (isLoading) LoadingWall(),
+            ],
+          ),
         ),
         floatingActionButton: floatingActionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,
