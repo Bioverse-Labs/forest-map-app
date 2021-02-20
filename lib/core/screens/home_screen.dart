@@ -137,18 +137,37 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     if (widget.organizationInviteNotifier.showScreen) {
-      Future.delayed(const Duration(milliseconds: 600), () {
-        widget.appNavigator.push('/organization-invite');
+      final userOrganizations = widget.userNotifier.user.organizations;
+      final alreadyMember = userOrganizations?.firstWhere(
+        (e) => e.id == widget.organizationInviteNotifier.organizationId,
+        orElse: () => null,
+      );
+
+      if (userOrganizations != null && alreadyMember != null) {
         widget.organizationInviteNotifier.setInviteScreenVisibility(false);
-      });
+      } else {
+        Future.delayed(const Duration(milliseconds: 600), () {
+          widget.appNavigator.push('/organization-invite');
+          widget.organizationInviteNotifier.setInviteScreenVisibility(false);
+        });
+      }
     }
 
     widget.organizationInviteNotifier.addListener(() {
       final showScreen = widget.organizationInviteNotifier.showScreen;
+      final userOrganizations = widget.userNotifier.user.organizations;
+      final alreadyMember = userOrganizations?.firstWhere(
+        (e) => e.id == widget.organizationInviteNotifier.organizationId,
+        orElse: () => null,
+      );
 
       if (showScreen) {
-        widget.appNavigator.push('/organization-invite');
-        widget.organizationInviteNotifier.setInviteScreenVisibility(false);
+        if (userOrganizations != null && alreadyMember != null) {
+          widget.organizationInviteNotifier.setInviteScreenVisibility(false);
+        } else {
+          widget.appNavigator.push('/organization-invite');
+          widget.organizationInviteNotifier.setInviteScreenVisibility(false);
+        }
       }
     });
 

@@ -1,6 +1,4 @@
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/util/generate_invite_link.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
@@ -8,6 +6,7 @@ import '../../../../core/enums/organization_role_types.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/navigation/app_navigator.dart';
 import '../../../../core/platform/camera.dart';
+import '../../../../core/util/generate_invite_link.dart';
 import '../../../../core/util/localized_string.dart';
 import '../../../../core/util/notifications.dart';
 import '../../../../core/widgets/screen.dart';
