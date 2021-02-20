@@ -1,9 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/style/theme.dart';
-import 'package:forestMapApp/features/post/presentation/notifier/post_notifier.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../core/style/theme.dart';
+import '../notifier/post_notifier.dart';
 
 class CachedPostUploadModal extends StatefulWidget {
   final AppTheme appTheme;

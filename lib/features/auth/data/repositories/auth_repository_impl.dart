@@ -57,7 +57,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
     try {
       final authModel = await dataSourceExecutor();
-      final userModel = await userRemoteDataSource.getUser(authModel.id);
+      final userModel = await userRemoteDataSource.getUser(authModel?.id);
 
       await userLocalDataSource.saveUser(id: 'currUser', user: userModel);
 

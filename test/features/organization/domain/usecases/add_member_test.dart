@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:forestMapApp/features/user/domain/entities/user.dart';
 import 'package:forestMapApp/features/organization/domain/entities/organization.dart';
 import 'package:forestMapApp/features/organization/domain/repositories/organization_repository.dart';
-import 'package:forestMapApp/features/organization/domain/usecases/invite_user_to_organization.dart';
+import 'package:forestMapApp/features/organization/domain/usecases/add_member.dart';
 import 'package:mockito/mockito.dart';
 
 class MockOrganizationRepository extends Mock
@@ -12,11 +12,11 @@ class MockOrganizationRepository extends Mock
 
 void main() {
   MockOrganizationRepository mockOrganizationRepository;
-  InviteUserToOrganization useCase;
+  AddMember useCase;
 
   setUp(() {
     mockOrganizationRepository = MockOrganizationRepository();
-    useCase = InviteUserToOrganization(mockOrganizationRepository);
+    useCase = AddMember(mockOrganizationRepository);
   });
 
   final tId = faker.guid.guid();
@@ -35,18 +35,18 @@ void main() {
   test(
     'should return [Organization] when repository succeed',
     () async {
-      when(mockOrganizationRepository.inviteUserToOrganization(
+      when(mockOrganizationRepository.addMember(
         id: anyNamed('id'),
         user: anyNamed('user'),
       )).thenAnswer((_) async => Right(tOrganization));
 
-      final result = await useCase(InviteUserToOrganizationParams(
+      final result = await useCase(AddMemberParams(
         id: tId,
         user: tUser,
       ));
 
       expect(result, Right(tOrganization));
-      verify(mockOrganizationRepository.inviteUserToOrganization(
+      verify(mockOrganizationRepository.addMember(
         id: tId,
         user: tUser,
       ));

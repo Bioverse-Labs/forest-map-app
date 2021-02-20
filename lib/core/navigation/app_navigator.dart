@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class AppNavigator {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  void push(String route) => navigatorKey.currentState.pushNamed(route);
+  void push(String route, {Object args}) =>
+      navigatorKey.currentState.pushNamed(route, arguments: args);
 
   void pop() => navigatorKey.currentState.pop();
 

@@ -31,11 +31,13 @@ dependencies:
   uuid: ^2.2.2
   cached_network_image: ^2.5.0
   app_settings: ^4.0.4
+  share: ^0.6.5+4
 
   # Firebase Deps
   firebase_core: "0.7.0"
   firebase_auth: "^0.20.0"
   firebase_storage: "^7.0.0"
+  firebase_dynamic_links: ^0.7.0+1
   cloud_firestore: "^0.16.0"
   google_sign_in: "^4.5.1"
   flutter_facebook_auth: ^2.0.2

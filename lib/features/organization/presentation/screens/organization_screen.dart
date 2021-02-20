@@ -1,5 +1,7 @@
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 import '../../../../core/enums/organization_role_types.dart';
 import '../../../../core/errors/failure.dart';
@@ -36,7 +38,7 @@ class OrganizationScreen extends StatelessWidget {
 
   OrganizationRoleType _getRole(User user, Organization organization) =>
       organization?.members
-          ?.firstWhere((e) => e.id == user.id, orElse: null)
+          ?.firstWhere((e) => e.id == user.id, orElse: () => null)
           ?.role;
 
   void _changeOrganization(BuildContext context) => showModalBottomSheet(
@@ -82,16 +84,44 @@ class OrganizationScreen extends StatelessWidget {
     }
   }
 
+  Future<void> _inviteMember() async {
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: 'https://forestmap.page.link/',
+      link: Uri.parse(
+        'https://forestmap.page.link/add-member?orgId=${organizationNotifier.organization.id}',
+      ),
+      androidParameters: AndroidParameters(
+        packageName: 'com.bioverselabs.forestmap',
+        minimumVersion: 000001,
+      ),
+      iosParameters: IosParameters(
+        bundleId: 'com.bioverselabs.forestmap',
+        minimumVersion: '1.0.1',
+        appStoreId: '',
+      ),
+      socialMetaTagParameters: SocialMetaTagParameters(
+        title: 'Example of a Dynamic Link',
+        description: 'This link works whether app is installed or not!',
+      ),
+      dynamicLinkParametersOptions: DynamicLinkParametersOptions(
+        shortDynamicLinkPathLength: ShortDynamicLinkPathLength.short,
+      ),
+    );
+
+    final dynamicUrl = await parameters.buildShortLink();
+    Share.share(dynamicUrl.shortUrl.toString());
+  }
+
   Widget _renderBody(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Consumer<OrganizationNotifierImpl>(
-              builder: (ctx, state, _) {
-                final user = userNotifier.user;
-                final organization = state.organization;
+            Consumer2<UserNotifierImpl, OrganizationNotifierImpl>(
+              builder: (ctx, userState, orgState, _) {
+                final user = userState.user;
+                final organization = orgState.organization;
 
                 if (user.organizations == null ||
                     user.organizations.length <= 0) {
@@ -137,6 +167,7 @@ class OrganizationScreen extends StatelessWidget {
                           appNavigator: appNavigator,
                           localizedString: localizedString,
                         ),
+                        SizedBox(height: 42),
                       ],
                     ),
                   );
@@ -162,7 +193,7 @@ class OrganizationScreen extends StatelessWidget {
               role == OrganizationRoleType.admin) {
             return FloatingActionButton.extended(
               heroTag: 'inviteUserFloatingButton',
-              onPressed: () {},
+              onPressed: _inviteMember,
               icon: Icon(Icons.person_add_alt_1_outlined),
               label: Text(localizedString.getLocalizedString(
                 'organization-screen.invite-member-button',
@@ -172,7 +203,17 @@ class OrganizationScreen extends StatelessWidget {
               ),
             );
           }
-          return Container();
+          return FloatingActionButton.extended(
+            heroTag: 'inviteUserFloatingButton',
+            onPressed: _inviteMember,
+            icon: Icon(Icons.person_add_alt_1_outlined),
+            label: Text(localizedString.getLocalizedString(
+              'organization-screen.invite-member-button',
+            )),
+            tooltip: localizedString.getLocalizedString(
+              'organization-screen.invite-member-button-tooltip',
+            ),
+          );
         },
       ),
       isLoading: Provider.of<OrganizationNotifierImpl>(context).isLoading,

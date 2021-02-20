@@ -91,12 +91,12 @@ class OrganizationRepositoryImpl implements OrganizationRepository {
   }
 
   @override
-  Future<Either<Failure, Organization>> inviteUserToOrganization({
+  Future<Either<Failure, Organization>> addMember({
     @required String id,
     @required User user,
   }) {
     return _getOrganization(
-      () => remoteDataSource.inviteUserToOrganization(id: id, user: user),
+      () => remoteDataSource.addMember(id: id, user: user),
     );
   }
 

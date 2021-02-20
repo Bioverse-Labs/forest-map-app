@@ -46,8 +46,7 @@ abstract class OrganizationRemoteDataSource {
   /// remove [Document] from organizations collections that match [id]
   Future<void> deleteOrganization(String id);
 
-  /// TODO: Use Firebase dynamic link to invite user
-  Future<OrganizationModel> inviteUserToOrganization({
+  Future<OrganizationModel> addMember({
     @required String id,
     @required UserModel user,
   });
@@ -199,9 +198,51 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
   }
 
   @override
-  Future<OrganizationModel> inviteUserToOrganization({String id, User user}) {
-    // TODO: implement inviteUserToOrganization
-    throw UnimplementedError();
+  Future<OrganizationModel> addMember({String id, User user}) async {
+    try {
+      final orgDoc = await firestoreAdapter.getDocument('organizations/$id');
+
+      if (!orgDoc.exists) {
+        throw ServerException(
+          localizedString.getLocalizedString('database-exceptions.get-error'),
+          '404',
+          ExceptionOriginTypes.firebaseFirestore,
+        );
+      }
+
+      await firestoreAdapter.addDocument(
+        'organizations/$id/members/${user.id}',
+        {
+          'id': user.id,
+          'status': OrganizationMemberStatus.active.index,
+          'role': OrganizationRoleType.member.index,
+        },
+      );
+
+      await firestoreAdapter.updateDocument(
+        'users/${user.id}',
+        {
+          'organizations': [
+            ...(user?.organizations != null
+                ? user?.organizations?.map((e) => e.id)?.toList()
+                : []),
+            id,
+          ]
+        },
+      );
+
+      return OrganizationModel.fromMap({
+        ...orgDoc.data(),
+        'members': await _getMembers(id),
+      });
+    } on FirebaseException catch (error) {
+      throw ServerException(
+        localizedString.getLocalizedString('database-exceptions.update-error'),
+        error.code,
+        ExceptionOriginTypes.firebaseFirestore,
+        stackTrace: error.stackTrace,
+      );
+    }
   }
 
   @override
@@ -216,8 +257,10 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
 
       final userDoc = await firestoreAdapter.getDocument('users/$userId');
       if (userDoc.exists) {
-        final List<String> organizations =
-            userDoc.data()['organizations'] as List<String>;
+        final List<String> organizations = userDoc
+            ?.data()['organizations']
+            ?.map<String>((e) => e.toString())
+            ?.toList();
         organizations?.remove(id);
 
         await firestoreAdapter.updateDocument('users/$userId', {

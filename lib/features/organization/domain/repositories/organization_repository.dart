@@ -29,7 +29,7 @@ abstract class OrganizationRepository {
     File avatar,
   });
   Future<Either<Failure, void>> deleteOrganization(String id);
-  Future<Either<Failure, Organization>> inviteUserToOrganization({
+  Future<Either<Failure, Organization>> addMember({
     @required String id,
     @required User user,
   });

@@ -66,10 +66,14 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                UserInfo(
-                  user: userNotifier.user,
-                  localizedString: localizedString,
-                  onAvatarPress: _updateAvatar,
+                Consumer<UserNotifierImpl>(
+                  builder: (ctx, state, _) {
+                    return UserInfo(
+                      user: state.user,
+                      localizedString: localizedString,
+                      onAvatarPress: _updateAvatar,
+                    );
+                  },
                 ),
               ],
             ),

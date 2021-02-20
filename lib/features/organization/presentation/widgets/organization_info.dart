@@ -15,7 +15,7 @@ class OrganizationInfo extends StatelessWidget {
   const OrganizationInfo({
     Key key,
     @required this.organization,
-    this.localizedString,
+    @required this.localizedString,
     this.canEdit = false,
     this.onAvatarPress,
     this.onChangeOrganizationPress,
@@ -49,14 +49,15 @@ class OrganizationInfo extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 8),
-                  RotatedBox(
-                    quarterTurns: 3,
-                    child: Icon(
-                      Icons.chevron_left_outlined,
-                      size: 30,
-                      color: Theme.of(context).textTheme.headline4.color,
+                  if (onChangeOrganizationPress != null)
+                    RotatedBox(
+                      quarterTurns: 3,
+                      child: Icon(
+                        Icons.chevron_left_outlined,
+                        size: 30,
+                        color: Theme.of(context).textTheme.headline4.color,
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -80,7 +81,7 @@ class OrganizationInfo extends StatelessWidget {
                 label: localizedString.getLocalizedString(
                   'organization-screen.members-counter',
                 ),
-                value: organization?.members?.length.toString() ?? '',
+                value: organization?.members?.length?.toString() ?? '',
               ),
               // if (canEdit)
               //   RaisedButton.icon(

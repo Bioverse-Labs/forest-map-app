@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:provider/provider.dart';
 
 import '../../features/auth/presentation/notifiers/auth_notifier.dart';
+import '../../features/organization/presentation/notifiers/organization_invite_notifier.dart';
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/post/presentation/notifier/post_notifier.dart';
 import '../../features/tracking/presentation/notifiers/location_notifier.dart';
@@ -26,6 +27,9 @@ class AppNotifier extends StatelessWidget {
           create: (_) => GetIt.I(),
         ),
         ChangeNotifierProvider<OrganizationNotifierImpl>(
+          create: (_) => GetIt.I(),
+        ),
+        ChangeNotifierProvider<OrganizationInviteNotifierImpl>(
           create: (_) => GetIt.I(),
         ),
         ChangeNotifierProvider<UserNotifierImpl>(

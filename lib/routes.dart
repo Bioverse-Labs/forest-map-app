@@ -8,7 +8,9 @@ import 'core/screens/initial_screen.dart';
 import 'features/auth/presentation/notifiers/auth_notifier.dart';
 import 'features/auth/presentation/screens/sign_in_screen.dart';
 import 'features/auth/presentation/screens/sign_up_screen.dart';
+import 'features/organization/presentation/notifiers/organization_invite_notifier.dart';
 import 'features/organization/presentation/notifiers/organizations_notifier.dart';
+import 'features/organization/presentation/screens/organization_invite_screen.dart';
 import 'features/post/presentation/notifier/post_notifier.dart';
 import 'features/tracking/presentation/notifiers/location_notifier.dart';
 import 'features/user/presentation/notifiers/user_notifier.dart';
@@ -24,6 +26,7 @@ Map<String, Widget Function(BuildContext)> routes = {
         firestoreAdapterImpl: GetIt.I(),
         appNavigator: GetIt.I(),
         networkInfo: GetIt.I(),
+        notificationsUtils: GetIt.I(),
       ),
   '/signIn': (ctx) => SignInScreen(
         authNotifier: Provider.of<AuthNotifierImpl>(ctx, listen: false),
@@ -61,6 +64,10 @@ Map<String, Widget Function(BuildContext)> routes = {
           ctx,
           listen: false,
         ),
+        organizationInviteNotifier: Provider.of<OrganizationInviteNotifierImpl>(
+          ctx,
+          listen: false,
+        ),
         userNotifier: Provider.of<UserNotifierImpl>(ctx, listen: false),
         authNotifier: Provider.of<AuthNotifierImpl>(ctx, listen: false),
         locationNotifier: Provider.of<LocationNotifierImpl>(ctx, listen: false),
@@ -71,5 +78,19 @@ Map<String, Widget Function(BuildContext)> routes = {
         appSettings: GetIt.I(),
         appTheme: GetIt.I(),
         networkInfo: GetIt.I(),
+      ),
+  '/organization-invite': (ctx) => OrganizationInviteScreen(
+        organizationInviteNotifier: Provider.of<OrganizationInviteNotifierImpl>(
+          ctx,
+          listen: false,
+        ),
+        organizationNotifier: Provider.of<OrganizationNotifierImpl>(
+          ctx,
+          listen: false,
+        ),
+        userNotifier: Provider.of<UserNotifierImpl>(ctx, listen: false),
+        notificationsUtils: GetIt.I(),
+        localizedString: GetIt.I(),
+        appNavigator: GetIt.I(),
       ),
 };

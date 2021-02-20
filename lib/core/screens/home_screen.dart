@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:app_settings/app_settings.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/errors/failure.dart';
 import 'package:provider/provider.dart';
 
 import '../../features/auth/presentation/notifiers/auth_notifier.dart';
 import '../../features/map/presentation/screens/map_screen.dart';
+import '../../features/organization/presentation/notifiers/organization_invite_notifier.dart';
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/organization/presentation/screens/organization_screen.dart';
 import '../../features/post/presentation/notifier/post_notifier.dart';
@@ -15,6 +15,7 @@ import '../../features/post/presentation/widgets/cached_post_upload_modal.dart';
 import '../../features/tracking/presentation/notifiers/location_notifier.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
 import '../../features/user/presentation/screen/profile_screen.dart';
+import '../errors/failure.dart';
 import '../navigation/app_navigator.dart';
 import '../notifiers/home_screen_notifier.dart';
 import '../platform/camera.dart';
@@ -27,6 +28,7 @@ class HomeScreen extends StatefulWidget {
   final LocalizedString localizedString;
   final HomeScreenNotifierImpl homeScreenNotifier;
   final OrganizationNotifierImpl organizationNotifier;
+  final OrganizationInviteNotifierImpl organizationInviteNotifier;
   final LocationNotifierImpl locationNotifier;
   final UserNotifierImpl userNotifier;
   final AuthNotifierImpl authNotifier;
@@ -43,6 +45,7 @@ class HomeScreen extends StatefulWidget {
     @required this.localizedString,
     @required this.homeScreenNotifier,
     @required this.organizationNotifier,
+    @required this.organizationInviteNotifier,
     @required this.locationNotifier,
     @required this.appNavigator,
     @required this.userNotifier,
@@ -132,6 +135,22 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
     );
+
+    if (widget.organizationInviteNotifier.showScreen) {
+      Future.delayed(const Duration(milliseconds: 600), () {
+        widget.appNavigator.push('/organization-invite');
+        widget.organizationInviteNotifier.setInviteScreenVisibility(false);
+      });
+    }
+
+    widget.organizationInviteNotifier.addListener(() {
+      final showScreen = widget.organizationInviteNotifier.showScreen;
+
+      if (showScreen) {
+        widget.appNavigator.push('/organization-invite');
+        widget.organizationInviteNotifier.setInviteScreenVisibility(false);
+      }
+    });
 
     super.initState();
   }

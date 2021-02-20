@@ -27,6 +27,7 @@ import '../../features/organization/data/hive/member.dart';
 import '../../features/organization/data/hive/organization.dart';
 import '../../features/organization/data/repositories/organization_repository_impl.dart';
 import '../../features/organization/domain/repositories/organization_repository.dart';
+import '../../features/organization/domain/usecases/add_member.dart';
 import '../../features/organization/domain/usecases/create_organization.dart';
 import '../../features/organization/domain/usecases/delete_organization.dart';
 import '../../features/organization/domain/usecases/get_organization.dart';
@@ -34,6 +35,7 @@ import '../../features/organization/domain/usecases/remove_member.dart';
 import '../../features/organization/domain/usecases/save_organization_locally.dart';
 import '../../features/organization/domain/usecases/update_member.dart';
 import '../../features/organization/domain/usecases/update_organization.dart';
+import '../../features/organization/presentation/notifiers/organization_invite_notifier.dart';
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/post/data/datasources/post_local_data_source.dart';
 import '../../features/post/data/datasources/post_remote_data_source.dart';
@@ -376,6 +378,12 @@ class AppConfig {
       ),
     );
 
+    GetIt.I.registerLazySingleton<AddMember>(
+      () => AddMember(
+        GetIt.I(),
+      ),
+    );
+
     GetIt.I.registerLazySingleton<UpdateMember>(
       () => UpdateMember(
         GetIt.I(),
@@ -441,6 +449,13 @@ class AppConfig {
         updateMemberUseCase: GetIt.I(),
         updateOrganizationUseCase: GetIt.I(),
         saveOrganizationLocallyUseCase: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerFactory<OrganizationInviteNotifierImpl>(
+      () => OrganizationInviteNotifierImpl(
+        getOrganizationUseCase: GetIt.I(),
+        addMemberUseCase: GetIt.I(),
       ),
     );
 
