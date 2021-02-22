@@ -21,6 +21,7 @@ class CodegenLoader extends AssetLoader{
     "phone": "Phone",
     "password": "Password"
   },
+  "no-internet": "You are not connected to the internet",
   "generic-exception": "Ops... something went wrong",
   "database-exceptions": {
     "get-error": "Ops... failed to get data from database",
@@ -33,6 +34,10 @@ class CodegenLoader extends AssetLoader{
     "user-not-found": "Sorry but we don't have any user with this email address in our base",
     "email-in-use": "Sorry but we already have an account registered with this email",
     "wrong-password": "Password or email incorrect"
+  },
+  "polygon-alert": {
+    "specie-label": "Specie",
+    "date-label": "Date"
   },
   "input-validations": {
     "required": "This field is required!",
@@ -97,11 +102,16 @@ class CodegenLoader extends AssetLoader{
     "invite-member-button": "Invite Members",
     "invite-member-button-tooltip": "Generate link to invite an User",
     "edit-button": "Edit data",
-    "data-section-title": "Tree Locations Data",
+    "data-section-title": "Geolocation Data",
     "members-list": "Members"
   },
   "edit-organization-screen": {
     "title": "Edit Organization"
+  },
+  "organization-invite-screen": {
+    "title": "Invite",
+    "description": "This Organization has invited you to be member",
+    "button": "Accept"
   },
   "profile-screen": {
     "organization-counter": "Organizations",
@@ -120,6 +130,7 @@ static const Map<String,dynamic> pt_BR = {
     "phone": "Celular",
     "password": "Senha"
   },
+  "no-internet": "Você não está conectado na internet",
   "generic-exception": "Ops... alguma coisa deu errado",
   "database-exceptions": {
     "get-error": "Ops... ocorreu uma falha durante a leitura de dados",
@@ -132,6 +143,10 @@ static const Map<String,dynamic> pt_BR = {
     "user-not-found": "Ops... não encontramos nenhum conta cadastrada com esse endereço de email",
     "email-in-use": "Ops.. esse endereço de email já está cadastrado em outra conta",
     "wrong-password": "Email ou senha incorretos..."
+  },
+  "polygon-alert": {
+    "specie-label": "Specie",
+    "date-label": "Date"
   },
   "input-validations": {
     "required": "Esse campo é obrigatório!",
@@ -196,11 +211,16 @@ static const Map<String,dynamic> pt_BR = {
     "invite-member-button": "Convidar membros",
     "invite-member-button-tooltip": "Gera um link para convidar um usuário",
     "edit-button": "Editar info",
-    "data-section-title": "Localizações das árvores",
+    "data-section-title": "Dados de geolocalização",
     "members-list": "Membros"
   },
   "edit-organization-screen": {
     "title": "Editar Organização"
+  },
+  "organization-invite-screen": {
+    "title": "Convite",
+    "description": "Essa organização lhe convidou para ser um membro",
+    "button": "Aceitar"
   },
   "profile-screen": {
     "organization-counter": "Organizações",

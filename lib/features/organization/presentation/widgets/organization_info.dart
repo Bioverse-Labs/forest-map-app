@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/core/navigation/app_navigator.dart';
 
 import '../../../../core/util/localized_string.dart';
 import '../../../../core/widgets/avatar.dart';
@@ -8,17 +9,21 @@ import '../../domain/entities/organization.dart';
 class OrganizationInfo extends StatelessWidget {
   final Organization organization;
   final LocalizedString localizedString;
+  final AppNavigator appNavigator;
   final bool canEdit;
   final Function onAvatarPress;
   final Function onChangeOrganizationPress;
+  final bool hideGeoData;
 
   const OrganizationInfo({
     Key key,
     @required this.organization,
     @required this.localizedString,
+    this.appNavigator,
     this.canEdit = false,
     this.onAvatarPress,
     this.onChangeOrganizationPress,
+    this.hideGeoData = false,
   }) : super(key: key);
 
   @override
@@ -100,6 +105,39 @@ class OrganizationInfo extends StatelessWidget {
               //   child: Divider(),
               // ),
               // ! REMOVE THIS WIDGET ONCE EDIT BUTTON IS BACK
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Divider(),
+              ),
+              if (!hideGeoData)
+                Text(
+                  localizedString.getLocalizedString(
+                    'organization-screen.data-section-title',
+                  ),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              if (!hideGeoData)
+                Column(
+                  children: [
+                    if (organization?.geolocationData != null)
+                      ...organization?.geolocationData
+                          ?.map(
+                            (geoData) => Card(
+                              child: ListTile(
+                                leading: Text(
+                                  geoData.name,
+                                ),
+                                trailing: Icon(Icons.map_outlined),
+                                // onTap: () => appNavigator.push(
+                                //   '/organization-geolocation-data-map',
+                                // ),
+                              ),
+                            ),
+                          )
+                          ?.toList(),
+                  ],
+                ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Divider(),

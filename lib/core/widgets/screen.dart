@@ -10,6 +10,7 @@ class ScreenWidget<T extends ChangeNotifier> extends StatelessWidget {
   final Widget floatingActionButton;
   final FloatingActionButtonLocation floatingActionButtonLocation;
   final bool isLoading;
+  final Color backgrounColor;
 
   ScreenWidget({
     Key key,
@@ -19,6 +20,7 @@ class ScreenWidget<T extends ChangeNotifier> extends StatelessWidget {
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.isLoading = false,
+    this.backgrounColor = Colors.white,
   }) : super(key: key);
 
   @override
@@ -34,6 +36,7 @@ class ScreenWidget<T extends ChangeNotifier> extends StatelessWidget {
       ),
       child: Scaffold(
         appBar: appBar,
+        backgroundColor: backgrounColor,
         body: SafeArea(
           child: Stack(
             children: [

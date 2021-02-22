@@ -44,64 +44,157 @@ class NotificationsUtils {
   }
 
   void showAlertDialog({
-    @required BuildContext context,
     @required Widget title,
     @required Widget content,
+    bool dismissable = true,
+    BackButtonBehavior backButtonBehavior = BackButtonBehavior.close,
     List<AlertButtonParams> buttons = const <AlertButtonParams>[],
   }) {
-    final androidDialog = AlertDialog(
-      title: title,
-      content: content,
-      actions: buttons
-          .map(
-            (button) => button.isPrimary
-                ? RaisedButton(
-                    onPressed: button.action,
-                    child: Text(button.title),
-                  )
-                : FlatButton(
-                    onPressed: button.action,
-                    child: Text(button.title),
-                  ),
-          )
-          .toList(),
-    );
+    Widget androidDialog(cancelFunc) => AlertDialog(
+          title: title,
+          content: content,
+          actions: buttons
+              .map(
+                (button) => button.isPrimary
+                    ? RaisedButton(
+                        onPressed: () {
+                          cancelFunc();
+                          button?.action?.call();
+                        },
+                        child: Text(button.title),
+                      )
+                    : FlatButton(
+                        onPressed: () {
+                          cancelFunc();
+                          button?.action?.call();
+                        },
+                        child: Text(button.title),
+                      ),
+              )
+              .toList(),
+        );
 
-    final iosDialog = CupertinoAlertDialog(
-      title: title,
-      content: content,
-      actions: buttons
-          .map(
-            (button) => button.isPrimary
-                ? CupertinoDialogAction(
-                    child: Text(button.title),
-                    onPressed: button.action,
-                    isDefaultAction: true,
-                  )
-                : CupertinoDialogAction(
-                    child: Text(button.title),
-                    onPressed: button.action,
-                  ),
-          )
-          .toList(),
-    );
+    Widget iosDialog(canceFunc) => CupertinoAlertDialog(
+          title: title,
+          content: content,
+          actions: buttons
+              .map(
+                (button) => button.isPrimary
+                    ? CupertinoDialogAction(
+                        child: Text(button.title),
+                        onPressed: () {
+                          canceFunc();
+                          button?.action?.call();
+                        },
+                        isDefaultAction: true,
+                      )
+                    : CupertinoDialogAction(
+                        child: Text(button.title),
+                        onPressed: () {
+                          canceFunc();
+                          button?.action?.call();
+                        },
+                      ),
+              )
+              .toList(),
+        );
 
-    showDialog(
-      context: context,
-      builder: (ctx) => Platform.isAndroid ? androidDialog : iosDialog,
-      barrierDismissible: false,
+    BotToast.showAnimationWidget(
+      clickClose: dismissable,
+      allowClick: false,
+      onlyOne: true,
+      crossPage: true,
+      backButtonBehavior: backButtonBehavior,
+      animationDuration: const Duration(milliseconds: 400),
+      wrapToastAnimation: (controller, cancel, child) => Stack(
+        children: <Widget>[
+          GestureDetector(
+            onTap: dismissable ? cancel : null,
+            child: AnimatedBuilder(
+              builder: (_, child) => Opacity(
+                opacity: controller.value,
+                child: child,
+              ),
+              child: DecoratedBox(
+                decoration: BoxDecoration(color: Colors.black26),
+                child: SizedBox.expand(),
+              ),
+              animation: controller,
+            ),
+          ),
+          CustomOffsetAnimation(
+            controller: controller,
+            child: child,
+          )
+        ],
+      ),
+      toastBuilder: (cancelFunc) => Platform.isAndroid
+          ? androidDialog(cancelFunc)
+          : iosDialog(cancelFunc),
     );
   }
 }
 
 class AlertButtonParams {
   final String title;
-  final Function action;
+  final VoidCallback action;
   final bool isPrimary;
 
   AlertButtonParams({
     @required this.title,
-    @required this.action,
+    this.action,
     this.isPrimary = false,
   });
+}
+
+class CustomOffsetAnimation extends StatefulWidget {
+  final AnimationController controller;
+  final Widget child;
+
+  const CustomOffsetAnimation({Key key, this.controller, this.child})
+      : super(key: key);
+
+  @override
+  _CustomOffsetAnimationState createState() => _CustomOffsetAnimationState();
+}
+
+class _CustomOffsetAnimationState extends State<CustomOffsetAnimation> {
+  Tween<Offset> tweenOffset;
+  Tween<double> tweenScale;
+
+  Animation<double> animation;
+
+  @override
+  void initState() {
+    tweenOffset = Tween<Offset>(
+      begin: const Offset(0.0, 0.8),
+      end: Offset.zero,
+    );
+    tweenScale = Tween<double>(begin: 0.3, end: 1.0);
+    animation =
+        CurvedAnimation(parent: widget.controller, curve: Curves.decelerate);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      child: widget.child,
+      animation: widget.controller,
+      builder: (BuildContext context, Widget child) {
+        return FractionalTranslation(
+          translation: tweenOffset.evaluate(animation),
+          child: ClipRect(
+            child: Transform.scale(
+              scale: tweenScale.evaluate(animation),
+              child: Opacity(
+                child: child,
+                opacity: animation.value,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

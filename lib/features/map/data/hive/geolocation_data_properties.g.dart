@@ -1,49 +1,47 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'organization.dart';
+part of 'geolocation_data_properties.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class OrganizationHiveAdapter extends TypeAdapter<OrganizationHive> {
+class GeolocationDataPropertiesHiveAdapter
+    extends TypeAdapter<GeolocationDataPropertiesHive> {
   @override
-  final int typeId = 2;
+  final int typeId = 9;
 
   @override
-  OrganizationHive read(BinaryReader reader) {
+  GeolocationDataPropertiesHive read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return OrganizationHive()
+    return GeolocationDataPropertiesHive()
       ..id = fields[0] as String
-      ..name = fields[1] as String
-      ..email = fields[2] as String
-      ..phone = fields[3] as String
-      ..avatarUrl = fields[4] as String
-      ..members = (fields[5] as List)?.cast<MemberHive>()
-      ..geolocationData = (fields[6] as List)?.cast<GeolocationDataHive>();
+      ..type = fields[1] as String
+      ..specie = fields[2] as String
+      ..detDate = fields[3] as DateTime
+      ..imageDate = fields[4] as DateTime
+      ..polygon = fields[5] as PolygonHive;
   }
 
   @override
-  void write(BinaryWriter writer, OrganizationHive obj) {
+  void write(BinaryWriter writer, GeolocationDataPropertiesHive obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.name)
+      ..write(obj.type)
       ..writeByte(2)
-      ..write(obj.email)
+      ..write(obj.specie)
       ..writeByte(3)
-      ..write(obj.phone)
+      ..write(obj.detDate)
       ..writeByte(4)
-      ..write(obj.avatarUrl)
+      ..write(obj.imageDate)
       ..writeByte(5)
-      ..write(obj.members)
-      ..writeByte(6)
-      ..write(obj.geolocationData);
+      ..write(obj.polygon);
   }
 
   @override
@@ -52,7 +50,7 @@ class OrganizationHiveAdapter extends TypeAdapter<OrganizationHive> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is OrganizationHiveAdapter &&
+      other is GeolocationDataPropertiesHiveAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -6,6 +6,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:forestMapApp/core/adapters/http_adapter.dart';
+import 'package:forestMapApp/core/util/dir.dart';
+import 'package:forestMapApp/core/util/geojson.dart';
+import 'package:forestMapApp/features/map/data/hive/geolocation_data.dart';
+import 'package:forestMapApp/features/map/data/hive/geolocation_data_properties.dart';
+import 'package:forestMapApp/features/map/data/hive/geolocation_data_properties.dart';
+import 'package:forestMapApp/features/map/data/hive/lat_lng.dart';
+import 'package:forestMapApp/features/map/data/hive/polygon.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
@@ -94,6 +102,10 @@ class AppConfig {
     Hive.registerAdapter(UserHiveAdapter());
     Hive.registerAdapter(LocationHiveAdapter());
     Hive.registerAdapter(PostHiveAdapter());
+    Hive.registerAdapter(LatLngHiveAdapter());
+    Hive.registerAdapter(PolygonHiveAdapter());
+    Hive.registerAdapter(GeolocationDataPropertiesHiveAdapter());
+    Hive.registerAdapter(GeolocationDataHiveAdapter());
   }
 
   static void registerUtils() {
@@ -106,6 +118,8 @@ class AppConfig {
     );
     GetIt.I.registerLazySingleton<ValidationUtils>(() => ValidationUtils());
     GetIt.I.registerLazySingleton<UUIDGenerator>(() => UUIDGenerator(Uuid()));
+    GetIt.I.registerLazySingleton<DirUtils>(() => DirUtils());
+    GetIt.I.registerLazySingleton<GeoJsonUtils>(() => GeoJsonUtils());
   }
 
   static void registerPlatformServices() {
@@ -180,6 +194,10 @@ class AppConfig {
     GetIt.I.registerLazySingleton<HiveAdapter<PostHive>>(
       () => HiveAdapter<PostHive>('posts', Hive),
     );
+
+    GetIt.I.registerLazySingleton<HttpAdapter>(
+      () => HttpAdapterImpl(),
+    );
   }
 
   static Future<void> initHiveAdapters() async {
@@ -224,6 +242,9 @@ class AppConfig {
         firestoreAdapter: GetIt.I(),
         localizedString: GetIt.I(),
         uuidGenerator: GetIt.I(),
+        dirUtils: GetIt.I(),
+        geoJsonUtils: GetIt.I(),
+        httpAdapter: GetIt.I(),
       ),
     );
 
@@ -238,6 +259,7 @@ class AppConfig {
         firestoreAdapter: GetIt.I(),
         firebaseStorageAdapter: GetIt.I(),
         localizedString: GetIt.I(),
+        organizationRemoteDataSource: GetIt.I(),
       ),
     );
 

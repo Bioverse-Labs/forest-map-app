@@ -32,6 +32,10 @@ dependencies:
   cached_network_image: ^2.5.0
   app_settings: ^4.0.4
   share: ^0.6.5+4
+  geojson: ^0.10.0
+  syncfusion_flutter_maps: ^18.4.43-beta
+  jiffy: ^3.0.1
+  http: ^0.12.2
 
   # Firebase Deps
   firebase_core: "0.7.0"

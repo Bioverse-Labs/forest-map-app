@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:meta/meta.dart';
 
@@ -69,9 +70,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     String password,
   ) async {
     try {
-      return firebaseAuthAdapter.signInWithEmailAndPassword(email, password);
+      final userModel = await firebaseAuthAdapter.signInWithEmailAndPassword(
+        email,
+        password,
+      );
+      return userModel;
     } on FirebaseAuthException catch (error) {
       throw getServerExceptionFromFirebaseAuth(error, localizedString);
+    } catch (error) {
+      throw error;
     }
   }
 

@@ -180,9 +180,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          IndexedStack(
-            index: Provider.of<HomeScreenNotifierImpl>(context).activeTabIndex,
-            children: _widgetOptions,
+          Consumer<HomeScreenNotifierImpl>(
+            builder: (ctx, state, _) {
+              return _widgetOptions.elementAt(state.activeTabIndex);
+            },
           ),
           Consumer<PostNotifierImpl>(
             builder: (ctx, state, child) {

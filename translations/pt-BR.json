@@ -5,6 +5,7 @@
     "phone": "Celular",
     "password": "Senha"
   },
+  "no-internet": "Você não está conectado na internet",
   "generic-exception": "Ops... alguma coisa deu errado",
   "database-exceptions": {
     "get-error": "Ops... ocorreu uma falha durante a leitura de dados",
@@ -17,6 +18,10 @@
     "user-not-found": "Ops... não encontramos nenhum conta cadastrada com esse endereço de email",
     "email-in-use": "Ops.. esse endereço de email já está cadastrado em outra conta",
     "wrong-password": "Email ou senha incorretos..."
+  },
+  "polygon-alert": {
+    "specie-label": "Specie",
+    "date-label": "Date"
   },
   "input-validations": {
     "required": "Esse campo é obrigatório!",
@@ -81,11 +86,16 @@
     "invite-member-button": "Convidar membros",
     "invite-member-button-tooltip": "Gera um link para convidar um usuário",
     "edit-button": "Editar info",
-    "data-section-title": "Localizações das árvores",
+    "data-section-title": "Dados de geolocalização",
     "members-list": "Membros"
   },
   "edit-organization-screen": {
     "title": "Editar Organização"
+  },
+  "organization-invite-screen": {
+    "title": "Convite",
+    "description": "Essa organização lhe convidou para ser um membro",
+    "button": "Aceitar"
   },
   "profile-screen": {
     "organization-counter": "Organizações",

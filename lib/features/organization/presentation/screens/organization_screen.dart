@@ -68,20 +68,32 @@ class OrganizationScreen extends StatelessWidget {
       );
 
   Future<void> _handleAvatarPress() async {
-    try {
-      final failureOrCameraResponse = await camera.takePicture();
-      failureOrCameraResponse.fold(
-        (failure) => notificationsUtils.showErrorNotification(
-          localizedString.getLocalizedString('generic-exception'),
-        ),
-        (resp) => organizationNotifier.updateOrganization(
-          id: organizationNotifier.organization.id,
-          avatar: resp.file,
-        ),
-      );
-    } on ServerFailure catch (failure) {
-      notificationsUtils.showErrorNotification(failure.message);
-    }
+    final failureOrCameraResponse = await camera.takePicture();
+    failureOrCameraResponse.fold(
+      (failure) {
+        if (!(failure is CameraCancelFailure)) {
+          notificationsUtils.showErrorNotification(
+            localizedString.getLocalizedString('generic-exception'),
+          );
+        }
+      },
+      (resp) async {
+        try {
+          organizationNotifier.updateOrganization(
+            id: organizationNotifier.organization.id,
+            avatar: resp.file,
+          );
+        } on ServerFailure catch (failure) {
+          notificationsUtils.showErrorNotification(failure.message);
+        } on LocalFailure catch (failure) {
+          notificationsUtils.showErrorNotification(failure.message);
+        } on NoInternetFailure catch (_) {
+          notificationsUtils.showErrorNotification(
+            localizedString.getLocalizedString('no-internet'),
+          );
+        }
+      },
+    );
   }
 
   Future<void> _inviteMember() async {
@@ -120,6 +132,7 @@ class OrganizationScreen extends StatelessWidget {
                       role == OrganizationRoleType.admin,
                   onChangeOrganizationPress: () => _changeOrganization(context),
                   onAvatarPress: () => _handleAvatarPress(),
+                  appNavigator: appNavigator,
                 );
               },
             ),

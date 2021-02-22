@@ -48,13 +48,29 @@ class ProfileScreen extends StatelessWidget {
     final failureOrCameraResp = await camera.takePicture();
 
     failureOrCameraResp.fold(
-      (failure) => notificationsUtils.showErrorNotification(
-        localizedString.getLocalizedString('generic-exception'),
-      ),
-      (resp) => userNotifier.updateUser(
-        id: userNotifier.user.id,
-        avatar: resp.file,
-      ),
+      (failure) {
+        if (!(failure is CameraCancelFailure)) {
+          notificationsUtils.showErrorNotification(
+            localizedString.getLocalizedString('generic-exception'),
+          );
+        }
+      },
+      (resp) async {
+        try {
+          await userNotifier.updateUser(
+            id: userNotifier.user.id,
+            avatar: resp.file,
+          );
+        } on ServerFailure catch (failure) {
+          notificationsUtils.showErrorNotification(failure.message);
+        } on LocalFailure catch (failure) {
+          notificationsUtils.showErrorNotification(failure.message);
+        } on NoInternetFailure catch (_) {
+          notificationsUtils.showErrorNotification(
+            localizedString.getLocalizedString('no-internet'),
+          );
+        }
+      },
     );
   }
 

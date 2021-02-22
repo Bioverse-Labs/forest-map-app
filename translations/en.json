@@ -5,6 +5,7 @@
     "phone": "Phone",
     "password": "Password"
   },
+  "no-internet": "You are not connected to the internet",
   "generic-exception": "Ops... something went wrong",
   "database-exceptions": {
     "get-error": "Ops... failed to get data from database",
@@ -17,6 +18,10 @@
     "user-not-found": "Sorry but we don't have any user with this email address in our base",
     "email-in-use": "Sorry but we already have an account registered with this email",
     "wrong-password": "Password or email incorrect"
+  },
+  "polygon-alert": {
+    "specie-label": "Specie",
+    "date-label": "Date"
   },
   "input-validations": {
     "required": "This field is required!",
@@ -81,11 +86,16 @@
     "invite-member-button": "Invite Members",
     "invite-member-button-tooltip": "Generate link to invite an User",
     "edit-button": "Edit data",
-    "data-section-title": "Tree Locations Data",
+    "data-section-title": "Geolocation Data",
     "members-list": "Members"
   },
   "edit-organization-screen": {
     "title": "Edit Organization"
+  },
+  "organization-invite-screen": {
+    "title": "Invite",
+    "description": "This Organization has invited you to be member",
+    "button": "Accept"
   },
   "profile-screen": {
     "organization-counter": "Organizations",

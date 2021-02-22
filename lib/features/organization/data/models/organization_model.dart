@@ -1,6 +1,8 @@
+import 'package:forestMapApp/features/map/data/models/geolocation_data_model.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/models/model.dart';
+import '../../../map/domain/entities/geolocation_data.dart';
 import '../../domain/entities/member.dart';
 import '../../domain/entities/organization.dart';
 import '../hive/organization.dart';
@@ -15,6 +17,7 @@ class OrganizationModel extends Organization
     phone,
     avatarUrl,
     List<Member> members,
+    List<GeolocationData> geolocationData,
   }) : super(
           id: id,
           name: name,
@@ -22,6 +25,7 @@ class OrganizationModel extends Organization
           phone: phone,
           avatarUrl: avatarUrl,
           members: members,
+          geolocationData: geolocationData,
         );
 
   factory OrganizationModel.fromMap(Map<String, dynamic> map) {
@@ -32,6 +36,7 @@ class OrganizationModel extends Organization
       phone: map['phone'],
       avatarUrl: map['avatarUrl'],
       members: map['members'],
+      geolocationData: map['geolocationData'] as List<GeolocationData>,
     );
   }
 
@@ -47,6 +52,9 @@ class OrganizationModel extends Organization
       phone: orgHive.phone,
       avatarUrl: orgHive.avatarUrl,
       members: _members,
+      geolocationData: orgHive.geolocationData
+          .map((geoData) => GeolocationDataModel.fromHive(geoData))
+          .toList(),
     );
   }
 
@@ -58,6 +66,7 @@ class OrganizationModel extends Organization
       phone: organization.phone,
       avatarUrl: organization.avatarUrl,
       members: organization.members,
+      geolocationData: organization.geolocationData,
     );
   }
 
@@ -71,16 +80,23 @@ class OrganizationModel extends Organization
       };
 
   @override
-  OrganizationHive toHiveAdapter() => OrganizationHive()
-    ..id = id
-    ..name = name
-    ..email = email
-    ..phone = phone
-    ..avatarUrl = avatarUrl
-    ..members = members
-            ?.map((member) => MemberModel.fromEntity(member).toHiveAdapter())
-            ?.toList() ??
-        [];
+  OrganizationHive toHiveAdapter() {
+    final geoHive = geolocationData?.map((geoData) {
+      print(GeolocationDataModel.fromEntity(geoData)?.toHiveAdapter());
+      return GeolocationDataModel.fromEntity(geoData)?.toHiveAdapter();
+    })?.toList();
+    return OrganizationHive()
+      ..id = id
+      ..name = name
+      ..email = email
+      ..phone = phone
+      ..avatarUrl = avatarUrl
+      ..members = members
+              ?.map((member) => MemberModel.fromEntity(member).toHiveAdapter())
+              ?.toList() ??
+          []
+      ..geolocationData = geoHive;
+  }
 
   @override
   OrganizationModel copyWith({
@@ -90,6 +106,7 @@ class OrganizationModel extends Organization
     phone,
     avatarUrl,
     members,
+    geolocationData,
   }) =>
       OrganizationModel(
         id: id ?? this.id,
@@ -98,5 +115,6 @@ class OrganizationModel extends Organization
         phone: phone ?? this.phone,
         avatarUrl: avatarUrl ?? this.avatarUrl,
         members: members ?? this.members,
+        geolocationData: geolocationData ?? this.geolocationData,
       );
 }

@@ -97,7 +97,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
 
   void _askPermission(BuildContext context) {
     widget.notificationsUtils.showAlertDialog(
-      context: context,
       title: Text(
         widget.localizedString.getLocalizedString('map-screen.alert-title'),
       ),
@@ -111,9 +110,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
           title: widget.localizedString.getLocalizedString(
             'map-screen.alert-cancel-button',
           ),
-          action: () {
-            widget.appNavigator.pop();
-          },
         ),
         AlertButtonParams(
           title: widget.localizedString.getLocalizedString(
@@ -197,6 +193,16 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     );
   }
 
+  Future<void> _goToDataLocation() async {
+    final position = CameraPosition(
+      target: LatLng(-7.32419301411112, -51.746992841544795),
+      zoom: 16,
+    );
+
+    final controllerFuture = await _controller.future;
+    controllerFuture.animateCamera(CameraUpdate.newCameraPosition(position));
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -243,18 +249,37 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
 
               return child;
             },
-            child: GoogleMap(
-              initialCameraPosition: _initalPosition,
-              onMapCreated: _handleMapCreation,
-              myLocationEnabled: true,
+            child: Consumer<OrganizationNotifierImpl>(
+              builder: (ctx, state, _) {
+                return GoogleMap(
+                  initialCameraPosition: _initalPosition,
+                  onMapCreated: _handleMapCreation,
+                  myLocationEnabled: true,
+                  mapType: MapType.satellite,
+                  polygons: state.polygons,
+                  myLocationButtonEnabled: true,
+                );
+              },
             ),
           ),
           floatingActionButton: snapshot.data is LocationFailure
               ? Container()
-              : FloatingActionButton(
-                  heroTag: 'mapPhotoActionButton',
-                  onPressed: () => _takePicture(context),
-                  child: Icon(Icons.add_a_photo_outlined),
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FloatingActionButton(
+                      heroTag: 'mapPhotoActionButton',
+                      onPressed: () => _takePicture(context),
+                      child: Icon(Icons.add_a_photo_outlined),
+                    ),
+                    SizedBox(width: 8),
+                    FloatingActionButton.extended(
+                      heroTag: 'goToTreeButton',
+                      onPressed: _goToDataLocation,
+                      icon: Icon(Icons.gps_fixed_outlined),
+                      label: Text('Data location'),
+                    ),
+                  ],
                 ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,

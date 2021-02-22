@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 
 import 'core/config/app_config.dart';
 import 'core/config/app_notifier.dart';
@@ -32,6 +33,7 @@ class _ForestMapState extends State<ForestMap> {
     AppConfig.registerRepositories();
     AppConfig.registerUseCases();
     AppConfig.registerNotifiers();
+    await Jiffy.locale(); // en
   }
 
   @override

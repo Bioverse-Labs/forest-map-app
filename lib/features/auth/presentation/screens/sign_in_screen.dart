@@ -78,6 +78,9 @@ class _SignInScreenState extends State<SignInScreen> {
         widget.notificationsUtils.showErrorNotification(exception.message);
       } on LocalFailure catch (failure) {
         widget.notificationsUtils.showErrorNotification(failure.message);
+      } on NoInternetFailure catch (_) {
+        widget.notificationsUtils
+            .showErrorNotification(_getString('no-internet'));
       } finally {
         setState(() {
           _isLoading = false;
@@ -105,6 +108,9 @@ class _SignInScreenState extends State<SignInScreen> {
       widget.notificationsUtils.showErrorNotification(exception.message);
     } on LocalFailure catch (failure) {
       widget.notificationsUtils.showErrorNotification(failure.message);
+    } on NoInternetFailure catch (_) {
+      widget.notificationsUtils
+          .showErrorNotification(_getString('no-internet'));
     } finally {
       setState(() {
         _isLoading = false;

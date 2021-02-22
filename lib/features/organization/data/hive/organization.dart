@@ -1,3 +1,4 @@
+import 'package:forestMapApp/features/map/data/hive/geolocation_data.dart';
 import 'package:hive/hive.dart';
 
 import 'member.dart';
@@ -23,4 +24,7 @@ class OrganizationHive {
 
   @HiveField(5)
   List<MemberHive> members;
+
+  @HiveField(6)
+  List<GeolocationDataHive> geolocationData;
 }

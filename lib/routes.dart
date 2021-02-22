@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forestMapApp/features/map/presentation/screens/static_map_screen.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
@@ -92,5 +93,11 @@ Map<String, Widget Function(BuildContext)> routes = {
         notificationsUtils: GetIt.I(),
         localizedString: GetIt.I(),
         appNavigator: GetIt.I(),
+      ),
+  '/organization-geolocation-data-map': (ctx) => StaticMapScreen(
+        organizationNotifier: Provider.of<OrganizationNotifierImpl>(
+          ctx,
+          listen: false,
+        ),
       ),
 };

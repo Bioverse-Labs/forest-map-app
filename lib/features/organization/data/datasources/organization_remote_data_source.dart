@@ -2,6 +2,10 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:forestMapApp/core/adapters/http_adapter.dart';
+import 'package:geojson/geojson.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/adapters/firebase_storage_adapter.dart';
@@ -10,8 +14,12 @@ import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';
 import '../../../../core/errors/exceptions.dart';
+import '../../../../core/util/dir.dart';
+import '../../../../core/util/geojson.dart';
 import '../../../../core/util/localized_string.dart';
 import '../../../../core/util/uuid_generator.dart';
+import '../../../map/data/models/geolocation_data_model.dart';
+import '../../../map/data/models/geolocation_data_properties_model.dart';
 import '../../../user/data/models/user_model.dart';
 import '../../../user/domain/entities/user.dart';
 import '../models/member_model.dart';
@@ -71,12 +79,18 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
   final FirebaseStorageAdapterImpl firebaseStorageAdapter;
   final LocalizedString localizedString;
   final UUIDGenerator uuidGenerator;
+  final DirUtils dirUtils;
+  final GeoJsonUtils geoJsonUtils;
+  final HttpAdapter httpAdapter;
 
   OrganizationRemoteDataSourceImpl({
     @required this.firestoreAdapter,
     @required this.firebaseStorageAdapter,
     @required this.localizedString,
     @required this.uuidGenerator,
+    @required this.dirUtils,
+    @required this.geoJsonUtils,
+    @required this.httpAdapter,
   });
 
   @override
@@ -174,6 +188,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
   Future<OrganizationModel> getOrganization(String id) async {
     try {
       final orgDoc = await firestoreAdapter.getDocument('organizations/$id');
+      List<GeolocationDataModel> geolocationData = <GeolocationDataModel>[];
 
       if (!orgDoc.exists) {
         throw ServerException(
@@ -182,10 +197,42 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
           ExceptionOriginTypes.firebaseFirestore,
         );
       }
+      final test = orgDoc.data();
+      if (orgDoc.data()['geolocationData'] != null) {
+        for (var filename in orgDoc.data()['geolocationData']) {
+          final docDir = await dirUtils.getDocumentsDirectory();
+          final localFile = File('${docDir.path}/$filename.geojson');
+          final geoProperties = <GeolocationDataPropertiesModel>[];
+          GeoJson geoJson;
+
+          if (!await localFile.exists()) {
+            await localFile.create();
+            final downloadUrl = await firebaseStorageAdapter.getDownloadUrl(
+              '/geolocation-data/$filename.geojson',
+            );
+            final resp = await httpAdapter.downloadFile(downloadUrl);
+            await localFile.writeAsBytes(resp.readAsBytesSync());
+          }
+
+          geoJson = await geoJsonUtils.parseFromFile(localFile);
+
+          for (var feature in geoJson.features) {
+            geoProperties.addAll(
+              await geoJsonUtils.parseFeaturesToModel(feature),
+            );
+          }
+
+          geolocationData.add(GeolocationDataModel(
+            name: filename,
+            dataProperties: geoProperties,
+          ));
+        }
+      }
 
       return OrganizationModel.fromMap({
         ...orgDoc.data(),
         'members': await _getMembers(id),
+        'geolocationData': geolocationData,
       });
     } on FirebaseException catch (error) {
       throw ServerException(
@@ -231,10 +278,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
         },
       );
 
-      return OrganizationModel.fromMap({
-        ...orgDoc.data(),
-        'members': await _getMembers(id),
-      });
+      return getOrganization(id);
     } on FirebaseException catch (error) {
       throw ServerException(
         localizedString.getLocalizedString('database-exceptions.update-error'),
@@ -268,11 +312,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
         });
       }
 
-      final orgDoc = await firestoreAdapter.getDocument('organizations/$id');
-      return OrganizationModel.fromMap({
-        ...orgDoc.data(),
-        'members': await _getMembers(id),
-      });
+      return getOrganization(id);
     } on FirebaseException catch (error) {
       throw ServerException(
         localizedString.getLocalizedString('database-exceptions.get-error'),
@@ -306,11 +346,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
         map,
       );
 
-      final orgDoc = await firestoreAdapter.getDocument('organizations/$id');
-      return OrganizationModel.fromMap({
-        ...orgDoc.data(),
-        'members': await _getMembers(id),
-      });
+      return getOrganization(id);
     } on FirebaseException catch (error) {
       throw ServerException(
         localizedString.getLocalizedString('database-exceptions.get-error'),
@@ -359,15 +395,12 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
         map['avatarUrl'] = avatarUrl;
       }
 
-      final ref = await firestoreAdapter.updateDocument(
+      await firestoreAdapter.updateDocument(
         'organizations/$id',
         map,
       );
 
-      return OrganizationModel.fromMap({
-        ...(await ref.get()).data(),
-        'members': await _getMembers(id),
-      });
+      return getOrganization(id);
     } on FirebaseException catch (error) {
       throw ServerException(
         localizedString.getLocalizedString('database-exceptions.get-error'),

@@ -1,6 +1,8 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/enums/organization_member_status.dart';
@@ -58,6 +60,7 @@ class OrganizationNotifierImpl extends ChangeNotifier
   Organization _organization;
   String _invitationLink;
   bool _loading = false;
+  Set<Polygon> _polygons = Set<Polygon>();
 
   OrganizationNotifierImpl({
     @required this.createOrganizationUseCase,
@@ -72,6 +75,21 @@ class OrganizationNotifierImpl extends ChangeNotifier
   Organization get organization => _organization;
   String get invitationLink => _invitationLink;
   bool get isLoading => _loading;
+  Set<Polygon> get polygons {
+    _polygons.clear();
+
+    final _geolocationData = _organization?.geolocationData;
+
+    if (_geolocationData != null && _geolocationData.length > 0) {
+      for (var geoData in _geolocationData) {
+        for (var dataProperties in geoData.dataProperties) {
+          _polygons.add(dataProperties.polygon);
+        }
+      }
+    }
+
+    return _polygons;
+  }
 
   @override
   Future<void> createOrganization({

@@ -82,7 +82,11 @@ class _OrganizationInviteScreenState extends State<OrganizationInviteScreen> {
   Widget build(BuildContext context) {
     return ScreenWidget(
       appBar: AppBar(
-        title: Text('Invitation'),
+        title: Text(
+          widget.localizedString.getLocalizedString(
+            'organization-invite-screen.title',
+          ),
+        ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -91,6 +95,7 @@ class _OrganizationInviteScreenState extends State<OrganizationInviteScreen> {
           OrganizationInfo(
             organization: widget.organizationInviteNotifier.organization,
             localizedString: widget.localizedString,
+            hideGeoData: true,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -98,14 +103,20 @@ class _OrganizationInviteScreenState extends State<OrganizationInviteScreen> {
               children: [
                 SizedBox(height: 16),
                 Text(
-                  'This Organization has invited you to be member',
+                  widget.localizedString.getLocalizedString(
+                    'organization-invite-screen.description',
+                  ),
                   style: Theme.of(context).textTheme.headline5,
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 16),
                 RaisedButton(
                   onPressed: _acceptInvite,
-                  child: Text('Accept'),
+                  child: Text(
+                    widget.localizedString.getLocalizedString(
+                      'organization-invite-screen.button',
+                    ),
+                  ),
                 ),
               ],
             ),

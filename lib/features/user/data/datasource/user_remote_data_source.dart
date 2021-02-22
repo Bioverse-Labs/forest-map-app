@@ -1,12 +1,19 @@
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:forestMapApp/core/adapters/http_adapter.dart';
+import 'package:forestMapApp/features/map/data/models/geolocation_data_model.dart';
+import 'package:forestMapApp/features/map/data/models/geolocation_data_properties_model.dart';
+import 'package:forestMapApp/features/organization/data/datasources/organization_remote_data_source.dart';
+import 'package:geojson/geojson.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/adapters/firebase_storage_adapter.dart';
 import '../../../../core/adapters/firestore_adapter.dart';
 import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/errors/exceptions.dart';
+import '../../../../core/util/dir.dart';
+import '../../../../core/util/geojson.dart';
 import '../../../../core/util/localized_string.dart';
 import '../../../organization/data/models/member_model.dart';
 import '../../../organization/data/models/organization_model.dart';
@@ -28,11 +35,13 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final FirestoreAdapterImpl firestoreAdapter;
   final FirebaseStorageAdapterImpl firebaseStorageAdapter;
   final LocalizedString localizedString;
+  final OrganizationRemoteDataSource organizationRemoteDataSource;
 
   UserRemoteDataSourceImpl({
     @required this.firestoreAdapter,
     @required this.firebaseStorageAdapter,
     @required this.localizedString,
+    @required this.organizationRemoteDataSource,
   });
 
   @override
@@ -49,7 +58,9 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       }
 
       for (var orgId in userDoc.data()['organizations'] ?? []) {
-        final organization = await _getOrganizations(orgId);
+        final organization = await organizationRemoteDataSource.getOrganization(
+          orgId,
+        );
         organizations.add(organization);
       }
 
@@ -114,7 +125,9 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
       final _organizations = <OrganizationModel>[];
       for (var orgId in userDoc.data()['organizations']) {
-        final organization = await _getOrganizations(orgId);
+        final organization = await organizationRemoteDataSource.getOrganization(
+          orgId,
+        );
         _organizations.add(organization);
       }
 
@@ -130,44 +143,5 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         stackTrace: error.stackTrace,
       );
     }
-  }
-
-  Future<OrganizationModel> _getOrganizations(String id) async {
-    final orgDoc = await firestoreAdapter.getDocument('organizations/$id');
-
-    if (orgDoc.exists) {
-      final members = await _getMembers(id);
-
-      return OrganizationModel.fromMap({
-        ...orgDoc.data(),
-        'members': members,
-      });
-    }
-
-    return null;
-  }
-
-  Future<List<MemberModel>> _getMembers(String id) async {
-    List<MemberModel> members = <MemberModel>[];
-
-    final membersQuery = firestoreAdapter.firestore.collection(
-      'organizations/$id/members',
-    );
-    final membersDoc = await firestoreAdapter.runQuery(membersQuery);
-    if (membersDoc.isNotEmpty) {
-      for (var member in membersDoc) {
-        final userId = member.id;
-        final userDoc = await firestoreAdapter.getDocument('users/$userId');
-
-        if (userDoc.exists) {
-          members.add(MemberModel.fromMap({
-            ...userDoc.data(),
-            ...member.data(),
-          }));
-        }
-      }
-    }
-
-    return members;
   }
 }
