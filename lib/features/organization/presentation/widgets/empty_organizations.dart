@@ -30,7 +30,7 @@ class EmptyOrganizations extends StatelessWidget {
             ),
             if (onPress != null) SizedBox(height: 32),
             if (onPress != null)
-              RaisedButton(
+              ElevatedButton(
                 onPressed: onPress,
                 child: Text(
                   localizedString.getLocalizedString(

@@ -1,8 +1,8 @@
 import 'package:faker/faker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:forestMapApp/core/adapters/firebase_auth_adapter.dart';
-import 'package:forestMapApp/features/user/data/models/user_model.dart';
+import 'package:forest_map_app/core/adapters/firebase_auth_adapter.dart';
+import 'package:forest_map_app/features/user/data/models/user_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';

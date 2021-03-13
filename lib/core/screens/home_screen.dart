@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../features/auth/presentation/notifiers/auth_notifier.dart';
+import '../../features/map/presentation/notifiers/map_notifier.dart';
 import '../../features/map/presentation/screens/map_screen.dart';
 import '../../features/organization/presentation/notifiers/organization_invite_notifier.dart';
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
@@ -33,6 +34,7 @@ class HomeScreen extends StatefulWidget {
   final UserNotifierImpl userNotifier;
   final AuthNotifierImpl authNotifier;
   final PostNotifierImpl postNotifier;
+  final MapNotifierImpl mapNotifier;
   final AppNavigator appNavigator;
   final NotificationsUtils notificationsUtils;
   final Camera camera;
@@ -47,6 +49,7 @@ class HomeScreen extends StatefulWidget {
     @required this.organizationNotifier,
     @required this.organizationInviteNotifier,
     @required this.locationNotifier,
+    @required this.mapNotifier,
     @required this.appNavigator,
     @required this.userNotifier,
     @required this.authNotifier,
@@ -86,6 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
         organizationNotifier: widget.organizationNotifier,
         postNotifier: widget.postNotifier,
         appTheme: widget.appTheme,
+        mapNotifier: widget.mapNotifier,
       ),
       OrganizationScreen(
         localizedString: widget.localizedString,
@@ -169,6 +173,18 @@ class _HomeScreenState extends State<HomeScreen> {
           widget.organizationInviteNotifier.setInviteScreenVisibility(false);
         }
       }
+    });
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      widget.mapNotifier.getGeolocationFiles(
+        widget.organizationNotifier.organization,
+      );
+
+      widget.organizationNotifier.addListener(() {
+        widget.mapNotifier.getGeolocationFiles(
+          widget.organizationNotifier.organization,
+        );
+      });
     });
 
     super.initState();

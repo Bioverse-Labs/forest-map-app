@@ -1,5 +1,5 @@
 import 'package:connectivity/connectivity.dart';
-import 'package:forestMapApp/core/platform/network_info.dart';
+import 'package:forest_map_app/core/platform/network_info.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';

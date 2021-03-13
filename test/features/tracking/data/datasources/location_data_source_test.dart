@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forestMapApp/core/adapters/firestore_adapter.dart';
-import 'package:forestMapApp/core/enums/exception_origin_types.dart';
-import 'package:forestMapApp/core/errors/exceptions.dart';
-import 'package:forestMapApp/core/platform/location.dart';
-import 'package:forestMapApp/features/tracking/data/datasources/location_data_source.dart';
-import 'package:forestMapApp/features/tracking/data/models/location_model.dart';
-import 'package:forestMapApp/features/tracking/domain/entities/location.dart';
+import 'package:forest_map_app/core/adapters/firestore_adapter.dart';
+import 'package:forest_map_app/core/enums/exception_origin_types.dart';
+import 'package:forest_map_app/core/errors/exceptions.dart';
+import 'package:forest_map_app/core/platform/location.dart';
+import 'package:forest_map_app/features/tracking/data/datasources/location_data_source.dart';
+import 'package:forest_map_app/features/tracking/data/models/location_model.dart';
+import 'package:forest_map_app/features/tracking/domain/entities/location.dart';
 import 'package:mockito/mockito.dart';
 
 class MockLocationUtilsImpl extends Mock implements LocationUtilsImpl {}

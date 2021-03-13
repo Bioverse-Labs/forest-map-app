@@ -1,21 +1,14 @@
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:forestMapApp/core/adapters/http_adapter.dart';
-import 'package:forestMapApp/features/map/data/models/geolocation_data_model.dart';
-import 'package:forestMapApp/features/map/data/models/geolocation_data_properties_model.dart';
-import 'package:forestMapApp/features/organization/data/datasources/organization_remote_data_source.dart';
-import 'package:geojson/geojson.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/adapters/firebase_storage_adapter.dart';
 import '../../../../core/adapters/firestore_adapter.dart';
 import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/errors/exceptions.dart';
-import '../../../../core/util/dir.dart';
-import '../../../../core/util/geojson.dart';
 import '../../../../core/util/localized_string.dart';
-import '../../../organization/data/models/member_model.dart';
+import '../../../organization/data/datasources/organization_remote_data_source.dart';
 import '../../../organization/data/models/organization_model.dart';
 import '../../../organization/domain/entities/organization.dart';
 import '../models/user_model.dart';

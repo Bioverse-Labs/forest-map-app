@@ -205,7 +205,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       SizedBox(height: 10),
                       SizedBox(
                         width: double.infinity,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           onPressed: _signIn,
                           child: Text(_getString('login-screen.submit-button')),
                         ),
@@ -213,7 +213,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       Divider(),
                       SizedBox(
                         width: double.infinity,
-                        child: FlatButton(
+                        child: TextButton(
                           onPressed: _gotToSignUpScreen,
                           child:
                               Text(_getString('login-screen.sign-up-button')),

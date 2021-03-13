@@ -1,13 +1,14 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:forestMapApp/core/style/theme.dart';
-import 'package:forestMapApp/core/util/localized_string.dart';
-import 'package:forestMapApp/core/util/notifications.dart';
-import 'package:forestMapApp/features/map/data/models/geolocation_data_properties_model.dart';
 import 'package:geojson/geojson.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../../features/map/data/models/geolocation_data_properties_model.dart';
+import 'localized_string.dart';
+import 'notifications.dart';
 
 class GeoJsonUtils {
   Future<GeoJson> parseFromFile(File file) async {

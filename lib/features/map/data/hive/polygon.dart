@@ -1,5 +1,6 @@
-import 'package:forestMapApp/features/map/data/hive/lat_lng.dart';
 import 'package:hive/hive.dart';
+
+import 'lat_lng.dart';
 
 part 'polygon.g.dart';
 

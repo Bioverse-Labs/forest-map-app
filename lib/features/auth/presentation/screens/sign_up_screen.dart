@@ -127,7 +127,7 @@ class SignupScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    RaisedButton(
+                    ElevatedButton(
                       onPressed: _signUp,
                       child: Text(
                         _getString('signup-screen.submit-button'),

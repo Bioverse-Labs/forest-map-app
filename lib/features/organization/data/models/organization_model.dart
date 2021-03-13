@@ -1,4 +1,3 @@
-import 'package:forestMapApp/features/map/data/models/geolocation_data_model.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/models/model.dart';
@@ -17,7 +16,7 @@ class OrganizationModel extends Organization
     phone,
     avatarUrl,
     List<Member> members,
-    List<GeolocationData> geolocationData,
+    List<String> geolocationData,
   }) : super(
           id: id,
           name: name,
@@ -36,7 +35,7 @@ class OrganizationModel extends Organization
       phone: map['phone'],
       avatarUrl: map['avatarUrl'],
       members: map['members'],
-      geolocationData: map['geolocationData'] as List<GeolocationData>,
+      geolocationData: map['geolocationData'] as List<String>,
     );
   }
 
@@ -52,9 +51,7 @@ class OrganizationModel extends Organization
       phone: orgHive.phone,
       avatarUrl: orgHive.avatarUrl,
       members: _members,
-      geolocationData: orgHive.geolocationData
-          .map((geoData) => GeolocationDataModel.fromHive(geoData))
-          .toList(),
+      geolocationData: orgHive.geolocationData,
     );
   }
 
@@ -81,10 +78,6 @@ class OrganizationModel extends Organization
 
   @override
   OrganizationHive toHiveAdapter() {
-    final geoHive = geolocationData?.map((geoData) {
-      print(GeolocationDataModel.fromEntity(geoData)?.toHiveAdapter());
-      return GeolocationDataModel.fromEntity(geoData)?.toHiveAdapter();
-    })?.toList();
     return OrganizationHive()
       ..id = id
       ..name = name
@@ -95,18 +88,18 @@ class OrganizationModel extends Organization
               ?.map((member) => MemberModel.fromEntity(member).toHiveAdapter())
               ?.toList() ??
           []
-      ..geolocationData = geoHive;
+      ..geolocationData = geolocationData;
   }
 
   @override
   OrganizationModel copyWith({
-    id,
-    name,
-    email,
-    phone,
-    avatarUrl,
-    members,
-    geolocationData,
+    String id,
+    String name,
+    String email,
+    String phone,
+    String avatarUrl,
+    List<Member> members,
+    List<GeolocationData> geolocationData,
   }) =>
       OrganizationModel(
         id: id ?? this.id,

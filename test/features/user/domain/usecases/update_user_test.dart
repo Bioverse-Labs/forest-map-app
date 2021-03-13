@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forestMapApp/core/enums/exception_origin_types.dart';
-import 'package:forestMapApp/core/errors/failure.dart';
-import 'package:forestMapApp/features/user/domain/entities/user.dart';
-import 'package:forestMapApp/features/user/domain/repository/user_repository.dart';
-import 'package:forestMapApp/features/user/domain/usecases/update_user.dart';
+import 'package:forest_map_app/core/enums/exception_origin_types.dart';
+import 'package:forest_map_app/core/errors/failure.dart';
+import 'package:forest_map_app/features/user/domain/entities/user.dart';
+import 'package:forest_map_app/features/user/domain/repository/user_repository.dart';
+import 'package:forest_map_app/features/user/domain/usecases/update_user.dart';
 import 'package:mockito/mockito.dart';
 
 class MockUserRepository extends Mock implements UserRepository {}

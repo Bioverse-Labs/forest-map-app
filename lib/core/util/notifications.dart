@@ -56,14 +56,14 @@ class NotificationsUtils {
           actions: buttons
               .map(
                 (button) => button.isPrimary
-                    ? RaisedButton(
+                    ? ElevatedButton(
                         onPressed: () {
                           cancelFunc();
                           button?.action?.call();
                         },
                         child: Text(button.title),
                       )
-                    : FlatButton(
+                    : TextButton(
                         onPressed: () {
                           cancelFunc();
                           button?.action?.call();

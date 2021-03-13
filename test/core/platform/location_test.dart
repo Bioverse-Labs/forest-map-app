@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:faker/faker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forestMapApp/core/errors/exceptions.dart';
-import 'package:forestMapApp/core/platform/location.dart';
-import 'package:forestMapApp/core/util/localized_string.dart';
-import 'package:forestMapApp/features/tracking/domain/entities/location.dart';
+import 'package:forest_map_app/core/errors/exceptions.dart';
+import 'package:forest_map_app/core/platform/location.dart';
+import 'package:forest_map_app/core/util/localized_string.dart';
+import 'package:forest_map_app/features/tracking/domain/entities/location.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mockito/mockito.dart';
 
@@ -31,6 +31,14 @@ void main() {
   final tPosition = Position(
     latitude: faker.randomGenerator.decimal(),
     longitude: faker.randomGenerator.decimal(),
+    accuracy: faker.randomGenerator.decimal(),
+    altitude: faker.randomGenerator.decimal(),
+    floor: faker.randomGenerator.integer(10),
+    heading: faker.randomGenerator.decimal(),
+    isMocked: true,
+    speed: faker.randomGenerator.decimal(),
+    speedAccuracy: faker.randomGenerator.decimal(),
+    timestamp: DateTime.now(),
   );
 
   group('getLastKnowPosition', () {

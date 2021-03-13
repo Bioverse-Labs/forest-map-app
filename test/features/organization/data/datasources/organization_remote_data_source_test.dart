@@ -4,17 +4,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faker/faker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forestMapApp/core/adapters/firebase_storage_adapter.dart';
-import 'package:forestMapApp/core/adapters/firestore_adapter.dart';
-import 'package:forestMapApp/core/enums/organization_member_status.dart';
-import 'package:forestMapApp/core/enums/organization_role_types.dart';
-import 'package:forestMapApp/core/errors/exceptions.dart';
-import 'package:forestMapApp/core/util/localized_string.dart';
-import 'package:forestMapApp/core/util/uuid_generator.dart';
-import 'package:forestMapApp/features/user/data/models/user_model.dart';
-import 'package:forestMapApp/features/organization/data/datasources/organization_remote_data_source.dart';
-import 'package:forestMapApp/features/organization/data/models/member_model.dart';
-import 'package:forestMapApp/features/organization/data/models/organization_model.dart';
+import 'package:forest_map_app/core/adapters/firebase_storage_adapter.dart';
+import 'package:forest_map_app/core/adapters/firestore_adapter.dart';
+import 'package:forest_map_app/core/enums/organization_member_status.dart';
+import 'package:forest_map_app/core/enums/organization_role_types.dart';
+import 'package:forest_map_app/core/errors/exceptions.dart';
+import 'package:forest_map_app/core/util/localized_string.dart';
+import 'package:forest_map_app/core/util/uuid_generator.dart';
+import 'package:forest_map_app/features/user/data/models/user_model.dart';
+import 'package:forest_map_app/features/organization/data/datasources/organization_remote_data_source.dart';
+import 'package:forest_map_app/features/organization/data/models/member_model.dart';
+import 'package:forest_map_app/features/organization/data/models/organization_model.dart';
 import 'package:mockito/mockito.dart';
 
 class MockFirestoreAdapter extends Mock implements FirestoreAdapterImpl {}
@@ -32,6 +32,7 @@ class MockDocumentSnapshot extends Mock implements DocumentSnapshot {}
 
 class MockQueryDocumentSnapshot extends Mock implements QueryDocumentSnapshot {}
 
+// ignore: must_be_immutable
 class MockCollectionReference extends Mock implements CollectionReference {}
 
 class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}

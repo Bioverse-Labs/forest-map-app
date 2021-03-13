@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forestMapApp/core/enums/organization_role_types.dart';
-import 'package:forestMapApp/features/organization/domain/entities/organization.dart';
-import 'package:forestMapApp/features/organization/domain/repositories/organization_repository.dart';
-import 'package:forestMapApp/features/organization/domain/usecases/update_member.dart';
+import 'package:forest_map_app/core/enums/organization_role_types.dart';
+import 'package:forest_map_app/features/organization/domain/entities/organization.dart';
+import 'package:forest_map_app/features/organization/domain/repositories/organization_repository.dart';
+import 'package:forest_map_app/features/organization/domain/usecases/update_member.dart';
 import 'package:mockito/mockito.dart';
 
 class MockOrganizationRepository extends Mock

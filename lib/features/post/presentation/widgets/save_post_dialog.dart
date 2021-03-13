@@ -77,7 +77,7 @@ class SavePostDialog extends StatelessWidget {
                   SizedBox(height: 8),
                   Container(
                     width: double.infinity,
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
                           onSave(_nameController.text);

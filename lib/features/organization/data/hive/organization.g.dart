@@ -23,7 +23,7 @@ class OrganizationHiveAdapter extends TypeAdapter<OrganizationHive> {
       ..phone = fields[3] as String
       ..avatarUrl = fields[4] as String
       ..members = (fields[5] as List)?.cast<MemberHive>()
-      ..geolocationData = (fields[6] as List)?.cast<GeolocationDataHive>();
+      ..geolocationData = (fields[6] as List)?.cast<String>();
   }
 
   @override

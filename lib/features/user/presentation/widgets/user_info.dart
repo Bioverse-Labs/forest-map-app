@@ -54,7 +54,7 @@ class UserInfo extends StatelessWidget {
                 value: user?.organizations?.length.toString() ?? '',
               ),
               // if (canEdit)
-              //   RaisedButton.icon(
+              //   ElevatedButton.icon(
               //     onPressed: () {},
               //     icon: Icon(Icons.edit),
               //     label: Text(

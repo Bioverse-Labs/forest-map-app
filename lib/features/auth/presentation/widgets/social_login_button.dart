@@ -16,9 +16,8 @@ class SocialLoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flexible(
       flex: 1,
-      child: OutlineButton(
+      child: OutlinedButton(
         onPressed: onPress,
-        color: Colors.white,
         child: Row(
           children: [
             icon,

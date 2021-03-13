@@ -110,7 +110,7 @@ class _OrganizationInviteScreenState extends State<OrganizationInviteScreen> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 16),
-                RaisedButton(
+                ElevatedButton(
                   onPressed: _acceptInvite,
                   child: Text(
                     widget.localizedString.getLocalizedString(

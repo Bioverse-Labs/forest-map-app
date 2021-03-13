@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
@@ -9,7 +10,7 @@ abstract class HttpAdapter {
 class HttpAdapterImpl implements HttpAdapter {
   @override
   Future<File> downloadFile(String url) async {
-    final resp = await http.get(url);
+    final resp = await http.get(Uri.parse(url));
     final tempDir = (await getTemporaryDirectory()).path;
     final file = File('$tempDir/file.geojson');
     await file.create();

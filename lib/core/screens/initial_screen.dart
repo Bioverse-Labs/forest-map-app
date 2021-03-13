@@ -1,14 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/errors/failure.dart';
-import 'package:forestMapApp/core/util/notifications.dart';
 
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
 import '../adapters/firebase_auth_adapter.dart';
 import '../adapters/firestore_adapter.dart';
+import '../errors/failure.dart';
 import '../navigation/app_navigator.dart';
 import '../platform/network_info.dart';
+import '../util/notifications.dart';
 import 'splash_screen.dart';
 
 class InitialScreen extends StatelessWidget {

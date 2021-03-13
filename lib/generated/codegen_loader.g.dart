@@ -92,7 +92,8 @@ class CodegenLoader extends AssetLoader{
     "input-placeholder": "Castanheira",
     "save-button": "Save",
     "post-success": "Data saved!",
-    "start-saving": "Data started to being saved"
+    "start-saving": "Data started to being saved",
+    "loading-geolocation-files": "Loading geolocation files..."
   },
   "organization-screen": {
     "title": "Organizations",
@@ -201,7 +202,8 @@ static const Map<String,dynamic> pt_BR = {
     "input-placeholder": "Castanheira",
     "save-button": "Salvar",
     "post-success": "Dado salvo!",
-    "start-saving": "Dado começou a ser salvo"
+    "start-saving": "Dado começou a ser salvo",
+    "loading-geolocation-files": "Carregando os arquivos de geolocalização..."
   },
   "organization-screen": {
     "title": "Organizações",

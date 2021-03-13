@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/util/localized_string.dart';
-import 'package:forestMapApp/core/util/notifications.dart';
-import 'package:forestMapApp/features/map/data/hive/lat_lng.dart';
-import 'package:forestMapApp/features/map/data/hive/polygon.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/models/model.dart';
+import '../../../../core/util/localized_string.dart';
+import '../../../../core/util/notifications.dart';
 import '../../domain/entities/geolocation_data_properties.dart';
 import '../hive/geolocation_data_properties.dart';
+import '../hive/lat_lng.dart';
+import '../hive/polygon.dart';
 
 class GeolocationDataPropertiesModel extends GeolocationDataProperties
     implements
@@ -36,8 +36,9 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties
       type: map['class'],
       specie: map['specie'],
       detDate: map['det_date'] != null ? DateTime.parse(map['det_date']) : null,
-      imageDate:
-          DateTime.parse(map['image_date'].toString().replaceAll('/', '-')),
+      imageDate: map['det_date'] != null
+          ? DateTime.parse(map['image_date'].toString().replaceAll('/', '-'))
+          : null,
       polygon: map['polygon'],
     );
   }

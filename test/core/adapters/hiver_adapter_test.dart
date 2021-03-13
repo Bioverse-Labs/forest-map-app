@@ -1,8 +1,8 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forestMapApp/core/adapters/hive_adapter.dart';
-import 'package:forestMapApp/core/errors/exceptions.dart';
-import 'package:forestMapApp/features/user/data/hive/user.dart';
+import 'package:forest_map_app/core/adapters/hive_adapter.dart';
+import 'package:forest_map_app/core/errors/exceptions.dart';
+import 'package:forest_map_app/features/user/data/hive/user.dart';
 import 'package:hive/hive.dart';
 import 'package:mockito/mockito.dart';
 

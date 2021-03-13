@@ -4,13 +4,13 @@ import 'package:faker/faker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forestMapApp/core/adapters/firebase_storage_adapter.dart';
-import 'package:forestMapApp/core/adapters/firestore_adapter.dart';
-import 'package:forestMapApp/core/errors/exceptions.dart';
-import 'package:forestMapApp/core/util/localized_string.dart';
-import 'package:forestMapApp/core/util/uuid_generator.dart';
-import 'package:forestMapApp/features/post/data/datasources/post_remote_data_source.dart';
-import 'package:forestMapApp/features/tracking/data/models/location_model.dart';
+import 'package:forest_map_app/core/adapters/firebase_storage_adapter.dart';
+import 'package:forest_map_app/core/adapters/firestore_adapter.dart';
+import 'package:forest_map_app/core/errors/exceptions.dart';
+import 'package:forest_map_app/core/util/localized_string.dart';
+import 'package:forest_map_app/core/util/uuid_generator.dart';
+import 'package:forest_map_app/features/post/data/datasources/post_remote_data_source.dart';
+import 'package:forest_map_app/features/tracking/data/models/location_model.dart';
 import 'package:mockito/mockito.dart';
 
 class MockFirestoreAdapter extends Mock implements FirestoreAdapter {}

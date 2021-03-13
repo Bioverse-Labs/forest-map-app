@@ -23,7 +23,7 @@ class OrganizationMemberStatusAdapter
       case 3:
         return OrganizationMemberStatus.active;
       default:
-        return null;
+        return OrganizationMemberStatus.removed;
     }
   }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/features/map/presentation/screens/static_map_screen.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +8,8 @@ import 'core/screens/initial_screen.dart';
 import 'features/auth/presentation/notifiers/auth_notifier.dart';
 import 'features/auth/presentation/screens/sign_in_screen.dart';
 import 'features/auth/presentation/screens/sign_up_screen.dart';
+import 'features/map/presentation/notifiers/map_notifier.dart';
+import 'features/map/presentation/screens/static_map_screen.dart';
 import 'features/organization/presentation/notifiers/organization_invite_notifier.dart';
 import 'features/organization/presentation/notifiers/organizations_notifier.dart';
 import 'features/organization/presentation/screens/organization_invite_screen.dart';
@@ -73,6 +74,7 @@ Map<String, Widget Function(BuildContext)> routes = {
         authNotifier: Provider.of<AuthNotifierImpl>(ctx, listen: false),
         locationNotifier: Provider.of<LocationNotifierImpl>(ctx, listen: false),
         postNotifier: Provider.of<PostNotifierImpl>(ctx, listen: false),
+        mapNotifier: Provider.of<MapNotifierImpl>(ctx, listen: false),
         appNavigator: GetIt.I(),
         notificationsUtils: GetIt.I(),
         camera: GetIt.I(),

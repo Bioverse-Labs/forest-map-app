@@ -1,15 +1,21 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:jiffy/jiffy.dart';
 
 import 'core/config/app_config.dart';
 import 'core/config/app_notifier.dart';
 import 'core/widgets/app.dart';
 import 'generated/codegen_loader.g.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(ForestMap());
+  await EasyLocalization.ensureInitialized();
+  runApp(EasyLocalization(
+    child: ForestMap(),
+    supportedLocales: [Locale('en'), Locale('pt', 'BR')],
+    fallbackLocale: Locale('en'),
+    path: 'translations/',
+    assetLoader: CodegenLoader(),
+  ));
 }
 
 class ForestMap extends StatefulWidget {
@@ -33,7 +39,6 @@ class _ForestMapState extends State<ForestMap> {
     AppConfig.registerRepositories();
     AppConfig.registerUseCases();
     AppConfig.registerNotifiers();
-    await Jiffy.locale(); // en
   }
 
   @override
@@ -44,23 +49,20 @@ class _ForestMapState extends State<ForestMap> {
 
   @override
   Widget build(BuildContext context) {
-    return EasyLocalization(
-      child: FutureBuilder(
-        future: _initApp(),
-        builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container();
-          }
+    return FutureBuilder(
+      future: _initApp(),
+      builder: (ctx, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Container();
+        }
 
-          return AppNotifier(
-            widget: App(),
-          );
-        },
-      ),
-      supportedLocales: [Locale('en'), Locale('pt', 'BR')],
-      fallbackLocale: Locale('en'),
-      path: 'translations/',
-      assetLoader: CodegenLoader(),
+        return AppNotifier(
+          widget: App(
+            localizationsDelegate: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+          ),
+        );
+      },
     );
   }
 }

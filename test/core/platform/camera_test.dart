@@ -2,9 +2,9 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:dartz/dartz.dart';
-import 'package:forestMapApp/core/errors/failure.dart';
-import 'package:forestMapApp/core/platform/camera.dart';
-import 'package:forestMapApp/core/util/image.dart';
+import 'package:forest_map_app/core/errors/failure.dart';
+import 'package:forest_map_app/core/platform/camera.dart';
+import 'package:forest_map_app/core/util/image.dart';
 import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mockito/mockito.dart';
@@ -14,6 +14,7 @@ import '../util/get_path.dart';
 
 class MockImagePicker extends Mock implements ImagePicker {}
 
+// ignore: must_be_immutable
 class MockPickedFile extends Mock implements PickedFile {}
 
 class MockImageUtils extends Mock implements ImageUtils {}

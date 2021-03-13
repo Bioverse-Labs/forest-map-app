@@ -3,14 +3,15 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forestMapApp/core/adapters/firebase_storage_adapter.dart';
-import 'package:forestMapApp/core/adapters/firestore_adapter.dart';
-import 'package:forestMapApp/core/enums/organization_member_status.dart';
-import 'package:forestMapApp/core/enums/organization_role_types.dart';
-import 'package:forestMapApp/core/errors/exceptions.dart';
-import 'package:forestMapApp/core/util/localized_string.dart';
-import 'package:forestMapApp/features/organization/domain/entities/organization.dart';
-import 'package:forestMapApp/features/user/data/datasource/user_remote_data_source.dart';
+import 'package:forest_map_app/core/adapters/firebase_storage_adapter.dart';
+import 'package:forest_map_app/core/adapters/firestore_adapter.dart';
+import 'package:forest_map_app/core/enums/organization_member_status.dart';
+import 'package:forest_map_app/core/enums/organization_role_types.dart';
+import 'package:forest_map_app/core/errors/exceptions.dart';
+import 'package:forest_map_app/core/util/localized_string.dart';
+import 'package:forest_map_app/features/organization/data/datasources/organization_remote_data_source.dart';
+import 'package:forest_map_app/features/organization/domain/entities/organization.dart';
+import 'package:forest_map_app/features/user/data/datasource/user_remote_data_source.dart';
 import 'package:mockito/mockito.dart';
 
 class MockFirestoreAdapter extends Mock implements FirestoreAdapterImpl {}
@@ -26,6 +27,10 @@ class MockDocumentSnapshot extends Mock implements DocumentSnapshot {}
 
 class MockQueryDocumentSnapshot extends Mock implements QueryDocumentSnapshot {}
 
+class MockOrganizationDataSource extends Mock
+    implements OrganizationRemoteDataSource {}
+
+// ignore: must_be_immutable
 class MockCollectionReference extends Mock implements CollectionReference {}
 
 void main() {
@@ -33,6 +38,7 @@ void main() {
   MockFirebaseStorageAdapter mockFirebaseStorageAdapter;
   MockLocalizedString mockLocalizedString;
   MockFirestore mockFirestore;
+  MockOrganizationDataSource mockOrganizationDataSource;
   UserRemoteDataSourceImpl userDataSourceImpl;
 
   setUp(() {
@@ -40,10 +46,12 @@ void main() {
     mockFirebaseStorageAdapter = MockFirebaseStorageAdapter();
     mockFirestore = MockFirestore();
     mockLocalizedString = MockLocalizedString();
+    mockOrganizationDataSource = MockOrganizationDataSource();
     userDataSourceImpl = UserRemoteDataSourceImpl(
       firestoreAdapter: mockFirestoreAdapter,
       firebaseStorageAdapter: mockFirebaseStorageAdapter,
       localizedString: mockLocalizedString,
+      organizationRemoteDataSource: mockOrganizationDataSource,
     );
   });
 

@@ -41,21 +41,7 @@ class StaticMapScreen extends StatelessWidget {
                 },
                 source: MapShapeSource.asset(
                   "assets/test.geojson",
-                  shapeDataField:
-                      "16JUN19140331-M3DS_R01C3-012954101010_01_P001",
-                  dataCount: organizationNotifier
-                      .organization.geolocationData.first.dataProperties.length,
-                  primaryValueMapper: (index) => organizationNotifier
-                      .organization
-                      .geolocationData
-                      .first
-                      .dataProperties[index]
-                      .id,
-                ),
-                tooltipSettings: const MapTooltipSettings(
-                  color: Colors.blue,
-                  strokeColor: Color.fromRGBO(252, 187, 15, 1),
-                  strokeWidth: 1.5,
+                  shapeDataField: "area-2-polygon-simplified",
                 ),
               ),
             ],

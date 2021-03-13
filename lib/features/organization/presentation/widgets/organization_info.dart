@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:forestMapApp/core/navigation/app_navigator.dart';
 
+import '../../../../core/navigation/app_navigator.dart';
 import '../../../../core/util/localized_string.dart';
 import '../../../../core/widgets/avatar.dart';
 import '../../../../core/widgets/text_with_label.dart';
@@ -89,7 +89,7 @@ class OrganizationInfo extends StatelessWidget {
                 value: organization?.members?.length?.toString() ?? '',
               ),
               // if (canEdit)
-              //   RaisedButton.icon(
+              //   ElevatedButton.icon(
               //     onPressed: () {},
               //     icon: Icon(Icons.edit),
               //     label: Text(
@@ -123,15 +123,13 @@ class OrganizationInfo extends StatelessWidget {
                     if (organization?.geolocationData != null)
                       ...organization?.geolocationData
                           ?.map(
-                            (geoData) => Card(
+                            (filename) => Card(
                               child: ListTile(
-                                leading: Text(
-                                  geoData.name,
-                                ),
+                                leading: Text(filename),
                                 trailing: Icon(Icons.map_outlined),
-                                // onTap: () => appNavigator.push(
-                                //   '/organization-geolocation-data-map',
-                                // ),
+                                onTap: () => appNavigator.push(
+                                  '/organization-geolocation-data-map',
+                                ),
                               ),
                             ),
                           )

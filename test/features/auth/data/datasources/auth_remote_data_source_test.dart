@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faker/faker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:forestMapApp/core/adapters/firebase_auth_adapter.dart';
-import 'package:forestMapApp/core/adapters/firestore_adapter.dart';
-import 'package:forestMapApp/core/adapters/hive_adapter.dart';
-import 'package:forestMapApp/core/enums/social_login_types.dart';
-import 'package:forestMapApp/core/errors/exceptions.dart';
-import 'package:forestMapApp/core/util/localized_string.dart';
-import 'package:forestMapApp/features/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:forestMapApp/features/organization/data/hive/organization.dart';
-import 'package:forestMapApp/features/user/data/hive/user.dart';
-import 'package:forestMapApp/features/user/data/models/user_model.dart';
+import 'package:forest_map_app/core/adapters/firebase_auth_adapter.dart';
+import 'package:forest_map_app/core/adapters/firestore_adapter.dart';
+import 'package:forest_map_app/core/adapters/hive_adapter.dart';
+import 'package:forest_map_app/core/enums/social_login_types.dart';
+import 'package:forest_map_app/core/errors/exceptions.dart';
+import 'package:forest_map_app/core/util/localized_string.dart';
+import 'package:forest_map_app/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:forest_map_app/features/organization/data/hive/organization.dart';
+import 'package:forest_map_app/features/user/data/hive/user.dart';
+import 'package:forest_map_app/features/user/data/models/user_model.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 

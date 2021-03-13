@@ -20,7 +20,7 @@ class OrganizationRoleTypeAdapter extends TypeAdapter<OrganizationRoleType> {
       case 2:
         return OrganizationRoleType.owner;
       default:
-        return null;
+        return OrganizationRoleType.member;
     }
   }
 

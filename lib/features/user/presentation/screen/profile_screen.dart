@@ -99,7 +99,7 @@ class ProfileScreen extends StatelessWidget {
           left: 32,
           right: 32,
           bottom: 16,
-          child: RaisedButton(
+          child: ElevatedButton(
             onPressed: _signOut,
             child: Text(localizedString.getLocalizedString(
               'profile-screen.logout-button',

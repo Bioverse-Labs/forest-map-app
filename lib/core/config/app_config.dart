@@ -6,14 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:forestMapApp/core/adapters/http_adapter.dart';
-import 'package:forestMapApp/core/util/dir.dart';
-import 'package:forestMapApp/core/util/geojson.dart';
-import 'package:forestMapApp/features/map/data/hive/geolocation_data.dart';
-import 'package:forestMapApp/features/map/data/hive/geolocation_data_properties.dart';
-import 'package:forestMapApp/features/map/data/hive/geolocation_data_properties.dart';
-import 'package:forestMapApp/features/map/data/hive/lat_lng.dart';
-import 'package:forestMapApp/features/map/data/hive/polygon.dart';
+import 'package:forest_map_app/features/map/domain/usecases/get_geolocation_files.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
@@ -29,6 +22,14 @@ import '../../features/auth/domain/usecases/sign_in_with_social.dart';
 import '../../features/auth/domain/usecases/sign_out.dart';
 import '../../features/auth/domain/usecases/sign_up.dart';
 import '../../features/auth/presentation/notifiers/auth_notifier.dart';
+import '../../features/map/data/hive/geolocation_data.dart';
+import '../../features/map/data/hive/geolocation_data_properties.dart';
+import '../../features/map/data/hive/lat_lng.dart';
+import '../../features/map/data/hive/polygon.dart';
+import '../../features/map/data/repositories/geolocation_repository_impl.dart';
+import '../../features/map/domain/repositories/geolocation_repository.dart';
+import '../../features/map/domain/usecases/get_geolocation_data.dart';
+import '../../features/map/presentation/notifiers/map_notifier.dart';
 import '../../features/organization/data/datasources/organization_local_data_source.dart';
 import '../../features/organization/data/datasources/organization_remote_data_source.dart';
 import '../../features/organization/data/hive/member.dart';
@@ -72,6 +73,7 @@ import '../adapters/firebase_auth_adapter.dart';
 import '../adapters/firebase_storage_adapter.dart';
 import '../adapters/firestore_adapter.dart';
 import '../adapters/hive_adapter.dart';
+import '../adapters/http_adapter.dart';
 import '../enums/organization_member_status.dart';
 import '../enums/organization_role_types.dart';
 import '../navigation/app_navigator.dart';
@@ -80,6 +82,8 @@ import '../platform/camera.dart';
 import '../platform/location.dart';
 import '../platform/network_info.dart';
 import '../style/theme.dart';
+import '../util/dir.dart';
+import '../util/geojson.dart';
 import '../util/image.dart';
 import '../util/localized_string.dart';
 import '../util/notifications.dart';
@@ -242,9 +246,6 @@ class AppConfig {
         firestoreAdapter: GetIt.I(),
         localizedString: GetIt.I(),
         uuidGenerator: GetIt.I(),
-        dirUtils: GetIt.I(),
-        geoJsonUtils: GetIt.I(),
-        httpAdapter: GetIt.I(),
       ),
     );
 
@@ -327,6 +328,16 @@ class AppConfig {
         localDataSource: GetIt.I(),
         networkInfo: GetIt.I(),
         locationUtils: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<GeolocationRepository>(
+      () => GeolocationRepositoryImpl(
+        dirUtils: GetIt.I(),
+        firebaseStorageAdapter: GetIt.I(),
+        geoJsonUtils: GetIt.I(),
+        httpAdapter: GetIt.I(),
+        localizedString: GetIt.I(),
       ),
     );
   }
@@ -441,6 +452,18 @@ class AppConfig {
         GetIt.I(),
       ),
     );
+
+    GetIt.I.registerLazySingleton<GetGeolocationData>(
+      () => GetGeolocationData(
+        repository: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<GetGeolocationFiles>(
+      () => GetGeolocationFiles(
+        repository: GetIt.I(),
+      ),
+    );
   }
 
   // * PRESENTATION LAYER SINGLETON'S //
@@ -497,6 +520,13 @@ class AppConfig {
         savePostUseCase: GetIt.I(),
         uploadCachedPostUseCase: GetIt.I(),
         postHive: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerFactory<MapNotifierImpl>(
+      () => MapNotifierImpl(
+        getGeolocationFilesUseCase: GetIt.I(),
+        getGeolocationDataUseCase: GetIt.I(),
       ),
     );
   }

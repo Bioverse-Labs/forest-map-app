@@ -11,7 +11,14 @@ import '../style/theme.dart';
 import '../util/notifications.dart';
 
 class App extends StatefulWidget {
-  App({Key key}) : super(key: key);
+  final Iterable<LocalizationsDelegate<dynamic>> localizationsDelegate;
+  final List<Locale> supportedLocales;
+
+  App({
+    Key key,
+    @required this.localizationsDelegate,
+    @required this.supportedLocales,
+  }) : super(key: key);
 
   @override
   _AppState createState() => _AppState();
@@ -53,6 +60,8 @@ class _AppState extends State<App> {
       navigatorObservers: [BotToastNavigatorObserver()],
       initialRoute: '/',
       routes: routes,
+      localizationsDelegates: widget.localizationsDelegate,
+      supportedLocales: widget.supportedLocales,
     );
   }
 }

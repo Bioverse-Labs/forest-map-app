@@ -1,11 +1,11 @@
-import 'package:forestMapApp/features/map/data/hive/geolocation_data_properties.dart';
-import 'package:forestMapApp/features/map/data/models/geolocation_data_properties_model.dart';
-import 'package:forestMapApp/features/map/domain/entities/geolocation_data_properties.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/models/model.dart';
 import '../../domain/entities/geolocation_data.dart';
+import '../../domain/entities/geolocation_data_properties.dart';
 import '../hive/geolocation_data.dart';
+import '../hive/geolocation_data_properties.dart';
+import 'geolocation_data_properties_model.dart';
 
 class GeolocationDataModel extends GeolocationData
     implements Model<GeolocationDataModel, GeolocationDataHive> {

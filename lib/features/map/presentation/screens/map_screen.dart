@@ -19,6 +19,8 @@ import '../../../post/presentation/widgets/save_post_dialog.dart';
 import '../../../tracking/domain/entities/location.dart';
 import '../../../tracking/presentation/notifiers/location_notifier.dart';
 import '../../../user/presentation/notifiers/user_notifier.dart';
+import '../notifiers/map_notifier.dart';
+import '../widgets/geolocation_loader.dart';
 
 class MapScreen extends StatefulWidget {
   final LocalizedString localizedString;
@@ -26,6 +28,7 @@ class MapScreen extends StatefulWidget {
   final UserNotifierImpl userNotifier;
   final PostNotifierImpl postNotifier;
   final OrganizationNotifierImpl organizationNotifier;
+  final MapNotifierImpl mapNotifier;
   final NotificationsUtils notificationsUtils;
   final Camera camera;
   final AppNavigator appNavigator;
@@ -42,6 +45,7 @@ class MapScreen extends StatefulWidget {
     @required this.appNavigator,
     @required this.appSettings,
     @required this.organizationNotifier,
+    @required this.mapNotifier,
     @required this.camera,
     @required this.appTheme,
   }) : super(key: key);
@@ -205,86 +209,98 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _fetchLocation(),
-      builder: (ctx, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+    return Stack(
+      children: [
+        FutureBuilder(
+          future: _fetchLocation(),
+          builder: (ctx, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-        if (snapshot.data is LocationFailure) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    widget.localizedString.getLocalizedString(
-                      'map-screen.location-permission-title',
-                    ),
-                    style: Theme.of(context).textTheme.headline5,
-                    textAlign: TextAlign.center,
+            if (snapshot.data is LocationFailure) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.localizedString.getLocalizedString(
+                          'map-screen.location-permission-title',
+                        ),
+                        style: Theme.of(context).textTheme.headline5,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 8),
+                      ElevatedButton(
+                        onPressed: () => _askPermission(context),
+                        child: Text(widget.localizedString.getLocalizedString(
+                          'map-screen.location-permission-button',
+                        )),
+                      )
+                    ],
                   ),
-                  SizedBox(height: 8),
-                  RaisedButton(
-                    onPressed: () => _askPermission(context),
-                    child: Text(widget.localizedString.getLocalizedString(
-                      'map-screen.location-permission-button',
-                    )),
-                  )
-                ],
-              ),
-            ),
-          );
-        }
-
-        return ScreenWidget(
-          body: Consumer<LocationNotifierImpl>(
-            builder: (ctx, state, child) {
-              _updateMapPosition(state.currentLocation);
-
-              return child;
-            },
-            child: Consumer<OrganizationNotifierImpl>(
-              builder: (ctx, state, _) {
-                return GoogleMap(
-                  initialCameraPosition: _initalPosition,
-                  onMapCreated: _handleMapCreation,
-                  myLocationEnabled: true,
-                  mapType: MapType.satellite,
-                  polygons: state.polygons,
-                  myLocationButtonEnabled: true,
-                );
-              },
-            ),
-          ),
-          floatingActionButton: snapshot.data is LocationFailure
-              ? Container()
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FloatingActionButton(
-                      heroTag: 'mapPhotoActionButton',
-                      onPressed: () => _takePicture(context),
-                      child: Icon(Icons.add_a_photo_outlined),
-                    ),
-                    SizedBox(width: 8),
-                    FloatingActionButton.extended(
-                      heroTag: 'goToTreeButton',
-                      onPressed: _goToDataLocation,
-                      icon: Icon(Icons.gps_fixed_outlined),
-                      label: Text('Data location'),
-                    ),
-                  ],
                 ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-        );
-      },
+              );
+            }
+
+            return ScreenWidget(
+              body: Consumer<LocationNotifierImpl>(
+                builder: (ctx, state, child) {
+                  _updateMapPosition(state.currentLocation);
+
+                  return child;
+                },
+                child: Consumer<OrganizationNotifierImpl>(
+                  builder: (ctx, state, _) {
+                    return GoogleMap(
+                      initialCameraPosition: _initalPosition,
+                      onMapCreated: _handleMapCreation,
+                      myLocationEnabled: true,
+                      mapType: MapType.satellite,
+                      myLocationButtonEnabled: true,
+                    );
+                  },
+                ),
+              ),
+              floatingActionButton: snapshot.data is LocationFailure
+                  ? Container()
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FloatingActionButton(
+                          heroTag: 'mapPhotoActionButton',
+                          onPressed: () => _takePicture(context),
+                          child: Icon(Icons.add_a_photo_outlined),
+                        ),
+                        SizedBox(width: 8),
+                        FloatingActionButton.extended(
+                          heroTag: 'goToTreeButton',
+                          onPressed: _goToDataLocation,
+                          icon: Icon(Icons.gps_fixed_outlined),
+                          label: Text('Data location'),
+                        ),
+                      ],
+                    ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
+            );
+          },
+        ),
+        Positioned(
+          top: 92,
+          left: 16,
+          right: 16,
+          child: GeolocationLoader(
+            organization: widget.organizationNotifier.organization,
+            localizedString: widget.localizedString,
+          ),
+        ),
+      ],
     );
   }
 }

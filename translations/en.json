@@ -76,7 +76,8 @@
     "input-placeholder": "Castanheira",
     "save-button": "Save",
     "post-success": "Data saved!",
-    "start-saving": "Data started to being saved"
+    "start-saving": "Data started to being saved",
+    "loading-geolocation-files": "Loading geolocation files..."
   },
   "organization-screen": {
     "title": "Organizations",

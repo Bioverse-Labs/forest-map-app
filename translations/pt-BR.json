@@ -76,7 +76,8 @@
     "input-placeholder": "Castanheira",
     "save-button": "Salvar",
     "post-success": "Dado salvo!",
-    "start-saving": "Dado começou a ser salvo"
+    "start-saving": "Dado começou a ser salvo",
+    "loading-geolocation-files": "Carregando os arquivos de geolocalização..."
   },
   "organization-screen": {
     "title": "Organizações",

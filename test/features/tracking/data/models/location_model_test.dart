@@ -1,8 +1,8 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forestMapApp/features/tracking/data/hive/location.dart';
-import 'package:forestMapApp/features/tracking/data/models/location_model.dart';
-import 'package:forestMapApp/features/tracking/domain/entities/location.dart';
+import 'package:forest_map_app/features/tracking/data/hive/location.dart';
+import 'package:forest_map_app/features/tracking/data/models/location_model.dart';
+import 'package:forest_map_app/features/tracking/domain/entities/location.dart';
 import 'package:geolocator/geolocator.dart';
 
 void main() {
@@ -31,9 +31,16 @@ void main() {
   group('fromPosition', () {
     test('should return a valid model when the map is valid', () {
       final tPosition = Position(
-        latitude: tLat,
-        longitude: tLng,
-        timestamp: tTimestamp,
+        latitude: faker.randomGenerator.decimal(),
+        longitude: faker.randomGenerator.decimal(),
+        accuracy: faker.randomGenerator.decimal(),
+        altitude: faker.randomGenerator.decimal(),
+        floor: faker.randomGenerator.integer(10),
+        heading: faker.randomGenerator.decimal(),
+        isMocked: true,
+        speed: faker.randomGenerator.decimal(),
+        speedAccuracy: faker.randomGenerator.decimal(),
+        timestamp: DateTime.now(),
       );
 
       final result = LocationModel.fromPosition(tPosition);

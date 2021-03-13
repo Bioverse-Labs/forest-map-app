@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:forestMapApp/core/enums/exception_origin_types.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../features/organization/domain/entities/organization.dart';
+import '../enums/exception_origin_types.dart';
 import '../errors/failure.dart';
 import 'localized_string.dart';
 

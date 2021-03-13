@@ -3,15 +3,15 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
-import 'package:forestMapApp/core/adapters/hive_adapter.dart';
-import 'package:forestMapApp/core/enums/exception_origin_types.dart';
-import 'package:forestMapApp/core/errors/failure.dart';
-import 'package:forestMapApp/core/usecases/usecase.dart';
-import 'package:forestMapApp/features/post/data/hive/post.dart';
-import 'package:forestMapApp/features/post/domain/entities/post.dart';
-import 'package:forestMapApp/features/post/domain/usecases/save_post.dart';
-import 'package:forestMapApp/features/post/domain/usecases/upload_cached_post.dart';
-import 'package:forestMapApp/features/post/presentation/notifier/post_notifier.dart';
+import 'package:forest_map_app/core/adapters/hive_adapter.dart';
+import 'package:forest_map_app/core/enums/exception_origin_types.dart';
+import 'package:forest_map_app/core/errors/failure.dart';
+import 'package:forest_map_app/core/usecases/usecase.dart';
+import 'package:forest_map_app/features/post/data/hive/post.dart';
+import 'package:forest_map_app/features/post/domain/entities/post.dart';
+import 'package:forest_map_app/features/post/domain/usecases/save_post.dart';
+import 'package:forest_map_app/features/post/domain/usecases/upload_cached_post.dart';
+import 'package:forest_map_app/features/post/presentation/notifier/post_notifier.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 

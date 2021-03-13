@@ -63,3 +63,7 @@ class LocationFailure extends Failure {
           stackTrace,
         ]);
 }
+
+class GenericFailure extends Failure {
+  GenericFailure(List<dynamic> properties) : super(properties);
+}

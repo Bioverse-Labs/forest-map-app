@@ -128,10 +128,14 @@ class MemberListItem extends StatelessWidget {
               ),
               SizedBox(
                 width: double.infinity,
-                child: RaisedButton.icon(
+                child: ElevatedButton.icon(
                   label: Text('Remove Member'),
                   icon: Icon(Icons.person_remove),
-                  color: Colors.redAccent,
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all<Color>(
+                      Colors.red,
+                    ),
+                  ),
                   onPressed: () {
                     appNavigator.pop();
                     if (_canEdit()) {
