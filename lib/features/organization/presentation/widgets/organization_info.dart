@@ -127,9 +127,9 @@ class OrganizationInfo extends StatelessWidget {
                               child: ListTile(
                                 leading: Text(filename),
                                 trailing: Icon(Icons.map_outlined),
-                                onTap: () => appNavigator.push(
-                                  '/organization-geolocation-data-map',
-                                ),
+                                // onTap: () => appNavigator.push(
+                                //   '/organization-geolocation-data-map',
+                                // ),
                               ),
                             ),
                           )

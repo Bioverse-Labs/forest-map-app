@@ -36,10 +36,13 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
 
   StreamController<Either<Failure, List<GeolocationDataProperties>>>
       // ignore: close_sinks
-      _geoStrController =
-      StreamController<Either<Failure, List<GeolocationDataProperties>>>();
+      _geoStrController = StreamController<
+          Either<Failure, List<GeolocationDataProperties>>>.broadcast();
   StreamController<Either<Failure, List<GeolocationDataProperties>>>
       get geoStrController => _geoStrController;
+
+  Stream<Either<Failure, List<GeolocationDataProperties>>>
+      get broadcastStream => _geoStrController.stream.asBroadcastStream();
 
   StreamController<Either<Failure, File>> _filestrController;
 

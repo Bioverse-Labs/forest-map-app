@@ -71,9 +71,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    widget.mapNotifier.geoStrController.stream
-        .asBroadcastStream()
-        .listen((event) {
+    widget.mapNotifier.broadcastStream.listen((event) {
       event.fold(
         (failure) {
           if (failure is LocalFailure) {
@@ -114,7 +112,9 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
             ),
           );
 
-          setState(() {});
+          if (mounted) {
+            setState(() {});
+          }
         },
       );
     });
