@@ -269,16 +269,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     );
   }
 
-  Future<void> _goToDataLocation() async {
-    final position = CameraPosition(
-      target: LatLng(-7.638148724632813, -51.89902615928159),
-      zoom: 16,
-    );
-
-    final controllerFuture = await _controller.future;
-    controllerFuture.animateCamera(CameraUpdate.newCameraPosition(position));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -355,13 +345,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                         heroTag: 'mapPhotoActionButton',
                         onPressed: () => _takePicture(context),
                         child: Icon(Icons.add_a_photo_outlined),
-                      ),
-                      SizedBox(width: 8),
-                      FloatingActionButton.extended(
-                        heroTag: 'goToTreeButton',
-                        onPressed: _goToDataLocation,
-                        icon: Icon(Icons.gps_fixed_outlined),
-                        label: Text('Data location'),
                       ),
                     ],
                   ),
