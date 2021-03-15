@@ -118,8 +118,8 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
           )));
         } catch (error) {
           strController.sink.add(Left(LocalFailure(
-            error?.message,
-            error?.code,
+            error.toString(),
+            error.toString(),
             ExceptionOriginTypes.unkown,
             stackTrace: StackTrace.fromString(error.toString()),
           )));
