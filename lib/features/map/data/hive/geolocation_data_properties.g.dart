@@ -23,13 +23,14 @@ class GeolocationDataPropertiesHiveAdapter
       ..specie = fields[2] as String
       ..detDate = fields[3] as DateTime
       ..imageDate = fields[4] as DateTime
-      ..polygon = fields[5] as PolygonHive;
+      ..latitude = fields[5] as double
+      ..longitude = fields[6] as double;
   }
 
   @override
   void write(BinaryWriter writer, GeolocationDataPropertiesHive obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class GeolocationDataPropertiesHiveAdapter
       ..writeByte(4)
       ..write(obj.imageDate)
       ..writeByte(5)
-      ..write(obj.polygon);
+      ..write(obj.latitude)
+      ..writeByte(6)
+      ..write(obj.longitude);
   }
 
   @override

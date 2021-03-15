@@ -22,10 +22,7 @@ import '../../features/auth/domain/usecases/sign_in_with_social.dart';
 import '../../features/auth/domain/usecases/sign_out.dart';
 import '../../features/auth/domain/usecases/sign_up.dart';
 import '../../features/auth/presentation/notifiers/auth_notifier.dart';
-import '../../features/map/data/hive/geolocation_data.dart';
 import '../../features/map/data/hive/geolocation_data_properties.dart';
-import '../../features/map/data/hive/lat_lng.dart';
-import '../../features/map/data/hive/polygon.dart';
 import '../../features/map/data/repositories/geolocation_repository_impl.dart';
 import '../../features/map/domain/repositories/geolocation_repository.dart';
 import '../../features/map/domain/usecases/get_geolocation_data.dart';
@@ -106,10 +103,7 @@ class AppConfig {
     Hive.registerAdapter(UserHiveAdapter());
     Hive.registerAdapter(LocationHiveAdapter());
     Hive.registerAdapter(PostHiveAdapter());
-    Hive.registerAdapter(LatLngHiveAdapter());
-    Hive.registerAdapter(PolygonHiveAdapter());
     Hive.registerAdapter(GeolocationDataPropertiesHiveAdapter());
-    Hive.registerAdapter(GeolocationDataHiveAdapter());
   }
 
   static void registerUtils() {
@@ -338,6 +332,7 @@ class AppConfig {
         geoJsonUtils: GetIt.I(),
         httpAdapter: GetIt.I(),
         localizedString: GetIt.I(),
+        uuidGenerator: GetIt.I(),
       ),
     );
   }

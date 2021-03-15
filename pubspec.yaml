@@ -35,6 +35,7 @@ dependencies:
   geojson: ^0.10.0
   syncfusion_flutter_maps: ^18.4.43-beta
   http: ^0.13.0
+  fluster: ^1.1.2
 
   # Firebase Deps
   firebase_core: "1.0.1"

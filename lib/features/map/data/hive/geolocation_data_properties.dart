@@ -1,7 +1,5 @@
 import 'package:hive/hive.dart';
 
-import 'polygon.dart';
-
 part 'geolocation_data_properties.g.dart';
 
 @HiveType(typeId: 9)
@@ -22,5 +20,8 @@ class GeolocationDataPropertiesHive {
   DateTime imageDate;
 
   @HiveField(5)
-  PolygonHive polygon;
+  double latitude;
+
+  @HiveField(6)
+  double longitude;
 }

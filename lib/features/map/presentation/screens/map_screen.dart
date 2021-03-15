@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app_settings/app_settings.dart';
+import 'package:fluster/fluster.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -19,6 +20,8 @@ import '../../../post/presentation/widgets/save_post_dialog.dart';
 import '../../../tracking/domain/entities/location.dart';
 import '../../../tracking/presentation/notifiers/location_notifier.dart';
 import '../../../user/presentation/notifiers/user_notifier.dart';
+import '../../data/models/map_marker.dart';
+import '../../domain/entities/geolocation_data_properties.dart';
 import '../notifiers/map_notifier.dart';
 import '../widgets/geolocation_loader.dart';
 
@@ -58,11 +61,79 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   Completer<GoogleMapController> _controller = Completer();
   CameraPosition _initalPosition;
   bool _shouldUpdateState = false;
+  bool _hasPermission = true;
+  double _currentZoom = 16;
+  List<MapMarker> _markers = <MapMarker>[];
+  Fluster<MapMarker> _fluster;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    widget.mapNotifier.geoStrController.stream
+        .asBroadcastStream()
+        .listen((event) {
+      event.fold(
+        (failure) {
+          if (failure is LocalFailure) {
+            widget.notificationsUtils.showErrorNotification(failure.message);
+          }
+        },
+        (List<GeolocationDataProperties> geoData) {
+          for (var item in geoData) {
+            final marker = MapMarker(
+              id: item.id,
+              icon: BitmapDescriptor.defaultMarker,
+              position: LatLng(item.latitude, item.longitude),
+            );
+
+            _markers.add(marker);
+          }
+
+          _fluster = Fluster<MapMarker>(
+            minZoom: 0,
+            maxZoom: 16,
+            radius: 500,
+            extent: 2048,
+            nodeSize: 64,
+            points: _markers,
+            createCluster: (
+              BaseCluster cluster,
+              double lng,
+              double lat,
+            ) =>
+                MapMarker(
+              id: cluster.id.toString(),
+              position: LatLng(lat, lng),
+              icon: BitmapDescriptor.defaultMarker,
+              isCluster: cluster.isCluster,
+              clusterId: cluster.id,
+              pointsSize: cluster.pointsSize,
+              childMarkerId: cluster.childMarkerId,
+            ),
+          );
+
+          setState(() {});
+        },
+      );
+    });
+
+    widget.mapNotifier.addListener(() {
+      if (widget.mapNotifier.hasCompleted) {
+        try {
+          widget.mapNotifier.getGeolocationData(
+            widget.organizationNotifier.organization,
+          );
+        } on LocalFailure catch (failure) {
+          widget.notificationsUtils.showErrorNotification(
+            failure.message,
+          );
+        }
+      }
+    });
+
+    _fetchLocation();
   }
 
   @override
@@ -90,8 +161,9 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
         target: LatLng(location.lat, location.lng),
         zoom: 16,
       );
-    } on LocationFailure catch (failure) {
-      return failure;
+      setState(() {});
+    } on LocationFailure catch (_) {
+      _hasPermission = true;
     } on LocalFailure catch (_) {
       widget.notificationsUtils.showErrorNotification(
         widget.localizedString.getLocalizedString('generic-exception'),
@@ -199,7 +271,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
 
   Future<void> _goToDataLocation() async {
     final position = CameraPosition(
-      target: LatLng(-7.32419301411112, -51.746992841544795),
+      target: LatLng(-7.638148724632813, -51.89902615928159),
       zoom: 16,
     );
 
@@ -211,86 +283,91 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        FutureBuilder(
-          future: _fetchLocation(),
-          builder: (ctx, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+        if (_initalPosition == null && _hasPermission)
+          Center(
+            child: CircularProgressIndicator(),
+          ),
+        if (!_hasPermission)
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.localizedString.getLocalizedString(
+                      'map-screen.location-permission-title',
+                    ),
+                    style: Theme.of(context).textTheme.headline5,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: () => _askPermission(context),
+                    child: Text(widget.localizedString.getLocalizedString(
+                      'map-screen.location-permission-button',
+                    )),
+                  )
+                ],
+              ),
+            ),
+          ),
+        if (_initalPosition != null && _hasPermission)
+          ScreenWidget(
+            body: Consumer<LocationNotifierImpl>(
+              builder: (ctx, state, child) {
+                _updateMapPosition(state.currentLocation);
 
-            if (snapshot.data is LocationFailure) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Column(
+                return child;
+              },
+              child: Consumer<MapNotifierImpl>(
+                builder: (ctx, state, _) {
+                  return GoogleMap(
+                    initialCameraPosition: _initalPosition,
+                    onMapCreated: _handleMapCreation,
+                    myLocationEnabled: true,
+                    mapType: MapType.satellite,
+                    myLocationButtonEnabled: true,
+                    markers: _fluster
+                            ?.clusters(
+                              [-180, -85, 180, 85],
+                              _currentZoom.toInt(),
+                            )
+                            ?.map((cluster) => cluster.toMarker())
+                            ?.toList()
+                            ?.toSet() ??
+                        Set<Marker>(),
+                    onCameraMove: (position) {
+                      _currentZoom = position.zoom;
+                      setState(() {});
+                    },
+                  );
+                },
+              ),
+            ),
+            floatingActionButton: !_hasPermission
+                ? Container()
+                : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        widget.localizedString.getLocalizedString(
-                          'map-screen.location-permission-title',
-                        ),
-                        style: Theme.of(context).textTheme.headline5,
-                        textAlign: TextAlign.center,
+                      FloatingActionButton(
+                        heroTag: 'mapPhotoActionButton',
+                        onPressed: () => _takePicture(context),
+                        child: Icon(Icons.add_a_photo_outlined),
                       ),
-                      SizedBox(height: 8),
-                      ElevatedButton(
-                        onPressed: () => _askPermission(context),
-                        child: Text(widget.localizedString.getLocalizedString(
-                          'map-screen.location-permission-button',
-                        )),
-                      )
+                      SizedBox(width: 8),
+                      FloatingActionButton.extended(
+                        heroTag: 'goToTreeButton',
+                        onPressed: _goToDataLocation,
+                        icon: Icon(Icons.gps_fixed_outlined),
+                        label: Text('Data location'),
+                      ),
                     ],
                   ),
-                ),
-              );
-            }
-
-            return ScreenWidget(
-              body: Consumer<LocationNotifierImpl>(
-                builder: (ctx, state, child) {
-                  _updateMapPosition(state.currentLocation);
-
-                  return child;
-                },
-                child: Consumer<OrganizationNotifierImpl>(
-                  builder: (ctx, state, _) {
-                    return GoogleMap(
-                      initialCameraPosition: _initalPosition,
-                      onMapCreated: _handleMapCreation,
-                      myLocationEnabled: true,
-                      mapType: MapType.satellite,
-                      myLocationButtonEnabled: true,
-                    );
-                  },
-                ),
-              ),
-              floatingActionButton: snapshot.data is LocationFailure
-                  ? Container()
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FloatingActionButton(
-                          heroTag: 'mapPhotoActionButton',
-                          onPressed: () => _takePicture(context),
-                          child: Icon(Icons.add_a_photo_outlined),
-                        ),
-                        SizedBox(width: 8),
-                        FloatingActionButton.extended(
-                          heroTag: 'goToTreeButton',
-                          onPressed: _goToDataLocation,
-                          icon: Icon(Icons.gps_fixed_outlined),
-                          label: Text('Data location'),
-                        ),
-                      ],
-                    ),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
-            );
-          },
-        ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+          ),
         Positioned(
           top: 92,
           left: 16,

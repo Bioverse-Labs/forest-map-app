@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:forest_map_app/features/map/domain/entities/geolocation_data_properties.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/errors/failure.dart';
@@ -11,9 +12,7 @@ import '../../domain/usecases/get_geolocation_data.dart';
 import '../../domain/usecases/get_geolocation_files.dart';
 
 abstract class MapNotifier {
-  Future<Either<Failure, Organization>> getGeolocationData(
-    Organization organization,
-  );
+  Future<void> getGeolocationData(Organization organization);
   Future<void> getGeolocationFiles(Organization organization);
 }
 
@@ -35,23 +34,31 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
   List<File> _files = [];
   List<File> get geolocationFiles => _files;
 
-  StreamController<Either<Failure, File>> _strController;
+  StreamController<Either<Failure, List<GeolocationDataProperties>>>
+      // ignore: close_sinks
+      _geoStrController =
+      StreamController<Either<Failure, List<GeolocationDataProperties>>>();
+  StreamController<Either<Failure, List<GeolocationDataProperties>>>
+      get geoStrController => _geoStrController;
+
+  StreamController<Either<Failure, File>> _filestrController;
+
+  int _currentZoom = 16;
+  int get currentZoom => _currentZoom;
 
   @override
-  Future<Either<Failure, Organization>> getGeolocationData(
+  Future<void> getGeolocationData(
     Organization organization,
   ) async {
-    _loading = true;
-    notifyListeners();
-
     final failureOrOrganization = await getGeolocationDataUseCase(
-      GetGeolocationDataParams(organization: organization),
+      GetGeolocationDataParams(
+        organization: organization,
+        files: _files,
+        strController: _geoStrController,
+      ),
     );
 
-    _loading = false;
-    notifyListeners();
-
-    return failureOrOrganization;
+    failureOrOrganization?.fold((failure) => throw failure, (r) => null);
   }
 
   @override
@@ -62,7 +69,7 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
       _files = [];
       notifyListeners();
 
-      _strController?.sink?.close();
+      _filestrController?.sink?.close();
 
       final failureOrStream = await getGeolocationFilesUseCase(
         GetGeolocationFilesParams(organization: organization),
@@ -71,7 +78,7 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
       failureOrStream.fold(
         (failure) => throw failure,
         (strController) {
-          _strController = strController;
+          _filestrController = strController;
           strController.stream.listen((failureOrFile) {
             failureOrFile.fold(
               (failure) => throw failure,
@@ -89,5 +96,10 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
         },
       );
     }
+  }
+
+  void setZoom(int zoom) {
+    _currentZoom = zoom;
+    notifyListeners();
   }
 }

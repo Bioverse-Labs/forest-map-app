@@ -1,4 +1,3 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
@@ -8,7 +7,8 @@ class GeolocationDataProperties extends Equatable {
   final String specie;
   final DateTime detDate;
   final DateTime imageDate;
-  final Polygon polygon;
+  final double latitude;
+  final double longitude;
 
   GeolocationDataProperties({
     @required this.id,
@@ -16,9 +16,18 @@ class GeolocationDataProperties extends Equatable {
     @required this.specie,
     @required this.detDate,
     @required this.imageDate,
-    @required this.polygon,
+    @required this.latitude,
+    @required this.longitude,
   });
 
   @override
-  List<Object> get props => [id, type, specie, detDate, imageDate, polygon];
+  List<Object> get props => [
+        id,
+        type,
+        specie,
+        detDate,
+        imageDate,
+        latitude,
+        longitude,
+      ];
 }

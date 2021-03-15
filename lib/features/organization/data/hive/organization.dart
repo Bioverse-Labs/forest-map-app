@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
 
-import '../../../map/data/hive/geolocation_data.dart';
 import 'member.dart';
 
 part 'organization.g.dart';

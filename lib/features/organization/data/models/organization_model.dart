@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
 
 import '../../../../core/models/model.dart';
-import '../../../map/domain/entities/geolocation_data.dart';
 import '../../domain/entities/member.dart';
 import '../../domain/entities/organization.dart';
 import '../hive/organization.dart';
@@ -99,7 +98,7 @@ class OrganizationModel extends Organization
     String phone,
     String avatarUrl,
     List<Member> members,
-    List<GeolocationData> geolocationData,
+    List<String> geolocationData,
   }) =>
       OrganizationModel(
         id: id ?? this.id,
