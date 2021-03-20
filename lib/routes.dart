@@ -9,7 +9,6 @@ import 'features/auth/presentation/notifiers/auth_notifier.dart';
 import 'features/auth/presentation/screens/sign_in_screen.dart';
 import 'features/auth/presentation/screens/sign_up_screen.dart';
 import 'features/map/presentation/notifiers/map_notifier.dart';
-import 'features/map/presentation/screens/static_map_screen.dart';
 import 'features/organization/presentation/notifiers/organization_invite_notifier.dart';
 import 'features/organization/presentation/notifiers/organizations_notifier.dart';
 import 'features/organization/presentation/screens/organization_invite_screen.dart';
@@ -95,11 +94,5 @@ Map<String, Widget Function(BuildContext)> routes = {
         notificationsUtils: GetIt.I(),
         localizedString: GetIt.I(),
         appNavigator: GetIt.I(),
-      ),
-  '/organization-geolocation-data-map': (ctx) => StaticMapScreen(
-        organizationNotifier: Provider.of<OrganizationNotifierImpl>(
-          ctx,
-          listen: false,
-        ),
       ),
 };

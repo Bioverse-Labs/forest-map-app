@@ -137,7 +137,16 @@ void main() {
     });
 
     group('getFacebookAuthCredential', () {
-      final tAccessToken = AccessToken(token: faker.guid.guid());
+      final tAccessToken = AccessToken(
+        token: faker.guid.guid(),
+        isExpired: false,
+        userId: faker.guid.guid(),
+        applicationId: faker.guid.guid(),
+        lastRefresh: DateTime.now(),
+        grantedPermissions: [],
+        expires: DateTime.now(),
+        declinedPermissions: [],
+      );
 
       test(
         'should return AuthCredential if Facebook login succeed',

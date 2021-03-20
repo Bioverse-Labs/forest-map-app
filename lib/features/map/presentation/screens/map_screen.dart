@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:fluster/fluster.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +20,6 @@ import '../../../post/presentation/widgets/save_post_dialog.dart';
 import '../../../tracking/domain/entities/location.dart';
 import '../../../tracking/presentation/notifiers/location_notifier.dart';
 import '../../../user/presentation/notifiers/user_notifier.dart';
-import '../../data/models/map_marker.dart';
-import '../../domain/entities/geolocation_data_properties.dart';
 import '../notifiers/map_notifier.dart';
 import '../widgets/geolocation_loader.dart';
 
@@ -63,58 +60,11 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   CameraPosition _initalPosition;
   bool _shouldUpdateState = false;
   bool _hasPermission = true;
-  double _currentZoom = 14;
-  List<MapMarker> _markers = <MapMarker>[];
-  Fluster<MapMarker> _fluster;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-
-    widget.mapNotifier.broadcastStream.listen((event) {
-      event.fold(
-        (failure) {
-          if (failure is LocalFailure) {
-            widget.notificationsUtils.showErrorNotification(failure.message);
-          }
-        },
-        (List<GeolocationDataProperties> geoData) {
-          compute<Map<String, dynamic>, List<MapMarker>>(
-            parseGeoDataToMapMarker,
-            {'geoData': geoData},
-          ).then((value) {
-            _markers.addAll(value);
-            _fluster = Fluster<MapMarker>(
-              minZoom: 0,
-              maxZoom: 16,
-              radius: 500,
-              extent: 2048,
-              nodeSize: 64,
-              points: _markers,
-              createCluster: (
-                BaseCluster cluster,
-                double lng,
-                double lat,
-              ) =>
-                  MapMarker(
-                id: cluster.id.toString(),
-                position: LatLng(lat, lng),
-                icon: BitmapDescriptor.defaultMarker,
-                isCluster: cluster.isCluster,
-                clusterId: cluster.id,
-                pointsSize: cluster.pointsSize,
-                childMarkerId: cluster.childMarkerId,
-              ),
-            );
-
-            if (mounted) {
-              setState(() {});
-            }
-          });
-        },
-      );
-    });
 
     widget.mapNotifier.addListener(() {
       if (widget.mapNotifier.hasCompleted) {
@@ -316,22 +266,13 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                     myLocationEnabled: true,
                     mapType: MapType.satellite,
                     myLocationButtonEnabled: true,
-                    markers: _fluster
-                            ?.clusters(
-                              [-180, -85, 180, 85],
-                              _currentZoom.toInt(),
-                            )
-                            ?.map((cluster) => cluster.toMarker())
-                            ?.toList()
-                            ?.toSet() ??
-                        Set<Marker>(),
-                    onCameraMove: (position) {
-                      if (mounted) {
-                        print(position.zoom);
-                        _currentZoom = position.zoom;
-                        setState(() {});
-                      }
-                    },
+                    // onCameraMove: (position) {
+                    //   if (mounted) {
+                    //     print(position.zoom);
+                    //     _currentZoom = position.zoom;
+                    //     setState(() {});
+                    //   }
+                    // },
                   );
                 },
               ),
@@ -363,23 +304,4 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
       ],
     );
   }
-}
-
-Future<List<MapMarker>> parseGeoDataToMapMarker(
-  Map<String, dynamic> params,
-) async {
-  final geoData = params['geoData'] as List<GeolocationDataProperties>;
-  final markers = <MapMarker>[];
-
-  for (var item in geoData) {
-    final marker = MapMarker(
-      id: item.id,
-      icon: BitmapDescriptor.defaultMarker,
-      position: LatLng(item.latitude, item.longitude),
-    );
-
-    markers.add(marker);
-  }
-
-  return Future.value(markers);
 }
