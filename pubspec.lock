@@ -253,6 +253,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  dart_geohash:
+    dependency: transitive
+    description:
+      name: dart_geohash
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   dart_style:
     dependency: transitive
     description:
@@ -750,7 +757,7 @@ packages:
     source: hosted
     version: "2.0.0"
   path:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: path
       url: "https://pub.dartlang.org"
@@ -840,6 +847,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
+  proximity_hash:
+    dependency: "direct main"
+    description:
+      name: proximity_hash
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   pub_semver:
     dependency: transitive
     description:
@@ -958,7 +972,7 @@ packages:
     source: hosted
     version: "1.8.0"
   sqflite:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: sqflite
       url: "https://pub.dartlang.org"

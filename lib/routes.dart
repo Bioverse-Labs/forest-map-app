@@ -28,6 +28,7 @@ Map<String, Widget Function(BuildContext)> routes = {
         appNavigator: GetIt.I(),
         networkInfo: GetIt.I(),
         notificationsUtils: GetIt.I(),
+        databaseAdapter: GetIt.I(),
       ),
   '/signIn': (ctx) => SignInScreen(
         authNotifier: Provider.of<AuthNotifierImpl>(ctx, listen: false),

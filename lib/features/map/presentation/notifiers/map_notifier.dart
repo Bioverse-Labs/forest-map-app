@@ -1,108 +1,78 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:forest_map_app/features/map/domain/entities/geolocation_data_properties.dart';
+import 'package:forest_map_app/features/map/domain/usecases/download_geo_data.dart';
+import 'package:forest_map_app/features/map/domain/usecases/get_geolocation_data.dart';
 import 'package:meta/meta.dart';
-
-import '../../../../core/errors/failure.dart';
-import '../../../organization/domain/entities/organization.dart';
-import '../../domain/usecases/get_geolocation_data.dart';
-import '../../domain/usecases/get_geolocation_files.dart';
+import 'package:forest_map_app/core/errors/failure.dart';
+import 'package:forest_map_app/features/map/domain/entities/geolocation_data_properties.dart';
+import 'package:forest_map_app/features/organization/domain/entities/organization.dart';
 
 abstract class MapNotifier {
-  Future<void> getGeolocationData(Organization organization);
-  Future<void> getGeolocationFiles(Organization organization);
+  Future<void> downloadGeoData(Organization organization);
+  Future<Either<Failure, List<GeolocationDataProperties>>> getGeoData({
+    @required Organization organization,
+    @required double latitude,
+    @required double longitude,
+  });
 }
 
 class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
+  final DownloadGeoData downloadGeoDataUseCase;
   final GetGeolocationData getGeolocationDataUseCase;
-  final GetGeolocationFiles getGeolocationFilesUseCase;
+
+  bool isLoading = false;
+  bool _isQuerying = false;
 
   MapNotifierImpl({
+    @required this.downloadGeoDataUseCase,
     @required this.getGeolocationDataUseCase,
-    @required this.getGeolocationFilesUseCase,
   });
 
-  bool _loading = false;
-  bool get isLoading => _loading;
-
-  bool _hasCompleted = false;
-  bool get hasCompleted => _hasCompleted;
-
-  List<File> _files = [];
-  List<File> get geolocationFiles => _files;
-
-  StreamController<Either<Failure, List<GeolocationDataProperties>>>
-      // ignore: close_sinks
-      _geoStrController = StreamController<
-          Either<Failure, List<GeolocationDataProperties>>>.broadcast();
-  StreamController<Either<Failure, List<GeolocationDataProperties>>>
-      get geoStrController => _geoStrController;
-
-  Stream<Either<Failure, List<GeolocationDataProperties>>>
-      get broadcastStream => _geoStrController.stream.asBroadcastStream();
-
-  StreamController<Either<Failure, File>> _filestrController;
-
-  int _currentZoom = 16;
-  int get currentZoom => _currentZoom;
-
   @override
-  Future<void> getGeolocationData(
+  Future<void> downloadGeoData(
     Organization organization,
   ) async {
-    final failureOrOrganization = await getGeolocationDataUseCase(
-      GetGeolocationDataParams(
-        organization: organization,
-        files: _files,
-        strController: _geoStrController,
-      ),
+    isLoading = true;
+    notifyListeners();
+
+    final result = await downloadGeoDataUseCase(DownloadGeoDataParams(
+      organization: organization,
+    ));
+
+    result.fold(
+      (failure) => throw failure,
+      (r) => null,
     );
 
-    failureOrOrganization?.fold((failure) => throw failure, (r) => null);
+    isLoading = false;
+    notifyListeners();
   }
 
   @override
-  Future<void> getGeolocationFiles(Organization organization) async {
-    if (organization.geolocationData.length > 0) {
-      _loading = true;
-      _hasCompleted = false;
-      _files = [];
-      notifyListeners();
+  Future<Either<Failure, List<GeolocationDataProperties>>> getGeoData({
+    @required Organization organization,
+    @required double latitude,
+    @required double longitude,
+  }) async {
+    if (!_isQuerying) {
+      _isQuerying = true;
 
-      _filestrController?.sink?.close();
-
-      final failureOrStream = await getGeolocationFilesUseCase(
-        GetGeolocationFilesParams(organization: organization),
+      final failureOrGeoData = await getGeolocationDataUseCase(
+        GetGeolocationDataParams(
+          organization: organization,
+          latitude: latitude,
+          longitude: longitude,
+        ),
       );
 
-      failureOrStream.fold(
-        (failure) => throw failure,
-        (strController) {
-          _filestrController = strController;
-          strController.stream.listen((failureOrFile) {
-            failureOrFile.fold(
-              (failure) => throw failure,
-              (file) {
-                _files.add(file);
-                if (_files.length == organization.geolocationData.length) {
-                  strController.sink.close();
-                  _loading = false;
-                  _hasCompleted = true;
-                  notifyListeners();
-                }
-              },
-            );
-          });
-        },
+      _isQuerying = false;
+
+      return failureOrGeoData.fold(
+        (failure) => Left(failure),
+        (geodata) => Right(geodata),
       );
     }
-  }
 
-  void setZoom(int zoom) {
-    _currentZoom = zoom;
-    notifyListeners();
+    return Right([]);
   }
 }

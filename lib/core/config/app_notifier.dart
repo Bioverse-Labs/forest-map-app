@@ -34,7 +34,7 @@ class AppNotifier extends StatelessWidget {
           create: (_) => GetIt.I(),
         ),
         ChangeNotifierProvider<UserNotifierImpl>(
-          create: (_) => GetIt.I(),
+          create: (_) => GetIt.I<UserNotifierImpl>(),
         ),
         ChangeNotifierProvider<HomeScreenNotifierImpl>(
           create: (_) => GetIt.I(),

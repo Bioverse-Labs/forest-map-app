@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
@@ -13,31 +12,34 @@ import '../repositories/geolocation_repository.dart';
 
 class GetGeolocationDataParams extends Equatable {
   final Organization organization;
-  final List<File> files;
-  final StreamController<Either<Failure, List<GeolocationDataProperties>>>
-      strController;
+  final double latitude;
+  final double longitude;
 
   GetGeolocationDataParams({
     @required this.organization,
-    @required this.files,
-    @required this.strController,
+    @required this.latitude,
+    @required this.longitude,
   });
 
   @override
-  List<Object> get props => [organization, files, strController];
+  List<Object> get props => [organization, latitude, longitude];
 }
 
-class GetGeolocationData implements UseCase<void, GetGeolocationDataParams> {
+class GetGeolocationData
+    implements
+        UseCase<List<GeolocationDataProperties>, GetGeolocationDataParams> {
   final GeolocationRepository repository;
 
   GetGeolocationData({@required this.repository});
 
   @override
-  Future<Either<Failure, void>> call(GetGeolocationDataParams params) {
-    return repository.getGeolocationData(
+  Future<Either<Failure, List<GeolocationDataProperties>>> call(
+    GetGeolocationDataParams params,
+  ) {
+    return repository.getPoints(
       organization: params.organization,
-      files: params.files,
-      strController: params.strController,
+      latitude: params.latitude,
+      longitude: params.longitude,
     );
   }
 }

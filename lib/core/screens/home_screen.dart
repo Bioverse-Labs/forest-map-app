@@ -176,12 +176,12 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     Future.delayed(const Duration(milliseconds: 300), () {
-      widget.mapNotifier.getGeolocationFiles(
+      widget.mapNotifier.downloadGeoData(
         widget.organizationNotifier.organization,
       );
 
       widget.organizationNotifier.addListener(() {
-        widget.mapNotifier.getGeolocationFiles(
+        widget.mapNotifier.downloadGeoData(
           widget.organizationNotifier.organization,
         );
       });

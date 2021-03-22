@@ -60,25 +60,12 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   CameraPosition _initalPosition;
   bool _shouldUpdateState = false;
   bool _hasPermission = true;
+  Set<Marker> _markers = Set<Marker>();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-
-    widget.mapNotifier.addListener(() {
-      if (widget.mapNotifier.hasCompleted) {
-        try {
-          widget.mapNotifier.getGeolocationData(
-            widget.organizationNotifier.organization,
-          );
-        } on LocalFailure catch (failure) {
-          widget.notificationsUtils.showErrorNotification(
-            failure.message,
-          );
-        }
-      }
-    });
 
     _fetchLocation();
   }
@@ -216,6 +203,16 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     );
   }
 
+  Future<void> _goToDataLocation() async {
+    final position = CameraPosition(
+      target: LatLng(-7.78404597523145, -51.94507302669496),
+      zoom: 14,
+    );
+
+    final controllerFuture = await _controller.future;
+    controllerFuture.animateCamera(CameraUpdate.newCameraPosition(position));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -254,7 +251,14 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
           ScreenWidget(
             body: Consumer<LocationNotifierImpl>(
               builder: (ctx, state, child) {
-                _updateMapPosition(state.currentLocation);
+                if (mounted && state.currentLocation != null) {
+                  widget.mapNotifier.getGeoData(
+                    organization: widget.organizationNotifier.organization,
+                    latitude: state.currentLocation?.lat,
+                    longitude: state.currentLocation?.lng,
+                  );
+                  _updateMapPosition(state.currentLocation);
+                }
 
                 return child;
               },
@@ -266,13 +270,31 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                     myLocationEnabled: true,
                     mapType: MapType.satellite,
                     myLocationButtonEnabled: true,
-                    // onCameraMove: (position) {
-                    //   if (mounted) {
-                    //     print(position.zoom);
-                    //     _currentZoom = position.zoom;
-                    //     setState(() {});
-                    //   }
-                    // },
+                    markers: _markers,
+                    onCameraMove: (position) async {
+                      final failureOrData = await widget.mapNotifier.getGeoData(
+                        organization: widget.organizationNotifier.organization,
+                        latitude: position.target.latitude,
+                        longitude: position.target.longitude,
+                      );
+
+                      failureOrData.fold(
+                        (l) => null,
+                        (geoData) {
+                          _markers.clear();
+
+                          for (var item in geoData) {
+                            final marker = Marker(
+                              markerId: MarkerId(item.id),
+                              position: LatLng(item.latitude, item.longitude),
+                            );
+                            _markers.add(marker);
+                          }
+
+                          setState(() {});
+                        },
+                      );
+                    },
                   );
                 },
               ),
@@ -286,6 +308,12 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                         heroTag: 'mapPhotoActionButton',
                         onPressed: () => _takePicture(context),
                         child: Icon(Icons.add_a_photo_outlined),
+                      ),
+                      SizedBox(width: 16),
+                      FloatingActionButton(
+                        heroTag: 'goToDataLocation',
+                        onPressed: _goToDataLocation,
+                        child: Icon(Icons.my_location_outlined),
                       ),
                     ],
                   ),

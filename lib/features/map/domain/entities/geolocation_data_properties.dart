@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 class GeolocationDataProperties extends Equatable {
   final String id;
+  final String geohash;
   final String type;
   final String specie;
   final DateTime detDate;
@@ -12,6 +13,7 @@ class GeolocationDataProperties extends Equatable {
 
   GeolocationDataProperties({
     @required this.id,
+    @required this.geohash,
     @required this.type,
     @required this.specie,
     @required this.detDate,
@@ -23,6 +25,7 @@ class GeolocationDataProperties extends Equatable {
   @override
   List<Object> get props => [
         id,
+        geohash,
         type,
         specie,
         detDate,

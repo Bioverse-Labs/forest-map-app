@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:forest_map_app/features/map/domain/usecases/get_geolocation_files.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
@@ -22,9 +22,12 @@ import '../../features/auth/domain/usecases/sign_in_with_social.dart';
 import '../../features/auth/domain/usecases/sign_out.dart';
 import '../../features/auth/domain/usecases/sign_up.dart';
 import '../../features/auth/presentation/notifiers/auth_notifier.dart';
-import '../../features/map/data/hive/geolocation_data_properties.dart';
+import '../../features/map/data/datasources/map_local_datasource.dart';
+import '../../features/map/data/datasources/map_remote_datasource.dart';
+import '../../features/map/data/hive/geolocation_file.dart';
 import '../../features/map/data/repositories/geolocation_repository_impl.dart';
 import '../../features/map/domain/repositories/geolocation_repository.dart';
+import '../../features/map/domain/usecases/download_geo_data.dart';
 import '../../features/map/domain/usecases/get_geolocation_data.dart';
 import '../../features/map/presentation/notifiers/map_notifier.dart';
 import '../../features/organization/data/datasources/organization_local_data_source.dart';
@@ -66,6 +69,7 @@ import '../../features/user/domain/repository/user_repository.dart';
 import '../../features/user/domain/usecases/get_user.dart';
 import '../../features/user/domain/usecases/update_user.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
+import '../adapters/database_adapter.dart';
 import '../adapters/firebase_auth_adapter.dart';
 import '../adapters/firebase_storage_adapter.dart';
 import '../adapters/firestore_adapter.dart';
@@ -103,7 +107,7 @@ class AppConfig {
     Hive.registerAdapter(UserHiveAdapter());
     Hive.registerAdapter(LocationHiveAdapter());
     Hive.registerAdapter(PostHiveAdapter());
-    Hive.registerAdapter(GeolocationDataPropertiesHiveAdapter());
+    Hive.registerAdapter(GeolocationFileHiveAdapter());
   }
 
   static void registerUtils() {
@@ -118,6 +122,7 @@ class AppConfig {
     GetIt.I.registerLazySingleton<UUIDGenerator>(() => UUIDGenerator(Uuid()));
     GetIt.I.registerLazySingleton<DirUtils>(() => DirUtils());
     GetIt.I.registerLazySingleton<GeoJsonUtils>(() => GeoJsonUtils());
+    GetIt.I.registerLazySingleton<Geoflutterfire>(() => Geoflutterfire());
   }
 
   static void registerPlatformServices() {
@@ -193,8 +198,18 @@ class AppConfig {
       () => HiveAdapter<PostHive>('posts', Hive),
     );
 
+    GetIt.I.registerLazySingleton<HiveAdapter<GeolocationFileHive>>(
+      () => HiveAdapter<GeolocationFileHive>('geofile', Hive),
+    );
+
     GetIt.I.registerLazySingleton<HttpAdapter>(
       () => HttpAdapterImpl(),
+    );
+
+    GetIt.I.registerLazySingleton<DatabaseAdapter>(
+      () => DatabaseAdapterImpl(
+        dirUtils: GetIt.I(),
+      ),
     );
   }
 
@@ -203,6 +218,7 @@ class AppConfig {
       await GetIt.I<HiveAdapter<OrganizationHive>>().init();
       await GetIt.I<HiveAdapter<UserHive>>().init();
       await GetIt.I<HiveAdapter<PostHive>>().init();
+      await GetIt.I<HiveAdapter<GeolocationFileHive>>().init();
     } catch (error) {}
   }
 
@@ -210,6 +226,7 @@ class AppConfig {
     await GetIt.I<HiveAdapter<OrganizationHive>>().close();
     await GetIt.I<HiveAdapter<UserHive>>().close();
     await GetIt.I<HiveAdapter<PostHive>>().close();
+    await GetIt.I<HiveAdapter<GeolocationFileHive>>().close();
   }
 
   // * DATA LAYER SINGLETON'S //
@@ -279,6 +296,22 @@ class AppConfig {
         uuidGenerator: GetIt.I(),
       ),
     );
+
+    GetIt.I.registerLazySingleton<MapRemoteDatasource>(
+      () => MapRemoteDatasourceImpl(
+        httpAdapter: GetIt.I(),
+        firebaseStorageAdapter: GetIt.I(),
+        dirUtils: GetIt.I(),
+        geoJsonUtils: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<MapLocalDataSource>(
+      () => MapLocalDataSourceImpl(
+        databaseAdapter: GetIt.I(),
+        hiveAdapter: GetIt.I(),
+      ),
+    );
   }
 
   static void registerRepositories() {
@@ -327,12 +360,10 @@ class AppConfig {
 
     GetIt.I.registerLazySingleton<GeolocationRepository>(
       () => GeolocationRepositoryImpl(
-        dirUtils: GetIt.I(),
-        firebaseStorageAdapter: GetIt.I(),
-        geoJsonUtils: GetIt.I(),
-        httpAdapter: GetIt.I(),
-        localizedString: GetIt.I(),
-        uuidGenerator: GetIt.I(),
+        mapLocalDataSource: GetIt.I(),
+        mapRemoteDatasource: GetIt.I(),
+        geoflutterfire: GetIt.I(),
+        networkInfo: GetIt.I(),
       ),
     );
   }
@@ -454,8 +485,8 @@ class AppConfig {
       ),
     );
 
-    GetIt.I.registerLazySingleton<GetGeolocationFiles>(
-      () => GetGeolocationFiles(
+    GetIt.I.registerLazySingleton<DownloadGeoData>(
+      () => DownloadGeoData(
         repository: GetIt.I(),
       ),
     );
@@ -520,7 +551,7 @@ class AppConfig {
 
     GetIt.I.registerFactory<MapNotifierImpl>(
       () => MapNotifierImpl(
-        getGeolocationFilesUseCase: GetIt.I(),
+        downloadGeoDataUseCase: GetIt.I(),
         getGeolocationDataUseCase: GetIt.I(),
       ),
     );

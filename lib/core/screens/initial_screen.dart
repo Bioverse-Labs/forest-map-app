@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:forest_map_app/core/adapters/database_adapter.dart';
 
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
@@ -19,6 +20,7 @@ class InitialScreen extends StatelessWidget {
   final OrganizationNotifierImpl organizationNotifier;
   final NetworkInfo networkInfo;
   final NotificationsUtils notificationsUtils;
+  final DatabaseAdapter databaseAdapter;
 
   InitialScreen({
     Key key,
@@ -29,10 +31,13 @@ class InitialScreen extends StatelessWidget {
     @required this.organizationNotifier,
     @required this.networkInfo,
     @required this.notificationsUtils,
+    @required this.databaseAdapter,
   }) : super(key: key);
 
   Future<void> _handleStateChange(BuildContext context, User user) async {
     try {
+      await databaseAdapter.openDatabase();
+
       if (user == null) {
         appNavigator.pushAndReplace('/signIn');
         return;

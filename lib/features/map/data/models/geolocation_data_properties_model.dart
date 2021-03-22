@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-import '../../../../core/models/model.dart';
 import '../../domain/entities/geolocation_data_properties.dart';
-import '../hive/geolocation_data_properties.dart';
 
-class GeolocationDataPropertiesModel extends GeolocationDataProperties
-    implements
-        Model<GeolocationDataPropertiesModel, GeolocationDataPropertiesHive> {
+class GeolocationDataPropertiesModel extends GeolocationDataProperties {
   GeolocationDataPropertiesModel({
     @required String id,
+    @required String geohash,
     @required String type,
     @required String specie,
     @required DateTime detDate,
@@ -18,6 +15,7 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties
     @required double longitude,
   }) : super(
           id: id,
+          geohash: geohash,
           type: type,
           specie: specie,
           detDate: detDate,
@@ -29,6 +27,7 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties
   factory GeolocationDataPropertiesModel.fromMap(Map<String, dynamic> map) {
     return GeolocationDataPropertiesModel(
       id: map['id'].toString(),
+      geohash: map['geohash'].toString(),
       type: map['class'],
       specie: map['specie'],
       detDate: map['det_date'] != null ? DateTime.parse(map['det_date']) : null,
@@ -45,6 +44,7 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties
   ) {
     return GeolocationDataPropertiesModel(
       id: geoProperties.id,
+      geohash: geoProperties.geohash,
       type: geoProperties.type,
       detDate: geoProperties.detDate,
       imageDate: geoProperties.imageDate,
@@ -54,21 +54,6 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties
     );
   }
 
-  factory GeolocationDataPropertiesModel.fromHive(
-    GeolocationDataPropertiesHive geoPropertiesHive,
-  ) {
-    return GeolocationDataPropertiesModel(
-      id: geoPropertiesHive.id,
-      type: geoPropertiesHive.type,
-      detDate: geoPropertiesHive.detDate,
-      imageDate: geoPropertiesHive.imageDate,
-      specie: geoPropertiesHive.specie,
-      latitude: geoPropertiesHive.longitude,
-      longitude: geoPropertiesHive.longitude,
-    );
-  }
-
-  @override
   GeolocationDataPropertiesModel copyWith({
     String id,
     String type,
@@ -80,6 +65,7 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties
   }) {
     return GeolocationDataPropertiesModel(
       id: id ?? this.id,
+      geohash: geohash ?? this.geohash,
       type: type ?? this.type,
       specie: specie ?? this.specie,
       detDate: detDate ?? this.detDate,
@@ -89,22 +75,10 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties
     );
   }
 
-  @override
-  GeolocationDataPropertiesHive toHiveAdapter() {
-    return GeolocationDataPropertiesHive()
-      ..id = id
-      ..type = type
-      ..specie = specie
-      ..detDate = detDate
-      ..imageDate = imageDate
-      ..latitude = latitude
-      ..longitude = longitude;
-  }
-
-  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'geohash': geohash,
       'type': type,
       'specie': specie,
       'detDate': detDate,

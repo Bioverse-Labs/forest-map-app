@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:forest_map_app/core/errors/failure.dart';
@@ -10,27 +7,26 @@ import 'package:meta/meta.dart';
 
 import '../../../organization/domain/entities/organization.dart';
 
-class GetGeolocationFilesParams extends Equatable {
+class DownloadGeoDataParams extends Equatable {
   final Organization organization;
 
-  GetGeolocationFilesParams({@required this.organization});
+  DownloadGeoDataParams({
+    @required this.organization,
+  });
 
   @override
   List<Object> get props => [organization];
 }
 
-class GetGeolocationFiles
-    implements
-        UseCase<StreamController<Either<Failure, File>>,
-            GetGeolocationFilesParams> {
+class DownloadGeoData implements UseCase<void, DownloadGeoDataParams> {
   final GeolocationRepository repository;
 
-  GetGeolocationFiles({@required this.repository});
+  DownloadGeoData({
+    @required this.repository,
+  });
 
   @override
-  Future<Either<Failure, StreamController<Either<Failure, File>>>> call(
-    GetGeolocationFilesParams params,
-  ) {
-    return repository.getGolocationFiles(params.organization);
+  Future<Either<Failure, void>> call(DownloadGeoDataParams params) async {
+    return repository.insertDataFromFile(params.organization);
   }
 }
