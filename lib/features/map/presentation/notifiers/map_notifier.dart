@@ -21,7 +21,7 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
   final GetGeolocationData getGeolocationDataUseCase;
 
   bool isLoading = false;
-  bool _isQuerying = false;
+  bool isQuerying = false;
 
   MapNotifierImpl({
     @required this.downloadGeoDataUseCase,
@@ -54,8 +54,9 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
     @required double latitude,
     @required double longitude,
   }) async {
-    if (!_isQuerying) {
-      _isQuerying = true;
+    if (!isQuerying) {
+      isQuerying = true;
+      notifyListeners();
 
       final failureOrGeoData = await getGeolocationDataUseCase(
         GetGeolocationDataParams(
@@ -65,7 +66,8 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
         ),
       );
 
-      _isQuerying = false;
+      isQuerying = false;
+      notifyListeners();
 
       return failureOrGeoData.fold(
         (failure) => Left(failure),

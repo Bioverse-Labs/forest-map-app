@@ -2,7 +2,7 @@ name: forest_map_app
 description: A new Flutter project.
 
 publish_to: "none"
-version: 1.0.0+4
+version: 1.0.0+6
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

@@ -21,7 +21,6 @@ import '../../../tracking/domain/entities/location.dart';
 import '../../../tracking/presentation/notifiers/location_notifier.dart';
 import '../../../user/presentation/notifiers/user_notifier.dart';
 import '../notifiers/map_notifier.dart';
-import '../widgets/geolocation_loader.dart';
 
 class MapScreen extends StatefulWidget {
   final LocalizedString localizedString;
@@ -60,6 +59,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   CameraPosition _initalPosition;
   bool _shouldUpdateState = false;
   bool _hasPermission = true;
+  bool _showLocation = false;
+  MapType _mapType = MapType.satellite;
   Set<Marker> _markers = Set<Marker>();
 
   @override
@@ -213,16 +214,95 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     controllerFuture.animateCamera(CameraUpdate.newCameraPosition(position));
   }
 
+  void _switchLocation() async {
+    setState(() {
+      _showLocation = !_showLocation;
+    });
+  }
+
+  void _onMapMoved(position) {
+    widget.mapNotifier
+        .getGeoData(
+          organization: widget.organizationNotifier.organization,
+          latitude: position.target.latitude,
+          longitude: position.target.longitude,
+        )
+        .then(
+          (failureOrData) => failureOrData.fold(
+            (l) => null,
+            (geoData) {
+              if (mounted) {
+                _markers.clear();
+
+                for (var item in geoData) {
+                  final marker = Marker(
+                    markerId: MarkerId(item.id),
+                    position: LatLng(item.latitude, item.longitude),
+                  );
+                  _markers.add(marker);
+                }
+
+                setState(() {});
+              }
+            },
+          ),
+        );
+  }
+
+  void _changeMapType() {
+    switch (_mapType) {
+      case MapType.satellite:
+        _mapType = MapType.terrain;
+        break;
+      case MapType.terrain:
+        _mapType = MapType.hybrid;
+        break;
+      case MapType.hybrid:
+        _mapType = MapType.normal;
+        break;
+      default:
+        _mapType = MapType.satellite;
+        break;
+    }
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        if (_initalPosition == null && _hasPermission)
-          Center(
-            child: CircularProgressIndicator(),
-          ),
-        if (!_hasPermission)
-          Center(
+    return Consumer2<LocationNotifierImpl, MapNotifierImpl>(
+      builder: (ctx, locationState, mapState, _) {
+        if (mounted && locationState.currentLocation != null && _showLocation) {
+          widget.mapNotifier.getGeoData(
+            organization: widget.organizationNotifier.organization,
+            latitude: locationState.currentLocation?.lat,
+            longitude: locationState.currentLocation?.lng,
+          );
+          _updateMapPosition(locationState.currentLocation);
+        }
+
+        if ((_initalPosition == null && _hasPermission) || mapState.isLoading) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    widget.localizedString.getLocalizedString(
+                        'map-screen.loading-geolocation-files'),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              ],
+            ),
+          );
+        }
+
+        if (!_hasPermission) {
+          return Center(
             child: Padding(
               padding: const EdgeInsets.all(32.0),
               child: Column(
@@ -246,58 +326,39 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                 ],
               ),
             ),
-          ),
-        if (_initalPosition != null && _hasPermission)
-          ScreenWidget(
-            body: Consumer<LocationNotifierImpl>(
-              builder: (ctx, state, child) {
-                if (mounted && state.currentLocation != null) {
-                  widget.mapNotifier.getGeoData(
-                    organization: widget.organizationNotifier.organization,
-                    latitude: state.currentLocation?.lat,
-                    longitude: state.currentLocation?.lng,
-                  );
-                  _updateMapPosition(state.currentLocation);
-                }
+          );
+        }
 
-                return child;
-              },
-              child: Consumer<MapNotifierImpl>(
-                builder: (ctx, state, _) {
-                  return GoogleMap(
-                    initialCameraPosition: _initalPosition,
-                    onMapCreated: _handleMapCreation,
-                    myLocationEnabled: true,
-                    mapType: MapType.satellite,
-                    myLocationButtonEnabled: true,
-                    markers: _markers,
-                    onCameraMove: (position) async {
-                      final failureOrData = await widget.mapNotifier.getGeoData(
-                        organization: widget.organizationNotifier.organization,
-                        latitude: position.target.latitude,
-                        longitude: position.target.longitude,
-                      );
-
-                      failureOrData.fold(
-                        (l) => null,
-                        (geoData) {
-                          _markers.clear();
-
-                          for (var item in geoData) {
-                            final marker = Marker(
-                              markerId: MarkerId(item.id),
-                              position: LatLng(item.latitude, item.longitude),
-                            );
-                            _markers.add(marker);
-                          }
-
-                          setState(() {});
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
+        if (_initalPosition != null && _hasPermission) {
+          return ScreenWidget(
+            body: Stack(
+              fit: StackFit.expand,
+              children: [
+                GoogleMap(
+                  initialCameraPosition: _initalPosition,
+                  onMapCreated: _handleMapCreation,
+                  myLocationEnabled: _showLocation,
+                  mapType: _mapType,
+                  myLocationButtonEnabled: true,
+                  markers: _markers,
+                  onCameraMove: _onMapMoved,
+                ),
+                if (mapState.isQuerying)
+                  Positioned(
+                    top: 16,
+                    left: 16,
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18),
+                        color: Colors.white,
+                      ),
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  )
+              ],
             ),
             floatingActionButton: !_hasPermission
                 ? Container()
@@ -313,23 +374,31 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                       FloatingActionButton(
                         heroTag: 'goToDataLocation',
                         onPressed: _goToDataLocation,
-                        child: Icon(Icons.my_location_outlined),
+                        child: Icon(Icons.terrain_outlined),
+                      ),
+                      SizedBox(width: 16),
+                      FloatingActionButton(
+                        heroTag: 'switchlocationButton',
+                        onPressed: _switchLocation,
+                        child: Icon(_showLocation
+                            ? Icons.location_disabled_outlined
+                            : Icons.my_location_outlined),
+                      ),
+                      SizedBox(width: 16),
+                      FloatingActionButton(
+                        heroTag: 'switchMapType',
+                        onPressed: _changeMapType,
+                        child: Icon(Icons.layers_outlined),
                       ),
                     ],
                   ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
-          ),
-        Positioned(
-          top: 92,
-          left: 16,
-          right: 16,
-          child: GeolocationLoader(
-            organization: widget.organizationNotifier.organization,
-            localizedString: widget.localizedString,
-          ),
-        ),
-      ],
+          );
+        }
+
+        return Container();
+      },
     );
   }
 }
