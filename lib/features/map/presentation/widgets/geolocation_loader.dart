@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:forest_map_app/core/util/localized_string.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/util/localized_string.dart';
 import '../../../organization/domain/entities/organization.dart';
 import '../notifiers/map_notifier.dart';
 

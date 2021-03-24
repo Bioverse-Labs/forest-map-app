@@ -1,8 +1,9 @@
-import 'package:forest_map_app/core/adapters/database_adapter.dart';
-import 'package:forest_map_app/core/adapters/hive_adapter.dart';
-import 'package:forest_map_app/features/map/data/hive/geolocation_file.dart';
-import 'package:forest_map_app/features/map/data/models/geolocation_data_properties_model.dart';
 import 'package:meta/meta.dart';
+
+import '../../../../core/adapters/database_adapter.dart';
+import '../../../../core/adapters/hive_adapter.dart';
+import '../hive/geolocation_file.dart';
+import '../models/geolocation_data_properties_model.dart';
 
 abstract class MapLocalDataSource {
   Future<List<GeolocationDataPropertiesModel>> getDataFromQuery({

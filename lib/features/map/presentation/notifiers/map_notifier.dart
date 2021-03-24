@@ -1,11 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:forest_map_app/features/map/domain/usecases/download_geo_data.dart';
-import 'package:forest_map_app/features/map/domain/usecases/get_geolocation_data.dart';
 import 'package:meta/meta.dart';
-import 'package:forest_map_app/core/errors/failure.dart';
-import 'package:forest_map_app/features/map/domain/entities/geolocation_data_properties.dart';
-import 'package:forest_map_app/features/organization/domain/entities/organization.dart';
+
+import '../../../../core/errors/failure.dart';
+import '../../../organization/domain/entities/organization.dart';
+import '../../domain/entities/geolocation_data_properties.dart';
+import '../../domain/usecases/download_geo_data.dart';
+import '../../domain/usecases/get_geolocation_data.dart';
 
 abstract class MapNotifier {
   Future<void> downloadGeoData(Organization organization);

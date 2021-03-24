@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:ui' as ui;
 
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -57,10 +59,12 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   Completer<GoogleMapController> _controller = Completer();
   CameraPosition _initalPosition;
+  Location _currentLocation;
   bool _shouldUpdateState = false;
   bool _hasPermission = true;
-  bool _showLocation = false;
   MapType _mapType = MapType.satellite;
+  BitmapDescriptor _pinLocationIcon;
+
   Set<Marker> _markers = Set<Marker>();
 
   @override
@@ -68,6 +72,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
+    _setCustomMapPin();
     _fetchLocation();
   }
 
@@ -85,6 +90,34 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
       _shouldUpdateState = false;
       setState(() {});
     }
+  }
+
+  Future<void> _setCustomMapPin() async {
+    _pinLocationIcon = await _renderMarker(32);
+  }
+
+  Future<BitmapDescriptor> _renderMarker(int size) async {
+    final pictureRecorder = ui.PictureRecorder();
+    final canvas = Canvas(pictureRecorder);
+    final radius = size / 2;
+
+    final imageData = await rootBundle.load('assets/marker_$size.png');
+    final decodedImage =
+        await decodeImageFromList(imageData.buffer.asUint8List());
+
+    canvas.drawImage(
+      decodedImage,
+      Offset(0, 0),
+      Paint(),
+    );
+
+    final image = await pictureRecorder.endRecording().toImage(
+          radius.toInt() * 2,
+          radius.toInt() * 2,
+        );
+
+    final data = await image.toByteData(format: ui.ImageByteFormat.png);
+    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
   }
 
   Future<void> _fetchLocation() async {
@@ -142,7 +175,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _updateMapPosition(Location location) async {
-    if (location != null) {
+    if (location != null && location != _currentLocation) {
       final position = CameraPosition(
         target: LatLng(location.lat, location.lng),
         zoom: 14,
@@ -150,6 +183,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
 
       final controllerFuture = await _controller.future;
       controllerFuture.animateCamera(CameraUpdate.newCameraPosition(position));
+
+      _currentLocation = location;
     }
   }
 
@@ -214,12 +249,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     controllerFuture.animateCamera(CameraUpdate.newCameraPosition(position));
   }
 
-  void _switchLocation() async {
-    setState(() {
-      _showLocation = !_showLocation;
-    });
-  }
-
   void _onMapMoved(position) {
     widget.mapNotifier
         .getGeoData(
@@ -238,6 +267,31 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                   final marker = Marker(
                     markerId: MarkerId(item.id),
                     position: LatLng(item.latitude, item.longitude),
+                    icon: _pinLocationIcon,
+                    consumeTapEvents: true,
+                    onTap: () => widget.notificationsUtils.showAlertDialog(
+                      title: Text(item.specie),
+                      content: Container(
+                        height: 100,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('${item.type} - ${item.specie}'),
+                            Divider(),
+                            Text(
+                              '${item.latitude} / ${item.longitude}',
+                              style: TextStyle(fontSize: 12),
+                            )
+                          ],
+                        ),
+                      ),
+                      buttons: [
+                        AlertButtonParams(
+                          title: 'OK',
+                          isPrimary: true,
+                        ),
+                      ],
+                    ),
                   );
                   _markers.add(marker);
                 }
@@ -272,12 +326,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Consumer2<LocationNotifierImpl, MapNotifierImpl>(
       builder: (ctx, locationState, mapState, _) {
-        if (mounted && locationState.currentLocation != null && _showLocation) {
-          widget.mapNotifier.getGeoData(
-            organization: widget.organizationNotifier.organization,
-            latitude: locationState.currentLocation?.lat,
-            longitude: locationState.currentLocation?.lng,
-          );
+        if (mounted) {
           _updateMapPosition(locationState.currentLocation);
         }
 
@@ -337,7 +386,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                 GoogleMap(
                   initialCameraPosition: _initalPosition,
                   onMapCreated: _handleMapCreation,
-                  myLocationEnabled: _showLocation,
+                  myLocationEnabled: true,
                   mapType: _mapType,
                   myLocationButtonEnabled: true,
                   markers: _markers,
@@ -372,18 +421,11 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                       ),
                       SizedBox(width: 16),
                       FloatingActionButton(
-                        heroTag: 'goToDataLocation',
-                        onPressed: _goToDataLocation,
-                        child: Icon(Icons.terrain_outlined),
-                      ),
-                      SizedBox(width: 16),
-                      FloatingActionButton(
-                        heroTag: 'switchlocationButton',
-                        onPressed: _switchLocation,
-                        child: Icon(_showLocation
-                            ? Icons.location_disabled_outlined
-                            : Icons.my_location_outlined),
-                      ),
+                          heroTag: 'goToDataLocation',
+                          onPressed: _goToDataLocation,
+                          child: Image.asset(
+                            'assets/marker_128.png',
+                          )),
                       SizedBox(width: 16),
                       FloatingActionButton(
                         heroTag: 'switchMapType',

@@ -36,6 +36,7 @@ class LocationNotifierImpl extends ChangeNotifier implements LocationNotifier {
       (subscription) {
         _streamSubscription = subscription;
         _streamSubscription.listen((event) {
+          print('dale');
           _location = event;
           notifyListeners();
         });

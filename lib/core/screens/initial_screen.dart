@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:forest_map_app/core/adapters/database_adapter.dart';
 
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
+import '../adapters/database_adapter.dart';
 import '../adapters/firebase_auth_adapter.dart';
 import '../adapters/firestore_adapter.dart';
 import '../errors/failure.dart';
