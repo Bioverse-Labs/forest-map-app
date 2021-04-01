@@ -15,4 +15,10 @@ abstract class GeolocationRepository {
     double latitude,
     double longitude,
   });
+  Future<Either<Failure, List<GeolocationDataProperties>>> loadBoundary(
+    Organization organization,
+  );
+  Future<Either<Failure, List<GeolocationDataProperties>>> loadVillages(
+    Organization organization,
+  );
 }

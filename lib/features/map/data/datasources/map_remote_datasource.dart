@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:forest_map_app/features/organization/domain/entities/organization.dart';
 import 'package:geojson/geojson.dart';
 import 'package:meta/meta.dart';
 
@@ -10,7 +11,8 @@ import '../../../../core/util/dir.dart';
 import '../../../../core/util/geojson.dart';
 
 abstract class MapRemoteDatasource {
-  Future<GeoJson> downloadGeoJsonFile(String filename);
+  Future<GeoJson> downloadGeoJsonFile(String filename,
+      [Organization organization]);
 }
 
 class MapRemoteDatasourceImpl implements MapRemoteDatasource {
@@ -26,13 +28,19 @@ class MapRemoteDatasourceImpl implements MapRemoteDatasource {
     @required this.geoJsonUtils,
   });
 
-  Future<GeoJson> downloadGeoJsonFile(String filename) async {
+  Future<GeoJson> downloadGeoJsonFile(String filename,
+      [Organization organization]) async {
     final tempDir = await dirUtils.getTempDirectory();
     final localFile = File('${tempDir.path}/$filename.geojson');
 
-    await localFile.create();
+    if (!await localFile.exists()) {
+      await localFile.create();
+    }
+
     final downloadUrl = await firebaseStorageAdapter.getDownloadUrl(
-      '/geolocation-data/$filename.geojson',
+      organization == null
+          ? '/geolocation-data/$filename.geojson'
+          : '/organizations/${organization.id}/geolocation-data/$filename.geojson',
     );
     final resp = await httpAdapter.downloadFile(downloadUrl);
     await localFile.writeAsBytes(resp.readAsBytesSync());

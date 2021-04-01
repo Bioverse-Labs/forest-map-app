@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
 import '../../domain/entities/geolocation_data_properties.dart';
@@ -13,6 +14,8 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties {
     @required DateTime imageDate,
     @required double latitude,
     @required double longitude,
+    String name,
+    List<LatLng> points,
   }) : super(
           id: id,
           geohash: geohash,
@@ -22,6 +25,8 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties {
           imageDate: imageDate,
           latitude: latitude,
           longitude: longitude,
+          points: points,
+          name: name,
         );
 
   factory GeolocationDataPropertiesModel.fromMap(Map<String, dynamic> map) {
@@ -36,6 +41,8 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties {
           : null,
       latitude: map['latitude'],
       longitude: map['longitude'],
+      points: map['points'],
+      name: map["etnia_nome"],
     );
   }
 
@@ -51,6 +58,8 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties {
       specie: geoProperties.specie,
       latitude: geoProperties.latitude,
       longitude: geoProperties.longitude,
+      points: geoProperties.points,
+      name: geoProperties.name,
     );
   }
 
@@ -62,6 +71,8 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties {
     DateTime imageDate,
     double latitude,
     double longitude,
+    List<LatLng> points,
+    String name,
   }) {
     return GeolocationDataPropertiesModel(
       id: id ?? this.id,
@@ -70,8 +81,10 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties {
       specie: specie ?? this.specie,
       detDate: detDate ?? this.detDate,
       imageDate: imageDate ?? this.imageDate,
-      latitude: latitude ?? latitude,
-      longitude: longitude ?? longitude,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      points: points ?? this.points,
+      name: name,
     );
   }
 
@@ -85,6 +98,8 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties {
       'imageDate': imageDate,
       'latitude': latitude,
       'longitude': longitude,
+      'points': points,
+      'name': name,
     };
   }
 }

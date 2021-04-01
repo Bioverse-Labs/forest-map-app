@@ -1,9 +1,15 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:forest_map_app/core/enums/exception_origin_types.dart';
+import 'package:forest_map_app/core/errors/exceptions.dart';
+import 'package:forest_map_app/core/util/geojson.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geojson/geojson.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 import 'package:proximity_hash/proximity_hash.dart';
 
@@ -21,12 +27,14 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
   final MapLocalDataSource mapLocalDataSource;
   final NetworkInfo networkInfo;
   final Geoflutterfire geoflutterfire;
+  final GeoJsonUtils geoJsonUtils;
 
   GeolocationRepositoryImpl({
     @required this.mapRemoteDatasource,
     @required this.mapLocalDataSource,
     @required this.networkInfo,
     @required this.geoflutterfire,
+    @required this.geoJsonUtils,
   });
 
   @override
@@ -46,11 +54,8 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
 
         final geoData = await compute<Map<String, dynamic>,
             List<GeolocationDataPropertiesModel>>(
-          parseData,
-          {
-            'geo': geoflutterfire,
-            'features': geoJson.features,
-          },
+          parseDataAsPoint,
+          {'geo': geoflutterfire, 'features': geoJson.features},
         );
 
         await mapLocalDataSource.saveData(filename, geoData);
@@ -84,9 +89,111 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
 
     return Right(items);
   }
+
+  @override
+  Future<Either<Failure, List<GeolocationDataProperties>>> loadBoundary(
+    Organization organization,
+  ) async {
+    try {
+      GeoJson geoJson;
+      if (await networkInfo.isConnected) {
+        geoJson = await mapRemoteDatasource.downloadGeoJsonFile(
+          'boundary',
+          organization,
+        );
+        mapLocalDataSource.saveFile('${organization.id}-boundary');
+      } else {
+        final file = await mapLocalDataSource.getFile(
+          '${organization.id}-boundary',
+        );
+        geoJson = await compute<Map<String, dynamic>, GeoJson>(
+          parseGeojson,
+          {
+            'geoJsonUtils': geoJsonUtils,
+            'file': file,
+          },
+        );
+      }
+
+      final geoData = await compute<Map<String, dynamic>,
+          List<GeolocationDataPropertiesModel>>(
+        parseDataAsPolygon,
+        {'geo': geoflutterfire, 'features': geoJson.features},
+      );
+
+      return Right(geoData);
+    } on FirebaseException catch (exception) {
+      return Left(ServerFailure(
+        exception.message,
+        exception.code,
+        ExceptionOriginTypes.firebaseStorage,
+        stackTrace: exception.stackTrace,
+      ));
+    } on LocalException catch (exception) {
+      return Left(LocalFailure(
+        exception.message,
+        exception.code,
+        ExceptionOriginTypes.firebaseStorage,
+        stackTrace: exception.stackTrace,
+      ));
+    } catch (error) {
+      return Left(GenericFailure([error]));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<GeolocationDataProperties>>> loadVillages(
+    Organization organization,
+  ) async {
+    try {
+      GeoJson geoJson;
+      if (await networkInfo.isConnected) {
+        geoJson = await mapRemoteDatasource.downloadGeoJsonFile(
+          'villages',
+          organization,
+        );
+        mapLocalDataSource.saveFile('${organization.id}-villages');
+      } else {
+        final file = await mapLocalDataSource.getFile(
+          '${organization.id}-villages',
+        );
+        geoJson = await compute<Map<String, dynamic>, GeoJson>(
+          parseGeojson,
+          {
+            'geoJsonUtils': geoJsonUtils,
+            'file': file,
+          },
+        );
+      }
+
+      final geoData = await compute<Map<String, dynamic>,
+          List<GeolocationDataPropertiesModel>>(
+        parseDataAsPoint,
+        {'geo': geoflutterfire, 'features': geoJson.features},
+      );
+
+      return Right(geoData);
+    } on FirebaseException catch (exception) {
+      return Left(ServerFailure(
+        exception.message,
+        exception.code,
+        ExceptionOriginTypes.firebaseStorage,
+        stackTrace: exception.stackTrace,
+      ));
+    } on LocalException catch (exception) {
+      return Left(LocalFailure(
+        exception.message,
+        exception.code,
+        ExceptionOriginTypes.firebaseStorage,
+        stackTrace: exception.stackTrace,
+      ));
+    } catch (error) {
+      return Left(GenericFailure([error]));
+    }
+  }
 }
 
-Future<List<GeolocationDataPropertiesModel>> parseData(
+Future<List<GeolocationDataPropertiesModel>> parseDataAsPoint(
   Map<String, dynamic> params,
 ) async {
   final geo = params['geo'] as Geoflutterfire;
@@ -114,4 +221,45 @@ Future<List<GeolocationDataPropertiesModel>> parseData(
   }
 
   return Future.value(dataList);
+}
+
+Future<List<GeolocationDataPropertiesModel>> parseDataAsPolygon(
+  Map<String, dynamic> params,
+) async {
+  final features = params['features'] as List<GeoJsonFeature>;
+
+  final dataList = <GeolocationDataPropertiesModel>[];
+
+  for (var feature in features) {
+    final multipoly = feature.geometry as GeoJsonMultiPolygon;
+    final properties = feature.properties;
+
+    for (var polygon in multipoly.polygons) {
+      final points = <LatLng>[];
+
+      for (var geoSerie in polygon.geoSeries) {
+        for (var point in geoSerie.geoPoints) {
+          points.add(LatLng(point.latitude, point.longitude));
+        }
+      }
+
+      final data = GeolocationDataPropertiesModel.fromMap({
+        ...properties,
+        'points': points,
+      });
+
+      dataList.add(data);
+    }
+  }
+
+  return Future.value(dataList);
+}
+
+Future<GeoJson> parseGeojson(Map<String, dynamic> params) async {
+  final geoJsonUtils = params['geoJsonUtils'] as GeoJsonUtils;
+  final file = params['file'] as File;
+
+  final geojson = await geoJsonUtils.parseFromFile(file);
+
+  return geojson;
 }

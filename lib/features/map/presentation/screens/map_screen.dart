@@ -6,6 +6,9 @@ import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:forest_map_app/core/util/uuid_generator.dart';
+import 'package:forest_map_app/features/map/domain/entities/geolocation_data_properties.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -63,9 +66,11 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   bool _shouldUpdateState = false;
   bool _hasPermission = true;
   MapType _mapType = MapType.satellite;
-  BitmapDescriptor _pinLocationIcon;
+  BitmapDescriptor _treeLocationIcon;
+  BitmapDescriptor _villageLocationIcon;
 
   Set<Marker> _markers = Set<Marker>();
+  Set<Polygon> _polygons = Set<Polygon>();
 
   @override
   void initState() {
@@ -93,15 +98,16 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _setCustomMapPin() async {
-    _pinLocationIcon = await _renderMarker(32);
+    _treeLocationIcon = await _renderMarker(32, 'marker');
+    _villageLocationIcon = await _renderMarker(64, 'tent');
   }
 
-  Future<BitmapDescriptor> _renderMarker(int size) async {
+  Future<BitmapDescriptor> _renderMarker(int size, String filename) async {
     final pictureRecorder = ui.PictureRecorder();
     final canvas = Canvas(pictureRecorder);
     final radius = size / 2;
 
-    final imageData = await rootBundle.load('assets/marker_$size.png');
+    final imageData = await rootBundle.load('assets/${filename}_$size.png');
     final decodedImage =
         await decodeImageFromList(imageData.buffer.asUint8List());
 
@@ -241,7 +247,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
 
   Future<void> _goToDataLocation() async {
     final position = CameraPosition(
-      target: LatLng(-7.78404597523145, -51.94507302669496),
+      target: LatLng(-7.590742614531484, -51.928936749498135),
       zoom: 14,
     );
 
@@ -249,7 +255,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     controllerFuture.animateCamera(CameraUpdate.newCameraPosition(position));
   }
 
-  void _onMapMoved(position) {
+  void _onMapMoved(position, villages) {
     widget.mapNotifier
         .getGeoData(
           organization: widget.organizationNotifier.organization,
@@ -262,12 +268,15 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
             (geoData) {
               if (mounted) {
                 _markers.clear();
+                final villagesMarkers = _parseVillages(villages);
+
+                _markers.addAll(villagesMarkers);
 
                 for (var item in geoData) {
                   final marker = Marker(
                     markerId: MarkerId(item.id),
                     position: LatLng(item.latitude, item.longitude),
-                    icon: _pinLocationIcon,
+                    icon: _treeLocationIcon,
                     consumeTapEvents: true,
                     onTap: () => widget.notificationsUtils.showAlertDialog(
                       title: Text(item.specie),
@@ -322,6 +331,37 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     setState(() {});
   }
 
+  void _parsePolygon(List<GeolocationDataProperties> data) {
+    if (data.length > 0 && _polygons.isEmpty) {
+      for (var item in data) {
+        final polygon = Polygon(
+          polygonId: PolygonId(GetIt.I<UUIDGenerator>().generateUID()),
+          points: item.points,
+          strokeColor: Colors.blue,
+          fillColor: Colors.blue.withOpacity(0.2),
+          strokeWidth: 2,
+        );
+
+        _polygons.add(polygon);
+      }
+
+      // setState(() {});
+    }
+  }
+
+  List<Marker> _parseVillages(List<GeolocationDataProperties> data) => data
+      .map(
+        (e) => Marker(
+          markerId: MarkerId(e.geohash),
+          position: LatLng(
+            e.latitude,
+            e.longitude,
+          ),
+          icon: _villageLocationIcon,
+        ),
+      )
+      .toList();
+
   @override
   Widget build(BuildContext context) {
     return Consumer2<LocationNotifierImpl, MapNotifierImpl>(
@@ -329,6 +369,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
         if (mounted) {
           _updateMapPosition(locationState.currentLocation);
         }
+
+        _parsePolygon(mapState.boundary);
 
         if ((_initalPosition == null && _hasPermission) || mapState.isLoading) {
           return Center(
@@ -390,7 +432,11 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                   mapType: _mapType,
                   myLocationButtonEnabled: true,
                   markers: _markers,
-                  onCameraMove: _onMapMoved,
+                  polygons: _polygons,
+                  onCameraMove: (position) => _onMapMoved(
+                    position,
+                    mapState.villages,
+                  ),
                 ),
                 if (mapState.isQuerying)
                   Positioned(

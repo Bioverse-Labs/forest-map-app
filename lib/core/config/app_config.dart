@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:forest_map_app/features/map/domain/usecases/get_boundary.dart';
+import 'package:forest_map_app/features/map/domain/usecases/get_villages.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -364,6 +366,7 @@ class AppConfig {
         mapRemoteDatasource: GetIt.I(),
         geoflutterfire: GetIt.I(),
         networkInfo: GetIt.I(),
+        geoJsonUtils: GetIt.I(),
       ),
     );
   }
@@ -490,6 +493,18 @@ class AppConfig {
         repository: GetIt.I(),
       ),
     );
+
+    GetIt.I.registerLazySingleton<GetBoundary>(
+      () => GetBoundary(
+        repository: GetIt.I(),
+      ),
+    );
+
+    GetIt.I.registerLazySingleton<GetVillages>(
+      () => GetVillages(
+        repository: GetIt.I(),
+      ),
+    );
   }
 
   // * PRESENTATION LAYER SINGLETON'S //
@@ -553,6 +568,8 @@ class AppConfig {
       () => MapNotifierImpl(
         downloadGeoDataUseCase: GetIt.I(),
         getGeolocationDataUseCase: GetIt.I(),
+        getBoundaryUseCase: GetIt.I(),
+        getVillagesUseCase: GetIt.I(),
       ),
     );
   }

@@ -180,8 +180,18 @@ class _HomeScreenState extends State<HomeScreen> {
         widget.organizationNotifier.organization,
       );
 
+      widget.mapNotifier.getBoundary(widget.organizationNotifier.organization);
+      widget.mapNotifier.getVillages(widget.organizationNotifier.organization);
+
       widget.organizationNotifier.addListener(() {
         widget.mapNotifier.downloadGeoData(
+          widget.organizationNotifier.organization,
+        );
+
+        widget.mapNotifier.getBoundary(
+          widget.organizationNotifier.organization,
+        );
+        widget.mapNotifier.getVillages(
           widget.organizationNotifier.organization,
         );
       });

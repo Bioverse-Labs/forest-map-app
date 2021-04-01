@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:forest_map_app/features/map/domain/usecases/get_boundary.dart';
+import 'package:forest_map_app/features/map/domain/usecases/get_villages.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/errors/failure.dart';
@@ -15,18 +17,26 @@ abstract class MapNotifier {
     @required double latitude,
     @required double longitude,
   });
+  Future<void> getBoundary(Organization organization);
+  Future<void> getVillages(Organization organization);
 }
 
 class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
   final DownloadGeoData downloadGeoDataUseCase;
   final GetGeolocationData getGeolocationDataUseCase;
+  final GetBoundary getBoundaryUseCase;
+  final GetVillages getVillagesUseCase;
 
   bool isLoading = false;
   bool isQuerying = false;
+  List<GeolocationDataProperties> boundary = [];
+  List<GeolocationDataProperties> villages = [];
 
   MapNotifierImpl({
     @required this.downloadGeoDataUseCase,
     @required this.getGeolocationDataUseCase,
+    @required this.getBoundaryUseCase,
+    @required this.getVillagesUseCase,
   });
 
   @override
@@ -77,5 +87,47 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
     }
 
     return Right([]);
+  }
+
+  @override
+  Future<void> getBoundary(Organization organization) async {
+    isLoading = true;
+    notifyListeners();
+
+    final failureOrBoundary = await getBoundaryUseCase(GetBoundaryParams(
+      organization: organization,
+    ));
+
+    isLoading = false;
+    notifyListeners();
+
+    failureOrBoundary.fold(
+      (failure) => throw failure,
+      (data) {
+        boundary = data;
+        notifyListeners();
+      },
+    );
+  }
+
+  @override
+  Future<void> getVillages(Organization organization) async {
+    isLoading = true;
+    notifyListeners();
+
+    final failureOrBoundary = await getVillagesUseCase(GetVillagesParams(
+      organization: organization,
+    ));
+
+    isLoading = false;
+    notifyListeners();
+
+    failureOrBoundary.fold(
+      (failure) => throw failure,
+      (data) {
+        villages = data;
+        notifyListeners();
+      },
+    );
   }
 }
