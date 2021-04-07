@@ -4,15 +4,13 @@ import '../../../../core/platform/camera.dart';
 import '../../../../core/style/theme.dart';
 import '../../../../core/util/localized_string.dart';
 
-class SavePostDialog extends StatelessWidget {
+class SavePostDialog extends StatefulWidget {
   final BuildContext ctx;
   final CameraResponse cameraResponse;
   final AppTheme appTheme;
   final LocalizedString localizedString;
   final Function(String name) onSave;
   final Function onCancel;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
 
   SavePostDialog({
     Key key,
@@ -25,9 +23,29 @@ class SavePostDialog extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _SavePostDialogState createState() => _SavePostDialogState();
+}
+
+class _SavePostDialogState extends State<SavePostDialog> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _specie = 'Castanheira';
+
+  final _species = <String>[
+    'Castanheira',
+    'Andiroba',
+    'Cumaru',
+    'Breu',
+    'Copaiba',
+  ];
+
+  void _handleSelectChange(specie) => setState(() {
+        _specie = specie;
+      });
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onCancel,
+      onTap: widget.onCancel,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(
@@ -50,28 +68,37 @@ class SavePostDialog extends StatelessWidget {
                 children: [
                   AspectRatio(
                     aspectRatio: 3 / 4,
-                    child: Image.file(cameraResponse.file),
+                    child: Image.file(widget.cameraResponse.file),
                   ),
                   SizedBox(height: 32),
                   Form(
                     key: _formKey,
-                    child: TextFormField(
-                      controller: _nameController,
-                      decoration: appTheme.inputDecoration(
-                        localizedString
+                    child: DropdownButtonFormField(
+                      value: _specie,
+                      onChanged: _handleSelectChange,
+                      decoration: widget.appTheme.inputDecoration(
+                        widget.localizedString
                             .getLocalizedString('map-screen.input-label'),
-                        placeholder: localizedString
+                        placeholder: widget.localizedString
                             .getLocalizedString('map-screen.input-placeholder'),
                       ),
                       validator: (value) {
                         if (value.isEmpty) {
-                          return localizedString.getLocalizedString(
+                          return widget.localizedString.getLocalizedString(
                             'input-validations.required',
                           );
                         }
 
                         return null;
                       },
+                      items: _species
+                          .map<DropdownMenuItem>(
+                            (e) => DropdownMenuItem(
+                              child: Text(e),
+                              value: e,
+                            ),
+                          )
+                          .toList(),
                     ),
                   ),
                   SizedBox(height: 8),
@@ -80,11 +107,11 @@ class SavePostDialog extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
-                          onSave(_nameController.text);
+                          widget.onSave(_specie);
                         }
                       },
                       child: Text(
-                        localizedString.getLocalizedString(
+                        widget.localizedString.getLocalizedString(
                           'map-screen.save-button',
                         ),
                       ),

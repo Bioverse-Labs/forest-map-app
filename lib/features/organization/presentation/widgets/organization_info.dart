@@ -105,10 +105,11 @@ class OrganizationInfo extends StatelessWidget {
               //   child: Divider(),
               // ),
               // ! REMOVE THIS WIDGET ONCE EDIT BUTTON IS BACK
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Divider(),
-              ),
+              if (!hideGeoData)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Divider(),
+                ),
               if (!hideGeoData)
                 Text(
                   localizedString.getLocalizedString(

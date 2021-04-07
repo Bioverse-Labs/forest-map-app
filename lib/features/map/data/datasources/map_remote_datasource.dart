@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:forest_map_app/features/organization/domain/entities/organization.dart';
 import 'package:geojson/geojson.dart';
 import 'package:meta/meta.dart';
 
@@ -9,6 +8,7 @@ import '../../../../core/adapters/firebase_storage_adapter.dart';
 import '../../../../core/adapters/http_adapter.dart';
 import '../../../../core/util/dir.dart';
 import '../../../../core/util/geojson.dart';
+import '../../../organization/domain/entities/organization.dart';
 
 abstract class MapRemoteDatasource {
   Future<GeoJson> downloadGeoJsonFile(String filename,

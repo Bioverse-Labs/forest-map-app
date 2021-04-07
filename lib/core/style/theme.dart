@@ -9,13 +9,12 @@ class AppTheme {
     ),
   );
 
-  ThemeData darkTheme;
-
-  AppTheme() {
-    this.darkTheme = mainTheme.copyWith(
-      brightness: Brightness.dark,
-    );
-  }
+  final darkTheme = ThemeData.dark().copyWith(
+    buttonTheme: ButtonThemeData(
+      buttonColor: Colors.tealAccent,
+      textTheme: ButtonTextTheme.primary,
+    ),
+  );
 
   ThemeData get getMainTheme => mainTheme;
   ThemeData get getDarkTheme => darkTheme;

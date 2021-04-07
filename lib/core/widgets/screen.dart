@@ -20,7 +20,7 @@ class ScreenWidget<T extends ChangeNotifier> extends StatelessWidget {
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.isLoading = false,
-    this.backgrounColor = Colors.white,
+    this.backgrounColor,
   }) : super(key: key);
 
   @override

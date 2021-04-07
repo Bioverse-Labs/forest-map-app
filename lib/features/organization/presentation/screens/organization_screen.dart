@@ -133,6 +133,7 @@ class OrganizationScreen extends StatelessWidget {
                   onChangeOrganizationPress: () => _changeOrganization(context),
                   onAvatarPress: () => _handleAvatarPress(),
                   appNavigator: appNavigator,
+                  hideGeoData: true,
                 );
               },
             ),

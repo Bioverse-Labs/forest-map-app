@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../features/organization/presentation/notifiers/organization_invite_notifier.dart';
@@ -53,8 +54,12 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Forest App Map',
-      theme: _appTheme.getMainTheme,
-      darkTheme: _appTheme.getDarkTheme,
+      theme: _appTheme.getMainTheme.copyWith(
+        textTheme: GoogleFonts.nunitoTextTheme(Theme.of(context).textTheme),
+      ),
+      darkTheme: _appTheme.getDarkTheme.copyWith(
+        textTheme: GoogleFonts.nunitoTextTheme(Theme.of(context).textTheme),
+      ),
       builder: BotToastInit(),
       navigatorKey: _appNavigator.navigatorKey,
       navigatorObservers: [BotToastNavigatorObserver()],

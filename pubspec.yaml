@@ -2,7 +2,7 @@ name: forest_map_app
 description: A new Flutter project.
 
 publish_to: "none"
-version: 1.0.0+7
+version: 1.0.0+8
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -13,6 +13,7 @@ dependencies:
 
   cupertino_icons: ^1.0.0
   google_maps_flutter: ^2.0.1
+  google_fonts: ^2.0.0
   provider: ^5.0.0
   easy_mask: ^1.1.4
   bot_toast: ^4.0.1
@@ -63,3 +64,4 @@ flutter:
     - translations/en.json
     - translations/pt-BR.json
     - assets/
+    - google_fonts/

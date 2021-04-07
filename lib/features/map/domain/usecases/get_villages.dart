@@ -1,11 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:forest_map_app/core/errors/failure.dart';
-import 'package:forest_map_app/core/usecases/usecase.dart';
-import 'package:forest_map_app/features/map/domain/entities/geolocation_data_properties.dart';
-import 'package:forest_map_app/features/map/domain/repositories/geolocation_repository.dart';
-import 'package:forest_map_app/features/organization/domain/entities/organization.dart';
 import 'package:meta/meta.dart';
+
+import '../../../../core/errors/failure.dart';
+import '../../../../core/usecases/usecase.dart';
+import '../../../organization/domain/entities/organization.dart';
+import '../entities/geolocation_data_properties.dart';
+import '../repositories/geolocation_repository.dart';
 
 class GetVillagesParams extends Equatable {
   final Organization organization;

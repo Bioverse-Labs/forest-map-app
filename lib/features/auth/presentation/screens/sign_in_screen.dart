@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forest_map_app/core/widgets/logo.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../../core/enums/social_login_types.dart';
@@ -126,103 +127,92 @@ class _SignInScreenState extends State<SignInScreen> {
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
-            child: Column(
-              children: [
-                Image.asset(
-                  'assets/bioverse.png',
-                  fit: BoxFit.fill,
-                  width: double.infinity,
-                  semanticLabel: 'Company Logo',
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
-                  child: ListBody(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 32,
+              ),
+              child: Column(
+                children: [
+                  Logo(),
+                  SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SocialLoginButton(
-                            icon: Image.asset(
-                              'assets/google.png',
-                              width: 32,
-                              fit: BoxFit.contain,
-                            ),
-                            title:
-                                _getString('login-screen.social-login-google'),
-                            onPress: () =>
-                                _signInWithSocial(SocialLoginType.google),
-                          ),
-                          SizedBox(width: 12),
-                          SocialLoginButton(
-                            icon: Image.asset(
-                              'assets/facebook.png',
-                              width: 24,
-                              fit: BoxFit.contain,
-                            ),
-                            title: _getString(
-                                'login-screen.social-login-facebook'),
-                            onPress: () =>
-                                _signInWithSocial(SocialLoginType.facebook),
-                          ),
-                        ],
-                      ),
-                      Divider(),
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: _getInputDecoration('labels.email'),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return _getString('input-validations.required');
-                          }
-
-                          if (!widget.validationUtils.validateEmail(value)) {
-                            return _getString(
-                                'input-validations.invalid-email');
-                          }
-
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 10),
-                      TextFormField(
-                        controller: _passwordController,
-                        decoration: _getInputDecoration('labels.password'),
-                        obscureText: true,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return _getString('input-validations.required');
-                          }
-
-                          if (value.length < 8) {
-                            return _getString(
-                                'input-validations.invalid-password');
-                          }
-
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 10),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _signIn,
-                          child: Text(_getString('login-screen.submit-button')),
+                      SocialLoginButton(
+                        icon: Image.asset(
+                          'assets/google.png',
+                          width: 32,
+                          fit: BoxFit.contain,
                         ),
+                        title: _getString('login-screen.social-login-google'),
+                        onPress: () =>
+                            _signInWithSocial(SocialLoginType.google),
                       ),
-                      Divider(),
-                      SizedBox(
-                        width: double.infinity,
-                        child: TextButton(
-                          onPressed: _gotToSignUpScreen,
-                          child:
-                              Text(_getString('login-screen.sign-up-button')),
+                      SizedBox(width: 12),
+                      SocialLoginButton(
+                        icon: Image.asset(
+                          'assets/facebook.png',
+                          width: 24,
+                          fit: BoxFit.contain,
                         ),
+                        title: _getString('login-screen.social-login-facebook'),
+                        onPress: () =>
+                            _signInWithSocial(SocialLoginType.facebook),
                       ),
                     ],
                   ),
-                )
-              ],
+                  Divider(),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: _getInputDecoration('labels.email'),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return _getString('input-validations.required');
+                      }
+
+                      if (!widget.validationUtils.validateEmail(value)) {
+                        return _getString('input-validations.invalid-email');
+                      }
+
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: _getInputDecoration('labels.password'),
+                    obscureText: true,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return _getString('input-validations.required');
+                      }
+
+                      if (value.length < 8) {
+                        return _getString('input-validations.invalid-password');
+                      }
+
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _signIn,
+                      child: Text(_getString('login-screen.submit-button')),
+                    ),
+                  ),
+                  Divider(),
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      onPressed: _gotToSignUpScreen,
+                      child: Text(_getString('login-screen.sign-up-button')),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

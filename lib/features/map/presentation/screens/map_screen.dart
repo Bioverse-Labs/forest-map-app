@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:forest_map_app/core/util/uuid_generator.dart';
-import 'package:forest_map_app/features/map/domain/entities/geolocation_data_properties.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +16,7 @@ import '../../../../core/platform/camera.dart';
 import '../../../../core/style/theme.dart';
 import '../../../../core/util/localized_string.dart';
 import '../../../../core/util/notifications.dart';
+import '../../../../core/util/uuid_generator.dart';
 import '../../../../core/widgets/screen.dart';
 import '../../../organization/presentation/notifiers/organizations_notifier.dart';
 import '../../../post/presentation/notifier/post_notifier.dart';
@@ -25,6 +24,7 @@ import '../../../post/presentation/widgets/save_post_dialog.dart';
 import '../../../tracking/domain/entities/location.dart';
 import '../../../tracking/presentation/notifiers/location_notifier.dart';
 import '../../../user/presentation/notifiers/user_notifier.dart';
+import '../../domain/entities/geolocation_data_properties.dart';
 import '../notifiers/map_notifier.dart';
 
 class MapScreen extends StatefulWidget {
@@ -230,6 +230,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
       },
       (cameraResp) => showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (ctx) => SavePostDialog(
           ctx: ctx,
           cameraResponse: cameraResp,
