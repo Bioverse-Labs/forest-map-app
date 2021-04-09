@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:forest_map_app/core/util/color_generator.dart';
 
 class AppTheme {
   final mainTheme = ThemeData(
-    primarySwatch: Colors.blue,
+    primarySwatch: materialColorFromHex(0xff1D2D43),
     buttonTheme: ButtonThemeData(
-      buttonColor: Colors.blue,
+      buttonColor: materialColorFromHex(0xff1D2D43),
       textTheme: ButtonTextTheme.primary,
     ),
   );
