@@ -176,24 +176,38 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     Future.delayed(const Duration(milliseconds: 300), () {
-      widget.mapNotifier.downloadGeoData(
-        widget.organizationNotifier.organization,
-      );
-
-      widget.mapNotifier.getBoundary(widget.organizationNotifier.organization);
-      widget.mapNotifier.getVillages(widget.organizationNotifier.organization);
-
-      widget.organizationNotifier.addListener(() {
+      try {
         widget.mapNotifier.downloadGeoData(
           widget.organizationNotifier.organization,
         );
 
-        widget.mapNotifier.getBoundary(
-          widget.organizationNotifier.organization,
-        );
-        widget.mapNotifier.getVillages(
-          widget.organizationNotifier.organization,
-        );
+        widget.mapNotifier
+            .getBoundary(widget.organizationNotifier.organization);
+        widget.mapNotifier
+            .getVillages(widget.organizationNotifier.organization);
+      } on LocalFailure catch (failure) {
+        widget.notificationsUtils.showErrorNotification(failure.message);
+      } on ServerFailure catch (failure) {
+        widget.notificationsUtils.showErrorNotification(failure.message);
+      }
+
+      widget.organizationNotifier.addListener(() {
+        try {
+          widget.mapNotifier.downloadGeoData(
+            widget.organizationNotifier.organization,
+          );
+
+          widget.mapNotifier.getBoundary(
+            widget.organizationNotifier.organization,
+          );
+          widget.mapNotifier.getVillages(
+            widget.organizationNotifier.organization,
+          );
+        } on LocalFailure catch (failure) {
+          widget.notificationsUtils.showErrorNotification(failure.message);
+        } on ServerFailure catch (failure) {
+          widget.notificationsUtils.showErrorNotification(failure.message);
+        }
       });
     });
 

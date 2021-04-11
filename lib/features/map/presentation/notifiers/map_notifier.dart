@@ -71,7 +71,7 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
         isLoading = false;
         notifyListeners();
 
-        failureOrFirstPoints.fold(
+        return failureOrFirstPoints.fold(
           (failure) => throw failure,
           (points) {
             initialData = points;
@@ -124,7 +124,7 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
     isLoading = false;
     notifyListeners();
 
-    failureOrBoundary.fold(
+    return failureOrBoundary.fold(
       (failure) => throw failure,
       (data) {
         boundary = data;
@@ -145,7 +145,7 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
     isLoading = false;
     notifyListeners();
 
-    failureOrBoundary.fold(
+    return failureOrBoundary.fold(
       (failure) => throw failure,
       (data) {
         villages = data;

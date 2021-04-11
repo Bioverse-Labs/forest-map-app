@@ -72,22 +72,33 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
     double latitude,
     double longitude,
   }) async {
-    final geoLocation = createGeohashes(latitude, longitude, 1000, 7);
+    try {
+      final geoLocation = createGeohashes(latitude, longitude, 1000, 7);
 
-    final items = <GeolocationDataPropertiesModel>[];
+      final items = <GeolocationDataPropertiesModel>[];
 
-    for (var filename in organization.geolocationData) {
-      for (var location in geoLocation) {
-        final records = await mapLocalDataSource.getDataFromQuery(
-          filename: filename,
-          geohash: location.toUpperCase(),
-        );
+      for (var filename in organization.geolocationData) {
+        for (var location in geoLocation) {
+          final records = await mapLocalDataSource.getDataFromQuery(
+            filename: filename,
+            geohash: location.toUpperCase(),
+          );
 
-        items.addAll(records);
+          items.addAll(records);
+        }
       }
-    }
 
-    return Right(items);
+      return Right(items);
+    } on LocalException catch (exception) {
+      return Left(LocalFailure(
+        exception.message,
+        exception.code,
+        ExceptionOriginTypes.firebaseStorage,
+        stackTrace: exception.stackTrace,
+      ));
+    } catch (error) {
+      return Left(GenericFailure([error]));
+    }
   }
 
   @override
@@ -196,17 +207,30 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
   Future<Either<Failure, List<GeolocationDataProperties>>> getFirstPoint({
     Organization organization,
   }) async {
-    final items = <GeolocationDataPropertiesModel>[];
+    try {
+      final items = <GeolocationDataPropertiesModel>[];
 
-    for (var filename in organization.geolocationData) {
-      final records = await mapLocalDataSource.getFirstPoint(
-        filename: filename,
+      for (var filename in organization.geolocationData) {
+        final records = await mapLocalDataSource.getFirstPoint(
+          filename: filename,
+        );
+
+        items.addAll(records);
+      }
+
+      return Right(items);
+    } catch (error) {
+      return Left(
+        LocalFailure(
+          error.toString(),
+          error.toString(),
+          ExceptionOriginTypes.platform,
+          stackTrace: StackTrace.fromString(
+            error.toString(),
+          ),
+        ),
       );
-
-      items.addAll(records);
     }
-
-    return Right(items);
   }
 }
 

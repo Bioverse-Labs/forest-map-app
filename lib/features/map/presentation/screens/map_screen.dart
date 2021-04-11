@@ -272,7 +272,17 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
         )
         .then(
           (failureOrData) => failureOrData.fold(
-            (l) => null,
+            (failure) {
+              if (failure is LocalFailure) {
+                widget.notificationsUtils
+                    .showErrorNotification(failure.message);
+              }
+
+              if (failure is GenericFailure) {
+                widget.notificationsUtils
+                    .showErrorNotification(failure.toString());
+              }
+            },
             (geoData) {
               if (mounted) {
                 _markers.clear();
