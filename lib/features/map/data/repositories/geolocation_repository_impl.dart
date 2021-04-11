@@ -191,6 +191,23 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
       return Left(GenericFailure([error]));
     }
   }
+
+  @override
+  Future<Either<Failure, List<GeolocationDataProperties>>> getFirstPoint({
+    Organization organization,
+  }) async {
+    final items = <GeolocationDataPropertiesModel>[];
+
+    for (var filename in organization.geolocationData) {
+      final records = await mapLocalDataSource.getFirstPoint(
+        filename: filename,
+      );
+
+      items.addAll(records);
+    }
+
+    return Right(items);
+  }
 }
 
 Future<List<GeolocationDataPropertiesModel>> parseDataAsPoint(

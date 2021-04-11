@@ -10,6 +10,9 @@ abstract class MapLocalDataSource {
     String filename,
     String geohash,
   });
+  Future<List<GeolocationDataPropertiesModel>> getFirstPoint({
+    String filename,
+  });
   Future<GeolocationFileHive> getFile(String filename);
   Future<void> saveData(
       String filename, List<GeolocationDataPropertiesModel> geodata);
@@ -80,5 +83,24 @@ class MapLocalDataSourceImpl implements MapLocalDataSource {
         .toList();
 
     await databaseAdapter.insertInBatch(table: 'GeoData', fields: data);
+  }
+
+  @override
+  Future<List<GeolocationDataPropertiesModel>> getFirstPoint({
+    String filename,
+  }) async {
+    final result = await databaseAdapter.runRawQuery(
+      '''
+        SELECT * FROM GeoData
+        WHERE filename = "${filename.toUpperCase()}"
+        LIMIT 1
+      ''',
+    );
+
+    return result
+        ?.map<GeolocationDataPropertiesModel>(
+          (e) => GeolocationDataPropertiesModel.fromMap(e),
+        )
+        ?.toList();
   }
 }

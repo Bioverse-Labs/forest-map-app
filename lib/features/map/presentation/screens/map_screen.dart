@@ -247,9 +247,16 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _goToDataLocation() async {
+    final firstItem = widget.mapNotifier.initialData.first;
+
     final position = CameraPosition(
-      target: LatLng(-7.590742614531484, -51.928936749498135),
+      target: LatLng(firstItem.latitude, firstItem.longitude),
       zoom: 14,
+    );
+
+    _onMapMoved(
+      CameraPosition(target: LatLng(firstItem.latitude, firstItem.longitude)),
+      widget.mapNotifier.villages,
     );
 
     final controllerFuture = await _controller.future;
@@ -467,13 +474,15 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                         child: Icon(Icons.add_a_photo_outlined),
                       ),
                       SizedBox(width: 16),
-                      FloatingActionButton(
-                          heroTag: 'goToDataLocation',
-                          onPressed: _goToDataLocation,
-                          child: Image.asset(
-                            'assets/marker_128.png',
-                          )),
-                      SizedBox(width: 16),
+                      if (widget.mapNotifier.initialData.length > 0)
+                        FloatingActionButton(
+                            heroTag: 'goToDataLocation',
+                            onPressed: _goToDataLocation,
+                            child: Image.asset(
+                              'assets/marker_128.png',
+                            )),
+                      if (widget.mapNotifier.initialData.length > 0)
+                        SizedBox(width: 16),
                       FloatingActionButton(
                         heroTag: 'switchMapType',
                         onPressed: _changeMapType,

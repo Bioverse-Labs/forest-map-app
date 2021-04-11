@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:forest_map_app/features/map/domain/usecases/get_first_point.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/errors/failure.dart';
@@ -24,6 +25,7 @@ abstract class MapNotifier {
 class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
   final DownloadGeoData downloadGeoDataUseCase;
   final GetGeolocationData getGeolocationDataUseCase;
+  final GetFirstPoint getFirstPointUseCase;
   final GetBoundary getBoundaryUseCase;
   final GetVillages getVillagesUseCase;
 
@@ -31,10 +33,12 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
   bool isQuerying = false;
   List<GeolocationDataProperties> boundary = [];
   List<GeolocationDataProperties> villages = [];
+  List<GeolocationDataProperties> initialData = [];
 
   MapNotifierImpl({
     @required this.downloadGeoDataUseCase,
     @required this.getGeolocationDataUseCase,
+    @required this.getFirstPointUseCase,
     @required this.getBoundaryUseCase,
     @required this.getVillagesUseCase,
   });
@@ -51,12 +55,31 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
     ));
 
     result.fold(
-      (failure) => throw failure,
-      (r) => null,
-    );
+      (failure) {
+        isLoading = false;
+        notifyListeners();
 
-    isLoading = false;
-    notifyListeners();
+        throw failure;
+      },
+      (r) async {
+        final failureOrFirstPoints = await getFirstPointUseCase(
+          GetFirstPointParams(
+            organization: organization,
+          ),
+        );
+
+        isLoading = false;
+        notifyListeners();
+
+        failureOrFirstPoints.fold(
+          (failure) => throw failure,
+          (points) {
+            initialData = points;
+            notifyListeners();
+          },
+        );
+      },
+    );
   }
 
   @override

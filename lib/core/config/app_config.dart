@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:forest_map_app/features/map/domain/usecases/get_first_point.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -488,6 +489,12 @@ class AppConfig {
       ),
     );
 
+    GetIt.I.registerLazySingleton<GetFirstPoint>(
+      () => GetFirstPoint(
+        repository: GetIt.I(),
+      ),
+    );
+
     GetIt.I.registerLazySingleton<DownloadGeoData>(
       () => DownloadGeoData(
         repository: GetIt.I(),
@@ -570,6 +577,7 @@ class AppConfig {
         getGeolocationDataUseCase: GetIt.I(),
         getBoundaryUseCase: GetIt.I(),
         getVillagesUseCase: GetIt.I(),
+        getFirstPointUseCase: GetIt.I(),
       ),
     );
   }

@@ -21,4 +21,7 @@ abstract class GeolocationRepository {
   Future<Either<Failure, List<GeolocationDataProperties>>> loadVillages(
     Organization organization,
   );
+  Future<Either<Failure, List<GeolocationDataProperties>>> getFirstPoint({
+    Organization organization,
+  });
 }
