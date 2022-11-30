@@ -1,0 +1,124 @@
+{
+  "labels": {
+    "name": "Nome",
+    "email": "E-mail",
+    "phone": "Celular",
+    "password": "Senha"
+  },
+  "no-internet": "Você não está conectado na internet",
+  "generic-exception": "Ops... alguma coisa deu errado",
+  "database-exceptions": {
+    "get-error": "Ops... ocorreu uma falha durante a leitura de dados",
+    "update-error": "Ops... ocorreu uma falha durante a atualização de dados",
+    "deletion-error": "Ops... ocorreu uma falha durante a remoção de dados"
+  },
+  "auth-exceptions": {
+    "invalid-email": "Por favor digite um e-mail valido!",
+    "user-disabled": "Ops... essa conta está temporariamente desativada, por favor entre em contato como nosso suporte.",
+    "user-not-found": "Ops... não encontramos nenhum conta cadastrada com esse endereço de email",
+    "email-in-use": "Ops.. esse endereço de email já está cadastrado em outra conta",
+    "wrong-password": "Email ou senha incorretos..."
+  },
+  "polygon-alert": {
+    "specie-label": "Specie",
+    "date-label": "Date"
+  },
+  "input-validations": {
+    "required": "Esse campo é obrigatório!",
+    "invalid-email": "Por favor digite um e-mail valido!",
+    "invalid-phone": "Por favor digite um número de celular valido!",
+    "invalid-password": "A senha deve conter no mínimo 8 caracteres"
+  },
+  "members-role-validation": "A Organização precisa ter ao menos um dono",
+  "location-permission": {
+    "disabled": "O GPS está desativado.",
+    "denied-permantly": "As permissões de localização do aparelho estão permanentemente negadas, por favor ative a localização para continuar.",
+    "denied": "As permissões de localização foram negadas"
+  },
+  "masks": {
+    "phone": "(99) 99999-9999"
+  },
+  "invitation-link": {
+    "title": "Bem-Vindo ao Forest Map",
+    "description": "{name} te convidou para fazer parte da equipe!"
+  },
+  "home-drawer": {
+    "logout": "Sair"
+  },
+  "members-role": {
+    "owner": "Dono",
+    "admin": "Administrador",
+    "member": "Membro"
+  },
+  "signup-screen": {
+    "title": "Cadastrar",
+    "submit-button": "Criar conta"
+  },
+  "login-screen": {
+    "title": "Entrar",
+    "submit-button": "Entrar",
+    "social-login-google": "Entrar",
+    "social-login-facebook": "Entrar",
+    "sign-up-button": "Cadastre-se aqui",
+    "forgot-password-button": "Esqueceu a senha?"
+  },
+  "forgot-password-screen": {
+    "title": "Esqueceu a senha?",
+    "description": "Digite seu e-mail para enviarmos um link para redefinir sua senha",
+    "submit-button": "Enviar",
+    "success-message": "Um link para redefinir sua senha foi enviado para seu e-mail"
+  },
+  "preview-screen": {
+    "title": "Pré Visualização",
+    "submit-button": "Salvar"
+  },
+  "map-screen": {
+    "alert-title": "Atenção!",
+    "alert-description": "Para utilizar essa funcionalidade, permita o acesso ao GPS do aparelho",
+    "alert-cancel-button": "Cancelar",
+    "alert-confirm-button": "Permitir Localização",
+    "location-permission-title": "Por Favor permita o acesso ao GPS do aparelho",
+    "location-permission-button": "Permitir/Habilitar Localização",
+    "input-label": "Especie/Nome",
+    "input-placeholder": "Castanheira",
+    "save-button": "Salvar",
+    "example-button": "Ver Exemplos",
+    "post-success": "Dado salvo!",
+    "start-saving": "Dado começou a ser salvo",
+    "loading-geolocation-files": "Carregando os arquivos de geolocalização..."
+  },
+  "organization-screen": {
+    "title": "Organizações",
+    "empty-state-title": "Atualmente você não faz parte de nenhum organização :/",
+    "empty-state-button": "Nova organização",
+    "members-counter": "Membros",
+    "invite-member-button": "Convidar membros",
+    "invite-member-button-tooltip": "Gera um link para convidar um usuário",
+    "edit-button": "Editar info",
+    "data-section-title": "Dados de geolocalização",
+    "members-list": "Membros"
+  },
+  "edit-organization-screen": {
+    "title": "Editar Organização"
+  },
+  "organization-invite-screen": {
+    "title": "Convite",
+    "description": "Essa organização lhe convidou para ser um membro",
+    "button": "Aceitar"
+  },
+  "profile-screen": {
+    "organization-counter": "Organizações",
+    "logout-button": "Sair"
+  },
+  "home-screen": {
+    "map-tab": "Mapa",
+    "organization-tab": "Organizações",
+    "profile-tab": "Perfil"
+  },
+  "ask-location-screen": {
+    "title": "Permissão de Localização",
+    "description": "Para acessar as funcionalidades do aplicativo precisamos que você habilite o acesso a sua localização",
+    "body": "Utilizaremos a sua localização para fornecer a localização precisa das árvores ao seu redor.",
+    "submit-button": "Permitir Acesso"
+  }
+}

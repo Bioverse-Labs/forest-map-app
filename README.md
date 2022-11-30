@@ -1,0 +1,64 @@
+<img src="bioverse.png">
+
+<p align="center">    
+    <a href="https://github.com/Bioverse-Labs/forest-map-app/issues" alt="Issues">
+        <img src="https://img.shields.io/github/issues/Bioverse-Labs/forest-map-app" /></a>
+    <a href="https://github.com/Bioverse-Labs/forest-map-app/stargazers" alt="Stars">
+        <img src="https://img.shields.io/github/stars/Bioverse-Labs/forest-map-app" /></a>
+    <a href="https://github.com/Bioverse-Labs/forest-map-app/forks" alt="Forks">
+        <img src="https://img.shields.io/github/forks/Bioverse-Labs/forest-map-app" /></a>
+    <a href="https://github.com/Bioverse-Labs/forest-map-app/LICENCE.md" alt="Licence">
+        <img src="https://img.shields.io/github/license/Bioverse-Labs/forest-map-app" /></a>
+    <a href="https://twitter.com/BioverseLabs" alt="Twitter">
+        <img src="https://img.shields.io/twitter/follow/BioverseLabs?label=Follow&style=social" /></a>
+</p>
+
+# Bioverse Labs (forest-map-app module)
+Designed to serve traditional communities of the amazon rain forest, the Forest Map displays vector files generated from machine learning algorithms designed to locates key tree species from satellite imagery and or UAS. The species' choice is made by the communities and must align with the sustainable and regenerative agroforestry practices and exclude completely any species that have logging appeal. 
+
+On the first release, Forest Map TM will allow local cooperatives to use the abundance maps to locate Brazil Nut Tree (Bertholletia excelsa) and Palm Trees. Tree species that contribute to the economic resilience of the riverine communities can be added to future projects when it meets sustainability criteria contributing to increase the value of standing and productive forests.
+
+1. [Setting up your environment](#1-Setting-up-your-environment)
+2. [Run](#2-Run)
+3. [Test ](#3-Test)
+4. [Architecture ](#3-Architecture)
+5. [TODO-list](#5-TODO-list)
+
+
+# Setting up your environment
+   <p>
+     <a href="https://flutter.dev/docs/get-started/install">https://flutter.dev/docs/get-started/install</a>
+   </p>
+   
+# Run
+
+```
+    flutter run lib/main.dart
+ ```
+
+# Tests
+
+ ### How to run
+ ```
+    flutter test
+ ```
+  
+ ### Coverage Report
+     https://bioverse-labs.github.io/forest-map-app/
+
+# Architecture
+
+<p>
+    <img src="https://i1.wp.com/resocoder.com/wp-content/uploads/2019/08/CleanArchitecture.jpg?w=772&ssl=1" width="350" /><br/>
+    <img src="https://i0.wp.com/resocoder.com/wp-content/uploads/2019/08/Clean-Architecture-Flutter-Diagram.png?w=556&ssl=1" width="350" />
+</p>
+
+# TODO-list
+
+<p>
+    <a href="https://flutter.dev/docs/deployment/cd">https://flutter.dev/docs/deployment/cd</a>
+</p>
+
+#
+
+<a href="https://www.bioverse.io/privacy-policy">Privacy Policy</a>

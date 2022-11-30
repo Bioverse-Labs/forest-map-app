@@ -1,0 +1,124 @@
+{
+  "labels": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "password": "Password"
+  },
+  "no-internet": "You are not connected to the internet",
+  "generic-exception": "Ops... something went wrong",
+  "database-exceptions": {
+    "get-error": "Ops... failed to get data from database",
+    "update-error": "Ops... failed to update data in database",
+    "deletion-error": "Ops... failed to delete data from database"
+  },
+  "auth-exceptions": {
+    "invalid-email": "Please input an valid email!",
+    "user-disabled": "Sorry but this user account is disabled, please contact our support",
+    "user-not-found": "Sorry but we don't have any user with this email address in our base",
+    "email-in-use": "Sorry but we already have an account registered with this email",
+    "wrong-password": "Password or email incorrect"
+  },
+  "polygon-alert": {
+    "specie-label": "Specie",
+    "date-label": "Date"
+  },
+  "input-validations": {
+    "required": "This field is required!",
+    "invalid-email": "Please input an valid email!",
+    "invalid-phone": "Please input an valid phone number!",
+    "invalid-password": "The password must contain at least 8 characters"
+  },
+  "members-role-validation": "Organization must have at least one owner",
+  "location-permission": {
+    "disabled": "Location services are disabled.",
+    "denied-permantly": "Location permissions are permantly denied, we cannot request permissions.",
+    "denied": "Location permissions are denied"
+  },
+  "masks": {
+    "phone": "(99) 999 99-99"
+  },
+  "invitation-link": {
+    "title": "Welcome to Forest Map",
+    "description": "{name} has invited you to be an member"
+  },
+  "home-drawer": {
+    "logout": "Logout"
+  },
+  "members-role": {
+    "owner": "Owner",
+    "admin": "Administrator",
+    "member": "Member"
+  },
+  "signup-screen": {
+    "title": "Sign-up",
+    "submit-button": "Create account"
+  },
+  "login-screen": {
+    "title": "Sign-in",
+    "submit-button": "Sign-in",
+    "social-login-google": "Sign-in",
+    "social-login-facebook": "Sign-in",
+    "sign-up-button": "Sign-up",
+    "forgot-password-button": "Forgot password?"
+  },
+  "forgot-password-screen": {
+    "title": "Forgot password",
+    "description": "Please enter your email address and we will send you a link to reset your password",
+    "submit-button": "Send email",
+    "success-message": "We have sent you an email with instructions to reset your password"
+  },
+  "preview-screen": {
+    "title": "Preview",
+    "submit-button": "Save"
+  },
+  "map-screen": {
+    "alert-title": "Atention!",
+    "alert-description": "To use this feature, wee need access to device location",
+    "alert-cancel-button": "Cancel",
+    "alert-confirm-button": "Allow Location",
+    "location-permission-title": "Please allow location access or enable device GPS",
+    "location-permission-button": "Allow/Enable Location",
+    "input-label": "Specie/Nome",
+    "input-placeholder": "Castanheira",
+    "save-button": "Save",
+    "example-button": "See Examples",
+    "post-success": "Data saved!",
+    "start-saving": "Data started to being saved",
+    "loading-geolocation-files": "Loading geolocation files..."
+  },
+  "organization-screen": {
+    "title": "Organizations",
+    "empty-state-title": "Currently you are not assined to any organization... :/",
+    "empty-state-button": "New organization",
+    "members-counter": "Members",
+    "invite-member-button": "Invite Members",
+    "invite-member-button-tooltip": "Generate link to invite an User",
+    "edit-button": "Edit data",
+    "data-section-title": "Geolocation Data",
+    "members-list": "Members"
+  },
+  "edit-organization-screen": {
+    "title": "Edit Organization"
+  },
+  "organization-invite-screen": {
+    "title": "Invite",
+    "description": "This Organization has invited you to be member",
+    "button": "Accept"
+  },
+  "profile-screen": {
+    "organization-counter": "Organizations",
+    "logout-button": "Sign Out"
+  },
+  "home-screen": {
+    "map-tab": "Map",
+    "organization-tab": "Organizations",
+    "profile-tab": "Profile"
+  },
+  "ask-location-screen": {
+    "title": "Location Permission",
+    "description": "To accesss app features you need to allow us to collect your location.",
+    "body": "We need your location to provide precise tree locations around you.",
+    "submit-button": "Allow Access"
+  }
+}
