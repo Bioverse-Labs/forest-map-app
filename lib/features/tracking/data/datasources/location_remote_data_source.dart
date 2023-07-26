@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/errors/exceptions.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../core/adapters/firestore_adapter.dart';
 import '../../domain/entities/location.dart';
@@ -11,27 +10,27 @@ abstract class LocationRemoteDataSource {
   /// save [Location] user's subcollection tracking in [Firestore]
   ///
   Future<void> saveLocation(
-    String userId,
+    String? userId,
     LocationModel location,
   );
 
-  Future<List<LocationModel>> getLocations(String userId);
+  Future<List<LocationModel>> getLocations(String? userId);
 }
 
 class LocationRemoteDataSourceImpl implements LocationRemoteDataSource {
-  final FirestoreAdapterImpl firestoreAdapter;
+  final FirestoreAdapterImpl? firestoreAdapter;
 
   LocationRemoteDataSourceImpl({
-    @required this.firestoreAdapter,
+    required this.firestoreAdapter,
   });
 
   @override
   Future<void> saveLocation(
-    String userId,
+    String? userId,
     LocationModel location,
   ) async {
     try {
-      await firestoreAdapter.addDocument(
+      await firestoreAdapter!.addDocument(
         'users/$userId/tracking/${location.id}',
         location.toMap(),
       );
@@ -45,13 +44,13 @@ class LocationRemoteDataSourceImpl implements LocationRemoteDataSource {
   }
 
   @override
-  Future<List<LocationModel>> getLocations(String userId) async {
+  Future<List<LocationModel>> getLocations(String? userId) async {
     try {
-      final query = firestoreAdapter.firestore
+      final query = firestoreAdapter!.firestore
           .doc('users/$userId')
           .collection('tracking');
 
-      final res = await firestoreAdapter.runQuery(query);
+      final res = await firestoreAdapter!.runQuery(query);
 
       return res
           .map<LocationModel>(

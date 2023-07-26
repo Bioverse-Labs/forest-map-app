@@ -1,8 +1,8 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/core/adapters/hive_adapter.dart';
-import 'package:forest_map_app/core/errors/exceptions.dart';
-import 'package:forest_map_app/features/user/data/hive/user.dart';
+import 'package:forest_map/core/adapters/hive_adapter.dart';
+import 'package:forest_map/core/errors/exceptions.dart';
+import 'package:forest_map/features/user/data/hive/user.dart';
 import 'package:hive/hive.dart';
 import 'package:mockito/mockito.dart';
 
@@ -11,9 +11,9 @@ class MockLazyBox extends Mock implements LazyBox<UserHive> {}
 class MockHiveInterface extends Mock implements HiveInterface {}
 
 void main() {
-  MockLazyBox mockLazyBox;
-  MockHiveInterface mockHiveInterface;
-  HiveAdapter<UserHive> hiveAdapter;
+  late MockLazyBox mockLazyBox;
+  late MockHiveInterface mockHiveInterface;
+  late HiveAdapter<UserHive> hiveAdapter;
 
   setUp(() {
     mockLazyBox = MockLazyBox();

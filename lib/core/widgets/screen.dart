@@ -4,17 +4,17 @@ import 'package:flutter/services.dart';
 import 'loading_wall.dart';
 
 class ScreenWidget<T extends ChangeNotifier> extends StatelessWidget {
-  final PreferredSizeWidget appBar;
-  final Widget body;
+  final PreferredSizeWidget? appBar;
+  final Widget? body;
   final List<Widget> children;
-  final Widget floatingActionButton;
-  final FloatingActionButtonLocation floatingActionButtonLocation;
+  final Widget? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
   final bool isLoading;
-  final Color backgrounColor;
+  final Color? backgrounColor;
   final EdgeInsets padding;
 
   ScreenWidget({
-    Key key,
+    Key? key,
     this.appBar,
     this.body,
     this.children = const <Widget>[],
@@ -44,7 +44,7 @@ class ScreenWidget<T extends ChangeNotifier> extends StatelessWidget {
             padding: padding,
             child: Stack(
               children: [
-                if (body != null) body,
+                if (body != null) body!,
                 ...children,
                 if (isLoading) LoadingWall(),
               ],

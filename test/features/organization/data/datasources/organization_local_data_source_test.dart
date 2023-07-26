@@ -1,9 +1,9 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/core/adapters/hive_adapter.dart';
-import 'package:forest_map_app/features/organization/data/datasources/organization_local_data_source.dart';
-import 'package:forest_map_app/features/organization/data/hive/organization.dart';
-import 'package:forest_map_app/features/organization/data/models/organization_model.dart';
+import 'package:forest_map/core/adapters/hive_adapter.dart';
+import 'package:forest_map/features/organization/data/datasources/organization_local_data_source.dart';
+import 'package:forest_map/features/organization/data/hive/organization.dart';
+import 'package:forest_map/features/organization/data/models/organization_model.dart';
 import 'package:mockito/mockito.dart';
 
 class MockHiveAdapter extends Mock implements HiveAdapter<OrganizationHive> {}

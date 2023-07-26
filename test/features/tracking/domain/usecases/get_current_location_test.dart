@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/core/usecases/usecase.dart';
-import 'package:forest_map_app/features/tracking/data/models/location_model.dart';
-import 'package:forest_map_app/features/tracking/domain/repositories/location_repository.dart';
-import 'package:forest_map_app/features/tracking/domain/usecases/get_current_location.dart';
+import 'package:forest_map/core/usecases/usecase.dart';
+import 'package:forest_map/features/tracking/data/models/location_model.dart';
+import 'package:forest_map/features/tracking/domain/repositories/location_repository.dart';
+import 'package:forest_map/features/tracking/domain/usecases/get_current_location.dart';
 import 'package:mockito/mockito.dart';
 
 class MockLocationRepository extends Mock implements LocationRepository {}

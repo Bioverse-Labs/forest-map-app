@@ -1,15 +1,15 @@
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
-import 'package:forest_map_app/core/enums/exception_origin_types.dart';
-import 'package:forest_map_app/core/enums/social_login_types.dart';
-import 'package:forest_map_app/core/errors/failure.dart';
-import 'package:forest_map_app/features/auth/domain/usecases/forgot_password.dart';
-import 'package:forest_map_app/features/auth/domain/usecases/sign_out.dart';
-import 'package:forest_map_app/features/user/domain/entities/user.dart';
-import 'package:forest_map_app/features/auth/domain/usecases/sign_in_with_email_and_password.dart';
-import 'package:forest_map_app/features/auth/domain/usecases/sign_in_with_social.dart';
-import 'package:forest_map_app/features/auth/domain/usecases/sign_up.dart';
-import 'package:forest_map_app/features/auth/presentation/notifiers/auth_notifier.dart';
+import 'package:forest_map/core/enums/exception_origin_types.dart';
+import 'package:forest_map/core/enums/social_login_types.dart';
+import 'package:forest_map/core/errors/failure.dart';
+import 'package:forest_map/features/auth/domain/usecases/forgot_password.dart';
+import 'package:forest_map/features/auth/domain/usecases/sign_out.dart';
+import 'package:forest_map/features/user/domain/entities/user.dart';
+import 'package:forest_map/features/auth/domain/usecases/sign_in_with_email_and_password.dart';
+import 'package:forest_map/features/auth/domain/usecases/sign_in_with_social.dart';
+import 'package:forest_map/features/auth/domain/usecases/sign_up.dart';
+import 'package:forest_map/features/auth/presentation/notifiers/auth_notifier.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 

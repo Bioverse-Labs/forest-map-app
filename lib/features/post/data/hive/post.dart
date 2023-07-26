@@ -7,26 +7,26 @@ part 'post.g.dart';
 @HiveType(typeId: 5)
 class PostHive {
   @HiveField(0)
-  String id;
+  String? id;
 
   @HiveField(1)
-  String userId;
+  String? userId;
 
   @HiveField(2)
-  String organizationId;
+  String? organizationId;
 
   @HiveField(3)
-  String specie;
+  String? specie;
 
   @HiveField(4)
-  String imageUrl;
+  String? imageUrl;
 
   @HiveField(5)
-  DateTime timestamp;
+  DateTime? timestamp;
 
   @HiveField(6)
-  LocationHive location;
+  LocationHive? location;
 
   @HiveField(7)
-  int categoryId;
+  int? categoryId;
 }

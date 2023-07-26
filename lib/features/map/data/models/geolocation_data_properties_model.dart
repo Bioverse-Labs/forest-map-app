@@ -1,21 +1,19 @@
-import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:meta/meta.dart';
 
 import '../../domain/entities/geolocation_data_properties.dart';
 
 class GeolocationDataPropertiesModel extends GeolocationDataProperties {
   GeolocationDataPropertiesModel({
-    @required String id,
-    @required String geohash,
-    @required String type,
-    @required String specie,
-    @required DateTime detDate,
-    @required DateTime imageDate,
-    @required double latitude,
-    @required double longitude,
-    String name,
-    List<LatLng> points,
+    required String id,
+    required String geohash,
+    required String? type,
+    required String? specie,
+    required DateTime? detDate,
+    required DateTime? imageDate,
+    required double? latitude,
+    required double? longitude,
+    String? name,
+    List<LatLng>? points,
   }) : super(
           id: id,
           geohash: geohash,
@@ -64,15 +62,16 @@ class GeolocationDataPropertiesModel extends GeolocationDataProperties {
   }
 
   GeolocationDataPropertiesModel copyWith({
-    String id,
-    String type,
-    String specie,
-    DateTime detDate,
-    DateTime imageDate,
-    double latitude,
-    double longitude,
-    List<LatLng> points,
-    String name,
+    String? id,
+    String? type,
+    String? specie,
+    String? geohash,
+    DateTime? detDate,
+    DateTime? imageDate,
+    double? latitude,
+    double? longitude,
+    List<LatLng>? points,
+    String? name,
   }) {
     return GeolocationDataPropertiesModel(
       id: id ?? this.id,

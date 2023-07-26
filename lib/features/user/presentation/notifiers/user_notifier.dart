@@ -9,42 +9,42 @@ import '../../domain/usecases/update_user.dart';
 
 abstract class UserNotifier {
   Future<void> getUser({
-    @required String id,
-    bool searchLocally,
+    required String id,
+    bool? searchLocally,
   });
   Future<void> updateUser({
-    String id,
-    String name,
-    String email,
-    List<Organization> organizations,
-    File avatar,
+    String? id,
+    String? name,
+    String? email,
+    List<Organization>? organizations,
+    File? avatar,
   });
 }
 
 class UserNotifierImpl extends ChangeNotifier implements UserNotifier {
-  final GetUser getUserUseCase;
-  final UpdateUser updateUserUseCase;
+  final GetUser? getUserUseCase;
+  final UpdateUser? updateUserUseCase;
 
-  User _user;
+  User? _user;
   bool _loading = false;
 
-  User get user => _user;
+  User? get user => _user;
   bool get isLoading => _loading;
 
   UserNotifierImpl({
-    @required this.getUserUseCase,
-    @required this.updateUserUseCase,
+    required this.getUserUseCase,
+    required this.updateUserUseCase,
   });
 
   @override
   Future<void> getUser({
-    @required String id,
-    bool searchLocally = false,
+    required String? id,
+    bool? searchLocally = false,
   }) async {
     _loading = true;
     notifyListeners();
 
-    final failureOrUser = await getUserUseCase(GetUserParams(
+    final failureOrUser = await getUserUseCase!(GetUserParams(
       id: id,
       searchLocally: searchLocally,
     ));
@@ -63,16 +63,16 @@ class UserNotifierImpl extends ChangeNotifier implements UserNotifier {
 
   @override
   Future<void> updateUser({
-    @required String id,
-    String name,
-    String email,
-    List<Organization> organizations,
-    File avatar,
+    String? id,
+    String? name,
+    String? email,
+    List<Organization>? organizations,
+    File? avatar,
   }) async {
     _loading = true;
     notifyListeners();
 
-    final failureOrUser = await updateUserUseCase(UpdateUserParams(
+    final failureOrUser = await updateUserUseCase!(UpdateUserParams(
       id: id,
       name: name,
       email: email,

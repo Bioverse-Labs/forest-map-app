@@ -9,13 +9,13 @@ import '../repositories/post_repository.dart';
 
 class UploadCachedPost
     extends UseCase<StreamController<Either<Failure, Post>>, NoParams> {
-  final PostRepository repository;
+  final PostRepository? repository;
 
   UploadCachedPost(this.repository);
 
   @override
   Future<Either<Failure, StreamController<Either<Failure, Post>>>> call(
       NoParams params) {
-    return repository.uploadCachedPost();
+    return repository!.uploadCachedPost();
   }
 }

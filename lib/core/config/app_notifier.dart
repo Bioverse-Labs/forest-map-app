@@ -15,37 +15,37 @@ import '../notifiers/home_screen_notifier.dart';
 class AppNotifier extends StatelessWidget {
   final Widget widget;
 
-  const AppNotifier({Key key, @required this.widget}) : super(key: key);
+  const AppNotifier({Key? key, required this.widget}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AuthNotifierImpl>(
+        ChangeNotifierProvider<AuthNotifierImpl?>(
           create: (_) => GetIt.I(),
         ),
-        ChangeNotifierProvider<LocationNotifierImpl>(
+        ChangeNotifierProvider<LocationNotifierImpl?>(
           create: (_) => GetIt.I(),
         ),
-        ChangeNotifierProvider<OrganizationNotifierImpl>(
+        ChangeNotifierProvider<OrganizationNotifierImpl?>(
           create: (_) => GetIt.I(),
         ),
-        ChangeNotifierProvider<OrganizationInviteNotifierImpl>(
+        ChangeNotifierProvider<OrganizationInviteNotifierImpl?>(
           create: (_) => GetIt.I(),
         ),
-        ChangeNotifierProvider<UserNotifierImpl>(
+        ChangeNotifierProvider<UserNotifierImpl?>(
           create: (_) => GetIt.I<UserNotifierImpl>(),
         ),
-        ChangeNotifierProvider<HomeScreenNotifierImpl>(
+        ChangeNotifierProvider<HomeScreenNotifierImpl?>(
           create: (_) => GetIt.I(),
         ),
-        ChangeNotifierProvider<PostNotifierImpl>(
+        ChangeNotifierProvider<PostNotifierImpl?>(
           create: (_) => GetIt.I(),
         ),
-        ChangeNotifierProvider<MapNotifierImpl>(
+        ChangeNotifierProvider<MapNotifierImpl?>(
           create: (_) => GetIt.I(),
         ),
-        ChangeNotifierProvider<CatalogNotifierImpl>(
+        ChangeNotifierProvider<CatalogNotifierImpl?>(
           create: (_) => GetIt.I(),
         ),
       ],

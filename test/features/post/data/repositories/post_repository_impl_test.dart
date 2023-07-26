@@ -4,17 +4,17 @@
 // import 'package:dartz/dartz.dart';
 // import 'package:faker/faker.dart';
 // import 'package:flutter_test/flutter_test.dart';
-// import 'package:forest_map_app/core/enums/exception_origin_types.dart';
-// import 'package:forest_map_app/core/errors/exceptions.dart';
-// import 'package:forest_map_app/core/errors/failure.dart';
-// import 'package:forest_map_app/core/platform/location.dart';
-// import 'package:forest_map_app/core/platform/network_info.dart';
-// import 'package:forest_map_app/features/post/data/datasources/post_local_data_source.dart';
-// import 'package:forest_map_app/features/post/data/datasources/post_remote_data_source.dart';
-// import 'package:forest_map_app/features/post/data/models/post_model.dart';
-// import 'package:forest_map_app/features/post/data/repositories/post_repository_impl.dart';
-// import 'package:forest_map_app/features/post/domain/entities/post.dart';
-// import 'package:forest_map_app/features/tracking/domain/entities/location.dart';
+// import 'package:forest_map/core/enums/exception_origin_types.dart';
+// import 'package:forest_map/core/errors/exceptions.dart';
+// import 'package:forest_map/core/errors/failure.dart';
+// import 'package:forest_map/core/platform/location.dart';
+// import 'package:forest_map/core/platform/network_info.dart';
+// import 'package:forest_map/features/post/data/datasources/post_local_data_source.dart';
+// import 'package:forest_map/features/post/data/datasources/post_remote_data_source.dart';
+// import 'package:forest_map/features/post/data/models/post_model.dart';
+// import 'package:forest_map/features/post/data/repositories/post_repository_impl.dart';
+// import 'package:forest_map/features/post/domain/entities/post.dart';
+// import 'package:forest_map/features/tracking/domain/entities/location.dart';
 // import 'package:mockito/mockito.dart';
 
 // class MockPostRemoteDataSource extends Mock implements PostRemoteDataSource {}

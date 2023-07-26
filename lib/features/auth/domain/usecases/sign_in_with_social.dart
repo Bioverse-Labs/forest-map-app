@@ -8,13 +8,13 @@ import '../../../user/domain/entities/user.dart';
 import '../repositories/auth_repository.dart';
 
 class SignInWithSocial implements UseCase<User, SignInWithSocialParams> {
-  final AuthRepository repository;
+  final AuthRepository? repository;
 
   SignInWithSocial(this.repository);
 
   @override
   Future<Either<Failure, User>> call(SignInWithSocialParams params) async {
-    return await repository.signInWithSocial(params.type);
+    return await repository!.signInWithSocial(params.type);
   }
 }
 

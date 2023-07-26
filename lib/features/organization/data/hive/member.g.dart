@@ -17,12 +17,12 @@ class MemberHiveAdapter extends TypeAdapter<MemberHive> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return MemberHive()
-      ..id = fields[0] as String
-      ..name = fields[1] as String
-      ..email = fields[2] as String
-      ..avatarUrl = fields[3] as String
-      ..status = fields[4] as OrganizationMemberStatus
-      ..role = fields[5] as OrganizationRoleType;
+      ..id = fields[0] as String?
+      ..name = fields[1] as String?
+      ..email = fields[2] as String?
+      ..avatarUrl = fields[3] as String?
+      ..status = fields[4] as OrganizationMemberStatus?
+      ..role = fields[5] as OrganizationRoleType?;
   }
 
   @override

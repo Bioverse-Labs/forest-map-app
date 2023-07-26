@@ -20,7 +20,7 @@ Future<Either<LocalFailure, Uri>> generateInviteLink(
         packageName: 'com.bioverselabs.forestmap',
         minimumVersion: 000001,
       ),
-      iosParameters: IosParameters(
+      iosParameters: IOSParameters(
         bundleId: 'com.bioverselabs.forestmap',
         minimumVersion: '1.0.1',
         appStoreId: '',
@@ -37,14 +37,14 @@ Future<Either<LocalFailure, Uri>> generateInviteLink(
           'https://raw.githubusercontent.com/Bioverse-Labs/forest-map-app/master/bioverse.png',
         ),
       ),
-      dynamicLinkParametersOptions: DynamicLinkParametersOptions(
-        shortDynamicLinkPathLength: ShortDynamicLinkPathLength.short,
-      ),
+      // dynamicLinkParametersOptions: DynamicLinkParametersOptions(
+      //   shortDynamicLinkPathLength: ShortDynamicLinkPathLength.short,
+      // ),
     );
 
-    final dynamicUrl = await parameters.buildShortLink();
+    final dynamicUrl = await parameters.link;
 
-    return Right(dynamicUrl.shortUrl);
+    return Right(dynamicUrl);
   } catch (error) {
     return Left(LocalFailure(
       GetIt.I<LocalizedString>().getLocalizedString('generic-exception'),

@@ -1,8 +1,8 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/features/user/data/hive/user.dart';
-import 'package:forest_map_app/features/user/domain/entities/user.dart';
-import 'package:forest_map_app/features/user/data/models/user_model.dart';
+import 'package:forest_map/features/user/data/hive/user.dart';
+import 'package:forest_map/features/user/domain/entities/user.dart';
+import 'package:forest_map/features/user/data/models/user_model.dart';
 
 void main() {
   final userId = faker.guid.guid();

@@ -6,11 +6,11 @@ import '../../../../core/widgets/screen.dart';
 import '../../../post/domain/entities/post.dart';
 
 class PostModal extends StatelessWidget {
-  final AppNavigator appNavigator;
-  final Post post;
+  final AppNavigator? appNavigator;
+  final Post? post;
 
   const PostModal({
-    Key key,
+    Key? key,
     this.appNavigator,
     this.post,
   }) : super(key: key);
@@ -18,7 +18,7 @@ class PostModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenWidget(
-      appBar: AppBar(title: Text(post.category.name)),
+      appBar: AppBar(title: Text(post!.category!.name)),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -28,11 +28,11 @@ class PostModal extends StatelessWidget {
             child: ListBody(
               children: [
                 Text(
-                  '${post.category.name} - ${post.category.scientificName}',
+                  '${post!.category!.name} - ${post!.category!.scientificName}',
                 ),
                 Divider(),
                 Text(
-                  '${post.location.lat} / ${post.location.lng}',
+                  '${post!.location.lat} / ${post!.location.lng}',
                   style: TextStyle(fontSize: 12),
                 ),
               ],
@@ -44,7 +44,7 @@ class PostModal extends StatelessWidget {
                   color: Colors.black, style: BorderStyle.solid, width: 3),
             ),
             child: Image.file(
-              File(post.imageUrl),
+              File(post!.imageUrl!),
             ),
           ),
         ],

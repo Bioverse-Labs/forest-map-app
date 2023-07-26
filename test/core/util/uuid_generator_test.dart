@@ -1,6 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/core/util/uuid_generator.dart';
+import 'package:forest_map/core/util/uuid_generator.dart';
 import 'package:mockito/mockito.dart';
 import 'package:uuid/uuid.dart';
 

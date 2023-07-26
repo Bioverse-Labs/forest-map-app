@@ -3,15 +3,15 @@
 
 // import 'package:dartz/dartz.dart';
 // import 'package:faker/faker.dart';
-// import 'package:forest_map_app/core/adapters/hive_adapter.dart';
-// import 'package:forest_map_app/core/enums/exception_origin_types.dart';
-// import 'package:forest_map_app/core/errors/failure.dart';
-// import 'package:forest_map_app/core/usecases/usecase.dart';
-// import 'package:forest_map_app/features/post/data/hive/post.dart';
-// import 'package:forest_map_app/features/post/domain/entities/post.dart';
-// import 'package:forest_map_app/features/post/domain/usecases/save_post.dart';
-// import 'package:forest_map_app/features/post/domain/usecases/upload_cached_post.dart';
-// import 'package:forest_map_app/features/post/presentation/notifier/post_notifier.dart';
+// import 'package:forest_map/core/adapters/hive_adapter.dart';
+// import 'package:forest_map/core/enums/exception_origin_types.dart';
+// import 'package:forest_map/core/errors/failure.dart';
+// import 'package:forest_map/core/usecases/usecase.dart';
+// import 'package:forest_map/features/post/data/hive/post.dart';
+// import 'package:forest_map/features/post/domain/entities/post.dart';
+// import 'package:forest_map/features/post/domain/usecases/save_post.dart';
+// import 'package:forest_map/features/post/domain/usecases/upload_cached_post.dart';
+// import 'package:forest_map/features/post/presentation/notifier/post_notifier.dart';
 // import 'package:mockito/mockito.dart';
 // import 'package:flutter_test/flutter_test.dart';
 

@@ -18,10 +18,10 @@ abstract class FirebaseAuthAdapter {
 }
 
 class FirebaseAuthAdapterImpl implements FirebaseAuthAdapter {
-  final FirebaseAuth firebaseAuth;
-  final GoogleSignIn googleSignIn;
-  final FacebookAuth facebookAuth;
-  final SocialCredentialAdapter socialCredentialAdapter;
+  final FirebaseAuth? firebaseAuth;
+  final GoogleSignIn? googleSignIn;
+  final FacebookAuth? facebookAuth;
+  final SocialCredentialAdapter? socialCredentialAdapter;
 
   FirebaseAuthAdapterImpl(
     this.firebaseAuth,
@@ -32,16 +32,16 @@ class FirebaseAuthAdapterImpl implements FirebaseAuthAdapter {
 
   @override
   Future<AuthCredential> getFacebookAuthCredential() async {
-    final res = await facebookAuth.login();
-    final credential = await socialCredentialAdapter
-        .getFacebookCredential(res.accessToken.token);
+    final res = await facebookAuth!.login();
+    final credential = await socialCredentialAdapter!
+        .getFacebookCredential(res.accessToken!.token);
     return credential;
   }
 
   @override
   Future<AuthCredential> getGoogleAuthCredential() async {
-    final googleAuth = await (await googleSignIn.signIn())?.authentication;
-    final credential = await socialCredentialAdapter.getGoogleCredential(
+    final googleAuth = (await (await googleSignIn!.signIn())?.authentication)!;
+    final credential = await socialCredentialAdapter!.getGoogleCredential(
       googleAuth.accessToken,
       googleAuth.idToken,
     );
@@ -51,12 +51,12 @@ class FirebaseAuthAdapterImpl implements FirebaseAuthAdapter {
 
   @override
   Future<UserModel> signInWithCredential(AuthCredential credential) async {
-    final result = await firebaseAuth.signInWithCredential(credential);
+    final result = await firebaseAuth!.signInWithCredential(credential);
     return UserModel(
-      id: result.user.uid,
-      name: result.user.displayName,
-      email: result.user.email,
-      avatarUrl: result.user.photoURL,
+      id: result.user!.uid,
+      name: result.user!.displayName!,
+      email: result.user!.email,
+      avatarUrl: result.user!.photoURL,
     );
   }
 
@@ -65,16 +65,16 @@ class FirebaseAuthAdapterImpl implements FirebaseAuthAdapter {
     String email,
     String password,
   ) async {
-    final result = await firebaseAuth.signInWithEmailAndPassword(
+    final result = await firebaseAuth!.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
 
     return UserModel(
-      id: result.user.uid,
-      name: result.user.displayName ?? '',
-      email: result.user.email ?? '',
-      avatarUrl: result.user.photoURL ?? '',
+      id: result.user!.uid,
+      name: result.user!.displayName ?? '',
+      email: result.user!.email ?? '',
+      avatarUrl: result.user!.photoURL ?? '',
     );
   }
 
@@ -83,32 +83,32 @@ class FirebaseAuthAdapterImpl implements FirebaseAuthAdapter {
     String email,
     String password,
   ) async {
-    final result = await firebaseAuth.createUserWithEmailAndPassword(
+    final result = await firebaseAuth!.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
 
     return UserModel(
-      id: result.user.uid,
-      name: result.user.displayName ?? '',
-      email: result.user.email ?? '',
-      avatarUrl: result.user.photoURL ?? '',
+      id: result.user!.uid,
+      name: result.user!.displayName ?? '',
+      email: result.user!.email ?? '',
+      avatarUrl: result.user!.photoURL ?? '',
     );
   }
 
   @override
-  Future<void> signOut() => firebaseAuth.signOut();
+  Future<void> signOut() => firebaseAuth!.signOut();
 
   @override
   Future<void> forgotPassword(String email) {
-    return firebaseAuth.sendPasswordResetEmail(email: email);
+    return firebaseAuth!.sendPasswordResetEmail(email: email);
   }
 }
 
 abstract class SocialCredentialAdapter {
   Future<AuthCredential> getFacebookCredential(String token);
   Future<AuthCredential> getGoogleCredential(
-      String accessToken, String idToken);
+      String? accessToken, String? idToken);
 }
 
 class SocialCredentialAdapterImpl implements SocialCredentialAdapter {
@@ -118,8 +118,8 @@ class SocialCredentialAdapterImpl implements SocialCredentialAdapter {
 
   @override
   Future<AuthCredential> getGoogleCredential(
-    String accessToken,
-    String idToken,
+    String? accessToken,
+    String? idToken,
   ) async =>
       GoogleAuthProvider.credential(accessToken: accessToken, idToken: idToken);
 }

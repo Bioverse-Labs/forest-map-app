@@ -1,8 +1,8 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/features/tracking/data/hive/location.dart';
-import 'package:forest_map_app/features/tracking/data/models/location_model.dart';
-import 'package:forest_map_app/features/tracking/domain/entities/location.dart';
+import 'package:forest_map/features/tracking/data/hive/location.dart';
+import 'package:forest_map/features/tracking/data/models/location_model.dart';
+import 'package:forest_map/features/tracking/domain/entities/location.dart';
 import 'package:geolocator/geolocator.dart';
 
 void main() {

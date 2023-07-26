@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
@@ -14,7 +13,7 @@ class GetFirstPointParams extends Equatable {
   final Organization organization;
 
   GetFirstPointParams({
-    @required this.organization,
+    required this.organization,
   });
 
   @override
@@ -23,14 +22,14 @@ class GetFirstPointParams extends Equatable {
 
 class GetFirstPoint
     implements UseCase<List<GeolocationDataProperties>, GetFirstPointParams> {
-  final GeolocationRepository repository;
+  final GeolocationRepository? repository;
 
-  GetFirstPoint({@required this.repository});
+  GetFirstPoint({required this.repository});
 
   @override
   Future<Either<Failure, List<GeolocationDataProperties>>> call(
     GetFirstPointParams params,
   ) {
-    return repository.getFirstPoint(organization: params.organization);
+    return repository!.getFirstPoint(organization: params.organization);
   }
 }

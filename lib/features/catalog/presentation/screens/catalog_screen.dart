@@ -6,14 +6,14 @@ import '../notifiers/catalog_notifier.dart';
 
 class CatalogScreen extends StatelessWidget {
   final CatalogNotifierImpl _catalogNotifier;
-  final AppNavigator _appNavigator;
+  final AppNavigator? _appNavigator;
 
-  const CatalogScreen(this._catalogNotifier, this._appNavigator, {Key key})
+  const CatalogScreen(this._catalogNotifier, this._appNavigator, {Key? key})
       : super(key: key);
 
   void _onItemTap(int index) {
     _catalogNotifier.setState(index);
-    _appNavigator.push('/catalog/images');
+    _appNavigator!.push('/catalog/images');
   }
 
   @override
@@ -23,7 +23,7 @@ class CatalogScreen extends StatelessWidget {
       body: ListView.builder(
         itemCount: _catalogNotifier.items.values.length,
         itemBuilder: (ctx, index) {
-          final item = catalogList[index];
+          final item = catalogList[index]!;
 
           return Card(
             child: ListTile(

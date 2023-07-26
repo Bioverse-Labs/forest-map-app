@@ -17,9 +17,9 @@ class GeolocationFileHiveAdapter extends TypeAdapter<GeolocationFileHive> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return GeolocationFileHive()
-      ..id = fields[1] as String
-      ..fileName = fields[2] as String
-      ..downloadDate = fields[3] as DateTime;
+      ..id = fields[1] as String?
+      ..fileName = fields[2] as String?
+      ..downloadDate = fields[3] as DateTime?;
   }
 
   @override

@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
@@ -11,7 +10,7 @@ class DownloadGeoDataParams extends Equatable {
   final Organization organization;
 
   DownloadGeoDataParams({
-    @required this.organization,
+    required this.organization,
   });
 
   @override
@@ -19,14 +18,14 @@ class DownloadGeoDataParams extends Equatable {
 }
 
 class DownloadGeoData implements UseCase<void, DownloadGeoDataParams> {
-  final GeolocationRepository repository;
+  final GeolocationRepository? repository;
 
   DownloadGeoData({
-    @required this.repository,
+    required this.repository,
   });
 
   @override
   Future<Either<Failure, void>> call(DownloadGeoDataParams params) async {
-    return repository.insertDataFromFile(params.organization);
+    return repository!.insertDataFromFile(params.organization);
   }
 }

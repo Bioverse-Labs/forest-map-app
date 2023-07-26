@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:meta/meta.dart';
 
 class Catalog extends Equatable {
   final int id;
@@ -10,11 +9,11 @@ class Catalog extends Equatable {
   final BitmapDescriptor icon;
 
   Catalog({
-    @required this.id,
-    @required this.name,
-    @required this.scientificName,
-    @required this.images,
-    @required this.icon,
+    required this.id,
+    required this.name,
+    required this.scientificName,
+    required this.images,
+    required this.icon,
   });
 
   @override

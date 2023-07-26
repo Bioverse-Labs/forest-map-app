@@ -22,32 +22,32 @@ import '../datasources/map_remote_datasource.dart';
 import '../models/geolocation_data_properties_model.dart';
 
 class GeolocationRepositoryImpl implements GeolocationRepository {
-  final MapRemoteDatasource mapRemoteDatasource;
-  final MapLocalDataSource mapLocalDataSource;
-  final NetworkInfo networkInfo;
-  final Geoflutterfire geoflutterfire;
-  final GeoJsonUtils geoJsonUtils;
+  final MapRemoteDatasource? mapRemoteDatasource;
+  final MapLocalDataSource? mapLocalDataSource;
+  final NetworkInfo? networkInfo;
+  final Geoflutterfire? geoflutterfire;
+  final GeoJsonUtils? geoJsonUtils;
 
   GeolocationRepositoryImpl({
-    @required this.mapRemoteDatasource,
-    @required this.mapLocalDataSource,
-    @required this.networkInfo,
-    @required this.geoflutterfire,
-    @required this.geoJsonUtils,
+    required this.mapRemoteDatasource,
+    required this.mapLocalDataSource,
+    required this.networkInfo,
+    required this.geoflutterfire,
+    required this.geoJsonUtils,
   });
 
   @override
   Future<Either<Failure, void>> insertDataFromFile(
-    Organization organization,
+    Organization? organization,
   ) async {
-    if (!await networkInfo.isConnected) {
+    if (!await networkInfo!.isConnected) {
       return Left(NoInternetFailure());
     }
 
-    for (var filename in organization?.geolocationData) {
-      final file = await mapLocalDataSource.getFile(filename);
+    for (var filename in organization!.geolocationData!) {
+      final file = await mapLocalDataSource!.getFile(filename);
       if (file == null) {
-        final geoJson = await mapRemoteDatasource.downloadGeoJsonFile(
+        final geoJson = await mapRemoteDatasource!.downloadGeoJsonFile(
           filename,
         );
 
@@ -57,8 +57,8 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
           {'geo': geoflutterfire, 'features': geoJson.features},
         );
 
-        await mapLocalDataSource.saveData(filename, geoData);
-        await mapLocalDataSource.saveFile(filename);
+        await mapLocalDataSource!.saveData(filename, geoData);
+        await mapLocalDataSource!.saveFile(filename);
       }
     }
 
@@ -67,18 +67,22 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
 
   @override
   Future<Either<Failure, List<GeolocationDataProperties>>> getPoints({
-    Organization organization,
-    double latitude,
-    double longitude,
+    Organization? organization,
+    required double latitude,
+    required double longitude,
   }) async {
     try {
       final geoLocation = createGeohashes(latitude, longitude, 1000, 7);
 
       final items = <GeolocationDataPropertiesModel>[];
 
-      for (var filename in organization.geolocationData) {
+      if (organization?.geolocationData == null) {
+        return Right(items);
+      }
+
+      for (var filename in organization!.geolocationData!) {
         for (var location in geoLocation) {
-          final records = await mapLocalDataSource.getDataFromQuery(
+          final records = await mapLocalDataSource!.getDataFromQuery(
             filename: filename,
             geohash: location.toUpperCase(),
           );
@@ -106,14 +110,14 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
   ) async {
     try {
       GeoJson geoJson;
-      if (await networkInfo.isConnected) {
-        geoJson = await mapRemoteDatasource.downloadGeoJsonFile(
+      if (await networkInfo!.isConnected) {
+        geoJson = await mapRemoteDatasource!.downloadGeoJsonFile(
           'boundary',
           organization,
         );
-        mapLocalDataSource.saveFile('${organization.id}-boundary');
+        mapLocalDataSource!.saveFile('${organization.id}-boundary');
       } else {
-        final file = await mapLocalDataSource.getFile(
+        final file = await mapLocalDataSource!.getFile(
           '${organization.id}-boundary',
         );
         geoJson = await compute<Map<String, dynamic>, GeoJson>(
@@ -157,14 +161,14 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
   ) async {
     try {
       GeoJson geoJson;
-      if (await networkInfo.isConnected) {
-        geoJson = await mapRemoteDatasource.downloadGeoJsonFile(
+      if (await networkInfo!.isConnected) {
+        geoJson = await mapRemoteDatasource!.downloadGeoJsonFile(
           'villages',
           organization,
         );
-        mapLocalDataSource.saveFile('${organization.id}-villages');
+        mapLocalDataSource!.saveFile('${organization.id}-villages');
       } else {
-        final file = await mapLocalDataSource.getFile(
+        final file = await mapLocalDataSource!.getFile(
           '${organization.id}-villages',
         );
         geoJson = await compute<Map<String, dynamic>, GeoJson>(
@@ -204,13 +208,13 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
 
   @override
   Future<Either<Failure, List<GeolocationDataProperties>>> getFirstPoint({
-    Organization organization,
+    Organization? organization,
   }) async {
     try {
       final items = <GeolocationDataPropertiesModel>[];
 
-      for (var filename in organization.geolocationData) {
-        final records = await mapLocalDataSource.getFirstPoint(
+      for (var filename in organization!.geolocationData!) {
+        final records = await mapLocalDataSource!.getFirstPoint(
           filename: filename,
         );
 
@@ -236,16 +240,16 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
 Future<List<GeolocationDataPropertiesModel>> parseDataAsPoint(
   Map<String, dynamic> params,
 ) async {
-  final geo = params['geo'] as Geoflutterfire;
+  final geo = params['geo'] as Geoflutterfire?;
   final features = params['features'] as List<GeoJsonFeature>;
 
   final dataList = <GeolocationDataPropertiesModel>[];
 
   for (var feature in features) {
     final point = feature.geometry as GeoJsonPoint;
-    final properties = feature.properties;
+    final properties = feature.properties!;
 
-    final geoLocation = geo.point(
+    final geoLocation = geo!.point(
       latitude: point.geoPoint.latitude,
       longitude: point.geoPoint.longitude,
     );
@@ -284,7 +288,7 @@ Future<List<GeolocationDataPropertiesModel>> parseDataAsPolygon(
       }
 
       final data = GeolocationDataPropertiesModel.fromMap({
-        ...properties,
+        ...properties!,
         'points': points,
       });
 

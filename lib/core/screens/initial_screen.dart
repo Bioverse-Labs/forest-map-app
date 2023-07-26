@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:forest_map_app/core/platform/location.dart';
+import 'package:forest_map/core/platform/location.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../features/post/presentation/notifier/post_notifier.dart';
 
@@ -16,56 +16,55 @@ import '../util/notifications.dart';
 import 'splash_screen.dart';
 
 class InitialScreen extends StatelessWidget {
-  final FirebaseAuthAdapterImpl firebaseAuthAdapterImpl;
-  final FirestoreAdapterImpl firestoreAdapterImpl;
-  final AppNavigator appNavigator;
+  final FirebaseAuthAdapterImpl? firebaseAuthAdapterImpl;
+  final FirestoreAdapterImpl? firestoreAdapterImpl;
+  final AppNavigator? appNavigator;
   final UserNotifierImpl userNotifier;
   final OrganizationNotifierImpl organizationNotifier;
   final PostNotifier postNotifier;
-  final NetworkInfo networkInfo;
-  final NotificationsUtils notificationsUtils;
-  final DatabaseAdapter databaseAdapter;
+  final NetworkInfo? networkInfo;
+  final NotificationsUtils? notificationsUtils;
+  final DatabaseAdapter? databaseAdapter;
   final LocationSource locationSource;
 
   InitialScreen({
-    Key key,
-    @required this.firebaseAuthAdapterImpl,
-    @required this.firestoreAdapterImpl,
-    @required this.appNavigator,
-    @required this.userNotifier,
-    @required this.organizationNotifier,
-    @required this.postNotifier,
-    @required this.networkInfo,
-    @required this.notificationsUtils,
-    @required this.databaseAdapter,
-    @required this.locationSource,
+    Key? key,
+    required this.firebaseAuthAdapterImpl,
+    required this.firestoreAdapterImpl,
+    required this.appNavigator,
+    required this.userNotifier,
+    required this.organizationNotifier,
+    required this.postNotifier,
+    required this.networkInfo,
+    required this.notificationsUtils,
+    required this.databaseAdapter,
+    required this.locationSource,
   }) : super(key: key);
 
-  Future<void> _handleStateChange(BuildContext context, User user) async {
+  Future<void> _handleStateChange(BuildContext context, User? user) async {
     try {
-      await databaseAdapter.openDatabase();
+      await databaseAdapter!.openDatabase();
     } catch (error) {
-      notificationsUtils
-          .showErrorNotification(error?.message ?? error.toString());
+      notificationsUtils!.showErrorNotification(error.toString());
     }
 
     if (user == null) {
-      appNavigator.pushAndReplace('/signIn');
+      appNavigator!.pushAndReplace('/signIn');
       return;
     }
 
     try {
-      final isConnected = await networkInfo.isConnected;
+      final isConnected = await networkInfo!.isConnected;
 
       final locationPermission = await locationSource.checkPermission();
 
       if (locationPermission == LocationPermission.denied) {
-        appNavigator.pushAndReplace('/ask-location');
+        appNavigator!.pushAndReplace('/ask-location');
         return;
       }
 
       await userNotifier.getUser(
-        id: isConnected ? user?.uid : 'currUser',
+        id: isConnected ? user.uid : 'currUser',
         searchLocally: !isConnected,
       );
       await organizationNotifier.getOrganization(
@@ -73,31 +72,31 @@ class InitialScreen extends StatelessWidget {
         searchLocally: true,
       );
 
-      if (organizationNotifier?.organization?.id != null) {
+      if (organizationNotifier.organization?.id != null) {
         if (isConnected) {
           await organizationNotifier.getOrganization(
-            id: organizationNotifier?.organization?.id,
+            id: organizationNotifier.organization?.id,
             searchLocally: false,
           );
         }
       }
 
-      postNotifier.getPosts(organizationNotifier?.organization?.id);
+      postNotifier.getPosts(organizationNotifier.organization?.id);
     } on ServerFailure catch (failure) {
-      notificationsUtils.showErrorNotification(failure.message);
+      notificationsUtils!.showErrorNotification(failure.message);
     } on LocalFailure catch (failure) {
-      notificationsUtils.showErrorNotification(failure.message);
+      notificationsUtils!.showErrorNotification(failure.message);
     } catch (error) {
-      notificationsUtils.showErrorNotification(error.toString());
+      notificationsUtils!.showErrorNotification(error.toString());
     }
 
-    appNavigator.pushAndReplace('/home');
+    appNavigator!.pushAndReplace('/home');
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User>(
-      stream: firebaseAuthAdapterImpl.firebaseAuth.authStateChanges(),
+    return StreamBuilder<User?>(
+      stream: firebaseAuthAdapterImpl!.firebaseAuth!.authStateChanges(),
       builder: (ctx, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           Future.delayed(

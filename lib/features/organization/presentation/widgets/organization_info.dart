@@ -7,18 +7,18 @@ import '../../../../core/widgets/text_with_label.dart';
 import '../../domain/entities/organization.dart';
 
 class OrganizationInfo extends StatelessWidget {
-  final Organization organization;
-  final LocalizedString localizedString;
-  final AppNavigator appNavigator;
+  final Organization? organization;
+  final LocalizedString? localizedString;
+  final AppNavigator? appNavigator;
   final bool canEdit;
-  final Function onAvatarPress;
-  final Function onChangeOrganizationPress;
+  final Function? onAvatarPress;
+  final Function? onChangeOrganizationPress;
   final bool hideGeoData;
 
   const OrganizationInfo({
-    Key key,
-    @required this.organization,
-    @required this.localizedString,
+    Key? key,
+    required this.organization,
+    required this.localizedString,
     this.appNavigator,
     this.canEdit = false,
     this.onAvatarPress,
@@ -33,7 +33,7 @@ class OrganizationInfo extends StatelessWidget {
       child: Column(
         children: [
           GestureDetector(
-            onTap: canEdit ? onAvatarPress : null,
+            onTap: canEdit ? onAvatarPress as void Function()? : null,
             child: Avatar(
               url: organization?.avatarUrl,
               canEdit: canEdit,
@@ -42,7 +42,7 @@ class OrganizationInfo extends StatelessWidget {
           if (organization?.name != null) SizedBox(height: 12),
           if (organization?.name != null)
             GestureDetector(
-              onTap: onChangeOrganizationPress,
+              onTap: onChangeOrganizationPress as void Function()?,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,7 +50,7 @@ class OrganizationInfo extends StatelessWidget {
                   Flexible(
                     child: Text(
                       organization?.name ?? '',
-                      style: Theme.of(context).textTheme.headline4,
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   ),
                   SizedBox(width: 8),
@@ -60,7 +60,8 @@ class OrganizationInfo extends StatelessWidget {
                       child: Icon(
                         Icons.chevron_left_outlined,
                         size: 30,
-                        color: Theme.of(context).textTheme.headline4.color,
+                        color:
+                            Theme.of(context).textTheme.headlineMedium!.color,
                       ),
                     ),
                 ],
@@ -73,20 +74,20 @@ class OrganizationInfo extends StatelessWidget {
           ListBody(
             children: [
               TextWithLabel(
-                label: localizedString.getLocalizedString('labels.email'),
+                label: localizedString!.getLocalizedString('labels.email'),
                 value: organization?.email ?? '',
               ),
               SizedBox(height: 8),
               TextWithLabel(
-                label: localizedString.getLocalizedString('labels.phone'),
+                label: localizedString!.getLocalizedString('labels.phone'),
                 value: organization?.phone ?? '',
               ),
               SizedBox(height: 8),
               TextWithLabel(
-                label: localizedString.getLocalizedString(
+                label: localizedString!.getLocalizedString(
                   'organization-screen.members-counter',
                 ),
-                value: organization?.members?.length?.toString() ?? '',
+                value: organization?.members?.length.toString() ?? '',
               ),
               // if (canEdit)
               //   ElevatedButton.icon(
@@ -112,18 +113,18 @@ class OrganizationInfo extends StatelessWidget {
                 ),
               if (!hideGeoData)
                 Text(
-                  localizedString.getLocalizedString(
+                  localizedString!.getLocalizedString(
                     'organization-screen.data-section-title',
                   ),
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               if (!hideGeoData)
                 Column(
                   children: [
                     if (organization?.geolocationData != null)
-                      ...organization?.geolocationData
-                          ?.map(
+                      ...organization!.geolocationData!
+                          .map(
                             (filename) => Card(
                               child: ListTile(
                                 leading: Text(filename),
@@ -134,7 +135,7 @@ class OrganizationInfo extends StatelessWidget {
                               ),
                             ),
                           )
-                          ?.toList(),
+                          .toList(),
                   ],
                 ),
               Padding(

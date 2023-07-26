@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:forest_map_app/core/platform/location.dart';
+import 'package:forest_map/core/platform/location.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../../../core/widgets/logo.dart';
 import 'package:get_it/get_it.dart';
@@ -21,24 +21,24 @@ class SignInScreen extends StatefulWidget {
   final AuthNotifierImpl authNotifier;
   final UserNotifierImpl userNotifier;
   final OrganizationNotifierImpl organizationNotifier;
-  final LocalizedString localizedString;
-  final ValidationUtils validationUtils;
-  final NotificationsUtils notificationsUtils;
+  final LocalizedString? localizedString;
+  final ValidationUtils? validationUtils;
+  final NotificationsUtils? notificationsUtils;
   final LocationSource locationSource;
-  final AppTheme appTheme;
-  final AppNavigator appNavigator;
+  final AppTheme? appTheme;
+  final AppNavigator? appNavigator;
 
   SignInScreen({
-    Key key,
-    @required this.authNotifier,
-    @required this.userNotifier,
-    @required this.organizationNotifier,
-    @required this.localizedString,
-    @required this.validationUtils,
-    @required this.notificationsUtils,
-    @required this.appTheme,
-    @required this.appNavigator,
-    @required this.locationSource,
+    Key? key,
+    required this.authNotifier,
+    required this.userNotifier,
+    required this.organizationNotifier,
+    required this.localizedString,
+    required this.validationUtils,
+    required this.notificationsUtils,
+    required this.appTheme,
+    required this.appNavigator,
+    required this.locationSource,
   }) : super(key: key);
 
   @override
@@ -52,10 +52,10 @@ class _SignInScreenState extends State<SignInScreen> {
   bool _isLoading = false;
 
   String _getString(String matcher) =>
-      widget.localizedString.getLocalizedString(matcher);
+      widget.localizedString!.getLocalizedString(matcher);
 
   InputDecoration _getInputDecoration(String title) =>
-      widget.appTheme.inputDecoration(_getString(title));
+      widget.appTheme!.inputDecoration(_getString(title));
 
   void _gotToSignUpScreen() => GetIt.I<AppNavigator>().push('/signUp');
 
@@ -63,7 +63,7 @@ class _SignInScreenState extends State<SignInScreen> {
       GetIt.I<AppNavigator>().push('/forgotPassword');
 
   Future<void> _signIn() async {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       try {
         setState(() {
           _isLoading = true;
@@ -77,26 +77,26 @@ class _SignInScreenState extends State<SignInScreen> {
             await widget.locationSource.checkPermission();
 
         if (locationPermission == LocationPermission.denied) {
-          widget.appNavigator.pushAndReplace('/ask-location');
+          widget.appNavigator!.pushAndReplace('/ask-location');
           return;
         }
 
         await widget.userNotifier.getUser(id: 'currUser', searchLocally: true);
 
         widget.organizationNotifier.getOrganization(
-          id: _authUser.organizations.first.id,
+          id: _authUser.organizations!.first.id,
           searchLocally: false,
         );
 
-        widget.appNavigator.pushAndReplace('/home');
+        widget.appNavigator!.pushAndReplace('/home');
       } on ServerFailure catch (failure) {
-        widget.notificationsUtils.showErrorNotification(failure.message);
+        widget.notificationsUtils!.showErrorNotification(failure.message);
       } on ServerException catch (exception) {
-        widget.notificationsUtils.showErrorNotification(exception.message);
+        widget.notificationsUtils!.showErrorNotification(exception.message);
       } on LocalFailure catch (failure) {
-        widget.notificationsUtils.showErrorNotification(failure.message);
+        widget.notificationsUtils!.showErrorNotification(failure.message);
       } on NoInternetFailure catch (_) {
-        widget.notificationsUtils
+        widget.notificationsUtils!
             .showErrorNotification(_getString('no-internet'));
       } finally {
         if (mounted) {
@@ -185,11 +185,11 @@ class _SignInScreenState extends State<SignInScreen> {
                     controller: _emailController,
                     decoration: _getInputDecoration('labels.email'),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return _getString('input-validations.required');
                       }
 
-                      if (!widget.validationUtils.validateEmail(value)) {
+                      if (!widget.validationUtils!.validateEmail(value)) {
                         return _getString('input-validations.invalid-email');
                       }
 
@@ -202,7 +202,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     decoration: _getInputDecoration('labels.password'),
                     obscureText: true,
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return _getString('input-validations.required');
                       }
 

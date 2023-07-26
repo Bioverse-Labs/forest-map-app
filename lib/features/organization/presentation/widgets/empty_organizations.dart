@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import '../../../../core/util/localized_string.dart';
 
 class EmptyOrganizations extends StatelessWidget {
-  final LocalizedString localizedString;
-  final Function onPress;
+  final LocalizedString? localizedString;
+  final Function? onPress;
 
   const EmptyOrganizations({
-    Key key,
-    @required this.localizedString,
+    Key? key,
+    required this.localizedString,
     this.onPress,
   }) : super(key: key);
 
@@ -22,18 +22,18 @@ class EmptyOrganizations extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              localizedString.getLocalizedString(
+              localizedString!.getLocalizedString(
                 'organization-screen.empty-state-title',
               ),
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
               textAlign: TextAlign.center,
             ),
             if (onPress != null) SizedBox(height: 32),
             if (onPress != null)
               ElevatedButton(
-                onPressed: onPress,
+                onPressed: onPress as void Function()?,
                 child: Text(
-                  localizedString.getLocalizedString(
+                  localizedString!.getLocalizedString(
                     'organization-screen.empty-state-button',
                   ),
                 ),

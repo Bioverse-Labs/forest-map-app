@@ -8,20 +8,20 @@ part 'member.g.dart';
 @HiveType(typeId: 3)
 class MemberHive {
   @HiveField(0)
-  String id;
+  String? id;
 
   @HiveField(1)
-  String name;
+  String? name;
 
   @HiveField(2)
-  String email;
+  String? email;
 
   @HiveField(3)
-  String avatarUrl;
+  String? avatarUrl;
 
   @HiveField(4)
-  OrganizationMemberStatus status;
+  OrganizationMemberStatus? status;
 
   @HiveField(5)
-  OrganizationRoleType role;
+  OrganizationRoleType? role;
 }

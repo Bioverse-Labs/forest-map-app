@@ -8,14 +8,14 @@ import '../repositories/auth_repository.dart';
 
 class SignInWithEmailAndPassword
     implements UseCase<User, SignInWithEmailAndPasswordParams> {
-  final AuthRepository repository;
+  final AuthRepository? repository;
 
   SignInWithEmailAndPassword(this.repository);
 
   @override
   Future<Either<Failure, User>> call(
       SignInWithEmailAndPasswordParams params) async {
-    return await repository.signInWithEmailAndPassword(
+    return await repository!.signInWithEmailAndPassword(
       params.email,
       params.password,
     );

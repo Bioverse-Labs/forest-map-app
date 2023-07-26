@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:collection/collection.dart' show IterableExtension;
+import 'package:data_connection_checker_nulls/data_connection_checker_nulls.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +27,7 @@ import '../util/localized_string.dart';
 import '../util/notifications.dart';
 
 class HomeScreen extends StatefulWidget {
-  final LocalizedString localizedString;
+  final LocalizedString? localizedString;
   final HomeScreenNotifierImpl homeScreenNotifier;
   final OrganizationNotifierImpl organizationNotifier;
   final OrganizationInviteNotifierImpl organizationInviteNotifier;
@@ -35,30 +36,30 @@ class HomeScreen extends StatefulWidget {
   final AuthNotifierImpl authNotifier;
   final PostNotifierImpl postNotifier;
   final MapNotifierImpl mapNotifier;
-  final AppNavigator appNavigator;
-  final NotificationsUtils notificationsUtils;
-  final Camera camera;
-  final AppSettings appSettings;
-  final AppTheme appTheme;
-  final NetworkInfo networkInfo;
+  final AppNavigator? appNavigator;
+  final NotificationsUtils? notificationsUtils;
+  final Camera? camera;
+  final AppSettings? appSettings;
+  final AppTheme? appTheme;
+  final NetworkInfo? networkInfo;
 
   const HomeScreen({
-    Key key,
-    @required this.localizedString,
-    @required this.homeScreenNotifier,
-    @required this.organizationNotifier,
-    @required this.organizationInviteNotifier,
-    @required this.locationNotifier,
-    @required this.mapNotifier,
-    @required this.appNavigator,
-    @required this.userNotifier,
-    @required this.authNotifier,
-    @required this.postNotifier,
-    @required this.notificationsUtils,
-    @required this.camera,
-    @required this.appSettings,
-    @required this.appTheme,
-    @required this.networkInfo,
+    Key? key,
+    required this.localizedString,
+    required this.homeScreenNotifier,
+    required this.organizationNotifier,
+    required this.organizationInviteNotifier,
+    required this.locationNotifier,
+    required this.mapNotifier,
+    required this.appNavigator,
+    required this.userNotifier,
+    required this.authNotifier,
+    required this.postNotifier,
+    required this.notificationsUtils,
+    required this.camera,
+    required this.appSettings,
+    required this.appTheme,
+    required this.networkInfo,
   }) : super(key: key);
 
   @override
@@ -66,8 +67,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Widget> _widgetOptions;
-  StreamSubscription<DataConnectionStatus> _connectionStream;
+  late List<Widget> _widgetOptions;
+  StreamSubscription<DataConnectionStatus>? _connectionStream;
 
   @override
   void dispose() {
@@ -113,28 +114,28 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     _connectionStream =
-        widget.networkInfo.connectionStatusStream.asBroadcastStream().listen(
+        widget.networkInfo!.connectionStatusStream.asBroadcastStream().listen(
       (status) {
         if (status == DataConnectionStatus.connected) {
           try {
             widget.postNotifier.uploadCachedPost();
           } catch (error) {
             if (error is ServerFailure) {
-              widget.notificationsUtils.showErrorNotification(error.message);
+              widget.notificationsUtils!.showErrorNotification(error.message);
               return;
             }
 
             if (error is LocalFailure) {
-              widget.notificationsUtils.showErrorNotification(error.message);
+              widget.notificationsUtils!.showErrorNotification(error.message);
               return;
             }
 
             if (error is LocationFailure) {
-              widget.notificationsUtils.showErrorNotification(error.message);
+              widget.notificationsUtils!.showErrorNotification(error.message);
               return;
             }
 
-            widget.notificationsUtils.showErrorNotification(error.toString());
+            widget.notificationsUtils!.showErrorNotification(error.toString());
           }
         } else {
           widget.postNotifier.cancelUpload();
@@ -143,17 +144,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     if (widget.organizationInviteNotifier.showScreen) {
-      final userOrganizations = widget.userNotifier.user.organizations;
-      final alreadyMember = userOrganizations?.firstWhere(
+      final userOrganizations = widget.userNotifier.user!.organizations;
+      final alreadyMember = userOrganizations?.firstWhereOrNull(
         (e) => e.id == widget.organizationInviteNotifier.organizationId,
-        orElse: () => null,
       );
 
       if (userOrganizations != null && alreadyMember != null) {
         widget.organizationInviteNotifier.setInviteScreenVisibility(false);
       } else {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          widget.appNavigator.push('/organization-invite');
+          widget.appNavigator!.push('/organization-invite');
           widget.organizationInviteNotifier.setInviteScreenVisibility(false);
         });
       }
@@ -161,17 +161,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
     widget.organizationInviteNotifier.addListener(() {
       final showScreen = widget.organizationInviteNotifier.showScreen;
-      final userOrganizations = widget.userNotifier.user.organizations;
-      final alreadyMember = userOrganizations?.firstWhere(
+      final userOrganizations = widget.userNotifier.user!.organizations;
+      final alreadyMember = userOrganizations?.firstWhereOrNull(
         (e) => e.id == widget.organizationInviteNotifier.organizationId,
-        orElse: () => null,
       );
 
       if (showScreen) {
         if (userOrganizations != null && alreadyMember != null) {
           widget.organizationInviteNotifier.setInviteScreenVisibility(false);
         } else {
-          widget.appNavigator.push('/organization-invite');
+          widget.appNavigator!.push('/organization-invite');
           widget.organizationInviteNotifier.setInviteScreenVisibility(false);
         }
       }
@@ -179,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _getData();
-      widget.locationNotifier.trackUser(widget.userNotifier.user.id);
+      widget.locationNotifier.trackUser(widget.userNotifier.user!.id);
       widget.organizationNotifier.addListener(_getData);
     });
 
@@ -195,15 +194,15 @@ class _HomeScreenState extends State<HomeScreen> {
           widget.mapNotifier.downloadGeoData(organization),
           widget.mapNotifier.getBoundary(organization),
           widget.mapNotifier.getVillages(organization),
-          widget.locationNotifier.getLocations(widget.userNotifier.user.id),
+          widget.locationNotifier.getLocations(widget.userNotifier.user!.id),
         ]);
       } on LocalFailure catch (failure) {
-        widget.notificationsUtils.showErrorNotification(failure.message);
+        widget.notificationsUtils!.showErrorNotification(failure.message);
       } on ServerFailure catch (failure) {
-        widget.notificationsUtils.showErrorNotification(failure.message);
+        widget.notificationsUtils!.showErrorNotification(failure.message);
       } on NoInternetFailure catch (_) {
-        widget.notificationsUtils.showInfoNotification(
-          widget.localizedString.getLocalizedString('no-internet'),
+        widget.notificationsUtils!.showInfoNotification(
+          widget.localizedString!.getLocalizedString('no-internet'),
         );
       }
     }
@@ -224,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Consumer<PostNotifierImpl>(
               builder: (ctx, state, child) {
                 if (state.cachedPostsAmount != state.postsAmount) {
-                  return child;
+                  return child!;
                 }
 
                 return Container();
@@ -248,19 +247,19 @@ class _HomeScreenState extends State<HomeScreen> {
             items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.map_outlined),
-                label: widget.localizedString.getLocalizedString(
+                label: widget.localizedString!.getLocalizedString(
                   'home-screen.map-tab',
                 ),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.group_work_outlined),
-                label: widget.localizedString.getLocalizedString(
+                label: widget.localizedString!.getLocalizedString(
                   'home-screen.organization-tab',
                 ),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person_outline),
-                label: widget.localizedString.getLocalizedString(
+                label: widget.localizedString!.getLocalizedString(
                   'home-screen.profile-tab',
                 ),
               ),

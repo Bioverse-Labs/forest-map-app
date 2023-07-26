@@ -2,16 +2,16 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
-import 'package:forest_map_app/core/enums/exception_origin_types.dart';
-import 'package:forest_map_app/core/enums/organization_role_types.dart';
-import 'package:forest_map_app/core/errors/exceptions.dart';
-import 'package:forest_map_app/core/errors/failure.dart';
-import 'package:forest_map_app/core/platform/network_info.dart';
-import 'package:forest_map_app/features/organization/data/datasources/organization_local_data_source.dart';
-import 'package:forest_map_app/features/user/data/models/user_model.dart';
-import 'package:forest_map_app/features/organization/data/datasources/organization_remote_data_source.dart';
-import 'package:forest_map_app/features/organization/data/models/organization_model.dart';
-import 'package:forest_map_app/features/organization/data/repositories/organization_repository_impl.dart';
+import 'package:forest_map/core/enums/exception_origin_types.dart';
+import 'package:forest_map/core/enums/organization_role_types.dart';
+import 'package:forest_map/core/errors/exceptions.dart';
+import 'package:forest_map/core/errors/failure.dart';
+import 'package:forest_map/core/platform/network_info.dart';
+import 'package:forest_map/features/organization/data/datasources/organization_local_data_source.dart';
+import 'package:forest_map/features/user/data/models/user_model.dart';
+import 'package:forest_map/features/organization/data/datasources/organization_remote_data_source.dart';
+import 'package:forest_map/features/organization/data/models/organization_model.dart';
+import 'package:forest_map/features/organization/data/repositories/organization_repository_impl.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 

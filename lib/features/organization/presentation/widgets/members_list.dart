@@ -10,32 +10,32 @@ import '../notifiers/organizations_notifier.dart';
 
 class MemberListItem extends StatelessWidget {
   final Member member;
-  final Organization organization;
+  final Organization? organization;
   final OrganizationNotifierImpl organizationNotifier;
-  final NotificationsUtils notificationsUtils;
-  final AppNavigator appNavigator;
-  final LocalizedString localizedString;
+  final NotificationsUtils? notificationsUtils;
+  final AppNavigator? appNavigator;
+  final LocalizedString? localizedString;
 
   const MemberListItem({
-    Key key,
-    @required this.member,
-    @required this.organization,
-    @required this.organizationNotifier,
-    @required this.notificationsUtils,
-    @required this.appNavigator,
-    @required this.localizedString,
+    Key? key,
+    required this.member,
+    required this.organization,
+    required this.organizationNotifier,
+    required this.notificationsUtils,
+    required this.appNavigator,
+    required this.localizedString,
   }) : super(key: key);
 
   bool _canEdit() {
-    final result = organization.members
+    final result = organization!.members!
         .where(
           (el) => el.id != member.id && el.role == OrganizationRoleType.owner,
         )
         .toList();
 
     if (result.length <= 0) {
-      notificationsUtils.showErrorNotification(
-        localizedString.getLocalizedString('members-role-validation'),
+      notificationsUtils!.showErrorNotification(
+        localizedString!.getLocalizedString('members-role-validation'),
       );
       return false;
     }
@@ -59,22 +59,22 @@ class MemberListItem extends StatelessWidget {
               Text(
                 'Edit Member Role',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
               SizedBox(height: 16),
               Card(
                 child: ListTile(
-                  title: Text(localizedString.getLocalizedString(
+                  title: Text(localizedString!.getLocalizedString(
                     'members-role.owner',
                   )),
                   trailing: member.role == OrganizationRoleType.owner
                       ? Icon(Icons.circle)
                       : Container(width: 5),
                   onTap: () {
-                    appNavigator.pop();
+                    appNavigator!.pop();
                     if (_canEdit()) {
                       organizationNotifier.updateMember(
-                        id: organization.id,
+                        id: organization!.id,
                         userId: member.id,
                         role: OrganizationRoleType.owner,
                       );
@@ -84,17 +84,17 @@ class MemberListItem extends StatelessWidget {
               ),
               Card(
                 child: ListTile(
-                  title: Text(localizedString.getLocalizedString(
+                  title: Text(localizedString!.getLocalizedString(
                     'members-role.admin',
                   )),
                   trailing: member.role == OrganizationRoleType.admin
                       ? Icon(Icons.circle)
                       : Container(width: 5),
                   onTap: () {
-                    appNavigator.pop();
+                    appNavigator!.pop();
                     if (_canEdit()) {
                       organizationNotifier.updateMember(
-                        id: organization.id,
+                        id: organization!.id,
                         userId: member.id,
                         role: OrganizationRoleType.admin,
                       );
@@ -104,17 +104,17 @@ class MemberListItem extends StatelessWidget {
               ),
               Card(
                 child: ListTile(
-                  title: Text(localizedString.getLocalizedString(
+                  title: Text(localizedString!.getLocalizedString(
                     'members-role.member',
                   )),
                   trailing: member.role == OrganizationRoleType.member
                       ? Icon(Icons.circle)
                       : Container(width: 5),
                   onTap: () {
-                    appNavigator.pop();
+                    appNavigator!.pop();
                     if (_canEdit()) {
                       organizationNotifier.updateMember(
-                        id: organization.id,
+                        id: organization!.id,
                         userId: member.id,
                         role: OrganizationRoleType.member,
                       );
@@ -137,10 +137,10 @@ class MemberListItem extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    appNavigator.pop();
+                    appNavigator!.pop();
                     if (_canEdit()) {
                       organizationNotifier.removeMember(
-                        id: organization.id,
+                        id: organization!.id,
                         userId: member.id,
                       );
                     }
@@ -154,14 +154,14 @@ class MemberListItem extends StatelessWidget {
     );
   }
 
-  String _getRoleString(OrganizationRoleType role) {
+  String _getRoleString(OrganizationRoleType? role) {
     switch (role) {
       case OrganizationRoleType.owner:
-        return localizedString.getLocalizedString('members-role.owner');
+        return localizedString!.getLocalizedString('members-role.owner');
       case OrganizationRoleType.admin:
-        return localizedString.getLocalizedString('members-role.admin');
+        return localizedString!.getLocalizedString('members-role.admin');
       case OrganizationRoleType.member:
-        return localizedString.getLocalizedString('members-role.member');
+        return localizedString!.getLocalizedString('members-role.member');
       default:
         return '';
     }
@@ -180,27 +180,27 @@ class MemberListItem extends StatelessWidget {
 }
 
 class MemberList extends StatelessWidget {
-  final Organization organization;
+  final Organization? organization;
   final OrganizationNotifierImpl organizationNotifier;
-  final NotificationsUtils notificationsUtils;
-  final AppNavigator appNavigator;
-  final LocalizedString localizedString;
+  final NotificationsUtils? notificationsUtils;
+  final AppNavigator? appNavigator;
+  final LocalizedString? localizedString;
 
   const MemberList({
-    Key key,
-    @required this.organization,
-    @required this.organizationNotifier,
-    @required this.notificationsUtils,
-    @required this.appNavigator,
-    @required this.localizedString,
+    Key? key,
+    required this.organization,
+    required this.organizationNotifier,
+    required this.notificationsUtils,
+    required this.appNavigator,
+    required this.localizedString,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    organization.members.sort((a, b) => b.role.index.compareTo(a.role.index));
+    organization!.members!.sort((a, b) => b.role!.index.compareTo(a.role!.index));
     return Column(
       children: [
-        ...organization.members
+        ...organization!.members!
             .map(
               (member) => MemberListItem(
                 member: member,

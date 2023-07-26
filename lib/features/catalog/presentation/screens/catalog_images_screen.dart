@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_swiper_view/flutter_swiper_view.dart';
+// import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/widgets/screen.dart';
 import '../notifiers/catalog_notifier.dart';
 
 class CatalogImagesScreen extends StatelessWidget {
-  const CatalogImagesScreen({Key key}) : super(key: key);
+  const CatalogImagesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class CatalogImagesScreen extends StatelessWidget {
       appBar: AppBar(),
       body: Consumer<CatalogNotifierImpl>(
         builder: (ctx, state, _) {
-          final items = state.items[state.currentIndex].images;
+          final items = state.items[state.currentIndex]!.images;
           return Swiper(
             itemCount: items.length,
             pagination: SwiperPagination(),

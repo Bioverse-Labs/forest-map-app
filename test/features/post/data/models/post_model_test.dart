@@ -1,9 +1,9 @@
 // import 'package:faker/faker.dart';
 // import 'package:flutter_test/flutter_test.dart';
-// import 'package:forest_map_app/features/post/data/hive/post.dart';
-// import 'package:forest_map_app/features/post/data/models/post_model.dart';
-// import 'package:forest_map_app/features/post/domain/entities/post.dart';
-// import 'package:forest_map_app/features/tracking/data/models/location_model.dart';
+// import 'package:forest_map/features/post/data/hive/post.dart';
+// import 'package:forest_map/features/post/data/models/post_model.dart';
+// import 'package:forest_map/features/post/domain/entities/post.dart';
+// import 'package:forest_map/features/tracking/data/models/location_model.dart';
 
 // void main() {
 //   final id = faker.guid.guid();

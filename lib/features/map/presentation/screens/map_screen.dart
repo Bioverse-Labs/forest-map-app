@@ -29,31 +29,31 @@ import '../../domain/entities/geolocation_data_properties.dart';
 import '../notifiers/map_notifier.dart';
 
 class MapScreen extends StatefulWidget {
-  final LocalizedString localizedString;
+  final LocalizedString? localizedString;
   final LocationNotifierImpl locationNotifier;
   final UserNotifierImpl userNotifier;
   final PostNotifierImpl postNotifier;
   final OrganizationNotifierImpl organizationNotifier;
   final MapNotifierImpl mapNotifier;
-  final NotificationsUtils notificationsUtils;
-  final Camera camera;
-  final AppNavigator appNavigator;
-  final AppSettings appSettings;
-  final AppTheme appTheme;
+  final NotificationsUtils? notificationsUtils;
+  final Camera? camera;
+  final AppNavigator? appNavigator;
+  final AppSettings? appSettings;
+  final AppTheme? appTheme;
 
   MapScreen({
-    Key key,
-    @required this.localizedString,
-    @required this.locationNotifier,
-    @required this.userNotifier,
-    @required this.postNotifier,
-    @required this.notificationsUtils,
-    @required this.appNavigator,
-    @required this.appSettings,
-    @required this.organizationNotifier,
-    @required this.mapNotifier,
-    @required this.camera,
-    @required this.appTheme,
+    Key? key,
+    required this.localizedString,
+    required this.locationNotifier,
+    required this.userNotifier,
+    required this.postNotifier,
+    required this.notificationsUtils,
+    required this.appNavigator,
+    required this.appSettings,
+    required this.organizationNotifier,
+    required this.mapNotifier,
+    required this.camera,
+    required this.appTheme,
   }) : super(key: key);
 
   @override
@@ -61,14 +61,14 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
-  GoogleMapController _controller;
-  CameraPosition _initalPosition;
-  Location _currentLocation;
+  GoogleMapController? _controller;
+  CameraPosition? _initalPosition;
+  Location? _currentLocation;
   bool _shouldUpdateState = false;
   bool _hasPermission = true;
   MapType _mapType = MapType.satellite;
-  BitmapDescriptor _treeLocationIcon;
-  BitmapDescriptor _villageLocationIcon;
+  late BitmapDescriptor _treeLocationIcon;
+  late BitmapDescriptor _villageLocationIcon;
 
   @override
   void initState() {
@@ -122,7 +122,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
           radius.toInt() * 2,
         );
 
-    final data = await image.toByteData(format: ui.ImageByteFormat.png);
+    final data = (await image.toByteData(format: ui.ImageByteFormat.png))!;
     return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
   }
 
@@ -130,14 +130,14 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     try {
       final location = await widget.locationNotifier.getCurrentLocation();
       _initalPosition = CameraPosition(
-        target: LatLng(location.lat, location.lng),
+        target: LatLng(location!.lat!, location.lng!),
         zoom: 14,
       );
     } on LocationFailure catch (_) {
       _hasPermission = false;
     } on LocalFailure catch (_) {
-      widget.notificationsUtils.showErrorNotification(
-        widget.localizedString.getLocalizedString('generic-exception'),
+      widget.notificationsUtils!.showErrorNotification(
+        widget.localizedString!.getLocalizedString('generic-exception'),
       );
     } finally {
       if (mounted) {
@@ -147,28 +147,28 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   }
 
   void _askPermission(BuildContext context) {
-    widget.notificationsUtils.showAlertDialog(
+    widget.notificationsUtils!.showAlertDialog(
       title: Text(
-        widget.localizedString.getLocalizedString('map-screen.alert-title'),
+        widget.localizedString!.getLocalizedString('map-screen.alert-title'),
       ),
       content: Text(
-        widget.localizedString.getLocalizedString(
+        widget.localizedString!.getLocalizedString(
           'map-screen.alert-description',
         ),
       ),
       buttons: [
         AlertButtonParams(
-          title: widget.localizedString.getLocalizedString(
+          title: widget.localizedString!.getLocalizedString(
             'map-screen.alert-cancel-button',
           ),
         ),
         AlertButtonParams(
-          title: widget.localizedString.getLocalizedString(
+          title: widget.localizedString!.getLocalizedString(
             'map-screen.alert-confirm-button',
           ),
           action: () async {
             await AppSettings.openAppSettings();
-            widget.appNavigator.pop();
+            widget.appNavigator!.pop();
             _shouldUpdateState = true;
           },
           isPrimary: true,
@@ -181,10 +181,10 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     _controller = controller;
   }
 
-  Future<void> _updateMapPosition(Location location) async {
+  Future<void> _updateMapPosition(Location? location) async {
     if (location != null && location != _currentLocation) {
       final position = CameraPosition(
-        target: LatLng(location.lat, location.lng),
+        target: LatLng(location.lat!, location.lng!),
         zoom: 14,
       );
 
@@ -196,35 +196,35 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
 
   Future<void> _savePost(Catalog specie, CameraResponse cameraResponse) async {
     try {
-      widget.notificationsUtils.showInfoNotification(
-        widget.localizedString.getLocalizedString('map-screen.start-saving'),
+      widget.notificationsUtils!.showInfoNotification(
+        widget.localizedString!.getLocalizedString('map-screen.start-saving'),
       );
       await widget.postNotifier.savePost(
         file: cameraResponse.file,
-        organizationId: widget.organizationNotifier?.organization?.id,
-        userId: widget.userNotifier?.user?.id,
+        organizationId: widget.organizationNotifier.organization?.id,
+        userId: widget.userNotifier.user?.id,
         category: specie,
       );
-      widget.notificationsUtils.showSuccessNotification(
-        widget.localizedString.getLocalizedString('map-screen.post-success'),
+      widget.notificationsUtils!.showSuccessNotification(
+        widget.localizedString!.getLocalizedString('map-screen.post-success'),
       );
     } on ServerFailure catch (failure) {
-      widget.notificationsUtils.showErrorNotification(failure.message);
+      widget.notificationsUtils!.showErrorNotification(failure.message);
     } on LocalFailure catch (failure) {
-      widget.notificationsUtils.showErrorNotification(failure.message);
+      widget.notificationsUtils!.showErrorNotification(failure.message);
     } on LocationFailure catch (failure) {
-      widget.notificationsUtils.showErrorNotification(failure.message);
+      widget.notificationsUtils!.showErrorNotification(failure.message);
     }
   }
 
   Future<void> _takePicture(BuildContext context) async {
-    final failureOrCameraResp = await widget.camera.takePicture(isTemp: false);
+    final failureOrCameraResp = await widget.camera!.takePicture(isTemp: false);
 
     failureOrCameraResp.fold(
       (failure) {
         if (!(failure is CameraCancelFailure)) {
-          widget.notificationsUtils.showErrorNotification(
-            widget.localizedString.getLocalizedString('generic-exception'),
+          widget.notificationsUtils!.showErrorNotification(
+            widget.localizedString!.getLocalizedString('generic-exception'),
           );
         }
       },
@@ -237,13 +237,13 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
           appTheme: widget.appTheme,
           localizedString: widget.localizedString,
           onSave: (specie) {
-            widget.appNavigator.pop();
-            _savePost(specie, cameraResp);
+            widget.appNavigator!.pop();
+            _savePost(specie!, cameraResp);
           },
           onExample: () {
-            widget.appNavigator.push('/catalog');
+            widget.appNavigator!.push('/catalog');
           },
-          onCancel: widget.appNavigator.pop,
+          onCancel: widget.appNavigator!.pop,
         ),
       ),
     );
@@ -253,12 +253,12 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     final firstItem = widget.mapNotifier.initialData.first;
 
     final position = CameraPosition(
-      target: LatLng(firstItem.latitude, firstItem.longitude),
+      target: LatLng(firstItem.latitude!, firstItem.longitude!),
       zoom: 14,
     );
 
     _onMapMoved(
-      CameraPosition(target: LatLng(firstItem.latitude, firstItem.longitude)),
+      CameraPosition(target: LatLng(firstItem.latitude!, firstItem.longitude!)),
     );
 
     _controller?.animateCamera(CameraUpdate.newCameraPosition(position));
@@ -273,11 +273,11 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
       );
     } catch (failure) {
       if (failure is LocalFailure) {
-        widget.notificationsUtils.showErrorNotification(failure.message);
+        widget.notificationsUtils!.showErrorNotification(failure.message);
       }
 
       if (failure is GenericFailure) {
-        widget.notificationsUtils.showErrorNotification(failure.toString());
+        widget.notificationsUtils!.showErrorNotification(failure.toString());
       }
     }
   }
@@ -304,7 +304,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   List<Polygon> _parsePolygon(List<GeolocationDataProperties> data) => data
       .map((item) => Polygon(
             polygonId: PolygonId(GetIt.I<UUIDGenerator>().generateUID()),
-            points: item.points,
+            points: item.points!,
             strokeColor: Colors.blue,
             fillColor: Colors.blue.withOpacity(0.2),
             strokeWidth: 2,
@@ -316,8 +316,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
         (e) => Marker(
           markerId: MarkerId(e.geohash),
           position: LatLng(
-            e.latitude,
-            e.longitude,
+            e.latitude!,
+            e.longitude!,
           ),
           icon: _villageLocationIcon,
         ),
@@ -327,11 +327,11 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   List<Marker> _parseTreeLocations(List<GeolocationDataProperties> data) => data
       .map((item) => Marker(
             markerId: MarkerId(item.id),
-            position: LatLng(item.latitude, item.longitude),
+            position: LatLng(item.latitude!, item.longitude!),
             icon: _treeLocationIcon,
             consumeTapEvents: true,
-            onTap: () => widget.notificationsUtils.showAlertDialog(
-              title: Text(item.specie),
+            onTap: () => widget.notificationsUtils!.showAlertDialog(
+              title: Text(item.specie!),
               content: Container(
                 height: 100,
                 child: Column(
@@ -359,9 +359,9 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   List<Marker> _parsePosts(List<Post> posts) => posts
       .map(
         (post) => Marker(
-          markerId: MarkerId(post.id),
-          position: LatLng(post.location.lat, post.location.lng),
-          icon: post.category.icon,
+          markerId: MarkerId(post.id!),
+          position: LatLng(post.location.lat!, post.location.lng!),
+          icon: post.category!.icon,
           consumeTapEvents: true,
           onTap: () => showDialog(
             context: context,
@@ -377,7 +377,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   Polyline _parseLines(List<Location> locations) => Polyline(
         polylineId: PolylineId('track'),
         points: locations
-            .map((location) => LatLng(location.lat, location.lng))
+            .map((location) => LatLng(location.lat!, location.lng!))
             .toList(),
         color: Theme.of(context).primaryColor,
         width: 6,
@@ -402,7 +402,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    widget.localizedString.getLocalizedString(
+                    widget.localizedString!.getLocalizedString(
                         'map-screen.loading-geolocation-files'),
                     textAlign: TextAlign.center,
                   ),
@@ -421,16 +421,16 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    widget.localizedString.getLocalizedString(
+                    widget.localizedString!.getLocalizedString(
                       'map-screen.location-permission-title',
                     ),
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.headlineSmall,
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 8),
                   ElevatedButton(
                     onPressed: () => _askPermission(context),
-                    child: Text(widget.localizedString.getLocalizedString(
+                    child: Text(widget.localizedString!.getLocalizedString(
                       'map-screen.location-permission-button',
                     )),
                   )
@@ -456,7 +456,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
               fit: StackFit.expand,
               children: [
                 GoogleMap(
-                  initialCameraPosition: _initalPosition,
+                  initialCameraPosition: _initalPosition!,
                   onMapCreated: _handleMapCreation,
                   myLocationEnabled: true,
                   mapType: _mapType,

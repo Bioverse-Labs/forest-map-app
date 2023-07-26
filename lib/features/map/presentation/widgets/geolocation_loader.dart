@@ -10,9 +10,9 @@ class GeolocationLoader extends StatelessWidget {
   final LocalizedString localizedString;
 
   const GeolocationLoader({
-    Key key,
-    @required this.organization,
-    @required this.localizedString,
+    Key? key,
+    required this.organization,
+    required this.localizedString,
   }) : super(key: key);
 
   @override

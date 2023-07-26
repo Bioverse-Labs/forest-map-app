@@ -17,14 +17,14 @@ class PendingPostHiveAdapter extends TypeAdapter<PendingPostHive> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return PendingPostHive()
-      ..id = fields[0] as String
-      ..userId = fields[1] as String
-      ..organizationId = fields[2] as String
-      ..specie = fields[3] as String
-      ..imageUrl = fields[4] as String
-      ..timestamp = fields[5] as DateTime
-      ..location = fields[6] as LocationHive
-      ..categoryId = fields[7] as int;
+      ..id = fields[0] as String?
+      ..userId = fields[1] as String?
+      ..organizationId = fields[2] as String?
+      ..specie = fields[3] as String?
+      ..imageUrl = fields[4] as String?
+      ..timestamp = fields[5] as DateTime?
+      ..location = fields[6] as LocationHive?
+      ..categoryId = fields[7] as int?;
   }
 
   @override

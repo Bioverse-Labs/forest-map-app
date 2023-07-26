@@ -16,74 +16,74 @@ import '../../domain/usecases/update_organization.dart';
 
 abstract class OrganizationNotifier {
   Future<void> createOrganization({
-    User user,
-    String name,
-    String email,
-    String phone,
-    File avatar,
+    User? user,
+    String? name,
+    String? email,
+    String? phone,
+    File? avatar,
   });
-  Future<void> getOrganization({String id, bool searchLocally});
+  Future<void> getOrganization({String? id, bool? searchLocally});
   Future<void> updateOrganization({
-    String id,
-    String name,
-    String email,
-    String phone,
-    File avatar,
+    String? id,
+    String? name,
+    String? email,
+    String? phone,
+    File? avatar,
   });
   Future<void> deleteOrganization(String id);
   Future<void> updateMember({
-    String id,
-    String userId,
-    OrganizationRoleType role,
-    OrganizationMemberStatus status,
+    String? id,
+    String? userId,
+    OrganizationRoleType? role,
+    OrganizationMemberStatus? status,
   });
   Future<void> removeMember({
-    String id,
-    String userId,
+    String? id,
+    String? userId,
   });
-  Future<void> setOrganization({String id, Organization organization});
+  Future<void> setOrganization({String? id, Organization? organization});
 }
 
 class OrganizationNotifierImpl extends ChangeNotifier
     implements OrganizationNotifier {
-  final CreateOrganization createOrganizationUseCase;
-  final GetOrganization getOrganizationUseCase;
-  final UpdateOrganization updateOrganizationUseCase;
-  final DeleteOrganization deleteOrganizationUseCase;
-  final SaveOrganizationLocally saveOrganizationLocallyUseCase;
-  final UpdateMember updateMemberUseCase;
-  final RemoveMember removeMemberUseCase;
+  final CreateOrganization? createOrganizationUseCase;
+  final GetOrganization? getOrganizationUseCase;
+  final UpdateOrganization? updateOrganizationUseCase;
+  final DeleteOrganization? deleteOrganizationUseCase;
+  final SaveOrganizationLocally? saveOrganizationLocallyUseCase;
+  final UpdateMember? updateMemberUseCase;
+  final RemoveMember? removeMemberUseCase;
 
-  Organization _organization;
-  String _invitationLink;
+  Organization? _organization;
+  String? _invitationLink;
   bool _loading = false;
 
   OrganizationNotifierImpl({
-    @required this.createOrganizationUseCase,
-    @required this.getOrganizationUseCase,
-    @required this.updateOrganizationUseCase,
-    @required this.deleteOrganizationUseCase,
-    @required this.saveOrganizationLocallyUseCase,
-    @required this.updateMemberUseCase,
-    @required this.removeMemberUseCase,
+    required this.createOrganizationUseCase,
+    required this.getOrganizationUseCase,
+    required this.updateOrganizationUseCase,
+    required this.deleteOrganizationUseCase,
+    required this.saveOrganizationLocallyUseCase,
+    required this.updateMemberUseCase,
+    required this.removeMemberUseCase,
   });
 
-  Organization get organization => _organization;
-  String get invitationLink => _invitationLink;
+  Organization? get organization => _organization;
+  String? get invitationLink => _invitationLink;
   bool get isLoading => _loading;
 
   @override
   Future<void> createOrganization({
-    @required User user,
-    @required String name,
-    @required String email,
-    @required String phone,
-    File avatar,
+    User? user,
+    String? name,
+    String? email,
+    String? phone,
+    File? avatar,
   }) async {
     _loading = true;
     notifyListeners();
     final failureOrOrganization =
-        await createOrganizationUseCase(CreateOrganizationParams(
+        await createOrganizationUseCase!(CreateOrganizationParams(
       user: user,
       name: name,
       email: email,
@@ -107,7 +107,7 @@ class OrganizationNotifierImpl extends ChangeNotifier
   Future<void> deleteOrganization(String id) async {
     _loading = true;
     notifyListeners();
-    final failureOrOrganization = await deleteOrganizationUseCase(
+    final failureOrOrganization = await deleteOrganizationUseCase!(
       DeleteOrganizationParams(id),
     );
 
@@ -125,12 +125,12 @@ class OrganizationNotifierImpl extends ChangeNotifier
 
   @override
   Future<void> getOrganization({
-    @required String id,
-    bool searchLocally = false,
+    String? id,
+    bool? searchLocally = false,
   }) async {
     _loading = true;
     notifyListeners();
-    final failureOrOrganization = await getOrganizationUseCase(
+    final failureOrOrganization = await getOrganizationUseCase!(
       GetOrganizationParams(id: id, searchLocally: searchLocally),
     );
 
@@ -148,13 +148,13 @@ class OrganizationNotifierImpl extends ChangeNotifier
 
   @override
   Future<void> removeMember({
-    @required String id,
-    @required String userId,
+    String? id,
+    String? userId,
   }) async {
     _loading = true;
     notifyListeners();
 
-    final failureOrOrganization = await removeMemberUseCase(RemoveMemberParams(
+    final failureOrOrganization = await removeMemberUseCase!(RemoveMemberParams(
       id: id,
       userId: userId,
     ));
@@ -173,15 +173,15 @@ class OrganizationNotifierImpl extends ChangeNotifier
 
   @override
   Future<void> updateMember({
-    @required String id,
-    @required String userId,
-    OrganizationRoleType role,
-    OrganizationMemberStatus status,
+    String? id,
+    String? userId,
+    OrganizationRoleType? role,
+    OrganizationMemberStatus? status,
   }) async {
     _loading = true;
     notifyListeners();
 
-    final failureOrOrganization = await updateMemberUseCase(UpdateMemberParams(
+    final failureOrOrganization = await updateMemberUseCase!(UpdateMemberParams(
       id: id,
       userId: userId,
       role: role,
@@ -202,16 +202,16 @@ class OrganizationNotifierImpl extends ChangeNotifier
 
   @override
   Future<void> updateOrganization({
-    @required String id,
-    String name,
-    String email,
-    String phone,
-    File avatar,
+    String? id,
+    String? name,
+    String? email,
+    String? phone,
+    File? avatar,
   }) async {
     _loading = true;
     notifyListeners();
     final failureOrOrganization =
-        await updateOrganizationUseCase(UpdateOrganizationParams(
+        await updateOrganizationUseCase!(UpdateOrganizationParams(
       id: id,
       name: name,
       email: email,
@@ -233,13 +233,13 @@ class OrganizationNotifierImpl extends ChangeNotifier
 
   @override
   Future<void> setOrganization({
-    @required String id,
-    @required Organization organization,
+    String? id,
+    Organization? organization,
   }) async {
     _organization = organization;
     notifyListeners();
 
-    final failureOrOrganization = await saveOrganizationLocallyUseCase(
+    final failureOrOrganization = await saveOrganizationLocallyUseCase!(
       SaveOrganizationLocallyParams(
         id: id,
         organization: organization,

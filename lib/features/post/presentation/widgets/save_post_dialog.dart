@@ -9,21 +9,21 @@ import '../../../catalog/domain/entities/catalog.dart';
 class SavePostDialog extends StatefulWidget {
   final BuildContext ctx;
   final CameraResponse cameraResponse;
-  final AppTheme appTheme;
-  final LocalizedString localizedString;
-  final Function(Catalog specie) onSave;
+  final AppTheme? appTheme;
+  final LocalizedString? localizedString;
+  final Function(Catalog? specie) onSave;
   final VoidCallback onExample;
   final Function onCancel;
 
   SavePostDialog({
-    Key key,
-    @required this.ctx,
-    @required this.cameraResponse,
-    @required this.appTheme,
-    @required this.localizedString,
-    @required this.onSave,
-    @required this.onExample,
-    @required this.onCancel,
+    Key? key,
+    required this.ctx,
+    required this.cameraResponse,
+    required this.appTheme,
+    required this.localizedString,
+    required this.onSave,
+    required this.onExample,
+    required this.onCancel,
   }) : super(key: key);
 
   @override
@@ -32,7 +32,7 @@ class SavePostDialog extends StatefulWidget {
 
 class _SavePostDialogState extends State<SavePostDialog> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  int _specie = 0;
+  int? _specie = 0;
 
   void _handleSelectChange(specie) => setState(() {
         _specie = specie;
@@ -41,7 +41,7 @@ class _SavePostDialogState extends State<SavePostDialog> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onCancel,
+      onTap: widget.onCancel as void Function()?,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(
@@ -73,15 +73,15 @@ class _SavePostDialogState extends State<SavePostDialog> {
                       isExpanded: true,
                       value: _specie,
                       onChanged: _handleSelectChange,
-                      decoration: widget.appTheme.inputDecoration(
-                        widget.localizedString
+                      decoration: widget.appTheme!.inputDecoration(
+                        widget.localizedString!
                             .getLocalizedString('map-screen.input-label'),
-                        placeholder: widget.localizedString
+                        placeholder: widget.localizedString!
                             .getLocalizedString('map-screen.input-placeholder'),
                       ),
-                      validator: (value) {
+                      validator: (dynamic value) {
                         if (value == null) {
-                          return widget.localizedString.getLocalizedString(
+                          return widget.localizedString!.getLocalizedString(
                             'input-validations.required',
                           );
                         }
@@ -105,12 +105,12 @@ class _SavePostDialogState extends State<SavePostDialog> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState.validate()) {
+                        if (_formKey.currentState!.validate()) {
                           widget.onSave(catalogList[_specie]);
                         }
                       },
                       child: Text(
-                        widget.localizedString.getLocalizedString(
+                        widget.localizedString!.getLocalizedString(
                           'map-screen.save-button',
                         ),
                       ),
@@ -121,7 +121,7 @@ class _SavePostDialogState extends State<SavePostDialog> {
                     child: TextButton(
                       onPressed: widget.onExample,
                       child: Text(
-                        widget.localizedString
+                        widget.localizedString!
                             .getLocalizedString('map-screen.example-button'),
                       ),
                     ),

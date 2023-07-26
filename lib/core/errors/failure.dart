@@ -13,10 +13,10 @@ abstract class Failure extends Equatable {
 
 // General Failures
 class ServerFailure extends Failure {
-  final String message;
+  final String? message;
   final String code;
   final ExceptionOriginTypes origin;
-  final StackTrace stackTrace;
+  final StackTrace? stackTrace;
 
   ServerFailure(this.message, this.code, this.origin, {this.stackTrace})
       : super([
@@ -28,10 +28,10 @@ class ServerFailure extends Failure {
 }
 
 class LocalFailure extends Failure {
-  final String message;
+  final String? message;
   final String code;
   final ExceptionOriginTypes origin;
-  final StackTrace stackTrace;
+  final StackTrace? stackTrace;
 
   LocalFailure(this.message, this.code, this.origin, {this.stackTrace})
       : super([
@@ -52,7 +52,7 @@ class LocationFailure extends Failure {
   final String message;
   final bool hasPermission;
   final bool isGPSEnabled;
-  final StackTrace stackTrace;
+  final StackTrace? stackTrace;
 
   LocationFailure(this.message, this.hasPermission, this.isGPSEnabled,
       {this.stackTrace})

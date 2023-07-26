@@ -1,28 +1,26 @@
-import 'package:meta/meta.dart';
-
 import '../../../../core/adapters/hive_adapter.dart';
 import '../../domain/entities/organization.dart';
 import '../hive/organization.dart';
 import '../models/organization_model.dart';
 
 abstract class OrganizationLocalDataSource {
-  Future<OrganizationModel> getOrganization(String id);
+  Future<OrganizationModel?> getOrganization(String? id);
   Future<void> saveOrganization({
-    String id,
-    Organization organization,
+    String? id,
+    Organization? organization,
   });
 }
 
 class OrganizationLocalDataSourceImpl implements OrganizationLocalDataSource {
-  final HiveAdapter<OrganizationHive> orgHive;
+  final HiveAdapter<OrganizationHive>? orgHive;
 
   OrganizationLocalDataSourceImpl({
-    @required this.orgHive,
+    required this.orgHive,
   });
 
   @override
-  Future<OrganizationModel> getOrganization(String id) async {
-    final orgObject = await orgHive.get(id);
+  Future<OrganizationModel?> getOrganization(String? id) async {
+    final orgObject = await orgHive!.get(id);
 
     if (orgObject != null) {
       return OrganizationModel.fromHive(orgObject);
@@ -33,11 +31,11 @@ class OrganizationLocalDataSourceImpl implements OrganizationLocalDataSource {
 
   @override
   Future<void> saveOrganization({
-    @required String id,
-    @required Organization organization,
+    String? id,
+    Organization? organization,
   }) =>
-      orgHive.put(
+      orgHive!.put(
         id,
-        OrganizationModel.fromEntity(organization).toHiveAdapter(),
+        OrganizationModel.fromEntity(organization!).toHiveAdapter(),
       );
 }
