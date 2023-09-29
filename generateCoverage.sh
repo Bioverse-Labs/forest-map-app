@@ -1,4 +1,5 @@
 #!/bin/bash
 
 flutter test --coverage
-genhtml coverage/lcov.info -o coverage/html
+lcov --remove coverage/lcov.info '*.g.dart' -o coverage/new_lcov.info
+genhtml coverage/new_lcov.info -o coverage/html

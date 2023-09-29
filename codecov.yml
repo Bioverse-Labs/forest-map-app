@@ -1,0 +1,3 @@
+ignore:
+  - '**/*.mocks.dart'
+  - '**/*.g.dart'

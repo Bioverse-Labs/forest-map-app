@@ -1,6 +1,9 @@
 <img src="bioverse.png">
 
-<p align="center">    
+<p align="center">
+    <a href="https://github.com/Bioverse-Labs/forest-map-app/actions/workflows/tests.yml" alt="Tests">
+        <img src="https://github.com/Bioverse-Labs/forest-map-app/actions/workflows/tests.yml/badge.svg" />
+    </a>
     <a href="https://github.com/Bioverse-Labs/forest-map-app/issues" alt="Issues">
         <img src="https://img.shields.io/github/issues/Bioverse-Labs/forest-map-app" /></a>
     <a href="https://github.com/Bioverse-Labs/forest-map-app/stargazers" alt="Stars">
@@ -14,18 +17,19 @@
 </p>
 
 # Bioverse Labs (forest-map-app module)
-Designed to serve traditional communities of the amazon rain forest, the Forest Map displays vector files generated from machine learning algorithms designed to locates key tree species from satellite imagery and or UAS. The species' choice is made by the communities and must align with the sustainable and regenerative agroforestry practices and exclude completely any species that have logging appeal. 
+
+Designed to serve traditional communities of the amazon rain forest, the Forest Map displays vector files generated from machine learning algorithms designed to locates key tree species from satellite imagery and or UAS. The species' choice is made by the communities and must align with the sustainable and regenerative agroforestry practices and exclude completely any species that have logging appeal.
 
 On the first release, Forest Map TM will allow local cooperatives to use the abundance maps to locate Brazil Nut Tree (Bertholletia excelsa) and Palm Trees. Tree species that contribute to the economic resilience of the riverine communities can be added to future projects when it meets sustainability criteria contributing to increase the value of standing and productive forests.
 
 1. [Setting up your environment](#1-Setting-up-your-environment)
 2. [Run](#2-Run)
 3. [Test ](#3-Test)
-4. [Architecture ](#3-Architecture)
+4. [Architecture](#3-Architecture)
 5. [TODO-list](#5-TODO-list)
 
-
 # Setting up your environment
+
    <p>
      <a href="https://flutter.dev/docs/get-started/install">https://flutter.dev/docs/get-started/install</a>
    </p>
@@ -34,29 +38,27 @@ On the first release, Forest Map TM will allow local cooperatives to use the abu
 
 ```
     flutter run lib/main.dart
- ```
+```
 
 # Tests
 
- ### How to run
- ```
-    flutter test
- ```
-  
- ### Coverage Report
-     https://bioverse-labs.github.io/forest-map-app/
+### How to run
+
+```
+   flutter test
+```
+
+#### How to run converage
+
+```
+    ./generateCoverage.sh
+```
 
 # Architecture
 
 <p>
     <img src="https://i1.wp.com/resocoder.com/wp-content/uploads/2019/08/CleanArchitecture.jpg?w=772&ssl=1" width="350" /><br/>
     <img src="https://i0.wp.com/resocoder.com/wp-content/uploads/2019/08/Clean-Architecture-Flutter-Diagram.png?w=556&ssl=1" width="350" />
-</p>
-
-# TODO-list
-
-<p>
-    <a href="https://flutter.dev/docs/deployment/cd">https://flutter.dev/docs/deployment/cd</a>
 </p>
 
 #

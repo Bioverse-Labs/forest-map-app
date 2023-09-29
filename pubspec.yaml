@@ -1,8 +1,8 @@
 name: forest_map
-description: A new Flutter project.
+description: Forest Map a Bioverse App.
 
 publish_to: "none"
-version: 1.2.1+16
+version: 2.1.0+27092023
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
@@ -35,24 +35,21 @@ dependencies:
   share: ^2.0.1
   geojson: ^1.0.0
   http: ^0.13.0
-  geoflutterfire: ^3.0.0-nullsafety.1
+  geoflutterfire2: ^2.3.15
   sqflite: ^2.0.0+3
   path: ^1.8.0
   proximity_hash: ^2.0.0
   flutter_swiper_view: ^1.1.8
 
   # Firebase Deps
-  firebase_core: ^1.10.0
-  firebase_auth: ^3.11.2
-  firebase_storage: ^10.3.11
-  firebase_dynamic_links: ^4.3.11
-  cloud_firestore: ^3.5.1
-  google_sign_in: ^6.1.4
+  firebase_core: ^2.15.1
+  firebase_auth: ^4.9.0
+  firebase_storage: ^11.2.6
+  firebase_dynamic_links: ^5.3.5
+  cloud_firestore: ^4.9.1
+  google_sign_in: ^6.1.5
   flutter_facebook_auth: ^5.0.11
   collection: ^1.15.0-nullsafety.4
-
-dependency_overrides:
-  firebase_core_platform_interface: 4.5.1
 
 dev_dependencies:
   flutter_test:
@@ -71,3 +68,4 @@ flutter:
     - assets/
     - assets/example_images/
     - google_fonts/
+    - shorebird.yaml
