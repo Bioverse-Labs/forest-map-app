@@ -2,7 +2,7 @@
 
 <p align="center">
     <a href="https://github.com/Bioverse-Labs/forest-map-app/actions/workflows/tests.yml" alt="Tests">
-        <img src="https://github.com/Bioverse-Labs/forest-map-app/actions/workflows/tests.yml/badge.svg" />
+        <img src="https://github.com/Bioverse-Labs/forest-map-app/actions/workflows/tests.yml/badge.svg?branch=main" />
     </a>
     <a href="https://github.com/Bioverse-Labs/forest-map-app/issues" alt="Issues">
         <img src="https://img.shields.io/github/issues/Bioverse-Labs/forest-map-app" /></a>
