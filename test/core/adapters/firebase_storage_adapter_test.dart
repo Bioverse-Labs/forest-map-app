@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:faker/faker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:forest_map_app/core/adapters/firebase_storage_adapter.dart';
+import 'package:forest_map/core/adapters/firebase_storage_adapter.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -13,10 +13,10 @@ class MockUploadTask extends Mock implements UploadTask {}
 class MockReference extends Mock implements Reference {}
 
 void main() {
-  MockFirebaseStorage mockFirebaseStorage;
-  MockUploadTask mockUploadTask;
-  MockReference mockReference;
-  FirebaseStorageAdapterImpl firebaseStorageAdapterImpl;
+  late MockFirebaseStorage mockFirebaseStorage;
+  late MockUploadTask mockUploadTask;
+  late MockReference mockReference;
+  late FirebaseStorageAdapterImpl firebaseStorageAdapterImpl;
 
   setUp(() {
     mockFirebaseStorage = MockFirebaseStorage();

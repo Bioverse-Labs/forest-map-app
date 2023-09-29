@@ -5,16 +5,16 @@ import 'package:image/image.dart';
 
 abstract class ImageUtils {
   File pathToFile(String path);
-  Image fileToImage(File file);
-  Size getImageSize(Image image);
+  Image? fileToImage(File file);
+  Size getImageSize(Image? image);
 }
 
 class ImageUtilsImpl implements ImageUtils {
   @override
-  Image fileToImage(File file) {
+  Image? fileToImage(File? file) {
     assert(file != null);
 
-    if (!file.existsSync()) {
+    if (!file!.existsSync()) {
       throw Exception('file does not exists at path ${file.path}');
     }
 
@@ -22,16 +22,16 @@ class ImageUtilsImpl implements ImageUtils {
   }
 
   @override
-  File pathToFile(String path) {
+  File pathToFile(String? path) {
     assert(path != null);
 
-    return File(path);
+    return File(path!);
   }
 
   @override
-  Size getImageSize(Image image) {
+  Size getImageSize(Image? image) {
     assert(image != null);
 
-    return Size(image.width.toDouble(), image.height.toDouble());
+    return Size(image!.width.toDouble(), image.height.toDouble());
   }
 }

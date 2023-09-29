@@ -8,7 +8,7 @@ import '../entities/location.dart';
 import '../repositories/location_repository.dart';
 
 class TrackUser implements UseCase<Stream<Location>, NoParams> {
-  final LocationRepository locationRepository;
+  final LocationRepository? locationRepository;
 
   TrackUser(this.locationRepository);
 
@@ -16,6 +16,6 @@ class TrackUser implements UseCase<Stream<Location>, NoParams> {
   Future<Either<Failure, Stream<Location>>> call(
     NoParams params,
   ) async {
-    return locationRepository.trackUserLocation();
+    return locationRepository!.trackUserLocation();
   }
 }

@@ -6,13 +6,13 @@ import '../../../../core/usecases/usecase.dart';
 import '../repositories/auth_repository.dart';
 
 class ForgotPassword implements UseCase<void, ForgotPasswordParams> {
-  final AuthRepository repository;
+  final AuthRepository? repository;
 
   ForgotPassword(this.repository);
 
   @override
   Future<Either<Failure, void>> call(ForgotPasswordParams params) async {
-    return await repository.forgotPassword(params.email);
+    return await repository!.forgotPassword(params.email);
   }
 }
 

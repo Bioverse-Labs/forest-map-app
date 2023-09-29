@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:forest_map_app/core/platform/location.dart';
-import 'package:forest_map_app/features/tracking/presentation/screens/ask_location_screen.dart';
+import 'package:forest_map/core/platform/location.dart';
+import 'package:forest_map/features/tracking/presentation/screens/ask_location_screen.dart';
 import 'features/auth/presentation/screens/forgot_password_screen.dart';
 import 'features/catalog/presentation/notifiers/catalog_notifier.dart';
 import 'features/catalog/presentation/screens/catalog_screen.dart';

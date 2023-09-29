@@ -1,24 +1,24 @@
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
-import 'package:forest_map_app/core/adapters/hive_adapter.dart';
-import 'package:forest_map_app/core/enums/exception_origin_types.dart';
-import 'package:forest_map_app/core/enums/organization_member_status.dart';
-import 'package:forest_map_app/core/enums/organization_role_types.dart';
-import 'package:forest_map_app/core/enums/social_login_types.dart';
-import 'package:forest_map_app/core/errors/exceptions.dart';
-import 'package:forest_map_app/core/errors/failure.dart';
-import 'package:forest_map_app/core/platform/network_info.dart';
-import 'package:forest_map_app/features/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:forest_map_app/features/organization/data/datasources/organization_local_data_source.dart';
-import 'package:forest_map_app/features/organization/data/hive/organization.dart';
-import 'package:forest_map_app/features/organization/data/models/member_model.dart';
-import 'package:forest_map_app/features/organization/data/models/organization_model.dart';
-import 'package:forest_map_app/features/user/data/datasource/user_local_data_source.dart';
-import 'package:forest_map_app/features/user/data/datasource/user_remote_data_source.dart';
-import 'package:forest_map_app/features/user/data/hive/user.dart';
-import 'package:forest_map_app/features/user/data/models/user_model.dart';
-import 'package:forest_map_app/features/auth/data/repositories/auth_repository_impl.dart';
-import 'package:forest_map_app/features/user/domain/entities/user.dart';
+import 'package:forest_map/core/adapters/hive_adapter.dart';
+import 'package:forest_map/core/enums/exception_origin_types.dart';
+import 'package:forest_map/core/enums/organization_member_status.dart';
+import 'package:forest_map/core/enums/organization_role_types.dart';
+import 'package:forest_map/core/enums/social_login_types.dart';
+import 'package:forest_map/core/errors/exceptions.dart';
+import 'package:forest_map/core/errors/failure.dart';
+import 'package:forest_map/core/platform/network_info.dart';
+import 'package:forest_map/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:forest_map/features/organization/data/datasources/organization_local_data_source.dart';
+import 'package:forest_map/features/organization/data/hive/organization.dart';
+import 'package:forest_map/features/organization/data/models/member_model.dart';
+import 'package:forest_map/features/organization/data/models/organization_model.dart';
+import 'package:forest_map/features/user/data/datasource/user_local_data_source.dart';
+import 'package:forest_map/features/user/data/datasource/user_remote_data_source.dart';
+import 'package:forest_map/features/user/data/hive/user.dart';
+import 'package:forest_map/features/user/data/models/user_model.dart';
+import 'package:forest_map/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:forest_map/features/user/domain/entities/user.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -38,12 +38,12 @@ class MockUserHive extends Mock implements HiveAdapter<UserHive> {}
 class MockOrgHive extends Mock implements HiveAdapter<OrganizationHive> {}
 
 void main() {
-  AuthRepositoryImpl repository;
-  MockRemoteDataSource dataSource;
-  MockUserRemoteDataSource userRemoteDataSource;
-  MockUserLocalDataSource userLocalDataSource;
-  MockOrganizationLocalDataSource mockOrganizationLocalDataSource;
-  MockNetworkInfo networkInfo;
+  late AuthRepositoryImpl repository;
+  late MockRemoteDataSource dataSource;
+  late MockUserRemoteDataSource userRemoteDataSource;
+  late MockUserLocalDataSource userLocalDataSource;
+  late MockOrganizationLocalDataSource mockOrganizationLocalDataSource;
+  late MockNetworkInfo networkInfo;
 
   setUp(() {
     dataSource = MockRemoteDataSource();

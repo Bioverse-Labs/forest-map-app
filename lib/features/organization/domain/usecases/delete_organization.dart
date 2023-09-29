@@ -15,12 +15,12 @@ class DeleteOrganizationParams extends Equatable {
 }
 
 class DeleteOrganization implements UseCase<void, DeleteOrganizationParams> {
-  final OrganizationRepository organizationRepository;
+  final OrganizationRepository? organizationRepository;
 
   DeleteOrganization(this.organizationRepository);
 
   @override
   Future<Either<Failure, void>> call(DeleteOrganizationParams params) {
-    return organizationRepository.deleteOrganization(params.id);
+    return organizationRepository!.deleteOrganization(params.id);
   }
 }

@@ -4,7 +4,7 @@ class Logo extends StatelessWidget {
   final bool white;
 
   const Logo({
-    Key key,
+    Key? key,
     this.white = false,
   }) : super(key: key);
 

@@ -10,8 +10,8 @@ class MemberModel extends Member implements Model<MemberModel, MemberHive> {
     name,
     email,
     avatarUrl,
-    OrganizationMemberStatus status,
-    OrganizationRoleType role,
+    OrganizationMemberStatus? status,
+    OrganizationRoleType? role,
   }) : super(
           id: id,
           name: name,
@@ -64,8 +64,8 @@ class MemberModel extends Member implements Model<MemberModel, MemberHive> {
         'name': this.name,
         'email': this.email,
         'avatarUrl': this.avatarUrl,
-        'status': this.status.index,
-        'role': this.role.index,
+        'status': this.status!.index,
+        'role': this.role!.index,
       };
 
   @override
@@ -79,12 +79,12 @@ class MemberModel extends Member implements Model<MemberModel, MemberHive> {
 
   @override
   MemberModel copyWith({
-    String id,
-    String name,
-    String email,
-    String avatarUrl,
-    OrganizationMemberStatus status,
-    OrganizationRoleType role,
+    String? id,
+    String? name,
+    String? email,
+    String? avatarUrl,
+    OrganizationMemberStatus? status,
+    OrganizationRoleType? role,
   }) {
     return MemberModel(
       id: id ?? this.id,

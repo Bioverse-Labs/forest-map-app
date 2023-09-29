@@ -6,7 +6,7 @@ import '../errors/exceptions.dart';
 class HiveAdapter<T> {
   final String boxName;
   final HiveInterface hive;
-  LazyBox<T> _box;
+  late LazyBox<T> _box;
 
   HiveAdapter(this.boxName, this.hive);
 
@@ -17,7 +17,7 @@ class HiveAdapter<T> {
 
   Future<void> close() => _box.close();
 
-  Future<T> get(String id) async {
+  Future<T?> get(String? id) async {
     try {
       final res = await _box.get(id);
 
@@ -52,7 +52,7 @@ class HiveAdapter<T> {
     }
   }
 
-  Future<void> put(String id, T payload) async {
+  Future<void> put(String? id, T payload) async {
     try {
       return _box.put(id, payload);
     } on HiveError catch (error) {
@@ -65,7 +65,7 @@ class HiveAdapter<T> {
     }
   }
 
-  Future<void> delete(String id) async {
+  Future<void> delete(String? id) async {
     try {
       return _box.delete(id);
     } on HiveError catch (error) {

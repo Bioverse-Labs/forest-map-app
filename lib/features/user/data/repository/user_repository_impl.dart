@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failure.dart';
@@ -13,27 +12,27 @@ import '../datasource/user_local_data_source.dart';
 import '../datasource/user_remote_data_source.dart';
 
 class UserRepositoryImpl implements UserRepository {
-  final UserRemoteDataSource remoteDataSource;
-  final UserLocalDataSource localDataSource;
-  final NetworkInfo networkInfo;
+  final UserRemoteDataSource? remoteDataSource;
+  final UserLocalDataSource? localDataSource;
+  final NetworkInfo? networkInfo;
 
   UserRepositoryImpl({
-    @required this.remoteDataSource,
-    @required this.localDataSource,
-    @required this.networkInfo,
+    required this.remoteDataSource,
+    required this.localDataSource,
+    required this.networkInfo,
   });
 
   @override
-  Future<Either<Failure, User>> getUser({
-    @required String id,
-    @required bool searchLocally,
+  Future<Either<Failure, User?>> getUser({
+    String? id,
+    bool? searchLocally,
   }) async {
     try {
-      if (searchLocally || !await networkInfo.isConnected) {
-        return Right(await localDataSource.getUser(id));
+      if (searchLocally! || !await networkInfo!.isConnected) {
+        return Right(await localDataSource!.getUser(id));
       }
-      final userModel = await remoteDataSource.getUser(id);
-      await localDataSource.saveUser(
+      final userModel = await remoteDataSource!.getUser(id);
+      await localDataSource!.saveUser(
         id: 'currUser',
         user: userModel,
       );
@@ -57,18 +56,18 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<Either<Failure, User>> updateUser({
-    @required String id,
-    String name,
-    String email,
-    List<Organization> organizations,
-    File avatar,
+    String? id,
+    String? name,
+    String? email,
+    List<Organization>? organizations,
+    File? avatar,
   }) async {
     try {
-      if (!await networkInfo.isConnected) {
+      if (!await networkInfo!.isConnected) {
         return Left(NoInternetFailure());
       }
 
-      return Right(await remoteDataSource.updateUser(
+      return Right(await remoteDataSource!.updateUser(
         id: id,
         name: name,
         email: email,

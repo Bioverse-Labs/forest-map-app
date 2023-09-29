@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:meta/meta.dart';
+
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/models/model.dart';
@@ -10,16 +10,16 @@ import '../hive/location.dart';
 class LocationModel extends Location
     implements Model<LocationModel, LocationHive> {
   LocationModel({
-    @required String id,
-    @required double lat,
-    @required double lng,
-    @required DateTime timestamp,
-    double altitude,
-    double accuracy,
-    double heading,
-    int floor,
-    double speed,
-    double speedAccuracy,
+    required String? id,
+    required double? lat,
+    required double? lng,
+    required DateTime? timestamp,
+    double? altitude,
+    double? accuracy,
+    double? heading,
+    int? floor,
+    double? speed,
+    double? speedAccuracy,
   }) : super(
           id: id,
           lat: lat,
@@ -34,8 +34,6 @@ class LocationModel extends Location
         );
 
   factory LocationModel.fromPosition(Position position) {
-    assert(position != null);
-
     return LocationModel(
       id: Uuid().v4(),
       lat: position.latitude,
@@ -51,19 +49,17 @@ class LocationModel extends Location
   }
 
   factory LocationModel.fromMap(Map<String, dynamic> map) {
-    assert(map != null);
-
     return LocationModel(
       id: map['id'],
-      lat: (map['lat'] as num),
-      lng: (map['lng'] as num),
+      lat: (map['lat'] as num?) as double?,
+      lng: (map['lng'] as num?) as double?,
       timestamp: (map['timestamp'] as Timestamp).toDate(),
-      accuracy: (map['accuracy'] as num),
-      altitude: (map['altitude'] as num),
-      floor: (map['floor'] as num),
-      heading: (map['heading'] as num),
-      speed: (map['speed'] as num),
-      speedAccuracy: (map['speedAccuracy'] as num),
+      accuracy: (map['accuracy'] as num?) as double?,
+      altitude: (map['altitude'] as num?) as double?,
+      floor: (map['floor'] as num?) as int?,
+      heading: (map['heading'] as num?) as double?,
+      speed: (map['speed'] as num?) as double?,
+      speedAccuracy: (map['speedAccuracy'] as num?) as double?,
     );
   }
 
@@ -102,7 +98,7 @@ class LocationModel extends Location
         'id': id,
         'lat': lat,
         'lng': lng,
-        'timestamp': Timestamp.fromDate(timestamp),
+        'timestamp': Timestamp.fromDate(timestamp!),
         'accuracy': accuracy,
         'altitude': altitude,
         'floor': floor,
@@ -113,16 +109,16 @@ class LocationModel extends Location
 
   @override
   LocationModel copyWith({
-    String id,
-    double lat,
-    double lng,
-    DateTime timestamp,
-    double altitude,
-    double accuracy,
-    double heading,
-    int floor,
-    double speed,
-    double ccuracy,
+    String? id,
+    double? lat,
+    double? lng,
+    DateTime? timestamp,
+    double? altitude,
+    double? accuracy,
+    double? heading,
+    int? floor,
+    double? speed,
+    double? ccuracy,
   }) {
     return LocationModel(
       id: id ?? this.id,

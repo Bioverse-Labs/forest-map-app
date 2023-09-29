@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/platform/network_info.dart';
 import '../datasources/location_local_data_source.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failure.dart';
@@ -11,20 +10,20 @@ import '../datasources/location_remote_data_source.dart';
 import '../models/location_model.dart';
 
 class LocationRepositoryImpl implements LocationRepository {
-  final LocationRemoteDataSource remoteDataSource;
-  final LocationLocalDataSource localDataSource;
-  final NetworkInfo networkInfo;
+  final LocationRemoteDataSource? remoteDataSource;
+  final LocationLocalDataSource? localDataSource;
+  final NetworkInfo? networkInfo;
 
   LocationRepositoryImpl({
-    @required this.remoteDataSource,
-    @required this.localDataSource,
-    @required this.networkInfo,
+    required this.remoteDataSource,
+    required this.localDataSource,
+    required this.networkInfo,
   });
 
   @override
   Future<Either<Failure, Stream<Location>>> trackUserLocation() async {
     try {
-      final stream = await localDataSource.getPositionStream();
+      final stream = await localDataSource!.getPositionStream();
       return Right(stream);
     } on LocationException catch (error) {
       return Left(LocationFailure(
@@ -45,15 +44,15 @@ class LocationRepositoryImpl implements LocationRepository {
 
   @override
   Future<Either<Failure, void>> saveLocation(
-    String userId,
+    String? userId,
     LocationModel location,
   ) async {
     try {
-      if (!(await networkInfo.isConnected)) {
-        await localDataSource.saveLocation(userId, location);
+      if (!(await networkInfo!.isConnected)) {
+        await localDataSource!.saveLocation(userId, location);
       }
 
-      await remoteDataSource.saveLocation(userId, location);
+      await remoteDataSource!.saveLocation(userId, location);
 
       return Right(null);
     } on ServerException catch (exception) {
@@ -76,7 +75,7 @@ class LocationRepositoryImpl implements LocationRepository {
   @override
   Future<Either<Failure, Location>> getCurrentLocation() async {
     try {
-      final location = await localDataSource.getCurrentLocation();
+      final location = await localDataSource!.getCurrentLocation();
       return Right(location);
     } on LocationException catch (error) {
       return Left(LocationFailure(
@@ -96,14 +95,14 @@ class LocationRepositoryImpl implements LocationRepository {
   }
 
   @override
-  Future<Either<Failure, List<Location>>> getLocations(String userId) async {
+  Future<Either<Failure, List<Location>>> getLocations(String? userId) async {
     try {
-      if (await networkInfo.isConnected) {
-        final remoteLocations = await remoteDataSource.getLocations(userId);
-        await localDataSource.syncLocations(userId, remoteLocations);
+      if (await networkInfo!.isConnected) {
+        final remoteLocations = await remoteDataSource!.getLocations(userId);
+        await localDataSource!.syncLocations(userId, remoteLocations);
       }
 
-      final locations = await localDataSource.getLocations(userId);
+      final locations = await localDataSource!.getLocations(userId);
       return Right(locations);
     } on LocalException catch (error) {
       return Left(LocalFailure(

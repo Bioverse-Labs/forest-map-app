@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:forest_map_app/core/navigation/app_navigator.dart';
-import 'package:forest_map_app/core/util/localized_string.dart';
-import 'package:forest_map_app/core/widgets/screen.dart';
-import 'package:forest_map_app/features/tracking/presentation/notifiers/location_notifier.dart';
+import 'package:forest_map/core/navigation/app_navigator.dart';
+import 'package:forest_map/core/util/localized_string.dart';
+import 'package:forest_map/core/widgets/screen.dart';
+import 'package:forest_map/features/tracking/presentation/notifiers/location_notifier.dart';
 
 class AskLocationScreen extends StatelessWidget {
-  final LocalizedString localizedString;
-  final LocationNotifierImpl locationNotifier;
-  final AppNavigator appNavigator;
+  final LocalizedString? localizedString;
+  final LocationNotifierImpl? locationNotifier;
+  final AppNavigator? appNavigator;
 
   const AskLocationScreen({
-    Key key,
-    @required this.localizedString,
-    @required this.locationNotifier,
-    @required this.appNavigator,
+    Key? key,
+    required this.localizedString,
+    required this.locationNotifier,
+    required this.appNavigator,
   }) : super(key: key);
 
   Future<void> _onSubmit() async {
     try {
-      final location = await locationNotifier.getCurrentLocation();
+      final location = await locationNotifier!.getCurrentLocation();
 
       if (location != null) {
-        appNavigator.pushAndReplace('/');
+        appNavigator!.pushAndReplace('/');
       }
     } catch (error) {}
   }
@@ -30,47 +30,50 @@ class AskLocationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenWidget(
       appBar: AppBar(
-        title: Text(localizedString.getLocalizedString(
+        title: Text(localizedString!.getLocalizedString(
           'ask-location-screen.title',
         )),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Theme.of(context).primaryColor, width: 1),
-                  borderRadius: BorderRadius.circular(60),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Theme.of(context).primaryColor, width: 1),
+                    borderRadius: BorderRadius.circular(60),
+                  ),
+                  child: Icon(Icons.location_on_sharp, size: 80),
                 ),
-                child: Icon(Icons.location_on_sharp, size: 80),
-              ),
-              SizedBox(height: 48),
-              Text(
-                localizedString
-                    .getLocalizedString('ask-location-screen.description'),
-                style: Theme.of(context).textTheme.headline5,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 16),
-              Text(
-                localizedString.getLocalizedString('ask-location-screen.body'),
-                style: Theme.of(context).textTheme.subtitle1,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 24),
-              ElevatedButton(
-                child: Text(localizedString.getLocalizedString(
-                  'ask-location-screen.submit-button',
-                )),
-                onPressed: _onSubmit,
-              ),
-            ],
+                SizedBox(height: 48),
+                Text(
+                  localizedString!
+                      .getLocalizedString('ask-location-screen.description'),
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  localizedString!
+                      .getLocalizedString('ask-location-screen.body'),
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 24),
+                ElevatedButton(
+                  child: Text(localizedString!.getLocalizedString(
+                    'ask-location-screen.submit-button',
+                  )),
+                  onPressed: _onSubmit,
+                ),
+              ],
+            ),
           ),
         ),
       ),

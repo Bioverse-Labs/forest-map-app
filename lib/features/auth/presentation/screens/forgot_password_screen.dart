@@ -10,17 +10,17 @@ import '../notifiers/auth_notifier.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPassworScreen extends StatelessWidget {
-  final AuthNotifierImpl authNotifier;
-  final LocalizedString localizedString;
-  final AppTheme appTheme;
-  final ValidationUtils validationUtils;
-  final NotificationsUtils notificationsUtils;
-  final AppNavigator appNavigator;
+  final AuthNotifierImpl? authNotifier;
+  final LocalizedString? localizedString;
+  final AppTheme? appTheme;
+  final ValidationUtils? validationUtils;
+  final NotificationsUtils? notificationsUtils;
+  final AppNavigator? appNavigator;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _inputCtr = TextEditingController();
 
   ForgotPassworScreen({
-    Key key,
+    Key? key,
     this.authNotifier,
     this.localizedString,
     this.appTheme,
@@ -30,19 +30,19 @@ class ForgotPassworScreen extends StatelessWidget {
   }) : super(key: key);
 
   Future<void> _onSubmit() async {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       try {
-        await authNotifier.forgotPassword(_inputCtr.text);
+        await authNotifier!.forgotPassword(_inputCtr.text);
 
-        notificationsUtils.showSuccessNotification(localizedString
+        notificationsUtils!.showSuccessNotification(localizedString!
             .getLocalizedString('forgot-password-screen.success-message'));
 
-        appNavigator.pop();
+        appNavigator!.pop();
       } catch (error) {
         if (error is ServerFailure) {
-          notificationsUtils.showErrorNotification(error.message);
+          notificationsUtils!.showErrorNotification(error.message);
         } else {
-          notificationsUtils.showErrorNotification(error.toString());
+          notificationsUtils!.showErrorNotification(error.toString());
         }
       }
     }
@@ -55,7 +55,7 @@ class ForgotPassworScreen extends StatelessWidget {
         isLoading: state.isLoading,
         appBar: AppBar(
           title: Text(
-            localizedString.getLocalizedString('forgot-password-screen.title'),
+            localizedString!.getLocalizedString('forgot-password-screen.title'),
           ),
         ),
         body: Padding(
@@ -63,23 +63,23 @@ class ForgotPassworScreen extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                localizedString
+                localizedString!
                     .getLocalizedString('forgot-password-screen.description'),
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
               Form(
                 key: _formKey,
                 child: TextFormField(
                   controller: _inputCtr,
-                  decoration: appTheme.inputDecoration('Email'),
+                  decoration: appTheme!.inputDecoration('Email'),
                   validator: (value) {
-                    if (value.isEmpty) {
-                      return localizedString
+                    if (value!.isEmpty) {
+                      return localizedString!
                           .getLocalizedString('input-validations.required');
                     }
 
-                    if (!validationUtils.validateEmail(value)) {
-                      return localizedString.getLocalizedString(
+                    if (!validationUtils!.validateEmail(value)) {
+                      return localizedString!.getLocalizedString(
                           'input-validations.invalid-email');
                     }
 
@@ -93,7 +93,7 @@ class ForgotPassworScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: _onSubmit,
                   child: Text(
-                    localizedString.getLocalizedString(
+                    localizedString!.getLocalizedString(
                         'forgot-password-screen.submit-button'),
                   ),
                 ),

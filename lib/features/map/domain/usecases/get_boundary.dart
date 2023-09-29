@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
@@ -11,7 +10,7 @@ import '../repositories/geolocation_repository.dart';
 class GetBoundaryParams extends Equatable {
   final Organization organization;
 
-  GetBoundaryParams({@required this.organization});
+  GetBoundaryParams({required this.organization});
 
   @override
   List<Object> get props => throw UnimplementedError();
@@ -19,14 +18,14 @@ class GetBoundaryParams extends Equatable {
 
 class GetBoundary
     implements UseCase<List<GeolocationDataProperties>, GetBoundaryParams> {
-  final GeolocationRepository repository;
+  final GeolocationRepository? repository;
 
-  GetBoundary({@required this.repository});
+  GetBoundary({required this.repository});
 
   @override
   Future<Either<Failure, List<GeolocationDataProperties>>> call(
     GetBoundaryParams params,
   ) {
-    return repository.loadBoundary(params.organization);
+    return repository!.loadBoundary(params.organization);
   }
 }

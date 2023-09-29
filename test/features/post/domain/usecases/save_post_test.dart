@@ -3,8 +3,8 @@
 // import 'package:dartz/dartz.dart';
 // import 'package:faker/faker.dart';
 // import 'package:flutter_test/flutter_test.dart';
-// import 'package:forest_map_app/features/post/domain/repositories/post_repository.dart';
-// import 'package:forest_map_app/features/post/domain/usecases/save_post.dart';
+// import 'package:forest_map/features/post/domain/repositories/post_repository.dart';
+// import 'package:forest_map/features/post/domain/usecases/save_post.dart';
 // import 'package:mockito/mockito.dart';
 
 // class MockPostRepository extends Mock implements PostRepository {}

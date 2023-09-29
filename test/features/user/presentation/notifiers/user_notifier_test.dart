@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/core/enums/exception_origin_types.dart';
-import 'package:forest_map_app/core/errors/failure.dart';
-import 'package:forest_map_app/features/user/domain/entities/user.dart';
-import 'package:forest_map_app/features/user/domain/usecases/get_user.dart';
-import 'package:forest_map_app/features/user/domain/usecases/update_user.dart';
-import 'package:forest_map_app/features/user/presentation/notifiers/user_notifier.dart';
+import 'package:forest_map/core/enums/exception_origin_types.dart';
+import 'package:forest_map/core/errors/failure.dart';
+import 'package:forest_map/features/user/domain/entities/user.dart';
+import 'package:forest_map/features/user/domain/usecases/get_user.dart';
+import 'package:forest_map/features/user/domain/usecases/update_user.dart';
+import 'package:forest_map/features/user/presentation/notifiers/user_notifier.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../../../core/notifiers/change_notifiers.dart';

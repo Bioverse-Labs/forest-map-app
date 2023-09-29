@@ -5,32 +5,32 @@ part 'location.g.dart';
 @HiveType(typeId: 4)
 class LocationHive {
   @HiveField(0)
-  String id;
+  String? id;
 
   @HiveField(1)
-  double lat;
+  double? lat;
 
   @HiveField(2)
-  double lng;
+  double? lng;
 
   @HiveField(3)
-  DateTime timestamp;
+  DateTime? timestamp;
 
   @HiveField(4)
-  double altitude;
+  double? altitude;
 
   @HiveField(5)
-  double accuracy;
+  double? accuracy;
 
   @HiveField(6)
-  double heading;
+  double? heading;
 
   @HiveField(7)
-  int floor;
+  int? floor;
 
   @HiveField(8)
-  double speed;
+  double? speed;
 
   @HiveField(9)
-  double speedAccuracy;
+  double? speedAccuracy;
 }

@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
 
@@ -6,28 +5,29 @@ import '../util/dir.dart';
 
 abstract class DatabaseAdapter {
   Future<Database> openDatabase();
-  Future<List<Map<String, Object>>> runQuery({
-    String table,
-    List<String> columns,
-    String where,
-    List<Object> whereArgs,
-    int limit,
+  Future<List<Map<String, Object?>>> runQuery({
+    String? table,
+    List<String>? columns,
+    String? where,
+    List<Object>? whereArgs,
+    int? limit,
   });
-  Future<List<Map<String, Object>>> runRawQuery(String query);
-  Future<void> insertInBatch({String table, List<Map<String, Object>> fields});
+  Future<List<Map<String, Object?>>> runRawQuery(String query);
+  Future<void> insertInBatch(
+      {String? table, List<Map<String, Object?>>? fields});
 }
 
 class DatabaseAdapterImpl implements DatabaseAdapter {
-  final DirUtils dirUtils;
+  final DirUtils? dirUtils;
   final String dbName = 'forestMap.db';
-  Database db;
+  late Database db;
 
-  DatabaseAdapterImpl({@required this.dirUtils});
+  DatabaseAdapterImpl({required this.dirUtils});
 
   @override
   Future<Database> openDatabase() async {
-    final dbPath = await dirUtils.getDbPath();
-    final database = await sql.openDatabase(dirUtils.join([dbPath, dbName]),
+    final dbPath = await dirUtils!.getDbPath();
+    final database = await sql.openDatabase(dirUtils!.join([dbPath, dbName]),
         version: 1, onCreate: (_db, version) async {
       await _db.execute(
         '''
@@ -51,15 +51,15 @@ class DatabaseAdapterImpl implements DatabaseAdapter {
   }
 
   @override
-  Future<List<Map<String, Object>>> runQuery({
-    @required String table,
-    @required List<String> columns,
-    @required String where,
-    @required List<Object> whereArgs,
-    @required int limit,
+  Future<List<Map<String, Object?>>> runQuery({
+    String? table,
+    List<String>? columns,
+    String? where,
+    List<Object>? whereArgs,
+    int? limit,
   }) async =>
       db.query(
-        table,
+        table!,
         columns: columns,
         where: where,
         whereArgs: whereArgs,
@@ -68,19 +68,19 @@ class DatabaseAdapterImpl implements DatabaseAdapter {
 
   @override
   Future<void> insertInBatch({
-    String table,
-    List<Map<String, Object>> fields,
+    String? table,
+    List<Map<String, Object?>>? fields,
   }) async {
     final batch = db.batch();
 
-    for (var field in fields) {
-      batch.insert(table, field);
+    for (var field in fields!) {
+      batch.insert(table!, field);
     }
 
     await batch.commit(noResult: true);
   }
 
   @override
-  Future<List<Map<String, Object>>> runRawQuery(String query) async =>
+  Future<List<Map<String, Object?>>> runRawQuery(String query) async =>
       db.rawQuery(query);
 }

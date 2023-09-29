@@ -1,9 +1,9 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/core/adapters/hive_adapter.dart';
-import 'package:forest_map_app/features/user/data/datasource/user_local_data_source.dart';
-import 'package:forest_map_app/features/user/data/hive/user.dart';
-import 'package:forest_map_app/features/user/data/models/user_model.dart';
+import 'package:forest_map/core/adapters/hive_adapter.dart';
+import 'package:forest_map/features/user/data/datasource/user_local_data_source.dart';
+import 'package:forest_map/features/user/data/hive/user.dart';
+import 'package:forest_map/features/user/data/models/user_model.dart';
 import 'package:mockito/mockito.dart';
 
 class MockHiveAdapter extends Mock implements HiveAdapter<UserHive> {}

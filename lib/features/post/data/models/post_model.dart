@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../catalog/data/catalog.dart';
 import '../../../catalog/domain/entities/catalog.dart';
 import '../hive/pending_post.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../core/models/model.dart';
 import '../../../tracking/data/models/location_model.dart';
@@ -12,13 +11,13 @@ import '../hive/post.dart';
 
 class PostModel extends Post implements Model<PostModel, PostHive> {
   PostModel({
-    @required String id,
-    @required String imageUrl,
-    @required DateTime timestamp,
-    @required Location location,
-    @required String userId,
-    @required String organizationId,
-    @required Catalog category,
+    required String? id,
+    required String? imageUrl,
+    required DateTime? timestamp,
+    required Location location,
+    required String? userId,
+    required String? organizationId,
+    required Catalog? category,
   }) : super(
           id: id,
           userId: userId,
@@ -48,7 +47,7 @@ class PostModel extends Post implements Model<PostModel, PostHive> {
         ),
         userId: map['userId'],
         organizationId: map['organizationId'],
-        category: catalogList[map['categoryId'] as num]);
+        category: catalogList[map['categoryId'] as num?]);
   }
 
   factory PostModel.fromHive(dynamic postHive) {
@@ -77,13 +76,13 @@ class PostModel extends Post implements Model<PostModel, PostHive> {
 
   @override
   PostModel copyWith({
-    String id,
-    String imageUrl,
-    DateTime timestamp,
-    Location location,
-    String userId,
-    String organizationId,
-    Catalog category,
+    String? id,
+    String? imageUrl,
+    DateTime? timestamp,
+    Location? location,
+    String? userId,
+    String? organizationId,
+    Catalog? category,
   }) {
     return PostModel(
       id: id ?? this.id,
@@ -104,9 +103,9 @@ class PostModel extends Post implements Model<PostModel, PostHive> {
       ..imageUrl = imageUrl
       ..timestamp = timestamp
       ..location = LocationModel.fromEntity(location).toHiveAdapter()
-      ..categoryId = category.id
+      ..categoryId = category!.id
       ..organizationId = organizationId
-      ..specie = category.scientificName;
+      ..specie = category!.scientificName;
   }
 
   PendingPostHive toPendingPostHiveAdapter() {
@@ -116,21 +115,21 @@ class PostModel extends Post implements Model<PostModel, PostHive> {
       ..imageUrl = imageUrl
       ..timestamp = timestamp
       ..location = LocationModel.fromEntity(location).toHiveAdapter()
-      ..categoryId = category.id
+      ..categoryId = category!.id
       ..organizationId = organizationId
-      ..specie = category.scientificName;
+      ..specie = category!.scientificName;
   }
 
   @override
   Map<String, dynamic> toMap() => {
         ...LocationModel.fromEntity(location).toMap(),
         'id': id,
-        'specie': category.scientificName,
-        'name': category.name,
+        'specie': category!.scientificName,
+        'name': category!.name,
         'imageUrl': imageUrl,
-        'timestamp': Timestamp.fromDate(timestamp),
+        'timestamp': Timestamp.fromDate(timestamp!),
         'userId': userId,
-        'categoryId': category.id,
+        'categoryId': category!.id,
         ...(location as LocationModel).toMap(),
       };
 }

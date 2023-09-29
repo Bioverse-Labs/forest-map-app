@@ -12,30 +12,30 @@ abstract class OrganizationInviteNotifier {
 
 class OrganizationInviteNotifierImpl extends ChangeNotifier
     implements OrganizationInviteNotifier {
-  final GetOrganization getOrganizationUseCase;
-  final AddMember addMemberUseCase;
+  final GetOrganization? getOrganizationUseCase;
+  final AddMember? addMemberUseCase;
 
-  Organization _organization;
-  String _orgId;
+  Organization? _organization;
+  String? _orgId;
   bool _loading = false;
   bool _showInviteScreen = false;
 
-  Organization get organization => _organization;
-  String get organizationId => _orgId;
+  Organization? get organization => _organization;
+  String? get organizationId => _orgId;
   bool get isLoading => _loading;
   bool get showScreen => _showInviteScreen;
 
   OrganizationInviteNotifierImpl({
-    @required this.getOrganizationUseCase,
-    @required this.addMemberUseCase,
+    required this.getOrganizationUseCase,
+    required this.addMemberUseCase,
   });
 
   @override
-  Future<void> acceptInvite(String id, User user) async {
+  Future<void> acceptInvite(String? id, User? user) async {
     _loading = true;
     notifyListeners();
 
-    final failureOrOrganization = await addMemberUseCase(
+    final failureOrOrganization = await addMemberUseCase!(
       AddMemberParams(id: id, user: user),
     );
 
@@ -52,11 +52,11 @@ class OrganizationInviteNotifierImpl extends ChangeNotifier
   }
 
   @override
-  Future<void> getOrganization(String id) async {
+  Future<void> getOrganization(String? id) async {
     _loading = true;
     notifyListeners();
 
-    final failureOrOrganization = await getOrganizationUseCase(
+    final failureOrOrganization = await getOrganizationUseCase!(
       GetOrganizationParams(
         id: id,
         searchLocally: false,
@@ -75,7 +75,7 @@ class OrganizationInviteNotifierImpl extends ChangeNotifier
     );
   }
 
-  void setOrgId(String orgId) {
+  void setOrgId(String? orgId) {
     _orgId = orgId;
     _showInviteScreen = true;
     notifyListeners();

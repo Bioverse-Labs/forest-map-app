@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 import '../../../../core/models/model.dart';
 import '../../domain/entities/member.dart';
 import '../../domain/entities/organization.dart';
@@ -9,13 +7,13 @@ import 'member_model.dart';
 class OrganizationModel extends Organization
     implements Model<OrganizationModel, OrganizationHive> {
   OrganizationModel({
-    @required id,
-    @required name,
-    @required email,
+    required id,
+    required name,
+    required email,
     phone,
     avatarUrl,
-    List<Member> members,
-    List<String> geolocationData,
+    List<Member>? members,
+    List<String>? geolocationData,
   }) : super(
           id: id,
           name: name,
@@ -34,14 +32,13 @@ class OrganizationModel extends Organization
       phone: map['phone'],
       avatarUrl: map['avatarUrl'],
       members: map['members'],
-      geolocationData: map['geolocationData'] as List<String>,
+      geolocationData: map['geolocationData'] as List<String>?,
     );
   }
 
   factory OrganizationModel.fromHive(OrganizationHive orgHive) {
-    final _members = orgHive?.members
-        ?.map((member) => MemberModel.fromHive(member))
-        ?.toList();
+    final _members =
+        orgHive.members?.map((member) => MemberModel.fromHive(member)).toList();
 
     return OrganizationModel(
       id: orgHive.id,
@@ -85,20 +82,20 @@ class OrganizationModel extends Organization
       ..avatarUrl = avatarUrl
       ..members = members
               ?.map((member) => MemberModel.fromEntity(member).toHiveAdapter())
-              ?.toList() ??
+              .toList() ??
           []
       ..geolocationData = geolocationData;
   }
 
   @override
   OrganizationModel copyWith({
-    String id,
-    String name,
-    String email,
-    String phone,
-    String avatarUrl,
-    List<Member> members,
-    List<String> geolocationData,
+    String? id,
+    String? name,
+    String? email,
+    String? phone,
+    String? avatarUrl,
+    List<Member>? members,
+    List<String>? geolocationData,
   }) =>
       OrganizationModel(
         id: id ?? this.id,

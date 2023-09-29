@@ -17,13 +17,13 @@ class OrganizationHiveAdapter extends TypeAdapter<OrganizationHive> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return OrganizationHive()
-      ..id = fields[0] as String
-      ..name = fields[1] as String
-      ..email = fields[2] as String
-      ..phone = fields[3] as String
-      ..avatarUrl = fields[4] as String
-      ..members = (fields[5] as List)?.cast<MemberHive>()
-      ..geolocationData = (fields[6] as List)?.cast<String>();
+      ..id = fields[0] as String?
+      ..name = fields[1] as String?
+      ..email = fields[2] as String?
+      ..phone = fields[3] as String?
+      ..avatarUrl = fields[4] as String?
+      ..members = (fields[5] as List?)?.cast<MemberHive>()
+      ..geolocationData = (fields[6] as List?)?.cast<String>();
   }
 
   @override

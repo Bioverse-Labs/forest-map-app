@@ -15,18 +15,18 @@ class OrganizationInviteScreen extends StatefulWidget {
   final OrganizationInviteNotifierImpl organizationInviteNotifier;
   final OrganizationNotifierImpl organizationNotifier;
   final UserNotifierImpl userNotifier;
-  final NotificationsUtils notificationsUtils;
-  final LocalizedString localizedString;
-  final AppNavigator appNavigator;
+  final NotificationsUtils? notificationsUtils;
+  final LocalizedString? localizedString;
+  final AppNavigator? appNavigator;
 
   const OrganizationInviteScreen({
-    Key key,
-    @required this.organizationInviteNotifier,
-    @required this.organizationNotifier,
-    @required this.userNotifier,
-    @required this.notificationsUtils,
-    @required this.localizedString,
-    @required this.appNavigator,
+    Key? key,
+    required this.organizationInviteNotifier,
+    required this.organizationNotifier,
+    required this.userNotifier,
+    required this.notificationsUtils,
+    required this.localizedString,
+    required this.appNavigator,
   }) : super(key: key);
 
   @override
@@ -47,7 +47,7 @@ class _OrganizationInviteScreenState extends State<OrganizationInviteScreen> {
             widget.organizationInviteNotifier.organizationId,
           );
         } on ServerFailure catch (failure) {
-          widget.notificationsUtils.showErrorNotification(failure.message);
+          widget.notificationsUtils!.showErrorNotification(failure.message);
         }
       },
     );
@@ -56,7 +56,7 @@ class _OrganizationInviteScreenState extends State<OrganizationInviteScreen> {
   Future<void> _acceptInvite() async {
     try {
       await widget.organizationInviteNotifier.acceptInvite(
-        widget.organizationInviteNotifier.organization.id,
+        widget.organizationInviteNotifier.organization!.id,
         widget.userNotifier.user,
       );
 
@@ -66,15 +66,15 @@ class _OrganizationInviteScreenState extends State<OrganizationInviteScreen> {
       );
 
       await widget.userNotifier.getUser(
-        id: widget.userNotifier.user.id,
+        id: widget.userNotifier.user!.id,
         searchLocally: false,
       );
 
-      widget.appNavigator.pop();
+      widget.appNavigator!.pop();
     } on ServerFailure catch (failure) {
-      widget.notificationsUtils.showErrorNotification(failure.message);
+      widget.notificationsUtils!.showErrorNotification(failure.message);
     } on LocalFailure catch (failure) {
-      widget.notificationsUtils.showErrorNotification(failure.message);
+      widget.notificationsUtils!.showErrorNotification(failure.message);
     }
   }
 
@@ -83,7 +83,7 @@ class _OrganizationInviteScreenState extends State<OrganizationInviteScreen> {
     return ScreenWidget(
       appBar: AppBar(
         title: Text(
-          widget.localizedString.getLocalizedString(
+          widget.localizedString!.getLocalizedString(
             'organization-invite-screen.title',
           ),
         ),
@@ -103,17 +103,17 @@ class _OrganizationInviteScreenState extends State<OrganizationInviteScreen> {
               children: [
                 SizedBox(height: 16),
                 Text(
-                  widget.localizedString.getLocalizedString(
+                  widget.localizedString!.getLocalizedString(
                     'organization-invite-screen.description',
                   ),
-                  style: Theme.of(context).textTheme.headline5,
+                  style: Theme.of(context).textTheme.headlineSmall,
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _acceptInvite,
                   child: Text(
-                    widget.localizedString.getLocalizedString(
+                    widget.localizedString!.getLocalizedString(
                       'organization-invite-screen.button',
                     ),
                   ),

@@ -11,9 +11,9 @@ abstract class GeolocationRepository {
     Organization organization,
   );
   Future<Either<Failure, List<GeolocationDataProperties>>> getPoints({
-    Organization organization,
-    double latitude,
-    double longitude,
+    Organization? organization,
+    required double latitude,
+    required double longitude,
   });
   Future<Either<Failure, List<GeolocationDataProperties>>> loadBoundary(
     Organization organization,
@@ -22,6 +22,6 @@ abstract class GeolocationRepository {
     Organization organization,
   );
   Future<Either<Failure, List<GeolocationDataProperties>>> getFirstPoint({
-    Organization organization,
+    Organization? organization,
   });
 }

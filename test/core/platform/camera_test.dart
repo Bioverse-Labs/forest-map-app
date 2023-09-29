@@ -2,9 +2,9 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:dartz/dartz.dart';
-import 'package:forest_map_app/core/errors/failure.dart';
-import 'package:forest_map_app/core/platform/camera.dart';
-import 'package:forest_map_app/core/util/image.dart';
+import 'package:forest_map/core/errors/failure.dart';
+import 'package:forest_map/core/platform/camera.dart';
+import 'package:forest_map/core/util/image.dart';
 import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mockito/mockito.dart';

@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../../core/enums/social_login_types.dart';
+import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../../user/domain/entities/user.dart';
 import '../../domain/usecases/forgot_password.dart';
@@ -18,11 +22,11 @@ abstract class AuthNotifier {
 }
 
 class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
-  final SignInWithEmailAndPassword signInWithEmailAndPasswordUseCase;
-  final SignInWithSocial signInWithSocialUseCase;
-  final SignUp signUpUseCase;
-  final SignOut signOutUseCase;
-  final ForgotPassword forgotPasswordUseCase;
+  final SignInWithEmailAndPassword? signInWithEmailAndPasswordUseCase;
+  final SignInWithSocial? signInWithSocialUseCase;
+  final SignUp? signUpUseCase;
+  final SignOut? signOutUseCase;
+  final ForgotPassword? forgotPasswordUseCase;
   bool _loading = false;
 
   bool get isLoading => _loading;
@@ -40,7 +44,7 @@ class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
     this._loading = true;
     notifyListeners();
 
-    final failureOrUser = await signInWithEmailAndPasswordUseCase(
+    final failureOrUser = await signInWithEmailAndPasswordUseCase!(
       SignInWithEmailAndPasswordParams(email, password),
     );
 
@@ -61,7 +65,7 @@ class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
     notifyListeners();
 
     final failureOrUser =
-        await signInWithSocialUseCase(SignInWithSocialParams(type));
+        await signInWithSocialUseCase!(SignInWithSocialParams(type));
 
     this._loading = false;
     notifyListeners();
@@ -80,7 +84,7 @@ class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
     notifyListeners();
 
     final failureOrUser =
-        await signUpUseCase(SignUpParams(name, email, password));
+        await signUpUseCase!(SignUpParams(name, email, password));
 
     this._loading = false;
     notifyListeners();
@@ -95,7 +99,8 @@ class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
 
   @override
   Future<void> signOut() async {
-    final failureOrVoid = await signOutUseCase(NoParams());
+    final Either<Failure, void>? failureOrVoid =
+        await signOutUseCase!(NoParams());
 
     failureOrVoid?.fold(
       (failure) => throw failure,
@@ -108,8 +113,8 @@ class AuthNotifierImpl extends ChangeNotifier implements AuthNotifier {
     this._loading = true;
     notifyListeners();
 
-    final failureOrVoid =
-        await forgotPasswordUseCase(ForgotPasswordParams(email));
+    final Either<Failure, void>? failureOrVoid =
+        await forgotPasswordUseCase!(ForgotPasswordParams(email));
 
     this._loading = false;
     notifyListeners();

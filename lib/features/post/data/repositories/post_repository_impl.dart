@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/errors/exceptions.dart';
@@ -19,49 +17,49 @@ import '../datasources/post_remote_data_source.dart';
 import '../models/post_model.dart';
 
 class PostRepositoryImpl implements PostRepository {
-  final PostRemoteDataSource remoteDataSource;
-  final PostLocalDataSource localDataSource;
-  final NetworkInfo networkInfo;
-  final LocationUtils locationUtils;
-  final UUIDGenerator uuidGenerator;
+  final PostRemoteDataSource? remoteDataSource;
+  final PostLocalDataSource? localDataSource;
+  final NetworkInfo? networkInfo;
+  final LocationUtils? locationUtils;
+  final UUIDGenerator? uuidGenerator;
 
   PostRepositoryImpl({
-    @required this.remoteDataSource,
-    @required this.localDataSource,
-    @required this.networkInfo,
-    @required this.locationUtils,
-    @required this.uuidGenerator,
+    required this.remoteDataSource,
+    required this.localDataSource,
+    required this.networkInfo,
+    required this.locationUtils,
+    required this.uuidGenerator,
   });
 
   @override
   Future<Either<Failure, List<Post>>> savePost({
-    @required String organizationId,
-    @required String userId,
-    @required File file,
-    @required Catalog category,
+    String? organizationId,
+    String? userId,
+    File? file,
+    Catalog? category,
   }) async {
     try {
-      final hasPermission = await locationUtils.checkLocationPermission();
-      final location = await locationUtils.getCurrentPosition(hasPermission);
+      final hasPermission = await locationUtils!.checkLocationPermission();
+      final location = await locationUtils!.getCurrentPosition(hasPermission);
       final post = PostModel(
-        id: uuidGenerator.generateUID(),
+        id: uuidGenerator!.generateUID(),
         userId: userId,
         organizationId: organizationId,
-        imageUrl: file.path,
+        imageUrl: file!.path,
         location: location,
         timestamp: DateTime.now(),
         category: category,
       );
 
-      if (!await networkInfo.isConnected) {
-        await localDataSource.savePost(post, isPendingPost: true);
+      if (!await networkInfo!.isConnected) {
+        await localDataSource!.savePost(post, isPendingPost: true);
       } else {
-        await localDataSource.savePost(post);
-        await remoteDataSource.savePost(post);
+        await localDataSource!.savePost(post);
+        await remoteDataSource!.savePost(post);
       }
 
-      final localPosts = await localDataSource.getAllOrgPosts(organizationId);
-      final localPendingPosts = await localDataSource.getAllOrgPosts(
+      final localPosts = await localDataSource!.getAllOrgPosts(organizationId);
+      final localPendingPosts = await localDataSource!.getAllOrgPosts(
         organizationId,
         isPendingPost: true,
       );
@@ -94,7 +92,7 @@ class PostRepositoryImpl implements PostRepository {
   Future<Either<Failure, StreamController<Either<Failure, Post>>>>
       uploadCachedPost() async {
     try {
-      final posts = await localDataSource.getAllPosts(isPendingPost: true);
+      final posts = await localDataSource!.getAllPosts(isPendingPost: true);
       // ignore: close_sinks
       final streamController = StreamController<Either<Failure, Post>>();
 
@@ -103,12 +101,12 @@ class PostRepositoryImpl implements PostRepository {
           (failureOrBool) => failureOrBool.fold(
             (failure) {
               if (!streamController.isClosed) {
-                streamController?.sink?.add(Left(failure));
+                streamController.sink.add(Left(failure));
               }
             },
             (resp) {
               if (!streamController.isClosed) {
-                streamController?.sink?.add(Right(resp));
+                streamController.sink.add(Right(resp));
               }
             },
           ),
@@ -134,14 +132,14 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   Future<Either<Failure, Post>> _uploadInIsolate(PostModel post) async {
-    if (!await networkInfo.isConnected) {
+    if (!await networkInfo!.isConnected) {
       return Left(NoInternetFailure());
     }
 
     try {
-      await remoteDataSource.savePost(post);
-      await localDataSource.deletePost(post?.id, isPendingPost: true);
-      await localDataSource.savePost(post);
+      await remoteDataSource!.savePost(post);
+      await localDataSource!.deletePost(post.id, isPendingPost: true);
+      await localDataSource!.savePost(post);
 
       return Right(post);
     } on ServerException catch (exception) {
@@ -166,21 +164,21 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, List<Post>>> getPosts({String orgId}) async {
+  Future<Either<Failure, List<Post>>> getPosts({String? orgId}) async {
     try {
-      final localPosts = await localDataSource.getAllOrgPosts(orgId);
-      final localPendingPosts = await localDataSource.getAllOrgPosts(
+      final localPosts = await localDataSource!.getAllOrgPosts(orgId);
+      final localPendingPosts = await localDataSource!.getAllOrgPosts(
         orgId,
         isPendingPost: true,
       );
 
-      if (!await networkInfo.isConnected) {
+      if (!await networkInfo!.isConnected) {
         return Right([...localPosts, ...localPendingPosts]);
       }
 
-      final remotePosts = await remoteDataSource.getPosts(orgId: orgId);
+      final remotePosts = await remoteDataSource!.getPosts(orgId: orgId);
 
-      await localDataSource.syncPosts(remotePosts);
+      await localDataSource!.syncPosts(remotePosts);
 
       return Right([...localPendingPosts, ...remotePosts]);
     } on LocalException catch (exception) {

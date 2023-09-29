@@ -1,14 +1,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/core/enums/exception_origin_types.dart';
-import 'package:forest_map_app/core/errors/exceptions.dart';
-import 'package:forest_map_app/core/errors/failure.dart';
-import 'package:forest_map_app/core/platform/network_info.dart';
-import 'package:forest_map_app/features/user/data/datasource/user_local_data_source.dart';
-import 'package:forest_map_app/features/user/data/datasource/user_remote_data_source.dart';
-import 'package:forest_map_app/features/user/data/models/user_model.dart';
-import 'package:forest_map_app/features/user/data/repository/user_repository_impl.dart';
+import 'package:forest_map/core/enums/exception_origin_types.dart';
+import 'package:forest_map/core/errors/exceptions.dart';
+import 'package:forest_map/core/errors/failure.dart';
+import 'package:forest_map/core/platform/network_info.dart';
+import 'package:forest_map/features/user/data/datasource/user_local_data_source.dart';
+import 'package:forest_map/features/user/data/datasource/user_remote_data_source.dart';
+import 'package:forest_map/features/user/data/models/user_model.dart';
+import 'package:forest_map/features/user/data/repository/user_repository_impl.dart';
 import 'package:mockito/mockito.dart';
 
 class MockUserRemoteDataSource extends Mock implements UserRemoteDataSource {}

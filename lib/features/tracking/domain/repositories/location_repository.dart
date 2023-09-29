@@ -8,11 +8,11 @@ abstract class LocationRepository {
   Future<Either<Failure, Stream<Location>>> trackUserLocation();
 
   Future<Either<Failure, void>> saveLocation(
-    String userId,
+    String? userId,
     LocationModel location,
   );
 
   Future<Either<Failure, Location>> getCurrentLocation();
 
-  Future<Either<Failure, List<Location>>> getLocations(String userId);
+  Future<Either<Failure, List<Location>>> getLocations(String? userId);
 }

@@ -7,13 +7,13 @@ import '../../../../core/style/theme.dart';
 import '../notifier/post_notifier.dart';
 
 class CachedPostUploadModal extends StatefulWidget {
-  final AppTheme appTheme;
+  final AppTheme? appTheme;
   final Size size;
 
   const CachedPostUploadModal({
-    Key key,
-    @required this.appTheme,
-    @required this.size,
+    Key? key,
+    required this.appTheme,
+    required this.size,
   }) : super(key: key);
 
   @override
@@ -22,14 +22,14 @@ class CachedPostUploadModal extends StatefulWidget {
 
 class _CachedPostUploadModalState extends State<CachedPostUploadModal>
     with TickerProviderStateMixin {
-  AnimationController _animationController;
-  Animation<double> _widthTween;
-  Animation<double> _heightTween;
-  Animation<double> _contentWidthTween;
-  Animation<double> _contentHeightTween;
-  Animation<double> _borderRadiusTween;
-  Animation<double> _paddingTween;
-  Animation<double> _opacityTween;
+  AnimationController? _animationController;
+  late Animation<double> _widthTween;
+  late Animation<double> _heightTween;
+  late Animation<double> _contentWidthTween;
+  late Animation<double> _contentHeightTween;
+  late Animation<double> _borderRadiusTween;
+  late Animation<double> _paddingTween;
+  late Animation<double> _opacityTween;
   bool _isExpanded = true;
 
   @override
@@ -43,7 +43,7 @@ class _CachedPostUploadModalState extends State<CachedPostUploadModal>
       begin: widget.size.width - 32,
       end: 36,
     ).animate(CurvedAnimation(
-      parent: _animationController,
+      parent: _animationController!,
       curve: Curves.easeInOut,
     ))
       ..addListener(() {
@@ -54,7 +54,7 @@ class _CachedPostUploadModalState extends State<CachedPostUploadModal>
       begin: 82,
       end: 36,
     ).animate(CurvedAnimation(
-      parent: _animationController,
+      parent: _animationController!,
       curve: Curves.easeInOut,
     ))
       ..addListener(() {
@@ -65,7 +65,7 @@ class _CachedPostUploadModalState extends State<CachedPostUploadModal>
       begin: widget.size.width - 64,
       end: 0,
     ).animate(CurvedAnimation(
-      parent: _animationController,
+      parent: _animationController!,
       curve: Curves.easeInOut,
     ))
       ..addListener(() {
@@ -76,7 +76,7 @@ class _CachedPostUploadModalState extends State<CachedPostUploadModal>
       begin: 50,
       end: 0,
     ).animate(CurvedAnimation(
-      parent: _animationController,
+      parent: _animationController!,
       curve: Curves.easeInOut,
     ))
       ..addListener(() {
@@ -87,7 +87,7 @@ class _CachedPostUploadModalState extends State<CachedPostUploadModal>
       begin: 8,
       end: 35,
     ).animate(CurvedAnimation(
-      parent: _animationController,
+      parent: _animationController!,
       curve: Curves.easeInOut,
     ))
       ..addListener(() {
@@ -98,7 +98,7 @@ class _CachedPostUploadModalState extends State<CachedPostUploadModal>
       begin: 16,
       end: 4,
     ).animate(CurvedAnimation(
-      parent: _animationController,
+      parent: _animationController!,
       curve: Curves.easeInOut,
     ))
       ..addListener(() {
@@ -109,7 +109,7 @@ class _CachedPostUploadModalState extends State<CachedPostUploadModal>
       begin: 1,
       end: 0,
     ).animate(CurvedAnimation(
-      parent: _animationController,
+      parent: _animationController!,
       curve: Curves.decelerate,
     ))
       ..addListener(() {
@@ -119,7 +119,7 @@ class _CachedPostUploadModalState extends State<CachedPostUploadModal>
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         _isExpanded = false;
-        _animationController.forward();
+        _animationController!.forward();
       }
     });
   }
@@ -139,12 +139,12 @@ class _CachedPostUploadModalState extends State<CachedPostUploadModal>
           setState(() {
             _isExpanded = false;
           });
-          _animationController.forward();
+          _animationController!.forward();
         } else {
           setState(() {
             _isExpanded = true;
           });
-          _animationController.reverse();
+          _animationController!.reverse();
         }
       },
       child: Container(
@@ -192,7 +192,7 @@ class _CachedPostUploadModalState extends State<CachedPostUploadModal>
                         builder: (ctx, state, _) {
                           return Text(
                             'Uploading cached data.... ${state.postsAmount}/${state.cachedPostsAmount}',
-                            style: Theme.of(context).textTheme.headline6,
+                            style: Theme.of(context).textTheme.titleLarge,
                           );
                         },
                       ),

@@ -1,7 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/features/organization/data/hive/organization.dart';
-import 'package:forest_map_app/features/organization/data/models/organization_model.dart';
+import 'package:forest_map/features/organization/data/hive/organization.dart';
+import 'package:forest_map/features/organization/data/models/organization_model.dart';
 
 void main() {
   final tId = faker.guid.guid();

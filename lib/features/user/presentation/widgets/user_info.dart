@@ -6,13 +6,13 @@ import '../../../../core/widgets/text_with_label.dart';
 import '../../domain/entities/user.dart';
 
 class UserInfo extends StatelessWidget {
-  final User user;
-  final LocalizedString localizedString;
-  final Function onAvatarPress;
+  final User? user;
+  final LocalizedString? localizedString;
+  final Function? onAvatarPress;
 
   const UserInfo({
-    Key key,
-    @required this.user,
+    Key? key,
+    required this.user,
     this.localizedString,
     this.onAvatarPress,
   }) : super(key: key);
@@ -24,7 +24,7 @@ class UserInfo extends StatelessWidget {
       child: Column(
         children: [
           GestureDetector(
-            onTap: onAvatarPress,
+            onTap: onAvatarPress as void Function()?,
             child: Avatar(
               url: user?.avatarUrl,
               canEdit: true,
@@ -34,7 +34,7 @@ class UserInfo extends StatelessWidget {
           if (user?.name != null)
             Text(
               user?.name ?? '',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
@@ -43,12 +43,12 @@ class UserInfo extends StatelessWidget {
           ListBody(
             children: [
               TextWithLabel(
-                label: localizedString.getLocalizedString('labels.email'),
+                label: localizedString!.getLocalizedString('labels.email'),
                 value: user?.email ?? '',
               ),
               SizedBox(height: 8),
               TextWithLabel(
-                label: localizedString.getLocalizedString(
+                label: localizedString!.getLocalizedString(
                   'profile-screen.organization-counter',
                 ),
                 value: user?.organizations?.length.toString() ?? '',

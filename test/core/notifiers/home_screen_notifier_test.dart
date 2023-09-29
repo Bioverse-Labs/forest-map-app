@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/core/notifiers/home_screen_notifier.dart';
+import 'package:forest_map/core/notifiers/home_screen_notifier.dart';
 
 import 'change_notifiers.dart';
 

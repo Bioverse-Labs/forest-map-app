@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import '../../domain/usecases/get_first_point.dart';
 
@@ -12,20 +11,20 @@ import '../../domain/usecases/get_villages.dart';
 abstract class MapNotifier {
   Future<void> downloadGeoData(Organization organization);
   Future<void> getGeoData({
-    @required Organization organization,
-    @required double latitude,
-    @required double longitude,
+    required Organization organization,
+    required double latitude,
+    required double longitude,
   });
   Future<void> getBoundary(Organization organization);
   Future<void> getVillages(Organization organization);
 }
 
 class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
-  final DownloadGeoData downloadGeoDataUseCase;
-  final GetGeolocationData getGeolocationDataUseCase;
-  final GetFirstPoint getFirstPointUseCase;
-  final GetBoundary getBoundaryUseCase;
-  final GetVillages getVillagesUseCase;
+  final DownloadGeoData? downloadGeoDataUseCase;
+  final GetGeolocationData? getGeolocationDataUseCase;
+  final GetFirstPoint? getFirstPointUseCase;
+  final GetBoundary? getBoundaryUseCase;
+  final GetVillages? getVillagesUseCase;
 
   bool isLoading = true;
   bool isQuerying = false;
@@ -35,11 +34,11 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
   List<GeolocationDataProperties> geodata = [];
 
   MapNotifierImpl({
-    @required this.downloadGeoDataUseCase,
-    @required this.getGeolocationDataUseCase,
-    @required this.getFirstPointUseCase,
-    @required this.getBoundaryUseCase,
-    @required this.getVillagesUseCase,
+    required this.downloadGeoDataUseCase,
+    required this.getGeolocationDataUseCase,
+    required this.getFirstPointUseCase,
+    required this.getBoundaryUseCase,
+    required this.getVillagesUseCase,
   });
 
   @override
@@ -49,7 +48,7 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
     isLoading = true;
     notifyListeners();
 
-    final result = await downloadGeoDataUseCase(DownloadGeoDataParams(
+    final result = await downloadGeoDataUseCase!(DownloadGeoDataParams(
       organization: organization,
     ));
 
@@ -61,7 +60,7 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
         throw failure;
       },
       (_) async {
-        final failureOrFirstPoints = await getFirstPointUseCase(
+        final failureOrFirstPoints = await getFirstPointUseCase!(
           GetFirstPointParams(
             organization: organization,
           ),
@@ -83,15 +82,15 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
 
   @override
   Future<void> getGeoData({
-    @required Organization organization,
-    @required double latitude,
-    @required double longitude,
+    Organization? organization,
+    required double latitude,
+    required double longitude,
   }) async {
     if (!isQuerying) {
       isQuerying = true;
       notifyListeners();
 
-      final failureOrGeoData = await getGeolocationDataUseCase(
+      final failureOrGeoData = await getGeolocationDataUseCase!(
         GetGeolocationDataParams(
           organization: organization,
           latitude: latitude,
@@ -110,8 +109,6 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
         },
       );
     }
-
-    return Right([]);
   }
 
   @override
@@ -119,7 +116,7 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
     isLoading = true;
     notifyListeners();
 
-    final failureOrBoundary = await getBoundaryUseCase(GetBoundaryParams(
+    final failureOrBoundary = await getBoundaryUseCase!(GetBoundaryParams(
       organization: organization,
     ));
 
@@ -140,7 +137,7 @@ class MapNotifierImpl extends ChangeNotifier implements MapNotifier {
     isLoading = true;
     notifyListeners();
 
-    final failureOrBoundary = await getVillagesUseCase(GetVillagesParams(
+    final failureOrBoundary = await getVillagesUseCase!(GetVillagesParams(
       organization: organization,
     ));
 

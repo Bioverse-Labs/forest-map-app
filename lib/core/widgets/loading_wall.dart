@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoadingWall extends StatelessWidget {
-  const LoadingWall({Key key}) : super(key: key);
+  const LoadingWall({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

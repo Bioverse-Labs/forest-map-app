@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class NotificationWidget extends StatelessWidget {
-  final String message;
-  final Function onCancel;
+  final String? message;
+  final Function? onCancel;
   final Color textColor;
   final Color backgroundColor;
   final IconData icon;
 
   NotificationWidget({
-    Key key,
+    Key? key,
     this.message,
     this.onCancel,
     this.textColor = Colors.black,
@@ -16,7 +16,7 @@ class NotificationWidget extends StatelessWidget {
     this.icon = Icons.info_outline,
   }) : super(key: key);
 
-  factory NotificationWidget.error(String message, Function onCancel) {
+  factory NotificationWidget.error(String? message, Function onCancel) {
     return NotificationWidget(
       message: message,
       onCancel: onCancel,
@@ -63,13 +63,13 @@ class NotificationWidget extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Text(
-                  message,
+                  message!,
                   style: TextStyle(color: textColor, fontSize: 18),
                 ),
               ),
               SizedBox(width: 8),
               GestureDetector(
-                onTap: onCancel,
+                onTap: onCancel as void Function()?,
                 child: Icon(Icons.close, color: textColor),
               ),
             ],

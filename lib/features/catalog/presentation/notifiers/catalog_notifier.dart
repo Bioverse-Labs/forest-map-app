@@ -8,10 +8,10 @@ abstract class CatalogNotifier {
 }
 
 class CatalogNotifierImpl extends ChangeNotifier implements CatalogNotifier {
-  int _index;
+  int? _index;
   Map<int, Catalog> items = catalogList;
 
-  int get currentIndex => _index;
+  int? get currentIndex => _index;
 
   @override
   void setState(int index) {

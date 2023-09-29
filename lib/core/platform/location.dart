@@ -16,8 +16,8 @@ abstract class LocationUtils {
 }
 
 class LocationUtilsImpl implements LocationUtils {
-  final LocalizedString localizedString;
-  final LocationSource locationSource;
+  final LocalizedString? localizedString;
+  final LocationSource? locationSource;
 
   LocationUtilsImpl(this.localizedString, this.locationSource);
 
@@ -27,7 +27,7 @@ class LocationUtilsImpl implements LocationUtils {
   ) async {
     try {
       if (hasPermission) {
-        final position = await locationSource.getLastKnowPosition();
+        final position = (await locationSource!.getLastKnowPosition())!;
 
         return LocationModel.fromPosition(position);
       }
@@ -42,7 +42,7 @@ class LocationUtilsImpl implements LocationUtils {
         error.message,
         error.code,
         ExceptionOriginTypes.platform,
-        stackTrace: StackTrace.fromString(error.stacktrace),
+        stackTrace: StackTrace.fromString(error.stacktrace!),
       );
     }
   }
@@ -52,7 +52,7 @@ class LocationUtilsImpl implements LocationUtils {
     try {
       if (!await isServiceEnabled) {
         throw LocationException(
-          localizedString.getLocalizedString(
+          localizedString!.getLocalizedString(
             'location-permission.disabled',
           ),
           false,
@@ -60,11 +60,11 @@ class LocationUtilsImpl implements LocationUtils {
         );
       }
 
-      LocationPermission permission = await locationSource.getPermission();
+      LocationPermission permission = await locationSource!.getPermission();
 
       if (permission == LocationPermission.deniedForever) {
         throw LocationException(
-          localizedString.getLocalizedString(
+          localizedString!.getLocalizedString(
             'location-permission.denied-permantly',
           ),
           false,
@@ -74,7 +74,7 @@ class LocationUtilsImpl implements LocationUtils {
 
       if (permission == LocationPermission.denied) {
         throw LocationException(
-          localizedString.getLocalizedString(
+          localizedString!.getLocalizedString(
             'location-permission.denied',
           ),
           false,
@@ -93,7 +93,7 @@ class LocationUtilsImpl implements LocationUtils {
         error.message,
         error.code,
         ExceptionOriginTypes.platform,
-        stackTrace: StackTrace.fromString(error.stacktrace),
+        stackTrace: StackTrace.fromString(error.stacktrace!),
       );
     }
   }
@@ -104,7 +104,7 @@ class LocationUtilsImpl implements LocationUtils {
   ) async {
     try {
       if (hasPermission) {
-        final position = await locationSource.getCurrentPosition();
+        final position = await locationSource!.getCurrentPosition();
 
         return LocationModel.fromPosition(position);
       }
@@ -119,19 +119,19 @@ class LocationUtilsImpl implements LocationUtils {
         error.message,
         error.code,
         ExceptionOriginTypes.platform,
-        stackTrace: StackTrace.fromString(error.stacktrace),
+        stackTrace: StackTrace.fromString(error.stacktrace!),
       );
     }
   }
 
   @override
-  Future<bool> get isServiceEnabled => locationSource.isLocationServiceEnabled;
+  Future<bool> get isServiceEnabled => locationSource!.isLocationServiceEnabled;
 
   @override
   Future<Stream<Location>> getLocationStream(bool hasPermission) async {
     try {
       if (hasPermission) {
-        final stream = locationSource.getPositionStream();
+        final stream = locationSource!.getPositionStream();
         return Future.value(
           stream.expand((element) => [LocationModel.fromPosition(element)]),
         );
@@ -147,7 +147,7 @@ class LocationUtilsImpl implements LocationUtils {
         error.message,
         error.code,
         ExceptionOriginTypes.platform,
-        stackTrace: StackTrace.fromString(error.stacktrace),
+        stackTrace: StackTrace.fromString(error.stacktrace!),
       );
     }
   }
@@ -160,10 +160,11 @@ class LocationSource {
 
   Future<Position> getCurrentPosition() => Geolocator.getCurrentPosition();
 
-  Future<Position> getLastKnowPosition() => Geolocator.getLastKnownPosition();
+  Future<Position?> getLastKnowPosition() => Geolocator.getLastKnownPosition();
 
-  Stream<Position> getPositionStream() =>
-      Geolocator.getPositionStream(distanceFilter: 100);
+  Stream<Position> getPositionStream() => Geolocator.getPositionStream(
+        locationSettings: LocationSettings(distanceFilter: 100),
+      );
 
   Future<bool> get isLocationServiceEnabled =>
       Geolocator.isLocationServiceEnabled();

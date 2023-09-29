@@ -1,9 +1,9 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/core/enums/organization_member_status.dart';
-import 'package:forest_map_app/core/enums/organization_role_types.dart';
-import 'package:forest_map_app/features/organization/data/hive/member.dart';
-import 'package:forest_map_app/features/organization/data/models/member_model.dart';
+import 'package:forest_map/core/enums/organization_member_status.dart';
+import 'package:forest_map/core/enums/organization_role_types.dart';
+import 'package:forest_map/features/organization/data/hive/member.dart';
+import 'package:forest_map/features/organization/data/models/member_model.dart';
 
 void main() {
   final tId = faker.guid.guid();

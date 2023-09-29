@@ -6,21 +6,21 @@ import '../entities/location.dart';
 import '../repositories/location_repository.dart';
 
 class GetLocationsParams extends Equatable {
-  final String userId;
+  final String? userId;
 
   GetLocationsParams(this.userId);
 
   @override
-  List<Object> get props => [userId];
+  List<Object?> get props => [userId];
 }
 
 class GetLocations implements UseCase<List<Location>, GetLocationsParams> {
-  final LocationRepository _repository;
+  final LocationRepository? _repository;
 
   GetLocations(this._repository);
 
   @override
   Future<Either<Failure, List<Location>>> call(GetLocationsParams params) {
-    return _repository.getLocations(params.userId);
+    return _repository!.getLocations(params.userId);
   }
 }

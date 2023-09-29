@@ -17,36 +17,36 @@ class SignupScreen extends StatelessWidget {
   final AuthNotifierImpl authNotifierImpl;
   final UserNotifierImpl userNotifierImpl;
   final OrganizationNotifierImpl organizationNotifier;
-  final LocalizedString localizedString;
-  final ValidationUtils validationUtils;
-  final AppTheme appTheme;
-  final NotificationsUtils notificationsUtils;
-  final AppNavigator appNavigator;
+  final LocalizedString? localizedString;
+  final ValidationUtils? validationUtils;
+  final AppTheme? appTheme;
+  final NotificationsUtils? notificationsUtils;
+  final AppNavigator? appNavigator;
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   SignupScreen({
-    Key key,
-    @required this.authNotifierImpl,
-    @required this.userNotifierImpl,
-    @required this.organizationNotifier,
-    @required this.localizedString,
-    @required this.validationUtils,
-    @required this.appTheme,
-    @required this.notificationsUtils,
-    @required this.appNavigator,
+    Key? key,
+    required this.authNotifierImpl,
+    required this.userNotifierImpl,
+    required this.organizationNotifier,
+    required this.localizedString,
+    required this.validationUtils,
+    required this.appTheme,
+    required this.notificationsUtils,
+    required this.appNavigator,
   }) : super(key: key);
 
   String _getString(String matcher) =>
-      localizedString.getLocalizedString(matcher);
+      localizedString!.getLocalizedString(matcher);
 
   InputDecoration _getInputDecoration(String title) =>
-      appTheme.inputDecoration(_getString(title));
+      appTheme!.inputDecoration(_getString(title));
 
   Future<void> _signUp() async {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       try {
         await authNotifierImpl.signUp(
           _nameController.text,
@@ -58,11 +58,11 @@ class SignupScreen extends StatelessWidget {
           id: 'currOrg',
           searchLocally: true,
         );
-        appNavigator.pushAndReplace('/home');
+        appNavigator!.pushAndReplace('/home');
       } on ServerFailure catch (failure) {
-        notificationsUtils.showErrorNotification(failure.message);
+        notificationsUtils!.showErrorNotification(failure.message);
       } on ServerException catch (exception) {
-        notificationsUtils.showErrorNotification(exception.message);
+        notificationsUtils!.showErrorNotification(exception.message);
       }
     }
   }
@@ -83,7 +83,7 @@ class SignupScreen extends StatelessWidget {
                   controller: _nameController,
                   decoration: _getInputDecoration('labels.name'),
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value!.isEmpty) {
                       return _getString('input-validations.required');
                     }
 
@@ -95,11 +95,11 @@ class SignupScreen extends StatelessWidget {
                   controller: _emailController,
                   decoration: _getInputDecoration('labels.email'),
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value!.isEmpty) {
                       return _getString('input-validations.required');
                     }
 
-                    if (!validationUtils.validateEmail(value)) {
+                    if (!validationUtils!.validateEmail(value)) {
                       return _getString('input-validations.invalid-email');
                     }
 
@@ -112,7 +112,7 @@ class SignupScreen extends StatelessWidget {
                   decoration: _getInputDecoration('labels.password'),
                   obscureText: true,
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value!.isEmpty) {
                       return _getString('input-validations.required');
                     }
 

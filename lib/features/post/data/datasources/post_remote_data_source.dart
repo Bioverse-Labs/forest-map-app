@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../models/post_model.dart';
-import 'package:meta/meta.dart';
+
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
@@ -17,39 +17,39 @@ import '../../../../core/util/uuid_generator.dart';
 
 abstract class PostRemoteDataSource {
   Future<void> savePost(PostModel post);
-  Future<List<PostModel>> getPosts({@required String orgId});
+  Future<List<PostModel>> getPosts({required String? orgId});
 }
 
 class PostRemoteDataSourceImpl implements PostRemoteDataSource {
-  final FirestoreAdapterImpl firestoreAdapter;
-  final FirebasStorageAdapter firebaseStorageAdapter;
-  final LocalizedString localizedString;
-  final UUIDGenerator uuidGenerator;
+  final FirestoreAdapterImpl? firestoreAdapter;
+  final FirebasStorageAdapter? firebaseStorageAdapter;
+  final LocalizedString? localizedString;
+  final UUIDGenerator? uuidGenerator;
 
   PostRemoteDataSourceImpl({
-    @required this.firestoreAdapter,
-    @required this.firebaseStorageAdapter,
-    @required this.localizedString,
-    @required this.uuidGenerator,
+    required this.firestoreAdapter,
+    required this.firebaseStorageAdapter,
+    required this.localizedString,
+    required this.uuidGenerator,
   });
 
   @override
   Future<void> savePost(PostModel post) async {
     try {
-      final file = File(post.imageUrl);
-      String imageUrl;
+      final file = File(post.imageUrl!);
+      String? imageUrl;
 
       if (file.existsSync()) {
-        await firebaseStorageAdapter.uploadFile(
-          file: File(post.imageUrl),
+        await firebaseStorageAdapter!.uploadFile(
+          file: File(post.imageUrl!),
           storagePath:
               'organizations/${post.organizationId}/posts/${post.id}.png',
         );
-        imageUrl = await firebaseStorageAdapter.getDownloadUrl(
+        imageUrl = await firebaseStorageAdapter!.getDownloadUrl(
             'organizations/${post.organizationId}/posts/${post.id}.png');
       }
 
-      await firestoreAdapter.addDocument(
+      await firestoreAdapter!.addDocument(
         'organizations/${post.organizationId}/posts/${post.id}',
         {
           ...post.toMap(),
@@ -58,28 +58,28 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       );
     } on FirebaseException catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('generic-exception'),
+        localizedString!.getLocalizedString('generic-exception'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,
       );
     } catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('generic-exception'),
+        localizedString!.getLocalizedString('generic-exception'),
         '400',
         ExceptionOriginTypes.firebaseFirestore,
-        stackTrace: error.stackTrace,
+        // stackTrace: error.stackTrace,
       );
     }
   }
 
   @override
-  Future<List<PostModel>> getPosts({String orgId}) async {
+  Future<List<PostModel>> getPosts({String? orgId}) async {
     try {
-      final query = firestoreAdapter.firestore.collection(
+      final query = firestoreAdapter!.firestore.collection(
         'organizations/$orgId/posts',
       );
-      final res = await firestoreAdapter.runQuery(query);
+      final res = await firestoreAdapter!.runQuery(query);
 
       if (res.isEmpty) return [];
 
@@ -116,7 +116,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       );
     } catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('generic-exception'),
+        localizedString!.getLocalizedString('generic-exception'),
         error.toString(),
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: StackTrace.fromString(error.toString()),

@@ -1,8 +1,8 @@
 import 'package:faker/faker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:forest_map_app/core/adapters/firebase_auth_adapter.dart';
-import 'package:forest_map_app/features/user/data/models/user_model.dart';
+import 'package:forest_map/core/adapters/firebase_auth_adapter.dart';
+import 'package:forest_map/features/user/data/models/user_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -28,13 +28,13 @@ class MockSocialCredentialAdapterImpl extends Mock
     implements SocialCredentialAdapterImpl {}
 
 void main() {
-  MockFirebaseAuth mockFirebaseAuth;
-  MockGoogleSignIn mockGoogleSignIn;
-  MockFacebookAuth mockFacebookAuth;
-  MockUserCredential mockUserCredential;
-  MockFirebaseUser mockFirebaseUser;
-  MockSocialCredentialAdapterImpl mockSocialCredentialAdapterImpl;
-  FirebaseAuthAdapterImpl firebaseAuthAdapterImpl;
+  late MockFirebaseAuth mockFirebaseAuth;
+  late MockGoogleSignIn mockGoogleSignIn;
+  late MockFacebookAuth mockFacebookAuth;
+  late MockUserCredential mockUserCredential;
+  late MockFirebaseUser mockFirebaseUser;
+  late MockSocialCredentialAdapterImpl mockSocialCredentialAdapterImpl;
+  late FirebaseAuthAdapterImpl firebaseAuthAdapterImpl;
 
   setUp(() {
     mockFirebaseAuth = MockFirebaseAuth();

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../core/adapters/firebase_storage_adapter.dart';
 import '../../../../core/adapters/firestore_adapter.dart';
@@ -14,37 +13,37 @@ import '../../../organization/domain/entities/organization.dart';
 import '../models/user_model.dart';
 
 abstract class UserRemoteDataSource {
-  Future<UserModel> getUser(String id);
+  Future<UserModel> getUser(String? id);
   Future<UserModel> updateUser({
-    @required String id,
-    String name,
-    String email,
-    List<Organization> organizations,
-    File avatar,
+    required String? id,
+    String? name,
+    String? email,
+    List<Organization>? organizations,
+    File? avatar,
   });
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
-  final FirestoreAdapterImpl firestoreAdapter;
-  final FirebaseStorageAdapterImpl firebaseStorageAdapter;
-  final LocalizedString localizedString;
-  final OrganizationRemoteDataSource organizationRemoteDataSource;
+  final FirestoreAdapterImpl? firestoreAdapter;
+  final FirebaseStorageAdapterImpl? firebaseStorageAdapter;
+  final LocalizedString? localizedString;
+  final OrganizationRemoteDataSource? organizationRemoteDataSource;
 
   UserRemoteDataSourceImpl({
-    @required this.firestoreAdapter,
-    @required this.firebaseStorageAdapter,
-    @required this.localizedString,
-    @required this.organizationRemoteDataSource,
+    required this.firestoreAdapter,
+    required this.firebaseStorageAdapter,
+    required this.localizedString,
+    required this.organizationRemoteDataSource,
   });
 
   @override
-  Future<UserModel> getUser(String id) async {
+  Future<UserModel> getUser(String? id) async {
     try {
-      final userDoc = await firestoreAdapter.getDocument('users/$id');
+      final userDoc = await firestoreAdapter!.getDocument('users/$id');
       final organizations = <OrganizationModel>[];
       if (!userDoc.exists) {
         throw ServerException(
-          localizedString.getLocalizedString('database-exceptions.get-error'),
+          localizedString!.getLocalizedString('database-exceptions.get-error'),
           '404',
           ExceptionOriginTypes.firebaseFirestore,
         );
@@ -53,7 +52,8 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       final userData = userDoc.data() as Map<String, dynamic>;
 
       for (var orgId in userData['organizations'] ?? []) {
-        final organization = await organizationRemoteDataSource.getOrganization(
+        final organization =
+            await organizationRemoteDataSource!.getOrganization(
           orgId,
         );
         organizations.add(organization);
@@ -65,7 +65,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       });
     } on FirebaseException catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('database-exceptions.get-error'),
+        localizedString!.getLocalizedString('database-exceptions.get-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,
@@ -75,11 +75,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<UserModel> updateUser({
-    String id,
-    String name,
-    String email,
-    List<Organization> organizations,
-    File avatar,
+    String? id,
+    String? name,
+    String? email,
+    List<Organization>? organizations,
+    File? avatar,
   }) async {
     try {
       final payload = <String, dynamic>{};
@@ -97,22 +97,22 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       }
 
       if (avatar != null) {
-        await firebaseStorageAdapter.uploadFile(
+        await firebaseStorageAdapter!.uploadFile(
           storagePath: 'users/$id/avatar/avatar.png',
           file: avatar,
         );
-        final avatarUrl = await firebaseStorageAdapter.getDownloadUrl(
+        final avatarUrl = await firebaseStorageAdapter!.getDownloadUrl(
           'users/$id/avatar/avatar.png',
         );
         payload['avatarUrl'] = avatarUrl;
       }
 
-      await firestoreAdapter.updateDocument('users/$id', payload);
-      final userDoc = await firestoreAdapter.getDocument('users/$id');
+      await firestoreAdapter!.updateDocument('users/$id', payload);
+      final userDoc = await firestoreAdapter!.getDocument('users/$id');
 
       if (!userDoc.exists) {
         throw ServerException(
-          localizedString.getLocalizedString('database-exceptions.get-error'),
+          localizedString!.getLocalizedString('database-exceptions.get-error'),
           '404',
           ExceptionOriginTypes.firebaseFirestore,
         );
@@ -121,7 +121,8 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       final userData = userDoc.data() as Map<String, dynamic>;
       final _organizations = <OrganizationModel>[];
       for (var orgId in userData['organizations']) {
-        final organization = await organizationRemoteDataSource.getOrganization(
+        final organization =
+            await organizationRemoteDataSource!.getOrganization(
           orgId,
         );
         _organizations.add(organization);
@@ -133,7 +134,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       });
     } on FirebaseException catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('database-exceptions.get-error'),
+        localizedString!.getLocalizedString('database-exceptions.get-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,

@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../core/adapters/firebase_storage_adapter.dart';
 import '../../../../core/adapters/firestore_adapter.dart';
@@ -23,86 +21,86 @@ abstract class OrganizationRemoteDataSource {
   /// user passed as params as [owner] of this new organization then
   /// adds an organization reference inside user [Document].
   Future<OrganizationModel> createOrganization({
-    @required UserModel user,
-    @required String name,
-    @required String email,
-    @required String phone,
-    File avatar,
+    required UserModel? user,
+    required String? name,
+    required String? email,
+    required String? phone,
+    File? avatar,
   });
 
   /// return [Document] that matches [id] inside organizations
   /// collection
-  Future<OrganizationModel> getOrganization(String id);
+  Future<OrganizationModel> getOrganization(String? id);
 
   /// update [Document] data that matches [id] inside organizations
   /// collection
   Future<OrganizationModel> updateOrganization({
-    @required String id,
-    @required String name,
-    @required String email,
-    @required String phone,
-    File avatar,
+    required String? id,
+    required String? name,
+    required String? email,
+    required String? phone,
+    File? avatar,
   });
 
   /// remove [Document] from organizations collections that match [id]
   Future<void> deleteOrganization(String id);
 
   Future<OrganizationModel> addMember({
-    @required String id,
-    @required UserModel user,
+    required String? id,
+    required UserModel? user,
   });
 
   /// remove user from organization and remove organization reference from
   /// [User] document
   Future<OrganizationModel> removeMember({
-    @required String id,
-    @required String userId,
+    required String? id,
+    required String? userId,
   });
 
   Future<OrganizationModel> updateMember({
-    @required String id,
-    @required String userId,
-    OrganizationRoleType role,
-    OrganizationMemberStatus status,
+    required String? id,
+    required String? userId,
+    OrganizationRoleType? role,
+    OrganizationMemberStatus? status,
   });
 }
 
 class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
-  final FirestoreAdapterImpl firestoreAdapter;
-  final FirebaseStorageAdapterImpl firebaseStorageAdapter;
-  final LocalizedString localizedString;
-  final UUIDGenerator uuidGenerator;
+  final FirestoreAdapterImpl? firestoreAdapter;
+  final FirebaseStorageAdapterImpl? firebaseStorageAdapter;
+  final LocalizedString? localizedString;
+  final UUIDGenerator? uuidGenerator;
 
   OrganizationRemoteDataSourceImpl({
-    @required this.firestoreAdapter,
-    @required this.firebaseStorageAdapter,
-    @required this.localizedString,
-    @required this.uuidGenerator,
+    required this.firestoreAdapter,
+    required this.firebaseStorageAdapter,
+    required this.localizedString,
+    required this.uuidGenerator,
   });
 
   @override
   Future<OrganizationModel> createOrganization({
-    UserModel user,
-    String name,
-    String email,
-    String phone,
-    File avatar,
+    UserModel? user,
+    String? name,
+    String? email,
+    String? phone,
+    File? avatar,
   }) async {
     try {
-      final orgId = uuidGenerator.generateUID();
+      final orgId = uuidGenerator!.generateUID();
       var avatarUrl;
 
       if (avatar != null) {
-        await firebaseStorageAdapter.uploadFile(
+        await firebaseStorageAdapter!.uploadFile(
           file: avatar,
           storagePath: 'organizations/$orgId/avatar/avatar.png',
         );
-        avatarUrl = await firebaseStorageAdapter.getDownloadUrl(
+        avatarUrl = await firebaseStorageAdapter!.getDownloadUrl(
           'organizations/$orgId/avatar/avatar.png',
         );
       }
 
-      await firestoreAdapter.addDocument(
+      await firestoreAdapter!.addDocument(
         'organizations/$orgId',
         {
           'id': orgId,
@@ -112,8 +110,8 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
           'avatarUrl': avatarUrl,
         },
       );
-      await firestoreAdapter.addDocument(
-        'organizations/$orgId/members/${user.id}',
+      await firestoreAdapter!.addDocument(
+        'organizations/$orgId/members/${user!.id}',
         {
           'id': user.id,
           'status': OrganizationMemberStatus.active.index,
@@ -121,12 +119,12 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
         },
       );
 
-      await firestoreAdapter.updateDocument(
+      await firestoreAdapter!.updateDocument(
         'users/${user.id}',
         {
           'organizations': [
-            ...(user?.organizations != null
-                ? user?.organizations?.map((e) => e.id)?.toList()
+            ...(user.organizations != null
+                ? user.organizations!.map((e) => e.id).toList()
                 : []),
             orgId,
           ]
@@ -149,7 +147,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
       );
     } on FirebaseException catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('database-exceptions.get-error'),
+        localizedString!.getLocalizedString('database-exceptions.get-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,
@@ -160,10 +158,10 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
   @override
   Future<void> deleteOrganization(String id) async {
     try {
-      await firestoreAdapter.deleteDocument('organizations/$id');
+      await firestoreAdapter!.deleteDocument('organizations/$id');
     } on FirebaseException catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('database-exceptions.get-error'),
+        localizedString!.getLocalizedString('database-exceptions.get-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,
@@ -172,13 +170,13 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
   }
 
   @override
-  Future<OrganizationModel> getOrganization(String id) async {
+  Future<OrganizationModel> getOrganization(String? id) async {
     try {
-      final orgDoc = await firestoreAdapter.getDocument('organizations/$id');
+      final orgDoc = await firestoreAdapter!.getDocument('organizations/$id');
 
       if (!orgDoc.exists) {
         throw ServerException(
-          localizedString.getLocalizedString('database-exceptions.get-error'),
+          localizedString!.getLocalizedString('database-exceptions.get-error'),
           '404',
           ExceptionOriginTypes.firebaseFirestore,
         );
@@ -195,7 +193,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
       });
     } on FirebaseException catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('database-exceptions.get-error'),
+        localizedString!.getLocalizedString('database-exceptions.get-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,
@@ -204,20 +202,20 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
   }
 
   @override
-  Future<OrganizationModel> addMember({String id, User user}) async {
+  Future<OrganizationModel> addMember({String? id, User? user}) async {
     try {
-      final orgDoc = await firestoreAdapter.getDocument('organizations/$id');
+      final orgDoc = await firestoreAdapter!.getDocument('organizations/$id');
 
       if (!orgDoc.exists) {
         throw ServerException(
-          localizedString.getLocalizedString('database-exceptions.get-error'),
+          localizedString!.getLocalizedString('database-exceptions.get-error'),
           '404',
           ExceptionOriginTypes.firebaseFirestore,
         );
       }
 
-      await firestoreAdapter.addDocument(
-        'organizations/$id/members/${user.id}',
+      await firestoreAdapter!.addDocument(
+        'organizations/$id/members/${user!.id}',
         {
           'id': user.id,
           'status': OrganizationMemberStatus.active.index,
@@ -225,12 +223,12 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
         },
       );
 
-      await firestoreAdapter.updateDocument(
+      await firestoreAdapter!.updateDocument(
         'users/${user.id}',
         {
           'organizations': [
-            ...(user?.organizations != null
-                ? user?.organizations?.map((e) => e.id)?.toList()
+            ...(user.organizations != null
+                ? user.organizations!.map((e) => e.id).toList()
                 : []),
             id,
           ]
@@ -240,7 +238,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
       return getOrganization(id);
     } on FirebaseException catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('database-exceptions.update-error'),
+        localizedString!.getLocalizedString('database-exceptions.update-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,
@@ -250,23 +248,23 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
 
   @override
   Future<OrganizationModel> removeMember({
-    @required String id,
-    @required String userId,
+    required String? id,
+    required String? userId,
   }) async {
     try {
-      await firestoreAdapter.deleteDocument(
+      await firestoreAdapter!.deleteDocument(
         'organizations/$id/members/$userId',
       );
 
-      final userDoc = await firestoreAdapter.getDocument('users/$userId');
+      final userDoc = await firestoreAdapter!.getDocument('users/$userId');
       if (userDoc.exists) {
-        final List<String> organizations =
+        final List<String>? organizations =
             (userDoc.data() as Map<String, dynamic>)['organizations']
                 ?.map<String>((e) => e.toString())
                 ?.toList();
         organizations?.remove(id);
 
-        await firestoreAdapter.updateDocument('users/$userId', {
+        await firestoreAdapter!.updateDocument('users/$userId', {
           'organizations': organizations,
         });
       }
@@ -274,7 +272,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
       return getOrganization(id);
     } on FirebaseException catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('database-exceptions.get-error'),
+        localizedString!.getLocalizedString('database-exceptions.get-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,
@@ -284,10 +282,10 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
 
   @override
   Future<OrganizationModel> updateMember({
-    String id,
-    String userId,
-    OrganizationRoleType role,
-    OrganizationMemberStatus status,
+    String? id,
+    String? userId,
+    OrganizationRoleType? role,
+    OrganizationMemberStatus? status,
   }) async {
     try {
       final map = <String, dynamic>{};
@@ -300,7 +298,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
         map['status'] = status.index;
       }
 
-      await firestoreAdapter.updateDocument(
+      await firestoreAdapter!.updateDocument(
         'organizations/$id/members/$userId',
         map,
       );
@@ -308,7 +306,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
       return getOrganization(id);
     } on FirebaseException catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('database-exceptions.get-error'),
+        localizedString!.getLocalizedString('database-exceptions.get-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,
@@ -318,11 +316,11 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
 
   @override
   Future<OrganizationModel> updateOrganization({
-    String id,
-    String name,
-    String email,
-    String phone,
-    File avatar,
+    String? id,
+    String? name,
+    String? email,
+    String? phone,
+    File? avatar,
   }) async {
     try {
       final Map<String, dynamic> map = {};
@@ -344,17 +342,17 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
       }
 
       if (avatar != null) {
-        await firebaseStorageAdapter.uploadFile(
+        await firebaseStorageAdapter!.uploadFile(
           file: avatar,
           storagePath: 'organizations/$id/avatar/avatar.png',
         );
-        final avatarUrl = await firebaseStorageAdapter.getDownloadUrl(
+        final avatarUrl = await firebaseStorageAdapter!.getDownloadUrl(
           'organizations/$id/avatar/avatar.png',
         );
         map['avatarUrl'] = avatarUrl;
       }
 
-      await firestoreAdapter.updateDocument(
+      await firestoreAdapter!.updateDocument(
         'organizations/$id',
         map,
       );
@@ -362,7 +360,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
       return getOrganization(id);
     } on FirebaseException catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('database-exceptions.get-error'),
+        localizedString!.getLocalizedString('database-exceptions.get-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,
@@ -370,17 +368,17 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
     }
   }
 
-  Future<List<MemberModel>> _getMembers(String id) async {
+  Future<List<MemberModel>> _getMembers(String? id) async {
     List<MemberModel> members = <MemberModel>[];
 
-    final membersQuery = firestoreAdapter.firestore.collection(
+    final membersQuery = firestoreAdapter!.firestore.collection(
       'organizations/$id/members',
     );
-    final membersDoc = await firestoreAdapter.runQuery(membersQuery);
+    final membersDoc = await firestoreAdapter!.runQuery(membersQuery);
     if (membersDoc.isNotEmpty) {
       for (var member in membersDoc) {
         final userId = member.id;
-        final userDoc = await firestoreAdapter.getDocument('users/$userId');
+        final userDoc = await firestoreAdapter!.getDocument('users/$userId');
 
         if (userDoc.exists) {
           members.add(MemberModel.fromMap({

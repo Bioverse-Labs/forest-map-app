@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:faker/faker.dart';
-import 'package:forest_map_app/core/enums/exception_origin_types.dart';
-import 'package:forest_map_app/core/errors/failure.dart';
-import 'package:forest_map_app/core/usecases/usecase.dart';
-import 'package:forest_map_app/features/tracking/domain/entities/location.dart';
-import 'package:forest_map_app/features/tracking/domain/usecases/get_current_location.dart';
-import 'package:forest_map_app/features/tracking/domain/usecases/get_locations.dart';
-import 'package:forest_map_app/features/tracking/domain/usecases/save_location.dart';
-import 'package:forest_map_app/features/tracking/domain/usecases/track_user.dart';
-import 'package:forest_map_app/features/tracking/presentation/notifiers/location_notifier.dart';
+import 'package:forest_map/core/enums/exception_origin_types.dart';
+import 'package:forest_map/core/errors/failure.dart';
+import 'package:forest_map/core/usecases/usecase.dart';
+import 'package:forest_map/features/tracking/domain/entities/location.dart';
+import 'package:forest_map/features/tracking/domain/usecases/get_current_location.dart';
+import 'package:forest_map/features/tracking/domain/usecases/get_locations.dart';
+import 'package:forest_map/features/tracking/domain/usecases/save_location.dart';
+import 'package:forest_map/features/tracking/domain/usecases/track_user.dart';
+import 'package:forest_map/features/tracking/presentation/notifiers/location_notifier.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 

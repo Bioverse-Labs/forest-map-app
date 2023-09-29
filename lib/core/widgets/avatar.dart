@@ -2,15 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class Avatar extends StatelessWidget {
-  final String url;
+  final String? url;
   final Size size;
-  final Widget placeholderWidget;
-  final Widget errorWidget;
+  final Widget? placeholderWidget;
+  final Widget? errorWidget;
   final bool canEdit;
 
   const Avatar({
-    Key key,
-    @required this.url,
+    Key? key,
+    required this.url,
     this.size = const Size(140, 140),
     this.placeholderWidget,
     this.errorWidget,
@@ -31,7 +31,7 @@ class Avatar extends StatelessWidget {
     }
 
     return CachedNetworkImage(
-      imageUrl: url,
+      imageUrl: url!,
       placeholder: (context, url) => ImageContainer(
         size: size,
         child: CircularProgressIndicator(),
@@ -53,12 +53,12 @@ class Avatar extends StatelessWidget {
 }
 
 class ImageContainer extends StatelessWidget {
-  final Widget child;
-  final Size size;
-  final ImageProvider imageProvider;
+  final Widget? child;
+  final Size? size;
+  final ImageProvider? imageProvider;
 
   const ImageContainer({
-    Key key,
+    Key? key,
     this.child,
     this.size,
     this.imageProvider,
@@ -67,14 +67,14 @@ class ImageContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: size.width,
-      height: size.height,
+      width: size!.width,
+      height: size!.height,
       decoration: BoxDecoration(
         image: imageProvider != null
-            ? DecorationImage(image: imageProvider, fit: BoxFit.cover)
+            ? DecorationImage(image: imageProvider!, fit: BoxFit.cover)
             : null,
         color: Colors.white,
-        borderRadius: BorderRadius.circular(size.width / 2),
+        borderRadius: BorderRadius.circular(size!.width / 2),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),

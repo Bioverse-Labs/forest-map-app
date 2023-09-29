@@ -11,10 +11,10 @@ class EditOrganizationScreen extends StatelessWidget {
   final NotificationsUtils notificationsUtils;
 
   EditOrganizationScreen({
-    Key key,
-    @required this.organizationNotifier,
-    @required this.localizedString,
-    @required this.notificationsUtils,
+    Key? key,
+    required this.organizationNotifier,
+    required this.localizedString,
+    required this.notificationsUtils,
   }) : super(key: key);
 
   @override

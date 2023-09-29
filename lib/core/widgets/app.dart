@@ -16,9 +16,9 @@ class App extends StatefulWidget {
   final List<Locale> supportedLocales;
 
   App({
-    Key key,
-    @required this.localizationsDelegate,
-    @required this.supportedLocales,
+    Key? key,
+    required this.localizationsDelegate,
+    required this.supportedLocales,
   }) : super(key: key);
 
   @override
@@ -26,8 +26,8 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  final _appTheme = GetIt.I<AppTheme>();
-  final _appNavigator = GetIt.I<AppNavigator>();
+  final AppTheme? _appTheme = GetIt.I<AppTheme>();
+  final AppNavigator? _appNavigator = GetIt.I<AppNavigator>();
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class _AppState extends State<App> {
   Future<void> _handleDynamicLink() async {
     final notifier =
         Provider.of<OrganizationInviteNotifierImpl>(context, listen: false);
-    final notificationUtils = GetIt.I<NotificationsUtils>();
+    final NotificationsUtils? notificationUtils = GetIt.I<NotificationsUtils>();
 
     try {
       final linkData = await FirebaseDynamicLinks.instance.getInitialLink();
@@ -49,37 +49,38 @@ class _AppState extends State<App> {
         notifier.setOrgId(orgId);
       }
     } catch (error) {
-      notificationUtils.showErrorNotification(error.toString());
+      notificationUtils!.showErrorNotification(error.toString());
     }
 
-    FirebaseDynamicLinks.instance.onLink(
-      onSuccess: (PendingDynamicLinkData dynamicLink) async {
-        final Uri deepLink = dynamicLink?.link;
+    FirebaseDynamicLinks.instance.onLink;
+    // (
+    //   onSuccess: (PendingDynamicLinkData dynamicLink) async {
+    //     final Uri deepLink = dynamicLink.link;
 
-        final orgId = deepLink.queryParameters['orgId'];
+    //     final orgId = deepLink.queryParameters['orgId'];
 
-        if (orgId != null) {
-          notifier.setOrgId(orgId);
-        }
-      },
-      onError: (OnLinkErrorException e) async {
-        notificationUtils.showErrorNotification(e.message);
-      },
-    );
+    //     if (orgId != null) {
+    //       notifier.setOrgId(orgId);
+    //     }
+    //   },
+    //   onError: (e) async {
+    //     notificationUtils!.showErrorNotification(e.message);
+    //   },
+    // );
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Forest App Map',
-      theme: _appTheme.getMainTheme.copyWith(
+      theme: _appTheme!.getMainTheme.copyWith(
         textTheme: GoogleFonts.nunitoTextTheme(Theme.of(context).textTheme),
       ),
-      darkTheme: _appTheme.getDarkTheme.copyWith(
+      darkTheme: _appTheme!.getDarkTheme.copyWith(
         textTheme: GoogleFonts.nunitoTextTheme(Theme.of(context).textTheme),
       ),
       builder: BotToastInit(),
-      navigatorKey: _appNavigator.navigatorKey,
+      navigatorKey: _appNavigator!.navigatorKey,
       navigatorObservers: [BotToastNavigatorObserver()],
       initialRoute: '/',
       routes: routes,

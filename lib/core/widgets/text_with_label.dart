@@ -4,9 +4,9 @@ class TextWithLabel extends StatelessWidget {
   final String label;
   final String value;
   const TextWithLabel({
-    Key key,
-    @required this.label,
-    @required this.value,
+    Key? key,
+    required this.label,
+    required this.value,
   }) : super(key: key);
 
   @override

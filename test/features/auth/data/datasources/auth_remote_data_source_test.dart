@@ -1,16 +1,16 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:faker/faker.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:forest_map_app/core/adapters/firebase_auth_adapter.dart';
-// import 'package:forest_map_app/core/adapters/firestore_adapter.dart';
-// import 'package:forest_map_app/core/adapters/hive_adapter.dart';
-// import 'package:forest_map_app/core/enums/social_login_types.dart';
-// import 'package:forest_map_app/core/errors/exceptions.dart';
-// import 'package:forest_map_app/core/util/localized_string.dart';
-// import 'package:forest_map_app/features/auth/data/datasources/auth_remote_data_source.dart';
-// import 'package:forest_map_app/features/organization/data/hive/organization.dart';
-// import 'package:forest_map_app/features/user/data/hive/user.dart';
-// import 'package:forest_map_app/features/user/data/models/user_model.dart';
+// import 'package:forest_map/core/adapters/firebase_auth_adapter.dart';
+// import 'package:forest_map/core/adapters/firestore_adapter.dart';
+// import 'package:forest_map/core/adapters/hive_adapter.dart';
+// import 'package:forest_map/core/enums/social_login_types.dart';
+// import 'package:forest_map/core/errors/exceptions.dart';
+// import 'package:forest_map/core/util/localized_string.dart';
+// import 'package:forest_map/features/auth/data/datasources/auth_remote_data_source.dart';
+// import 'package:forest_map/features/organization/data/hive/organization.dart';
+// import 'package:forest_map/features/user/data/hive/user.dart';
+// import 'package:forest_map/features/user/data/models/user_model.dart';
 // import 'package:mockito/mockito.dart';
 // import 'package:flutter_test/flutter_test.dart';
 

@@ -17,16 +17,16 @@ class LocationHiveAdapter extends TypeAdapter<LocationHive> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return LocationHive()
-      ..id = fields[0] as String
-      ..lat = fields[1] as double
-      ..lng = fields[2] as double
-      ..timestamp = fields[3] as DateTime
-      ..altitude = fields[4] as double
-      ..accuracy = fields[5] as double
-      ..heading = fields[6] as double
-      ..floor = fields[7] as int
-      ..speed = fields[8] as double
-      ..speedAccuracy = fields[9] as double;
+      ..id = fields[0] as String?
+      ..lat = fields[1] as double?
+      ..lng = fields[2] as double?
+      ..timestamp = fields[3] as DateTime?
+      ..altitude = fields[4] as double?
+      ..accuracy = fields[5] as double?
+      ..heading = fields[6] as double?
+      ..floor = fields[7] as int?
+      ..speed = fields[8] as double?
+      ..speedAccuracy = fields[9] as double?;
   }
 
   @override

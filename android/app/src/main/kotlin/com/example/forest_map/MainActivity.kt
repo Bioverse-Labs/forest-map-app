@@ -1,4 +1,4 @@
-package com.example.forestMapApp
+package com.bioverselabs.forestmap
 
 import io.flutter.embedding.android.FlutterActivity
 

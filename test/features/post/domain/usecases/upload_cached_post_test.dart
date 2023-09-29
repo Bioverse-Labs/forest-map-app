@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/core/errors/failure.dart';
-import 'package:forest_map_app/core/usecases/usecase.dart';
-import 'package:forest_map_app/features/post/domain/entities/post.dart';
-import 'package:forest_map_app/features/post/domain/repositories/post_repository.dart';
-import 'package:forest_map_app/features/post/domain/usecases/upload_cached_post.dart';
+import 'package:forest_map/core/errors/failure.dart';
+import 'package:forest_map/core/usecases/usecase.dart';
+import 'package:forest_map/features/post/domain/entities/post.dart';
+import 'package:forest_map/features/post/domain/repositories/post_repository.dart';
+import 'package:forest_map/features/post/domain/usecases/upload_cached_post.dart';
 import 'package:mockito/mockito.dart';
 
 class MockPostRepository extends Mock implements PostRepository {}

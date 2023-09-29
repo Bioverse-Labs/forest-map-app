@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class SocialLoginButton extends StatelessWidget {
-  final Function onPress;
-  final String title;
-  final Widget icon;
+  final Function? onPress;
+  final String? title;
+  final Widget? icon;
 
   const SocialLoginButton({
-    Key key,
+    Key? key,
     this.onPress,
     this.title,
     this.icon,
@@ -17,12 +17,12 @@ class SocialLoginButton extends StatelessWidget {
     return Flexible(
       flex: 1,
       child: OutlinedButton(
-        onPressed: onPress,
+        onPressed: onPress as void Function()?,
         child: Row(
           children: [
-            icon,
+            icon!,
             SizedBox(width: 8),
-            Text(title),
+            Text(title!),
           ],
         ),
       ),

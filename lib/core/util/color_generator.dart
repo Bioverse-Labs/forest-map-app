@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-MaterialColor materialColorFromHex(int hex, {int light, int dark}) {
+MaterialColor materialColorFromHex(int hex, {int? light, int? dark}) {
   Map<int, Color> color = {
     50: Color(light ?? hex),
     100: Color(light ?? hex),

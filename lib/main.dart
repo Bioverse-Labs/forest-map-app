@@ -35,7 +35,7 @@ Future<void> _initApp() async {
 }
 
 class ForestMap extends StatefulWidget {
-  const ForestMap({Key key}) : super(key: key);
+  const ForestMap({Key? key}) : super(key: key);
 
   @override
   _ForestMapState createState() => _ForestMapState();

@@ -7,23 +7,23 @@ part 'organization.g.dart';
 @HiveType(typeId: 2)
 class OrganizationHive {
   @HiveField(0)
-  String id;
+  String? id;
 
   @HiveField(1)
-  String name;
+  String? name;
 
   @HiveField(2)
-  String email;
+  String? email;
 
   @HiveField(3)
-  String phone;
+  String? phone;
 
   @HiveField(4)
-  String avatarUrl;
+  String? avatarUrl;
 
   @HiveField(5)
-  List<MemberHive> members;
+  List<MemberHive>? members;
 
   @HiveField(6)
-  List<String> geolocationData;
+  List<String>? geolocationData;
 }

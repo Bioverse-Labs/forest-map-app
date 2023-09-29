@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../core/adapters/firebase_auth_adapter.dart';
 import '../../../../core/adapters/firestore_adapter.dart';
@@ -51,17 +50,17 @@ abstract class AuthRemoteDataSource {
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final FirestoreAdapter firestoreAdapter;
-  final FirebaseAuthAdapter firebaseAuthAdapter;
-  final LocalizedString localizedString;
-  final HiveAdapter<UserHive> userHive;
-  final HiveAdapter<OrganizationHive> orgHive;
+  final FirestoreAdapter? firestoreAdapter;
+  final FirebaseAuthAdapter? firebaseAuthAdapter;
+  final LocalizedString? localizedString;
+  final HiveAdapter<UserHive>? userHive;
+  final HiveAdapter<OrganizationHive>? orgHive;
   AuthRemoteDataSourceImpl({
-    @required this.firestoreAdapter,
-    @required this.firebaseAuthAdapter,
-    @required this.localizedString,
-    @required this.userHive,
-    @required this.orgHive,
+    required this.firestoreAdapter,
+    required this.firebaseAuthAdapter,
+    required this.localizedString,
+    required this.userHive,
+    required this.orgHive,
   });
 
   @override
@@ -70,7 +69,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     String password,
   ) async {
     try {
-      final userModel = await firebaseAuthAdapter.signInWithEmailAndPassword(
+      final userModel = await firebaseAuthAdapter!.signInWithEmailAndPassword(
         email,
         password,
       );
@@ -87,19 +86,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       AuthCredential credential;
       if (type == SocialLoginType.facebook) {
-        credential = await firebaseAuthAdapter.getFacebookAuthCredential();
+        credential = await firebaseAuthAdapter!.getFacebookAuthCredential();
       } else {
-        credential = await firebaseAuthAdapter.getGoogleAuthCredential();
+        credential = await firebaseAuthAdapter!.getGoogleAuthCredential();
       }
 
       final authResult =
-          await firebaseAuthAdapter.signInWithCredential(credential);
+          await firebaseAuthAdapter!.signInWithCredential(credential);
 
       final docSnapshot =
-          await firestoreAdapter.getDocument('users/${authResult.id}');
+          await firestoreAdapter!.getDocument('users/${authResult.id}');
 
       if (!docSnapshot.exists) {
-        await firestoreAdapter.addDocument(
+        await firestoreAdapter!.addDocument(
           'users/${authResult.id}',
           authResult.toMap(),
         );
@@ -110,7 +109,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw getServerExceptionFromFirebaseAuth(error, localizedString);
     } on FirebaseException catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('database-exceptions.get-error'),
+        localizedString!.getLocalizedString('database-exceptions.get-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
       );
@@ -120,13 +119,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<UserModel> signUp(String name, String email, String password) async {
     try {
-      final authResult = await firebaseAuthAdapter
+      final authResult = await firebaseAuthAdapter!
           .signUpUserWithEmailAndPassword(email, password);
 
       final payload = authResult.toMap();
       payload['name'] = name;
 
-      await firestoreAdapter.addDocument(
+      await firestoreAdapter!.addDocument(
         'users/${authResult.id}',
         payload,
       );
@@ -136,7 +135,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw getServerExceptionFromFirebaseAuth(error, localizedString);
     } on FirebaseException catch (error) {
       throw ServerException(
-        localizedString.getLocalizedString('database-exceptions.get-error'),
+        localizedString!.getLocalizedString('database-exceptions.get-error'),
         error.code,
         ExceptionOriginTypes.firebaseFirestore,
         stackTrace: error.stackTrace,
@@ -147,9 +146,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> signOut() async {
     try {
-      await firebaseAuthAdapter.signOut();
-      await userHive.deleteAll();
-      await orgHive.deleteAll();
+      await firebaseAuthAdapter!.signOut();
+      await userHive!.deleteAll();
+      await orgHive!.deleteAll();
     } on FirebaseAuthException catch (error) {
       throw getServerExceptionFromFirebaseAuth(error, localizedString);
     }
@@ -158,7 +157,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> forgotPassword(String email) async {
     try {
-      await firebaseAuthAdapter.forgotPassword(email);
+      await firebaseAuthAdapter!.forgotPassword(email);
     } on FirebaseAuthException catch (error) {
       throw getServerExceptionFromFirebaseAuth(error, localizedString);
     } on FirebaseException catch (error) {

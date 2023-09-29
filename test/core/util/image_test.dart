@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/core/util/image.dart';
+import 'package:forest_map/core/util/image.dart';
 import 'package:image/image.dart';
 
 import 'get_path.dart';

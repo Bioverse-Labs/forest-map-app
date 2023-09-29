@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:faker/faker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map_app/core/errors/exceptions.dart';
-import 'package:forest_map_app/core/platform/location.dart';
-import 'package:forest_map_app/core/util/localized_string.dart';
-import 'package:forest_map_app/features/tracking/domain/entities/location.dart';
+import 'package:forest_map/core/errors/exceptions.dart';
+import 'package:forest_map/core/platform/location.dart';
+import 'package:forest_map/core/util/localized_string.dart';
+import 'package:forest_map/features/tracking/domain/entities/location.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mockito/mockito.dart';
 
