@@ -45,7 +45,7 @@ class NotificationsUtils {
 
   void showAlertDialog({
     required Widget title,
-    required Widget content,
+    Widget? content,
     bool dismissable = true,
     BackButtonBehavior backButtonBehavior = BackButtonBehavior.close,
     List<AlertButtonParams> buttons = const <AlertButtonParams>[],

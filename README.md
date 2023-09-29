@@ -25,7 +25,7 @@ On the first release, Forest Map TM will allow local cooperatives to use the abu
 1. [Setting up your environment](#1-Setting-up-your-environment)
 2. [Run](#2-Run)
 3. [Test ](#3-Test)
-4. [Architecture](#3-Architecture)
+4. [Architecture ](#3-Architecture)
 5. [TODO-list](#5-TODO-list)
 
 # Setting up your environment
@@ -48,17 +48,21 @@ On the first release, Forest Map TM will allow local cooperatives to use the abu
    flutter test
 ```
 
-#### How to run converage
+### Coverage Report
 
-```
-    ./generateCoverage.sh
-```
+     https://bioverse-labs.github.io/forest-map-app/
 
 # Architecture
 
 <p>
     <img src="https://i1.wp.com/resocoder.com/wp-content/uploads/2019/08/CleanArchitecture.jpg?w=772&ssl=1" width="350" /><br/>
     <img src="https://i0.wp.com/resocoder.com/wp-content/uploads/2019/08/Clean-Architecture-Flutter-Diagram.png?w=556&ssl=1" width="350" />
+</p>
+
+# TODO-list
+
+<p>
+    <a href="https://flutter.dev/docs/deployment/cd">https://flutter.dev/docs/deployment/cd</a>
 </p>
 
 #

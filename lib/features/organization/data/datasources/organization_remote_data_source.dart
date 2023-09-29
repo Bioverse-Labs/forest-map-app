@@ -91,7 +91,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
       var avatarUrl;
 
       if (avatar != null) {
-        await firebaseStorageAdapter!.uploadFile(
+        firebaseStorageAdapter!.uploadFile(
           file: avatar,
           storagePath: 'organizations/$orgId/avatar/avatar.png',
         );
@@ -187,7 +187,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
       return OrganizationModel.fromMap({
         ...orgData,
         'geolocationData': orgData['geolocationData']
-            .map<String>((e) => e.toString())
+            ?.map<String>((e) => e.toString())
             .toList(),
         'members': await _getMembers(id),
       });
@@ -342,7 +342,7 @@ class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
       }
 
       if (avatar != null) {
-        await firebaseStorageAdapter!.uploadFile(
+        firebaseStorageAdapter!.uploadFile(
           file: avatar,
           storagePath: 'organizations/$id/avatar/avatar.png',
         );

@@ -7,22 +7,25 @@ import 'package:forest_map/features/user/domain/entities/user.dart';
 import 'package:forest_map/features/user/domain/usecases/get_user.dart';
 import 'package:forest_map/features/user/domain/usecases/update_user.dart';
 import 'package:forest_map/features/user/presentation/notifiers/user_notifier.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../../../core/notifiers/change_notifiers.dart';
 
-class MockGetUserUseCase extends Mock implements GetUser {}
+import 'user_notifier_test.mocks.dart';
 
-class MockUpdateUserUseCase extends Mock implements UpdateUser {}
-
+@GenerateMocks([
+  GetUser,
+  UpdateUser,
+])
 void main() {
-  MockGetUserUseCase mockGetUserUseCase;
-  MockUpdateUserUseCase mockUpdateUserUseCase;
-  UserNotifierImpl userNotifierImpl;
+  late MockGetUser mockGetUserUseCase;
+  late MockUpdateUser mockUpdateUserUseCase;
+  late UserNotifierImpl userNotifierImpl;
 
   setUp(() {
-    mockGetUserUseCase = MockGetUserUseCase();
-    mockUpdateUserUseCase = MockUpdateUserUseCase();
+    mockGetUserUseCase = MockGetUser();
+    mockUpdateUserUseCase = MockUpdateUser();
     userNotifierImpl = UserNotifierImpl(
       getUserUseCase: mockGetUserUseCase,
       updateUserUseCase: mockUpdateUserUseCase,

@@ -8,16 +8,19 @@ import 'package:forest_map/core/platform/location.dart';
 import 'package:forest_map/core/util/localized_string.dart';
 import 'package:forest_map/features/tracking/domain/entities/location.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-class MockLocationSource extends Mock implements LocationSource {}
+import 'location_test.mocks.dart';
 
-class MockLocalizedString extends Mock implements LocalizedString {}
-
+@GenerateMocks([
+  LocationSource,
+  LocalizedString,
+])
 void main() {
-  MockLocationSource mockLocationSource;
-  MockLocalizedString mockLocalizedString;
-  LocationUtilsImpl locationUtilsImpl;
+  late MockLocationSource mockLocationSource;
+  late MockLocalizedString mockLocalizedString;
+  late LocationUtilsImpl locationUtilsImpl;
 
   setUp(() {
     mockLocationSource = MockLocationSource();
@@ -164,6 +167,12 @@ void main() {
   });
 
   group('checkLocationPermission', () {
+    setUp(
+      () => when(mockLocalizedString.getLocalizedString(any)).thenReturn(
+        faker.randomGenerator.string(20),
+      ),
+    );
+
     test(
       'should return [true] if permission is granted',
       () async {

@@ -97,7 +97,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       }
 
       if (avatar != null) {
-        await firebaseStorageAdapter!.uploadFile(
+        firebaseStorageAdapter!.uploadFile(
           storagePath: 'users/$id/avatar/avatar.png',
           file: avatar,
         );

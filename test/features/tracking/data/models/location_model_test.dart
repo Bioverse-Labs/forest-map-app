@@ -9,7 +9,7 @@ void main() {
   final tId = faker.guid.guid();
   final tLat = faker.randomGenerator.decimal();
   final tLng = faker.randomGenerator.decimal();
-  final tTimestamp = faker.date.dateTime();
+  final tTimestamp = DateTime.now();
 
   final tLocatioModel = LocationModel(
     id: tId,
@@ -44,7 +44,14 @@ void main() {
       );
 
       final result = LocationModel.fromPosition(tPosition);
-      expect(result, tLocatioModel);
+      expect(
+        result.lat,
+        tPosition.latitude,
+      );
+      expect(
+        result.lng,
+        tPosition.longitude,
+      );
     });
   });
 

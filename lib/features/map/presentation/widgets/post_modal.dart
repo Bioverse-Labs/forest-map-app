@@ -18,36 +18,50 @@ class PostModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenWidget(
-      appBar: AppBar(title: Text(post!.category!.name)),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: ListBody(
-              children: [
-                Text(
-                  '${post!.category!.name} - ${post!.category!.scientificName}',
+      appBar: AppBar(title: Text(post!.category?.name ?? post!.landUse ?? '')),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: ListBody(
+                children: [
+                  Text(
+                    '${post!.landUse ?? ''}',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  post?.category != null
+                      ? Text(
+                          '${post!.category?.name} - ${post!.category?.scientificName}',
+                        )
+                      : SizedBox.shrink(),
+                  post?.dbh != null
+                      ? Text('DBH: ${post!.dbh} cm')
+                      : SizedBox.shrink(),
+                  Divider(),
+                  Text(
+                    '${post!.location.lat} / ${post!.location.lng}',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.black,
+                  style: BorderStyle.solid,
+                  width: 3,
                 ),
-                Divider(),
-                Text(
-                  '${post!.location.lat} / ${post!.location.lng}',
-                  style: TextStyle(fontSize: 12),
-                ),
-              ],
+              ),
+              child: Image.file(
+                File(post!.imageUrl!),
+              ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                  color: Colors.black, style: BorderStyle.solid, width: 3),
-            ),
-            child: Image.file(
-              File(post!.imageUrl!),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,17 +1,19 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:forest_map/core/util/uuid_generator.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:uuid/uuid.dart';
 
-class MockUUID extends Mock implements Uuid {}
+import 'uuid_generator_test.mocks.dart';
 
+@GenerateMocks([Uuid])
 void main() {
-  MockUUID mockUUID;
-  UUIDGenerator uuidGenerator;
+  late MockUuid mockUUID;
+  late UUIDGenerator uuidGenerator;
 
   setUp(() {
-    mockUUID = MockUUID();
+    mockUUID = MockUuid();
     uuidGenerator = UUIDGenerator(mockUUID);
   });
 

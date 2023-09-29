@@ -12,22 +12,22 @@ import 'package:forest_map/features/user/data/models/user_model.dart';
 import 'package:forest_map/features/organization/data/datasources/organization_remote_data_source.dart';
 import 'package:forest_map/features/organization/data/models/organization_model.dart';
 import 'package:forest_map/features/organization/data/repositories/organization_repository_impl.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MockOrganizationRemoteDataSource extends Mock
-    implements OrganizationRemoteDataSource {}
+import 'organization_repository_impl_test.mocks.dart';
 
-class MockOrganizationLocalDataSource extends Mock
-    implements OrganizationLocalDataSource {}
-
-class MockNetworkInfo extends Mock implements NetworkInfo {}
-
+@GenerateMocks([
+  OrganizationRemoteDataSource,
+  OrganizationLocalDataSource,
+  NetworkInfo,
+])
 void main() {
-  MockOrganizationRemoteDataSource mockOrganizationDataSource;
-  MockOrganizationLocalDataSource mockOrganizationLocalDataSource;
-  MockNetworkInfo mockNetworkInfo;
-  OrganizationRepositoryImpl organizationRepositoryImpl;
+  late MockOrganizationRemoteDataSource mockOrganizationDataSource;
+  late MockOrganizationLocalDataSource mockOrganizationLocalDataSource;
+  late MockNetworkInfo mockNetworkInfo;
+  late OrganizationRepositoryImpl organizationRepositoryImpl;
 
   setUp(() {
     mockOrganizationDataSource = MockOrganizationRemoteDataSource();

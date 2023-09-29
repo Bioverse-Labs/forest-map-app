@@ -31,7 +31,7 @@ Future<Either<LocalFailure, Uri>> generateInviteLink(
         ),
         description: GetIt.I<LocalizedString>().getLocalizedString(
           'invitation-link.description',
-          namedArgs: {'name': organization.name},
+          namedArgs: {'name': organization.name ?? ''},
         ),
         imageUrl: Uri.parse(
           'https://raw.githubusercontent.com/Bioverse-Labs/forest-map-app/master/bioverse.png',

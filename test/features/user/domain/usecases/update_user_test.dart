@@ -6,13 +6,15 @@ import 'package:forest_map/core/errors/failure.dart';
 import 'package:forest_map/features/user/domain/entities/user.dart';
 import 'package:forest_map/features/user/domain/repository/user_repository.dart';
 import 'package:forest_map/features/user/domain/usecases/update_user.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-class MockUserRepository extends Mock implements UserRepository {}
+import 'update_user_test.mocks.dart';
 
+@GenerateMocks([UserRepository])
 void main() {
-  MockUserRepository mockUserRepository;
-  UpdateUser updateUser;
+  late MockUserRepository mockUserRepository;
+  late UpdateUser updateUser;
 
   setUp(() {
     mockUserRepository = MockUserRepository();

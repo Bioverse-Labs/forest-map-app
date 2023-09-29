@@ -15,34 +15,31 @@ import 'package:forest_map/features/organization/domain/usecases/remove_member.d
 import 'package:forest_map/features/organization/domain/usecases/update_member.dart';
 import 'package:forest_map/features/organization/domain/usecases/update_organization.dart';
 import 'package:forest_map/features/organization/presentation/notifiers/organizations_notifier.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../../../core/notifiers/change_notifiers.dart';
 
-class MockCreateOrganization extends Mock implements CreateOrganization {}
+import 'organization_notifier_test.mocks.dart';
 
-class MockGetOrganization extends Mock implements GetOrganization {}
-
-class MockUpdateOrganization extends Mock implements UpdateOrganization {}
-
-class MockDeleteOrganization extends Mock implements DeleteOrganization {}
-
-class MockUpdateMember extends Mock implements UpdateMember {}
-
-class MockRemoveMember extends Mock implements RemoveMember {}
-
-class MockSaveOrganizationLocally extends Mock
-    implements SaveOrganizationLocally {}
-
+@GenerateMocks([
+  CreateOrganization,
+  GetOrganization,
+  UpdateOrganization,
+  DeleteOrganization,
+  UpdateMember,
+  RemoveMember,
+  SaveOrganizationLocally,
+])
 void main() {
-  MockCreateOrganization mockCreateOrganization;
-  MockGetOrganization mockGetOrganization;
-  MockUpdateOrganization mockUpdateOrganization;
-  MockDeleteOrganization mockDeleteOrganization;
-  MockUpdateMember mockUpdateMember;
-  MockRemoveMember mockRemoveMember;
-  MockSaveOrganizationLocally mockSaveOrganizationLocally;
-  OrganizationNotifierImpl organizationNotifierImpl;
+  late MockCreateOrganization mockCreateOrganization;
+  late MockGetOrganization mockGetOrganization;
+  late MockUpdateOrganization mockUpdateOrganization;
+  late MockDeleteOrganization mockDeleteOrganization;
+  late MockUpdateMember mockUpdateMember;
+  late MockRemoveMember mockRemoveMember;
+  late MockSaveOrganizationLocally mockSaveOrganizationLocally;
+  late OrganizationNotifierImpl organizationNotifierImpl;
 
   setUp(() {
     mockCreateOrganization = MockCreateOrganization();

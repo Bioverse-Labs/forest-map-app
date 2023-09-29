@@ -25,6 +25,7 @@
   },
   "input-validations": {
     "required": "This field is required!",
+    "invalid-int": "Please input an valid integer!",
     "invalid-email": "Please input an valid email!",
     "invalid-phone": "Please input an valid phone number!",
     "invalid-password": "The password must contain at least 8 characters"
@@ -81,15 +82,23 @@
     "location-permission-button": "Allow/Enable Location",
     "input-label": "Specie/Nome",
     "input-placeholder": "Castanheira",
+    "land-use": {
+      "input-label": "Land Use",
+      "input-placeholder": "Select land use type",
+      "other": "Other land use type"
+    },
     "save-button": "Save",
     "example-button": "See Examples",
     "post-success": "Data saved!",
     "start-saving": "Data started to being saved",
-    "loading-geolocation-files": "Loading geolocation files..."
+    "loading-geolocation-files": "Loading geolocation files...",
+    "dbh-label": "DBH",
+    "dbh-suffix": "cm",
+    "dbh-helper": "Diameter at Breast Height"
   },
   "organization-screen": {
     "title": "Organizations",
-    "empty-state-title": "Currently you are not assined to any organization... :/",
+    "empty-state-title": "Currently you are not assined to any organization.",
     "empty-state-button": "New organization",
     "members-counter": "Members",
     "invite-member-button": "Invite Members",

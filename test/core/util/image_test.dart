@@ -12,7 +12,7 @@ void main() {
   final tPath = getTestPath('test/core/util/test_file.jpeg');
   final tFile = File(tPath);
   final tImage = decodeImage(tFile.readAsBytesSync());
-  ImageUtilsImpl imageUtilsImpl;
+  late ImageUtilsImpl imageUtilsImpl;
 
   setUp(() async {
     imageUtilsImpl = ImageUtilsImpl();
@@ -23,8 +23,8 @@ void main() {
       final result = imageUtilsImpl.fileToImage(tFile);
 
       expect(result, isInstanceOf<Image>());
-      expect(result.width, tSize.width);
-      expect(result.height, tSize.height);
+      expect(result?.width, tSize.width);
+      expect(result?.height, tSize.height);
     });
 
     test('should throw [AssertionError] if file is null', () {

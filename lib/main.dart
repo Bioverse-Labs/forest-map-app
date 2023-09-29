@@ -12,7 +12,11 @@ void main() async {
   await _initApp();
   runApp(EasyLocalization(
     child: ForestMap(),
-    supportedLocales: [Locale('en'), Locale('pt', 'BR')],
+    supportedLocales: [
+      Locale('en'),
+      Locale('es'),
+      Locale('pt', 'BR'),
+    ],
     fallbackLocale: Locale('en'),
     path: 'translations/',
     assetLoader: CodegenLoader(),

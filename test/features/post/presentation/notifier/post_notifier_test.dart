@@ -1,186 +1,193 @@
-// import 'dart:async';
-// import 'dart:io';
+import 'dart:async';
+import 'dart:io';
 
-// import 'package:dartz/dartz.dart';
-// import 'package:faker/faker.dart';
-// import 'package:forest_map/core/adapters/hive_adapter.dart';
-// import 'package:forest_map/core/enums/exception_origin_types.dart';
-// import 'package:forest_map/core/errors/failure.dart';
-// import 'package:forest_map/core/usecases/usecase.dart';
-// import 'package:forest_map/features/post/data/hive/post.dart';
-// import 'package:forest_map/features/post/domain/entities/post.dart';
-// import 'package:forest_map/features/post/domain/usecases/save_post.dart';
-// import 'package:forest_map/features/post/domain/usecases/upload_cached_post.dart';
-// import 'package:forest_map/features/post/presentation/notifier/post_notifier.dart';
-// import 'package:mockito/mockito.dart';
-// import 'package:flutter_test/flutter_test.dart';
+import 'package:dartz/dartz.dart';
+import 'package:faker/faker.dart';
+import 'package:forest_map/core/adapters/hive_adapter.dart';
+import 'package:forest_map/core/enums/exception_origin_types.dart';
+import 'package:forest_map/core/errors/failure.dart';
+import 'package:forest_map/core/usecases/usecase.dart';
+import 'package:forest_map/features/post/data/hive/pending_post.dart';
+import 'package:forest_map/features/post/domain/entities/post.dart';
+import 'package:forest_map/features/post/domain/usecases/get_posts.dart';
+import 'package:forest_map/features/post/domain/usecases/save_post.dart';
+import 'package:forest_map/features/post/domain/usecases/upload_cached_post.dart';
+import 'package:forest_map/features/post/presentation/notifier/post_notifier.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+import 'package:flutter_test/flutter_test.dart';
 
-// import '../../../../core/notifiers/change_notifiers.dart';
+import '../../../../core/notifiers/change_notifiers.dart';
 
-// class MockSavePost extends Mock implements SavePost {}
+import 'post_notifier_test.mocks.dart';
 
-// class MockUploadCachedPost extends Mock implements UploadCachedPost {}
+@GenerateMocks([
+  SavePost,
+  GetPosts,
+  UploadCachedPost,
+  HiveAdapter,
+])
+void main() {
+  late MockSavePost mockSavePost;
+  late MockGetPosts mockGetPost;
+  late MockUploadCachedPost mockUploadCachedPost;
+  late MockHiveAdapter<PendingPostHive> mockHiveAdapter;
+  late PostNotifierImpl postNotifierImpl;
 
-// class MockHiveAdapter extends Mock implements HiveAdapter<PostHive> {}
+  setUp(() {
+    mockSavePost = MockSavePost();
+    mockGetPost = MockGetPosts();
+    mockUploadCachedPost = MockUploadCachedPost();
+    mockHiveAdapter = MockHiveAdapter();
+    postNotifierImpl = PostNotifierImpl(
+      savePostUseCase: mockSavePost,
+      uploadCachedPostUseCase: mockUploadCachedPost,
+      getPostsUseCase: mockGetPost,
+      postHive: mockHiveAdapter,
+    );
+  });
 
-// void main() {
-//   MockSavePost mockSavePost;
-//   MockUploadCachedPost mockUploadCachedPost;
-//   MockHiveAdapter mockHiveAdapter;
-//   PostNotifierImpl postNotifierImpl;
+  final tUserId = faker.guid.guid();
+  final tOrgId = faker.guid.guid();
+  final tFile = File(faker.image.image());
+  final tSpecie = faker.randomGenerator.string(20);
+  final tStreamController = StreamController<Either<Failure, Post>>();
 
-//   setUp(() {
-//     mockSavePost = MockSavePost();
-//     mockUploadCachedPost = MockUploadCachedPost();
-//     mockHiveAdapter = MockHiveAdapter();
-//     postNotifierImpl = PostNotifierImpl(
-//       savePostUseCase: mockSavePost,
-//       uploadCachedPostUseCase: mockUploadCachedPost,
-//       postHive: mockHiveAdapter,
-//     );
-//   });
+  group('savePost', () {
+    test(
+      'should set [User] and notifiy all listeners if usecase succeed',
+      () async {
+        when(mockSavePost(any)).thenAnswer((_) async => Right([]));
 
-//   final tUserId = faker.guid.guid();
-//   final tOrgId = faker.guid.guid();
-//   final tFile = File(faker.image.image());
-//   final tSpecie = faker.randomGenerator.string(20);
-//   final tStreamController = StreamController<Either<Failure, Post>>();
+        await expectToNotifiyListener<PostNotifierImpl>(
+          postNotifierImpl,
+          () => postNotifierImpl.savePost(
+            userId: tUserId,
+            organizationId: tOrgId,
+            file: tFile,
+            specie: tSpecie,
+          ),
+          [
+            NotifierAssertParams(
+              value: (notifier) => notifier.isLoading,
+              matcher: true,
+            ),
+            NotifierAssertParams(
+              value: (notifier) => notifier.isLoading,
+              matcher: false,
+            ),
+          ],
+        );
 
-//   group('savePost', () {
-//     test(
-//       'should set [User] and notifiy all listeners if usecase succeed',
-//       () async {
-//         when(mockSavePost(any)).thenAnswer((_) async => Right(null));
+        verify(mockSavePost(SavePostParams(
+          userId: tUserId,
+          organizationId: tOrgId,
+          file: tFile,
+          specie: tSpecie,
+        )));
+        verifyNoMoreInteractions(mockSavePost);
+      },
+    );
 
-//         await expectToNotifiyListener<PostNotifierImpl>(
-//           postNotifierImpl,
-//           () => postNotifierImpl.savePost(
-//             userId: tUserId,
-//             organizationId: tOrgId,
-//             file: tFile,
-//             specie: tSpecie,
-//           ),
-//           [
-//             NotifierAssertParams(
-//               value: (notifier) => notifier.isLoading,
-//               matcher: true,
-//             ),
-//             NotifierAssertParams(
-//               value: (notifier) => notifier.isLoading,
-//               matcher: false,
-//             ),
-//           ],
-//         );
+    test(
+      'should throw [Failure] if useCase fails',
+      () async {
+        when(mockSavePost(any)).thenAnswer(
+          (_) async => Left(
+            ServerFailure(
+              faker.randomGenerator.string(20),
+              faker.randomGenerator.string(20),
+              ExceptionOriginTypes.test,
+            ),
+          ),
+        );
 
-//         verify(mockSavePost(SavePostParams(
-//           userId: tUserId,
-//           organizationId: tOrgId,
-//           file: tFile,
-//           specie: tSpecie,
-//         )));
-//         verifyNoMoreInteractions(mockSavePost);
-//       },
-//     );
+        final call = postNotifierImpl.savePost;
 
-//     test(
-//       'should throw [Failure] if useCase fails',
-//       () async {
-//         when(mockSavePost(any)).thenAnswer(
-//           (_) async => Left(
-//             ServerFailure(
-//               faker.randomGenerator.string(20),
-//               faker.randomGenerator.string(20),
-//               ExceptionOriginTypes.test,
-//             ),
-//           ),
-//         );
+        expect(
+          () => call(
+            userId: tUserId,
+            organizationId: tOrgId,
+            file: tFile,
+            specie: tSpecie,
+          ),
+          throwsA(isInstanceOf<ServerFailure>()),
+        );
 
-//         final call = postNotifierImpl.savePost;
+        verify(mockSavePost(SavePostParams(
+          userId: tUserId,
+          organizationId: tOrgId,
+          file: tFile,
+          specie: tSpecie,
+        )));
+        verifyNoMoreInteractions(mockSavePost);
+      },
+    );
+  });
 
-//         expect(
-//           () => call(
-//             userId: tUserId,
-//             organizationId: tOrgId,
-//             file: tFile,
-//             specie: tSpecie,
-//           ),
-//           throwsA(isInstanceOf<ServerFailure>()),
-//         );
+  group('uploadCachedPost', () {
+    setUp(() {
+      when(mockHiveAdapter.getKeys()).thenReturn([faker.guid.guid()]);
+    });
 
-//         verify(mockSavePost(SavePostParams(
-//           userId: tUserId,
-//           organizationId: tOrgId,
-//           file: tFile,
-//           specie: tSpecie,
-//         )));
-//         verifyNoMoreInteractions(mockSavePost);
-//       },
-//     );
-//   });
+    test(
+      'should set [User] and notifiy all listeners if usecase succeed',
+      () async {
+        when(mockUploadCachedPost(any)).thenAnswer((_) async => Right(
+              tStreamController,
+            ));
 
-//   group('uploadCachedPost', () {
-//     setUp(() {
-//       when(mockHiveAdapter.getKeys()).thenReturn([faker.guid.guid()]);
-//     });
+        await expectToNotifiyListener<PostNotifierImpl>(
+          postNotifierImpl,
+          () => postNotifierImpl.uploadCachedPost(),
+          [
+            NotifierAssertParams(
+              value: (notifier) => notifier.isLoading,
+              matcher: true,
+            ),
+            NotifierAssertParams(
+              value: (notifier) => notifier.isLoading,
+              matcher: false,
+            ),
+            NotifierAssertParams(
+              value: (notifier) => notifier.streamController,
+              matcher: tStreamController,
+            ),
+          ],
+        );
 
-//     test(
-//       'should set [User] and notifiy all listeners if usecase succeed',
-//       () async {
-//         when(mockUploadCachedPost(any)).thenAnswer((_) async => Right(
-//               tStreamController,
-//             ));
+        tStreamController.close();
 
-//         await expectToNotifiyListener<PostNotifierImpl>(
-//           postNotifierImpl,
-//           () => postNotifierImpl.uploadCachedPost(),
-//           [
-//             NotifierAssertParams(
-//               value: (notifier) => notifier.isLoading,
-//               matcher: true,
-//             ),
-//             NotifierAssertParams(
-//               value: (notifier) => notifier.isLoading,
-//               matcher: false,
-//             ),
-//             NotifierAssertParams(
-//               value: (notifier) => notifier.streamController,
-//               matcher: tStreamController,
-//             ),
-//           ],
-//         );
+        verify(mockUploadCachedPost(NoParams()));
+        verifyNoMoreInteractions(mockSavePost);
+      },
+    );
 
-//         tStreamController.close();
+    test(
+      'should throw [Failure] if useCase fails',
+      () async {
+        when(mockUploadCachedPost(any)).thenAnswer(
+          (_) async => Left(
+            ServerFailure(
+              faker.randomGenerator.string(20),
+              faker.randomGenerator.string(20),
+              ExceptionOriginTypes.test,
+            ),
+          ),
+        );
 
-//         verify(mockUploadCachedPost(NoParams()));
-//         verifyNoMoreInteractions(mockSavePost);
-//       },
-//     );
+        final call = postNotifierImpl.uploadCachedPost;
 
-//     test(
-//       'should throw [Failure] if useCase fails',
-//       () async {
-//         when(mockUploadCachedPost(any)).thenAnswer(
-//           (_) async => Left(
-//             ServerFailure(
-//               faker.randomGenerator.string(20),
-//               faker.randomGenerator.string(20),
-//               ExceptionOriginTypes.test,
-//             ),
-//           ),
-//         );
+        expect(
+          () => call(),
+          throwsA(isInstanceOf<ServerFailure>()),
+        );
 
-//         final call = postNotifierImpl.uploadCachedPost;
+        tStreamController.close();
 
-//         expect(
-//           () => call(),
-//           throwsA(isInstanceOf<ServerFailure>()),
-//         );
-
-//         tStreamController.close();
-
-//         verify(mockUploadCachedPost(NoParams()));
-//         verifyNoMoreInteractions(mockSavePost);
-//       },
-//     );
-//   });
-// }
+        verify(mockUploadCachedPost(NoParams()));
+        verifyNoMoreInteractions(mockSavePost);
+      },
+    );
+  });
+}

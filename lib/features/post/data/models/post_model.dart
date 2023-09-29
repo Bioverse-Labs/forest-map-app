@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../catalog/data/catalog.dart';
-import '../../../catalog/domain/entities/catalog.dart';
-import '../hive/pending_post.dart';
 
 import '../../../../core/models/model.dart';
+import '../../../catalog/data/catalog.dart';
+import '../../../catalog/domain/entities/catalog.dart';
 import '../../../tracking/data/models/location_model.dart';
 import '../../../tracking/domain/entities/location.dart';
 import '../../domain/entities/post.dart';
+import '../hive/pending_post.dart';
 import '../hive/post.dart';
 
 class PostModel extends Post implements Model<PostModel, PostHive> {
@@ -17,7 +17,10 @@ class PostModel extends Post implements Model<PostModel, PostHive> {
     required Location location,
     required String? userId,
     required String? organizationId,
-    required Catalog? category,
+    String? specie,
+    Catalog? category,
+    int? dbh,
+    String? landUse,
   }) : super(
           id: id,
           userId: userId,
@@ -26,28 +29,47 @@ class PostModel extends Post implements Model<PostModel, PostHive> {
           location: location,
           organizationId: organizationId,
           category: category,
+          specie: specie,
+          landUse: landUse,
+          dbh: dbh,
         );
 
   factory PostModel.fromMap(Map<String, dynamic> map) {
+    late DateTime timestamp;
+
+    if (map['timestamp'] is DateTime) {
+      timestamp = map['timestamp'] as DateTime;
+    } else if (map['timestamp'] is Timestamp) {
+      timestamp = (map['timestamp'] as Timestamp).toDate();
+    } else {
+      timestamp = DateTime.now();
+    }
+
     return PostModel(
-        id: map['id'],
-        imageUrl: map['imageUrl'],
-        timestamp: (map['timestamp'] as Timestamp).toDate(),
-        location: Location(
-          id: null,
-          lat: map['lat'],
-          lng: map['lng'],
-          timestamp: null,
-          accuracy: map['accuracy'],
-          altitude: map['altitude'],
-          floor: map['floor'],
-          heading: map['heading'],
-          speed: map['speed'],
-          speedAccuracy: map['speedAccuracy'],
-        ),
-        userId: map['userId'],
-        organizationId: map['organizationId'],
-        category: catalogList[map['categoryId'] as num?]);
+      id: map['id'],
+      imageUrl: map['imageUrl'],
+      timestamp: timestamp,
+      location: Location(
+        id: null,
+        lat: map['lat']?.toDouble(),
+        lng: map['lng']?.toDouble(),
+        timestamp: null,
+        accuracy: map['accuracy']?.toDouble(),
+        altitude: map['altitude']?.toDouble(),
+        floor: map['floor'],
+        heading: map['heading']?.toDouble(),
+        speed: map['speed']?.toDouble(),
+        speedAccuracy: map['speedAccuracy']?.toDouble(),
+      ),
+      userId: map['userId'],
+      dbh: map['dbh'],
+      specie: map['specie'],
+      organizationId: map['organizationId'],
+      landUse: map['landUse'],
+      category: map['categoryId'] != null
+          ? catalogList[map['categoryId'] as num?]
+          : null,
+    );
   }
 
   factory PostModel.fromHive(dynamic postHive) {
@@ -58,7 +80,11 @@ class PostModel extends Post implements Model<PostModel, PostHive> {
       timestamp: postHive.timestamp,
       location: LocationModel.fromHive(postHive.location),
       organizationId: postHive.organizationId,
-      category: catalogList[postHive.categoryId],
+      category:
+          postHive.categoryId != null ? catalogList[postHive.categoryId] : null,
+      landUse: postHive.landUse,
+      specie: postHive.specie,
+      dbh: postHive.dbh,
     );
   }
 
@@ -71,6 +97,9 @@ class PostModel extends Post implements Model<PostModel, PostHive> {
       timestamp: post.timestamp,
       location: post.location,
       category: post.category,
+      landUse: post.landUse,
+      specie: post.specie,
+      dbh: post.dbh,
     );
   }
 
@@ -83,6 +112,9 @@ class PostModel extends Post implements Model<PostModel, PostHive> {
     String? userId,
     String? organizationId,
     Catalog? category,
+    String? landUse,
+    String? specie,
+    int? dbh,
   }) {
     return PostModel(
       id: id ?? this.id,
@@ -92,6 +124,9 @@ class PostModel extends Post implements Model<PostModel, PostHive> {
       userId: userId ?? this.userId,
       organizationId: organizationId ?? this.organizationId,
       category: category ?? this.category,
+      landUse: landUse ?? this.landUse,
+      dbh: dbh ?? this.dbh,
+      specie: specie ?? this.specie,
     );
   }
 
@@ -103,9 +138,11 @@ class PostModel extends Post implements Model<PostModel, PostHive> {
       ..imageUrl = imageUrl
       ..timestamp = timestamp
       ..location = LocationModel.fromEntity(location).toHiveAdapter()
-      ..categoryId = category!.id
+      ..categoryId = category?.id
       ..organizationId = organizationId
-      ..specie = category!.scientificName;
+      ..dbh = dbh
+      ..landUse = landUse
+      ..specie = category?.scientificName;
   }
 
   PendingPostHive toPendingPostHiveAdapter() {
@@ -115,21 +152,24 @@ class PostModel extends Post implements Model<PostModel, PostHive> {
       ..imageUrl = imageUrl
       ..timestamp = timestamp
       ..location = LocationModel.fromEntity(location).toHiveAdapter()
-      ..categoryId = category!.id
+      ..categoryId = category?.id
       ..organizationId = organizationId
-      ..specie = category!.scientificName;
+      ..dbh = dbh
+      ..landUse = landUse
+      ..specie = category?.scientificName;
   }
 
   @override
   Map<String, dynamic> toMap() => {
         ...LocationModel.fromEntity(location).toMap(),
         'id': id,
-        'specie': category!.scientificName,
-        'name': category!.name,
+        'specie': category?.scientificName,
+        'name': category?.name,
         'imageUrl': imageUrl,
-        'timestamp': Timestamp.fromDate(timestamp!),
+        'timestamp': Timestamp.fromDate(timestamp ?? DateTime.now()),
         'userId': userId,
-        'categoryId': category!.id,
-        ...(location as LocationModel).toMap(),
+        'categoryId': category?.id,
+        'landUse': landUse,
+        'dbh': dbh,
       };
 }

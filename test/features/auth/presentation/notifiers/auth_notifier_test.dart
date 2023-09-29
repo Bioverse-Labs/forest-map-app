@@ -10,34 +10,34 @@ import 'package:forest_map/features/auth/domain/usecases/sign_in_with_email_and_
 import 'package:forest_map/features/auth/domain/usecases/sign_in_with_social.dart';
 import 'package:forest_map/features/auth/domain/usecases/sign_up.dart';
 import 'package:forest_map/features/auth/presentation/notifiers/auth_notifier.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../core/notifiers/change_notifiers.dart';
 
-class MockSignInWithEmailAndPassword extends Mock
-    implements SignInWithEmailAndPassword {}
+import 'auth_notifier_test.mocks.dart';
 
-class MockSignInWithSocial extends Mock implements SignInWithSocial {}
-
-class MockSignUp extends Mock implements SignUp {}
-
-class MockSignOut extends Mock implements SignOut {}
-
-class MockForgotPassword extends Mock implements ForgotPassword {}
-
+@GenerateMocks([
+  SignInWithEmailAndPassword,
+  SignInWithSocial,
+  SignUp,
+  SignOut,
+  ForgotPassword,
+])
 void main() {
-  MockSignInWithEmailAndPassword mockSignInWithEmailAndPassword;
-  MockSignInWithSocial mockSignInWithSocial;
-  MockSignUp mockSignUp;
-  MockSignOut mockSignOut;
-  MockForgotPassword mockForgotPassword;
-  AuthNotifierImpl authNotifierImpl;
+  late MockSignInWithEmailAndPassword mockSignInWithEmailAndPassword;
+  late MockSignInWithSocial mockSignInWithSocial;
+  late MockSignUp mockSignUp;
+  late MockSignOut mockSignOut;
+  late MockForgotPassword mockForgotPassword;
+  late AuthNotifierImpl authNotifierImpl;
 
   setUp(() {
     mockSignInWithEmailAndPassword = MockSignInWithEmailAndPassword();
     mockSignInWithSocial = MockSignInWithSocial();
     mockSignUp = MockSignUp();
+    mockSignOut = MockSignOut();
     mockForgotPassword = MockForgotPassword();
 
     authNotifierImpl = AuthNotifierImpl(

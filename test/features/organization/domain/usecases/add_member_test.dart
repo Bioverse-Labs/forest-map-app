@@ -5,14 +5,15 @@ import 'package:forest_map/features/user/domain/entities/user.dart';
 import 'package:forest_map/features/organization/domain/entities/organization.dart';
 import 'package:forest_map/features/organization/domain/repositories/organization_repository.dart';
 import 'package:forest_map/features/organization/domain/usecases/add_member.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-class MockOrganizationRepository extends Mock
-    implements OrganizationRepository {}
+import 'add_member_test.mocks.dart';
 
+@GenerateMocks([OrganizationRepository])
 void main() {
-  MockOrganizationRepository mockOrganizationRepository;
-  AddMember useCase;
+  late MockOrganizationRepository mockOrganizationRepository;
+  late AddMember useCase;
 
   setUp(() {
     mockOrganizationRepository = MockOrganizationRepository();

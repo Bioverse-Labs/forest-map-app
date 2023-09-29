@@ -4,13 +4,15 @@ import 'package:forest_map/core/adapters/hive_adapter.dart';
 import 'package:forest_map/features/user/data/datasource/user_local_data_source.dart';
 import 'package:forest_map/features/user/data/hive/user.dart';
 import 'package:forest_map/features/user/data/models/user_model.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-class MockHiveAdapter extends Mock implements HiveAdapter<UserHive> {}
+import 'user_local_data_source_test.mocks.dart';
 
+@GenerateMocks([HiveAdapter])
 void main() {
-  MockHiveAdapter mockHiveAdapter;
-  UserLocalDataSourceImpl userLocalDataSourceImpl;
+  late MockHiveAdapter<UserHive> mockHiveAdapter;
+  late UserLocalDataSourceImpl userLocalDataSourceImpl;
 
   setUp(() {
     mockHiveAdapter = MockHiveAdapter();
@@ -26,8 +28,8 @@ void main() {
     ..organizations = [];
 
   final tUserModel = UserModel(
-    id: tUserHive.id,
-    name: tUserHive.name,
+    id: tUserHive.id!,
+    name: tUserHive.name!,
     email: tUserHive.email,
     organizations: [],
   );
@@ -53,7 +55,7 @@ void main() {
     test(
       'should save to storage',
       () async {
-        when(mockHiveAdapter.put(any, any)).thenAnswer((_) => null);
+        when(mockHiveAdapter.put(any, any)).thenAnswer((_) async => null);
 
         await userLocalDataSourceImpl.saveUser(
           id: tUserModel.id,

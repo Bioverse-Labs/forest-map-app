@@ -68,6 +68,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   bool _hasPermission = true;
   MapType _mapType = MapType.satellite;
   late BitmapDescriptor _treeLocationIcon;
+  late BitmapDescriptor _landUseLocationIcon;
   late BitmapDescriptor _villageLocationIcon;
 
   @override
@@ -100,6 +101,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   Future<void> _setCustomMapPin() async {
     _treeLocationIcon = await _renderMarker(32, 'marker');
     _villageLocationIcon = await _renderMarker(64, 'tent');
+    _landUseLocationIcon = await _renderMarker(64, 'land');
   }
 
   Future<BitmapDescriptor> _renderMarker(int size, String filename) async {
@@ -177,6 +179,41 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     );
   }
 
+  void _handlePostType(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        title: Text('Post Type'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                child: Text('Specie'),
+                onPressed: () {
+                  _createPost(context, PostType.Specie);
+                  widget.appNavigator!.pop();
+                },
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                child: Text('Land Use'),
+                onPressed: () {
+                  _createPost(context, PostType.LandUse);
+                  widget.appNavigator!.pop();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _handleMapCreation(GoogleMapController controller) {
     _controller = controller;
   }
@@ -194,17 +231,35 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _savePost(Catalog specie, CameraResponse cameraResponse) async {
+  Future<void> _savePost(
+    dynamic value,
+    CameraResponse cameraResponse, {
+    int? dbh,
+  }) async {
     try {
       widget.notificationsUtils!.showInfoNotification(
         widget.localizedString!.getLocalizedString('map-screen.start-saving'),
       );
-      await widget.postNotifier.savePost(
-        file: cameraResponse.file,
-        organizationId: widget.organizationNotifier.organization?.id,
-        userId: widget.userNotifier.user?.id,
-        category: specie,
-      );
+
+      if (value is Catalog) {
+        await widget.postNotifier.savePost(
+          file: cameraResponse.file,
+          organizationId: widget.organizationNotifier.organization?.id,
+          userId: widget.userNotifier.user?.id,
+          category: value,
+          dbh: dbh,
+        );
+      } else if (value is String) {
+        await widget.postNotifier.savePost(
+          file: cameraResponse.file,
+          organizationId: widget.organizationNotifier.organization!.id!,
+          userId: widget.userNotifier.user!.id!,
+          landUse: value,
+        );
+      } else {
+        throw 'Invalid value type on Post';
+      }
+
       widget.notificationsUtils!.showSuccessNotification(
         widget.localizedString!.getLocalizedString('map-screen.post-success'),
       );
@@ -217,7 +272,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _takePicture(BuildContext context) async {
+  Future<void> _createPost(BuildContext context, PostType postType) async {
     final failureOrCameraResp = await widget.camera!.takePicture(isTemp: false);
 
     failureOrCameraResp.fold(
@@ -233,12 +288,17 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
         barrierDismissible: false,
         builder: (ctx) => SavePostDialog(
           ctx: ctx,
+          postType: postType,
           cameraResponse: cameraResp,
           appTheme: widget.appTheme,
           localizedString: widget.localizedString,
-          onSave: (specie) {
+          onSave: (dynamic value, {int? dbh}) {
             widget.appNavigator!.pop();
-            _savePost(specie!, cameraResp);
+            _savePost(
+              value,
+              cameraResp,
+              dbh: dbh,
+            );
           },
           onExample: () {
             widget.appNavigator!.push('/catalog');
@@ -356,23 +416,30 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
           ))
       .toList();
 
-  List<Marker> _parsePosts(List<Post> posts) => posts
-      .map(
-        (post) => Marker(
-          markerId: MarkerId(post.id!),
-          position: LatLng(post.location.lat!, post.location.lng!),
-          icon: post.category!.icon,
-          consumeTapEvents: true,
-          onTap: () => showDialog(
-            context: context,
-            builder: (ctx) => PostModal(
-              appNavigator: widget.appNavigator,
-              post: post,
+  List<Marker> _parsePosts(List<Post> posts) => posts.map(
+        (post) {
+          BitmapDescriptor postIcon =
+              (post.category?.icon ?? BitmapDescriptor.defaultMarker);
+
+          if (post.landUse != null) {
+            postIcon = _landUseLocationIcon;
+          }
+
+          return Marker(
+            markerId: MarkerId(post.id!),
+            position: LatLng(post.location.lat!, post.location.lng!),
+            icon: postIcon,
+            consumeTapEvents: true,
+            onTap: () => showDialog(
+              context: context,
+              builder: (ctx) => PostModal(
+                appNavigator: widget.appNavigator,
+                post: post,
+              ),
             ),
-          ),
-        ),
-      )
-      .toList();
+          );
+        },
+      ).toList();
 
   Polyline _parseLines(List<Location> locations) => Polyline(
         polylineId: PolylineId('track'),
@@ -390,6 +457,21 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
       builder: (ctx, locationState, mapState, postState, orgState, _) {
         if (mounted) {
           _updateMapPosition(locationState.currentLocation);
+        }
+
+        if (orgState.organization == null) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Text(
+                widget.localizedString!.getLocalizedString(
+                  'organization-screen.empty-state-title',
+                ),
+                style: Theme.of(context).textTheme.headlineSmall,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
         }
 
         if ((_hasPermission && mapState.isLoading) || orgState.isLoading) {
@@ -490,7 +572,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                     children: [
                       FloatingActionButton(
                         heroTag: 'mapPhotoActionButton',
-                        onPressed: () => _takePicture(context),
+                        onPressed: () => _handlePostType(context),
                         child: Icon(Icons.add_a_photo_outlined),
                       ),
                       SizedBox(width: 16),

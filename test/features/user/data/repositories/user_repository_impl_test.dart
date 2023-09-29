@@ -9,19 +9,21 @@ import 'package:forest_map/features/user/data/datasource/user_local_data_source.
 import 'package:forest_map/features/user/data/datasource/user_remote_data_source.dart';
 import 'package:forest_map/features/user/data/models/user_model.dart';
 import 'package:forest_map/features/user/data/repository/user_repository_impl.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-class MockUserRemoteDataSource extends Mock implements UserRemoteDataSource {}
+import 'user_repository_impl_test.mocks.dart';
 
-class MockUserLocalDataSource extends Mock implements UserLocalDataSource {}
-
-class MockNetworkInfo extends Mock implements NetworkInfo {}
-
+@GenerateMocks([
+  UserRemoteDataSource,
+  UserLocalDataSource,
+  NetworkInfo,
+])
 void main() {
-  MockUserRemoteDataSource mockRemoteDataSource;
-  MockUserLocalDataSource mockLocalDataSource;
-  MockNetworkInfo mockNetworkInfo;
-  UserRepositoryImpl userRepositoryImpl;
+  late MockUserRemoteDataSource mockRemoteDataSource;
+  late MockUserLocalDataSource mockLocalDataSource;
+  late MockNetworkInfo mockNetworkInfo;
+  late UserRepositoryImpl userRepositoryImpl;
 
   setUp(() {
     mockRemoteDataSource = MockUserRemoteDataSource();

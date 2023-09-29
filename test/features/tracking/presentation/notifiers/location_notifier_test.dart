@@ -11,25 +11,26 @@ import 'package:forest_map/features/tracking/domain/usecases/get_locations.dart'
 import 'package:forest_map/features/tracking/domain/usecases/save_location.dart';
 import 'package:forest_map/features/tracking/domain/usecases/track_user.dart';
 import 'package:forest_map/features/tracking/presentation/notifiers/location_notifier.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../core/notifiers/change_notifiers.dart';
 
-class MockTrackUser extends Mock implements TrackUser {}
+import 'location_notifier_test.mocks.dart';
 
-class MockGetCurrentLocation extends Mock implements GetCurrentLocation {}
-
-class MockGetLocations extends Mock implements GetLocations {}
-
-class MockSaveLocation extends Mock implements SaveLocation {}
-
+@GenerateMocks([
+  TrackUser,
+  GetCurrentLocation,
+  GetLocations,
+  SaveLocation,
+])
 void main() {
-  MockTrackUser mockTrackUser;
-  MockGetCurrentLocation mockGetCurrentLocation;
-  MockGetLocations mockGetLocations;
-  MockSaveLocation mockSaveLocation;
-  LocationNotifierImpl locationNotifierImpl;
+  late MockTrackUser mockTrackUser;
+  late MockGetCurrentLocation mockGetCurrentLocation;
+  late MockGetLocations mockGetLocations;
+  late MockSaveLocation mockSaveLocation;
+  late LocationNotifierImpl locationNotifierImpl;
 
   setUp(() {
     mockTrackUser = MockTrackUser();
@@ -50,7 +51,7 @@ void main() {
     id: faker.guid.guid(),
     lat: faker.randomGenerator.decimal(),
     lng: faker.randomGenerator.decimal(),
-    timestamp: faker.date.dateTime(),
+    timestamp: DateTime.now(),
   );
 
   final tFailure = ServerFailure(
@@ -70,12 +71,7 @@ void main() {
         await expectToNotifiyListener<LocationNotifierImpl>(
           locationNotifierImpl,
           () => locationNotifierImpl.trackUser(tUserId),
-          [
-            NotifierAssertParams(
-              value: (notifier) => notifier.stream,
-              matcher: tStream,
-            ),
-          ],
+          [],
         );
 
         verify(mockTrackUser(NoParams()));

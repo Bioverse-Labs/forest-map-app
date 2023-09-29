@@ -14,6 +14,9 @@ abstract class PostRepository {
     String? userId,
     File? file,
     Catalog? category,
+    int? dbh,
+    String? landUse,
+    String? specie,
   });
   Future<Either<Failure, StreamController<Either<Failure, Post>>>>
       uploadCachedPost();

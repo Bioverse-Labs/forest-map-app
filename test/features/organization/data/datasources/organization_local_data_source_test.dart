@@ -4,13 +4,15 @@ import 'package:forest_map/core/adapters/hive_adapter.dart';
 import 'package:forest_map/features/organization/data/datasources/organization_local_data_source.dart';
 import 'package:forest_map/features/organization/data/hive/organization.dart';
 import 'package:forest_map/features/organization/data/models/organization_model.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-class MockHiveAdapter extends Mock implements HiveAdapter<OrganizationHive> {}
+import 'organization_local_data_source_test.mocks.dart';
 
+@GenerateMocks([HiveAdapter])
 void main() {
-  MockHiveAdapter mockHiveAdapter;
-  OrganizationLocalDataSourceImpl organizationLocalDataSource;
+  late MockHiveAdapter<OrganizationHive> mockHiveAdapter;
+  late OrganizationLocalDataSourceImpl organizationLocalDataSource;
 
   setUp(() {
     mockHiveAdapter = MockHiveAdapter();
@@ -49,8 +51,6 @@ void main() {
     test(
       'should save to storage',
       () async {
-        when(mockHiveAdapter.put(any, any)).thenAnswer((_) => null);
-
         await organizationLocalDataSource.saveOrganization(
           id: tOrganiaztionModel.id,
           organization: tOrganiaztionModel,

@@ -4,14 +4,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:forest_map/features/organization/domain/entities/organization.dart';
 import 'package:forest_map/features/organization/domain/repositories/organization_repository.dart';
 import 'package:forest_map/features/organization/domain/usecases/delete_organization.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-class MockOrganizationRepository extends Mock
-    implements OrganizationRepository {}
+import 'delete_organization_test.mocks.dart';
 
+@GenerateMocks([OrganizationRepository])
 void main() {
-  MockOrganizationRepository mockOrganizationRepository;
-  DeleteOrganization useCase;
+  late MockOrganizationRepository mockOrganizationRepository;
+  late DeleteOrganization useCase;
 
   setUp(() {
     mockOrganizationRepository = MockOrganizationRepository();

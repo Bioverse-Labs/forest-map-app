@@ -98,7 +98,7 @@ class LocationModel extends Location
         'id': id,
         'lat': lat,
         'lng': lng,
-        'timestamp': Timestamp.fromDate(timestamp!),
+        'timestamp': Timestamp.fromDate(timestamp ?? DateTime.now()),
         'accuracy': accuracy,
         'altitude': altitude,
         'floor': floor,

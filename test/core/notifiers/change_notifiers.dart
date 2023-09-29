@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Future<void> expectToNotifiyListener<T extends ChangeNotifier>(
+Future<Map<int, bool>> expectToNotifiyListener<T extends ChangeNotifier>(
   T changeNotifier,
   Function() testFunction,
   List<NotifierAssertParams<T>> assertParams,
@@ -28,7 +28,7 @@ class NotifierAssertParams<T> {
   final dynamic matcher;
 
   NotifierAssertParams({
-    @required this.value,
-    @required this.matcher,
+    required this.value,
+    required this.matcher,
   });
 }

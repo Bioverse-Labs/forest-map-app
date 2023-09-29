@@ -1,140 +1,275 @@
-// import 'dart:io';
+import 'dart:io';
 
-// import 'package:faker/faker.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:forest_map/core/adapters/firebase_storage_adapter.dart';
-// import 'package:forest_map/core/adapters/firestore_adapter.dart';
-// import 'package:forest_map/core/errors/exceptions.dart';
-// import 'package:forest_map/core/util/localized_string.dart';
-// import 'package:forest_map/core/util/uuid_generator.dart';
-// import 'package:forest_map/features/post/data/datasources/post_remote_data_source.dart';
-// import 'package:forest_map/features/tracking/data/models/location_model.dart';
-// import 'package:mockito/mockito.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faker/faker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:forest_map/core/adapters/firebase_storage_adapter.dart';
+import 'package:forest_map/core/adapters/firestore_adapter.dart';
+import 'package:forest_map/core/errors/exceptions.dart';
+import 'package:forest_map/core/util/localized_string.dart';
+import 'package:forest_map/core/util/uuid_generator.dart';
+import 'package:forest_map/features/post/data/datasources/post_remote_data_source.dart';
+import 'package:forest_map/features/post/data/models/post_model.dart';
+import 'package:forest_map/features/tracking/data/models/location_model.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-// class MockFirestoreAdapter extends Mock implements FirestoreAdapterImpl {}
+import 'post_remote_data_source_test.mocks.dart';
 
-// class MockFirebaseStorage extends Mock implements FirebasStorageAdapter {}
+const String kTemporaryPath = 'temporaryPath';
+const String kApplicationSupportPath = 'applicationSupportPath';
+const String kDownloadsPath = 'downloadsPath';
+const String kLibraryPath = 'libraryPath';
+const String kApplicationDocumentsPath = '';
+const String kExternalCachePath = 'externalCachePath';
+const String kExternalStoragePath = 'externalStoragePath';
 
-// class MockLocalizedString extends Mock implements LocalizedString {}
+class MockPathProviderPlatform extends Mock
+    with MockPlatformInterfaceMixin
+    implements PathProviderPlatform {
+  Future<String> getTemporaryPath() async {
+    return kTemporaryPath;
+  }
 
-// class MockUUIDGenerator extends Mock implements UUIDGenerator {}
+  Future<String> getApplicationSupportPath() async {
+    return kApplicationSupportPath;
+  }
 
-// class MockUploadTask extends Mock implements UploadTask {}
+  Future<String> getLibraryPath() async {
+    return kLibraryPath;
+  }
 
-// void main() {
-//   MockFirestoreAdapter mockFirestoreAdapter;
-//   MockFirebaseStorage mockFirebaseStorage;
-//   MockLocalizedString mockLocalizedString;
-//   MockUUIDGenerator mockUUIDGenerator;
-//   PostRemoteDataSourceImpl postRemoteDataSourceImpl;
+  Future<String> getApplicationDocumentsPath() async {
+    return kApplicationDocumentsPath;
+  }
 
-//   setUp(() {
-//     mockFirestoreAdapter = MockFirestoreAdapter();
-//     mockFirebaseStorage = MockFirebaseStorage();
-//     mockLocalizedString = MockLocalizedString();
-//     mockUUIDGenerator = MockUUIDGenerator();
-//     postRemoteDataSourceImpl = PostRemoteDataSourceImpl(
-//       firestoreAdapter: mockFirestoreAdapter,
-//       firebaseStorageAdapter: mockFirebaseStorage,
-//       localizedString: mockLocalizedString,
-//       uuidGenerator: mockUUIDGenerator,
-//     );
-//   });
+  Future<String> getExternalStoragePath() async {
+    return kExternalStoragePath;
+  }
 
-//   final tSpecie = faker.randomGenerator.string(20);
-//   final tUserId = faker.guid.guid();
-//   final tOrgId = faker.guid.guid();
-//   final tImageUrl = faker.image.image();
-//   final tFile = File(tImageUrl);
-//   final tLocation = LocationModel(
-//     id: faker.guid.guid(),
-//     lat: faker.randomGenerator.decimal(),
-//     lng: faker.randomGenerator.decimal(),
-//     timestamp: faker.date.dateTime(),
-//   );
-//   final tPostId = faker.guid.guid();
-//   final tFirebaseException = FirebaseException(
-//     plugin: 'firestore',
-//     message: faker.randomGenerator.string(20),
-//   );
+  Future<List<String>> getExternalCachePaths() async {
+    return <String>[kExternalCachePath];
+  }
 
-//   group('savePost', () {
-//     test(
-//       'should save [Post]',
-//       () async {
-//         when(mockFirebaseStorage.uploadFile(
-//           file: anyNamed('file'),
-//           storagePath: anyNamed('storagePath'),
-//         )).thenAnswer((_) => null);
-//         when(mockFirebaseStorage.getDownloadUrl(any)).thenAnswer(
-//           (_) async => tImageUrl,
-//         );
-//         when(mockUUIDGenerator.generateUID()).thenReturn(tPostId);
+  Future<List<String>> getExternalStoragePaths({
+    StorageDirectory? type,
+  }) async {
+    return <String>[kExternalStoragePath];
+  }
 
-//         when(mockFirestoreAdapter.addDocument(any, any))
-//             .thenAnswer((_) => null);
+  Future<String> getDownloadsPath() async {
+    return kDownloadsPath;
+  }
+}
 
-//         await postRemoteDataSourceImpl.savePost(
-//           organizationId: tOrgId,
-//           userId: tUserId,
-//           specie: tSpecie,
-//           file: tFile,
-//           location: tLocation,
-//         );
+@GenerateMocks([
+  FirestoreAdapterImpl,
+  FirebasStorageAdapter,
+  LocalizedString,
+  UUIDGenerator,
+  UploadTask,
+  DocumentReference,
+  CollectionReference,
+  FirebaseFirestore,
+], customMocks: [
+  MockSpec<QueryDocumentSnapshot<Map<String, dynamic>>>(
+    as: #MockQueryDocumentSnapshot,
+  ),
+])
+void main() {
+  late MockFirestoreAdapterImpl mockFirestoreAdapter;
+  late MockFirebasStorageAdapter mockFirebaseStorage;
+  late MockLocalizedString mockLocalizedString;
+  late MockUUIDGenerator mockUUIDGenerator;
+  late PostRemoteDataSourceImpl postRemoteDataSourceImpl;
+  late MockCollectionReference<Map<String, dynamic>> mockCollectionReference;
+  late MockQueryDocumentSnapshot mockQueryDocumentSnapshot;
+  late MockFirebaseFirestore mockFirebaseFirestore;
 
-//         verify(mockFirebaseStorage.getDownloadUrl(
-//           'organizations/$tOrgId/posts/$tPostId.png',
-//         ));
-//         verify(mockFirebaseStorage.uploadFile(
-//           file: tFile,
-//           storagePath: 'organizations/$tOrgId/posts/$tPostId.png',
-//         ));
-//         verifyNoMoreInteractions(mockFirebaseStorage);
-//       },
-//     );
+  setUp(() {
+    mockFirestoreAdapter = MockFirestoreAdapterImpl();
+    mockFirebaseStorage = MockFirebasStorageAdapter();
+    mockLocalizedString = MockLocalizedString();
+    mockUUIDGenerator = MockUUIDGenerator();
+    mockCollectionReference = MockCollectionReference();
+    mockQueryDocumentSnapshot = MockQueryDocumentSnapshot();
+    mockFirebaseFirestore = MockFirebaseFirestore();
+    postRemoteDataSourceImpl = PostRemoteDataSourceImpl(
+      firestoreAdapter: mockFirestoreAdapter,
+      firebaseStorageAdapter: mockFirebaseStorage,
+      localizedString: mockLocalizedString,
+      uuidGenerator: mockUUIDGenerator,
+    );
 
-//     test(
-//       'should throw [ServerException] if adapter fails',
-//       () async {
-//         when(mockFirebaseStorage.uploadFile(
-//           file: anyNamed('file'),
-//           storagePath: anyNamed('storagePath'),
-//         )).thenAnswer((_) => null);
-//         when(mockFirebaseStorage.getDownloadUrl(any)).thenAnswer(
-//           (_) async => tImageUrl,
-//         );
-//         when(mockUUIDGenerator.generateUID()).thenReturn(tPostId);
+    PathProviderPlatform.instance = MockPathProviderPlatform();
 
-//         when(mockFirestoreAdapter.addDocument(any, any)).thenThrow(
-//           tFirebaseException,
-//         );
+    when(mockLocalizedString.getLocalizedString(any)).thenReturn(
+      faker.randomGenerator.string(20),
+    );
+    when(mockFirebaseStorage.uploadFile(
+      file: anyNamed('file'),
+      storagePath: anyNamed('storagePath'),
+    )).thenAnswer((_) => MockUploadTask());
+  });
 
-//         try {
-//           await postRemoteDataSourceImpl.savePost(
-//             organizationId: tOrgId,
-//             userId: tUserId,
-//             specie: tSpecie,
-//             file: tFile,
-//             location: tLocation,
-//           );
-//         } catch (error) {
-//           expect(
-//             error,
-//             isInstanceOf<ServerException>(),
-//           );
-//         }
+  final tUserId = faker.guid.guid();
+  final tOrgId = faker.guid.guid();
+  final tImageUrl = faker.image.image();
+  final tFile = File(tImageUrl);
+  final tLocation = LocationModel(
+    id: faker.guid.guid(),
+    lat: faker.randomGenerator.decimal(),
+    lng: faker.randomGenerator.decimal(),
+    timestamp: DateTime.now(),
+  );
+  final tPostId = faker.guid.guid();
+  final tFirebaseException = FirebaseException(
+    plugin: 'firestore',
+    message: faker.randomGenerator.string(20),
+  );
 
-//         verify(mockFirebaseStorage.getDownloadUrl(
-//           'organizations/$tOrgId/posts/$tPostId.png',
-//         ));
-//         verify(mockFirebaseStorage.uploadFile(
-//           file: tFile,
-//           storagePath: 'organizations/$tOrgId/posts/$tPostId.png',
-//         ));
-//         verifyNoMoreInteractions(mockFirebaseStorage);
-//       },
-//     );
-//   });
-// }
+  group('savePost', () {
+    test(
+      'should save [Post]',
+      () async {
+        when(mockFirebaseStorage.getDownloadUrl(any)).thenAnswer(
+          (_) async => tImageUrl,
+        );
+        when(mockUUIDGenerator.generateUID()).thenReturn(tPostId);
+
+        when(mockFirestoreAdapter.addDocument(any, any))
+            .thenAnswer((_) async => MockDocumentReference());
+
+        await postRemoteDataSourceImpl.savePost(
+          PostModel(
+            id: tPostId,
+            imageUrl: tFile.path,
+            timestamp: tLocation.timestamp,
+            location: tLocation,
+            userId: tUserId,
+            organizationId: tOrgId,
+          ),
+        );
+
+        verifyNoMoreInteractions(mockFirebaseStorage);
+      },
+    );
+
+    test(
+      'should throw [ServerException] if adapter fails',
+      () async {
+        when(mockFirebaseStorage.getDownloadUrl(any)).thenAnswer(
+          (_) async => tImageUrl,
+        );
+        when(mockUUIDGenerator.generateUID()).thenReturn(tPostId);
+
+        when(mockFirestoreAdapter.addDocument(any, any)).thenThrow(
+          tFirebaseException,
+        );
+
+        try {
+          await postRemoteDataSourceImpl.savePost(
+            PostModel(
+              id: tPostId,
+              imageUrl: tFile.path,
+              timestamp: tLocation.timestamp,
+              location: tLocation,
+              userId: tUserId,
+              organizationId: tOrgId,
+            ),
+          );
+        } catch (error) {
+          expect(
+            error,
+            isInstanceOf<ServerException>(),
+          );
+        }
+
+        verifyNever(mockFirebaseStorage.getDownloadUrl(
+          'organizations/$tOrgId/posts/$tPostId.png',
+        ));
+        verifyNever(mockFirebaseStorage.uploadFile(
+          file: tFile,
+          storagePath: 'organizations/$tOrgId/posts/$tPostId.png',
+        ));
+        verifyNoMoreInteractions(mockFirebaseStorage);
+      },
+    );
+  });
+
+  group('getPosts', () {
+    test(
+      'should get [Posts]',
+      () async {
+        when(mockFirestoreAdapter.firestore).thenReturn(mockFirebaseFirestore);
+        when(mockFirebaseFirestore.collection(any))
+            .thenReturn(mockCollectionReference);
+        when(mockFirestoreAdapter.runQuery(any))
+            .thenAnswer((_) async => [mockQueryDocumentSnapshot]);
+        when(mockQueryDocumentSnapshot.exists).thenReturn(true);
+        when(mockQueryDocumentSnapshot.id).thenReturn(tPostId);
+        when(mockQueryDocumentSnapshot.data()).thenReturn(
+          PostModel(
+            id: tPostId,
+            imageUrl: tImageUrl,
+            timestamp: tLocation.timestamp,
+            location: tLocation,
+            userId: tUserId,
+            organizationId: tOrgId,
+          ).toMap(),
+        );
+
+        final result = await postRemoteDataSourceImpl.getPosts(
+          orgId: tOrgId,
+        );
+
+        expect(result, isA<List<PostModel>>());
+        verify(mockFirestoreAdapter.runQuery(any));
+      },
+    );
+
+    test(
+      'should throw [ServerException] if adapter fails',
+      () async {
+        when(mockFirebaseStorage.getDownloadUrl(any)).thenAnswer(
+          (_) async => tImageUrl,
+        );
+        when(mockUUIDGenerator.generateUID()).thenReturn(tPostId);
+
+        when(mockFirestoreAdapter.addDocument(any, any)).thenThrow(
+          tFirebaseException,
+        );
+
+        try {
+          await postRemoteDataSourceImpl.savePost(
+            PostModel(
+              id: tPostId,
+              imageUrl: tFile.path,
+              timestamp: tLocation.timestamp,
+              location: tLocation,
+              userId: tUserId,
+              organizationId: tOrgId,
+            ),
+          );
+        } catch (error) {
+          expect(
+            error,
+            isInstanceOf<ServerException>(),
+          );
+        }
+
+        verifyNever(mockFirebaseStorage.getDownloadUrl(
+          'organizations/$tOrgId/posts/$tPostId.png',
+        ));
+        verifyNever(mockFirebaseStorage.uploadFile(
+          file: tFile,
+          storagePath: 'organizations/$tOrgId/posts/$tPostId.png',
+        ));
+        verifyNoMoreInteractions(mockFirebaseStorage);
+      },
+    );
+  });
+}

@@ -1,17 +1,20 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:data_connection_checker_nulls/data_connection_checker_nulls.dart';
 import 'package:forest_map/core/platform/network_info.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MockDataConnectionChecker extends Mock implements DataConnectionChecker {}
+import 'network_info_test.mocks.dart';
 
-class MockConnectivity extends Mock implements Connectivity {}
-
+@GenerateMocks([
+  DataConnectionChecker,
+  Connectivity,
+])
 void main() {
-  NetworkInfoImpl networkInfoImpl;
-  MockConnectivity mockConnectivity;
-  MockDataConnectionChecker mockDataConnectionChecker;
+  late NetworkInfoImpl networkInfoImpl;
+  late MockConnectivity mockConnectivity;
+  late MockDataConnectionChecker mockDataConnectionChecker;
 
   setUp(() {
     mockDataConnectionChecker = MockDataConnectionChecker();
@@ -27,13 +30,12 @@ void main() {
       test(
         'should forward the function call to DataConnectionChecker.hasConnection',
         () async {
-          final tHasConnectionFuture = Future.value(true);
           when(mockDataConnectionChecker.hasConnection)
-              .thenAnswer((_) => tHasConnectionFuture);
+              .thenAnswer((_) => Future.value(true));
 
-          final result = networkInfoImpl.isConnected;
+          final result = await networkInfoImpl.isConnected;
           verify(mockDataConnectionChecker.hasConnection);
-          expect(result, tHasConnectionFuture);
+          expect(result, true);
         },
       );
     });

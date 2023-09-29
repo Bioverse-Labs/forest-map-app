@@ -5,13 +5,15 @@ import 'package:forest_map/core/usecases/usecase.dart';
 import 'package:forest_map/features/tracking/data/models/location_model.dart';
 import 'package:forest_map/features/tracking/domain/repositories/location_repository.dart';
 import 'package:forest_map/features/tracking/domain/usecases/get_current_location.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-class MockLocationRepository extends Mock implements LocationRepository {}
+import 'get_current_location_test.mocks.dart';
 
+@GenerateMocks([LocationRepository])
 void main() {
-  MockLocationRepository mockLocationRepository;
-  GetCurrentLocation getCurrentLocation;
+  late MockLocationRepository mockLocationRepository;
+  late GetCurrentLocation getCurrentLocation;
 
   setUp(() {
     mockLocationRepository = MockLocationRepository();
@@ -22,7 +24,7 @@ void main() {
     id: faker.guid.guid(),
     lat: faker.randomGenerator.decimal(),
     lng: faker.randomGenerator.decimal(),
-    timestamp: faker.date.dateTime(),
+    timestamp: DateTime.now(),
   );
   test(
     'should return [Location] from stream when repository succeed',

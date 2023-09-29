@@ -24,13 +24,15 @@ class PostHiveAdapter extends TypeAdapter<PostHive> {
       ..imageUrl = fields[4] as String?
       ..timestamp = fields[5] as DateTime?
       ..location = fields[6] as LocationHive?
-      ..categoryId = fields[7] as int?;
+      ..categoryId = fields[7] as int?
+      ..dbh = fields[8] as int?
+      ..landUse = fields[9] as String?;
   }
 
   @override
   void write(BinaryWriter writer, PostHive obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -46,7 +48,11 @@ class PostHiveAdapter extends TypeAdapter<PostHive> {
       ..writeByte(6)
       ..write(obj.location)
       ..writeByte(7)
-      ..write(obj.categoryId);
+      ..write(obj.categoryId)
+      ..writeByte(8)
+      ..write(obj.dbh)
+      ..writeByte(9)
+      ..write(obj.landUse);
   }
 
   @override

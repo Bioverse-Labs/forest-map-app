@@ -16,10 +16,12 @@ import '../../domain/usecases/upload_cached_post.dart';
 
 abstract class PostNotifier {
   Future<void> savePost({
-    String? organizationId,
-    String? userId,
-    File? file,
+    required String organizationId,
+    required String userId,
+    required File file,
     Catalog? category,
+    String? landUse,
+    int? dbh,
   });
   Future<void> uploadCachedPost();
   Future<void> getPosts(String? orgId);
@@ -58,6 +60,9 @@ class PostNotifierImpl extends ChangeNotifier implements PostNotifier {
     String? userId,
     File? file,
     Catalog? category,
+    String? landUse,
+    int? dbh,
+    String? specie,
   }) async {
     _loading = true;
     notifyListeners();
@@ -67,6 +72,9 @@ class PostNotifierImpl extends ChangeNotifier implements PostNotifier {
       organizationId: organizationId,
       file: file,
       category: category,
+      landUse: landUse,
+      dbh: dbh,
+      specie: specie,
     ));
 
     _loading = false;

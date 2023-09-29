@@ -37,6 +37,9 @@ class PostRepositoryImpl implements PostRepository {
     String? userId,
     File? file,
     Catalog? category,
+    int? dbh,
+    String? landUse,
+    String? specie,
   }) async {
     try {
       final hasPermission = await locationUtils!.checkLocationPermission();
@@ -49,6 +52,9 @@ class PostRepositoryImpl implements PostRepository {
         location: location,
         timestamp: DateTime.now(),
         category: category,
+        dbh: dbh,
+        landUse: landUse,
+        specie: specie,
       );
 
       if (!await networkInfo!.isConnected) {

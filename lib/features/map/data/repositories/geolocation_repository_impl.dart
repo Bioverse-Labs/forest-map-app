@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:geojson/geojson.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:proximity_hash/proximity_hash.dart';
@@ -25,14 +25,14 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
   final MapRemoteDatasource? mapRemoteDatasource;
   final MapLocalDataSource? mapLocalDataSource;
   final NetworkInfo? networkInfo;
-  final Geoflutterfire? geoflutterfire;
+  final GeoFlutterFire? geoFlutterFire;
   final GeoJsonUtils? geoJsonUtils;
 
   GeolocationRepositoryImpl({
     required this.mapRemoteDatasource,
     required this.mapLocalDataSource,
     required this.networkInfo,
-    required this.geoflutterfire,
+    required this.geoFlutterFire,
     required this.geoJsonUtils,
   });
 
@@ -42,6 +42,10 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
   ) async {
     if (!await networkInfo!.isConnected) {
       return Left(NoInternetFailure());
+    }
+
+    if (organization?.geolocationData == null) {
+      return Right(null);
     }
 
     for (var filename in organization!.geolocationData!) {
@@ -54,7 +58,7 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
         final geoData = await compute<Map<String, dynamic>,
             List<GeolocationDataPropertiesModel>>(
           parseDataAsPoint,
-          {'geo': geoflutterfire, 'features': geoJson.features},
+          {'geo': GeoFlutterFire, 'features': geoJson.features},
         );
 
         await mapLocalDataSource!.saveData(filename, geoData);
@@ -132,7 +136,7 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
       final geoData = await compute<Map<String, dynamic>,
           List<GeolocationDataPropertiesModel>>(
         parseDataAsPolygon,
-        {'geo': geoflutterfire, 'features': geoJson.features},
+        {'geo': GeoFlutterFire, 'features': geoJson.features},
       );
 
       return Right(geoData);
@@ -183,7 +187,7 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
       final geoData = await compute<Map<String, dynamic>,
           List<GeolocationDataPropertiesModel>>(
         parseDataAsPoint,
-        {'geo': geoflutterfire, 'features': geoJson.features},
+        {'geo': GeoFlutterFire, 'features': geoJson.features},
       );
 
       return Right(geoData);
@@ -213,6 +217,10 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
     try {
       final items = <GeolocationDataPropertiesModel>[];
 
+      if (organization?.geolocationData == null) {
+        return Right(items);
+      }
+
       for (var filename in organization!.geolocationData!) {
         final records = await mapLocalDataSource!.getFirstPoint(
           filename: filename,
@@ -240,7 +248,7 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
 Future<List<GeolocationDataPropertiesModel>> parseDataAsPoint(
   Map<String, dynamic> params,
 ) async {
-  final geo = params['geo'] as Geoflutterfire?;
+  final geo = params['geo'] as GeoFlutterFire?;
   final features = params['features'] as List<GeoJsonFeature>;
 
   final dataList = <GeolocationDataPropertiesModel>[];

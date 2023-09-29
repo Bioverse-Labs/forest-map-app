@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 import '../../features/auth/domain/usecases/forgot_password.dart';
 import '../../features/catalog/presentation/notifiers/catalog_notifier.dart';
 import '../../features/map/domain/usecases/get_first_point.dart';
@@ -14,7 +15,6 @@ import '../../features/post/domain/usecases/get_posts.dart';
 import '../../features/tracking/data/datasources/location_local_data_source.dart';
 import '../../features/tracking/domain/usecases/get_locations.dart';
 import '../../features/tracking/domain/usecases/save_location.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -132,7 +132,7 @@ class AppConfig {
     GetIt.I.registerLazySingleton<UUIDGenerator>(() => UUIDGenerator(Uuid()));
     GetIt.I.registerLazySingleton<DirUtils>(() => DirUtils());
     GetIt.I.registerLazySingleton<GeoJsonUtils>(() => GeoJsonUtils());
-    GetIt.I.registerLazySingleton<Geoflutterfire>(() => Geoflutterfire());
+    GetIt.I.registerLazySingleton<GeoFlutterFire>(() => GeoFlutterFire());
   }
 
   static void registerPlatformServices() {
@@ -392,7 +392,7 @@ class AppConfig {
       () => GeolocationRepositoryImpl(
         mapLocalDataSource: GetIt.I(),
         mapRemoteDatasource: GetIt.I(),
-        geoflutterfire: GetIt.I(),
+        geoFlutterFire: GetIt.I(),
         networkInfo: GetIt.I(),
         geoJsonUtils: GetIt.I(),
       ),

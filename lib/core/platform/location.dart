@@ -42,7 +42,7 @@ class LocationUtilsImpl implements LocationUtils {
         error.message,
         error.code,
         ExceptionOriginTypes.platform,
-        stackTrace: StackTrace.fromString(error.stacktrace!),
+        stackTrace: StackTrace.fromString(error.stacktrace ?? ''),
       );
     }
   }
@@ -93,7 +93,7 @@ class LocationUtilsImpl implements LocationUtils {
         error.message,
         error.code,
         ExceptionOriginTypes.platform,
-        stackTrace: StackTrace.fromString(error.stacktrace!),
+        stackTrace: StackTrace.fromString(error.stacktrace ?? ''),
       );
     }
   }
@@ -119,7 +119,7 @@ class LocationUtilsImpl implements LocationUtils {
         error.message,
         error.code,
         ExceptionOriginTypes.platform,
-        stackTrace: StackTrace.fromString(error.stacktrace!),
+        stackTrace: StackTrace.fromString(error.stacktrace ?? ''),
       );
     }
   }
@@ -147,7 +147,7 @@ class LocationUtilsImpl implements LocationUtils {
         error.message,
         error.code,
         ExceptionOriginTypes.platform,
-        stackTrace: StackTrace.fromString(error.stacktrace!),
+        stackTrace: StackTrace.fromString(error.stacktrace ?? ''),
       );
     }
   }

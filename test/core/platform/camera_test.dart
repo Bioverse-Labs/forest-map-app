@@ -7,27 +7,28 @@ import 'package:forest_map/core/platform/camera.dart';
 import 'package:forest_map/core/util/image.dart';
 import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../util/get_path.dart';
 
-class MockImagePicker extends Mock implements ImagePicker {}
+import 'camera_test.mocks.dart';
 
-// ignore: must_be_immutable
-class MockPickedFile extends Mock implements PickedFile {}
-
-class MockImageUtils extends Mock implements ImageUtils {}
-
+@GenerateMocks([
+  ImagePicker,
+  XFile,
+  ImageUtils,
+])
 void main() {
-  MockImagePicker mockImagePicker;
-  MockPickedFile mockPickedFile;
-  MockImageUtils mockImageUtils;
-  CameraImpl cameraImpl;
+  late MockImagePicker mockImagePicker;
+  late MockXFile mockPickedFile;
+  late MockImageUtils mockImageUtils;
+  late CameraImpl cameraImpl;
 
   setUp(() {
     mockImagePicker = MockImagePicker();
-    mockPickedFile = MockPickedFile();
+    mockPickedFile = MockXFile();
     mockImageUtils = MockImageUtils();
     cameraImpl = CameraImpl(mockImagePicker, mockImageUtils);
   });
@@ -48,7 +49,7 @@ void main() {
     test(
       'should return [CameraResponse] when picture is successfuly taken',
       () async {
-        when(mockImagePicker.getImage(
+        when(mockImagePicker.pickImage(
           source: anyNamed('source'),
           imageQuality: anyNamed('imageQuality'),
         )).thenAnswer((_) async => mockPickedFile);
@@ -65,7 +66,7 @@ void main() {
         final result = await cameraImpl.takePicture();
 
         expect(result, equals(Right(tCameraResponse)));
-        verify(mockImagePicker.getImage(
+        verify(mockImagePicker.pickImage(
           source: ImageSource.camera,
           imageQuality: 100,
         ));
@@ -76,7 +77,7 @@ void main() {
     test(
       'should return [CameraCancelFailure] when user cancel picture',
       () async {
-        when(mockImagePicker.getImage(
+        when(mockImagePicker.pickImage(
           source: anyNamed('source'),
           imageQuality: anyNamed('imageQuality'),
         )).thenAnswer((_) async => null);
@@ -84,7 +85,7 @@ void main() {
         final result = await cameraImpl.takePicture();
 
         expect(result, equals(Left(CameraCancelFailure())));
-        verify(mockImagePicker.getImage(
+        verify(mockImagePicker.pickImage(
           source: ImageSource.camera,
           imageQuality: 100,
         ));
@@ -95,7 +96,7 @@ void main() {
     test(
       'should return [CameraFailure] if any exception is throw',
       () async {
-        when(mockImagePicker.getImage(
+        when(mockImagePicker.pickImage(
           source: anyNamed('source'),
           imageQuality: anyNamed('imageQuality'),
         )).thenThrow(Exception());
@@ -103,7 +104,7 @@ void main() {
         final result = await cameraImpl.takePicture();
 
         expect(result, equals(Left(CameraFailure())));
-        verify(mockImagePicker.getImage(
+        verify(mockImagePicker.pickImage(
           source: ImageSource.camera,
           imageQuality: 100,
         ));

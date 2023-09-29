@@ -7,13 +7,15 @@ import 'package:forest_map/core/usecases/usecase.dart';
 import 'package:forest_map/features/post/domain/entities/post.dart';
 import 'package:forest_map/features/post/domain/repositories/post_repository.dart';
 import 'package:forest_map/features/post/domain/usecases/upload_cached_post.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-class MockPostRepository extends Mock implements PostRepository {}
+import 'upload_cached_post_test.mocks.dart';
 
+@GenerateMocks([PostRepository])
 void main() {
-  MockPostRepository mockPostRepository;
-  UploadCachedPost uploadCachedPost;
+  late MockPostRepository mockPostRepository;
+  late UploadCachedPost uploadCachedPost;
 
   setUp(() {
     mockPostRepository = MockPostRepository();

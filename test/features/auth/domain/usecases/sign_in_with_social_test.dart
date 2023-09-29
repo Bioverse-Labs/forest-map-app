@@ -4,14 +4,16 @@ import 'package:forest_map/features/user/domain/entities/user.dart';
 import 'package:forest_map/core/enums/social_login_types.dart';
 import 'package:forest_map/features/auth/domain/repositories/auth_repository.dart';
 import 'package:forest_map/features/auth/domain/usecases/sign_in_with_social.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MockAuthRepository extends Mock implements AuthRepository {}
+import 'sign_in_with_social_test.mocks.dart';
 
+@GenerateMocks([AuthRepository])
 void main() {
-  SignInWithSocial usecase;
-  MockAuthRepository mockAuthRepository;
+  late SignInWithSocial usecase;
+  late MockAuthRepository mockAuthRepository;
 
   setUp(() {
     mockAuthRepository = MockAuthRepository();

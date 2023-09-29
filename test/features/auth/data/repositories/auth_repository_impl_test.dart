@@ -10,43 +10,37 @@ import 'package:forest_map/core/errors/failure.dart';
 import 'package:forest_map/core/platform/network_info.dart';
 import 'package:forest_map/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:forest_map/features/organization/data/datasources/organization_local_data_source.dart';
-import 'package:forest_map/features/organization/data/hive/organization.dart';
 import 'package:forest_map/features/organization/data/models/member_model.dart';
 import 'package:forest_map/features/organization/data/models/organization_model.dart';
 import 'package:forest_map/features/user/data/datasource/user_local_data_source.dart';
 import 'package:forest_map/features/user/data/datasource/user_remote_data_source.dart';
-import 'package:forest_map/features/user/data/hive/user.dart';
 import 'package:forest_map/features/user/data/models/user_model.dart';
 import 'package:forest_map/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:forest_map/features/user/domain/entities/user.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MockRemoteDataSource extends Mock implements AuthRemoteDataSource {}
+import 'auth_repository_impl_test.mocks.dart';
 
-class MockUserRemoteDataSource extends Mock implements UserRemoteDataSource {}
-
-class MockUserLocalDataSource extends Mock implements UserLocalDataSource {}
-
-class MockOrganizationLocalDataSource extends Mock
-    implements OrganizationLocalDataSource {}
-
-class MockNetworkInfo extends Mock implements NetworkInfo {}
-
-class MockUserHive extends Mock implements HiveAdapter<UserHive> {}
-
-class MockOrgHive extends Mock implements HiveAdapter<OrganizationHive> {}
-
+@GenerateMocks([
+  AuthRemoteDataSource,
+  UserRemoteDataSource,
+  UserLocalDataSource,
+  OrganizationLocalDataSource,
+  NetworkInfo,
+  HiveAdapter,
+])
 void main() {
   late AuthRepositoryImpl repository;
-  late MockRemoteDataSource dataSource;
+  late MockAuthRemoteDataSource dataSource;
   late MockUserRemoteDataSource userRemoteDataSource;
   late MockUserLocalDataSource userLocalDataSource;
   late MockOrganizationLocalDataSource mockOrganizationLocalDataSource;
   late MockNetworkInfo networkInfo;
 
   setUp(() {
-    dataSource = MockRemoteDataSource();
+    dataSource = MockAuthRemoteDataSource();
     userRemoteDataSource = MockUserRemoteDataSource();
     userLocalDataSource = MockUserLocalDataSource();
     mockOrganizationLocalDataSource = MockOrganizationLocalDataSource();

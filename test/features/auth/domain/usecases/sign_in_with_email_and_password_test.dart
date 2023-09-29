@@ -3,14 +3,16 @@ import 'package:faker/faker.dart';
 import 'package:forest_map/features/user/domain/entities/user.dart';
 import 'package:forest_map/features/auth/domain/repositories/auth_repository.dart';
 import 'package:forest_map/features/auth/domain/usecases/sign_in_with_email_and_password.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MockAuthRepository extends Mock implements AuthRepository {}
+import 'sign_in_with_email_and_password_test.mocks.dart';
 
+@GenerateMocks([AuthRepository])
 void main() {
-  SignInWithEmailAndPassword usecase;
-  MockAuthRepository mockAuthRepository;
+  late SignInWithEmailAndPassword usecase;
+  late MockAuthRepository mockAuthRepository;
 
   setUp(() {
     mockAuthRepository = MockAuthRepository();

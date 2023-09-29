@@ -29,4 +29,10 @@ class PostHive {
 
   @HiveField(7)
   int? categoryId;
+
+  @HiveField(8)
+  int? dbh;
+
+  @HiveField(9)
+  String? landUse;
 }

@@ -1,419 +1,398 @@
-// import 'dart:async';
-// import 'dart:io';
+import 'dart:async';
+import 'dart:io';
 
-// import 'package:dartz/dartz.dart';
-// import 'package:faker/faker.dart';
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:forest_map/core/enums/exception_origin_types.dart';
-// import 'package:forest_map/core/errors/exceptions.dart';
-// import 'package:forest_map/core/errors/failure.dart';
-// import 'package:forest_map/core/platform/location.dart';
-// import 'package:forest_map/core/platform/network_info.dart';
-// import 'package:forest_map/features/post/data/datasources/post_local_data_source.dart';
-// import 'package:forest_map/features/post/data/datasources/post_remote_data_source.dart';
-// import 'package:forest_map/features/post/data/models/post_model.dart';
-// import 'package:forest_map/features/post/data/repositories/post_repository_impl.dart';
-// import 'package:forest_map/features/post/domain/entities/post.dart';
-// import 'package:forest_map/features/tracking/domain/entities/location.dart';
-// import 'package:mockito/mockito.dart';
+import 'package:dartz/dartz.dart';
+import 'package:faker/faker.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:forest_map/core/enums/exception_origin_types.dart';
+import 'package:forest_map/core/errors/exceptions.dart';
+import 'package:forest_map/core/errors/failure.dart';
+import 'package:forest_map/core/platform/location.dart';
+import 'package:forest_map/core/platform/network_info.dart';
+import 'package:forest_map/core/util/uuid_generator.dart';
+import 'package:forest_map/features/post/data/datasources/post_local_data_source.dart';
+import 'package:forest_map/features/post/data/datasources/post_remote_data_source.dart';
+import 'package:forest_map/features/post/data/models/post_model.dart';
+import 'package:forest_map/features/post/data/repositories/post_repository_impl.dart';
+import 'package:forest_map/features/post/domain/entities/post.dart';
+import 'package:forest_map/features/tracking/domain/entities/location.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
-// class MockPostRemoteDataSource extends Mock implements PostRemoteDataSource {}
+import 'post_repository_impl_test.mocks.dart';
 
-// class MockPostLocalDataSource extends Mock implements PostLocalDataSource {}
+@GenerateMocks([
+  PostRemoteDataSource,
+  PostLocalDataSource,
+  NetworkInfo,
+  LocationUtils,
+  UUIDGenerator,
+])
+void main() {
+  late MockPostRemoteDataSource mockPostRemoteDataSource;
+  late MockPostLocalDataSource mockPostLocalDataSource;
+  late MockNetworkInfo mockNetworkInfo;
+  late MockLocationUtils mockLocationUtils;
+  late PostRepositoryImpl postRepositoryImpl;
+  late MockUUIDGenerator mockUUIDGenerator;
 
-// class MockNetworkInfo extends Mock implements NetworkInfo {}
+  final tUserId = faker.guid.guid();
+  final tOrgId = faker.guid.guid();
+  final tSpecie = faker.randomGenerator.string(20);
+  final tFile = File(faker.image.image());
+  final tLocation = Location(
+    id: faker.guid.guid(),
+    lat: faker.randomGenerator.decimal(),
+    lng: faker.randomGenerator.decimal(),
+    timestamp: DateTime.now(),
+  );
+  final tServerException = ServerException(
+    faker.randomGenerator.string(20),
+    faker.randomGenerator.string(20),
+    ExceptionOriginTypes.test,
+  );
+  final tLocalException = LocalException(
+    faker.randomGenerator.string(20),
+    faker.randomGenerator.string(20),
+    ExceptionOriginTypes.test,
+  );
+  final tLocationException = LocationException(
+    faker.randomGenerator.string(20),
+    false,
+    false,
+  );
+  final tPost = Post(
+    id: faker.guid.guid(),
+    specie: tSpecie,
+    imageUrl: tFile.path,
+    timestamp: DateTime.now(),
+    location: tLocation,
+    userId: tUserId,
+    organizationId: tOrgId,
+  );
 
-// class MockLocationUtils extends Mock implements LocationUtils {}
+  setUp(() {
+    mockPostRemoteDataSource = MockPostRemoteDataSource();
+    mockPostLocalDataSource = MockPostLocalDataSource();
+    mockNetworkInfo = MockNetworkInfo();
+    mockLocationUtils = MockLocationUtils();
+    mockUUIDGenerator = MockUUIDGenerator();
+    postRepositoryImpl = PostRepositoryImpl(
+      remoteDataSource: mockPostRemoteDataSource,
+      localDataSource: mockPostLocalDataSource,
+      networkInfo: mockNetworkInfo,
+      locationUtils: mockLocationUtils,
+      uuidGenerator: mockUUIDGenerator,
+    );
 
-// void main() {
-//   MockPostRemoteDataSource mockPostRemoteDataSource;
-//   MockPostLocalDataSource mockPostLocalDataSource;
-//   MockNetworkInfo mockNetworkInfo;
-//   MockLocationUtils mockLocationUtils;
-//   PostRepositoryImpl postRepositoryImpl;
+    when(mockUUIDGenerator.generateUID()).thenReturn(faker.guid.guid());
+    when(mockPostLocalDataSource.getAllPosts(
+      isPendingPost: anyNamed('isPendingPost'),
+    )).thenAnswer((_) async => [PostModel.fromEntity(tPost)]);
+    when(mockPostLocalDataSource.getAllOrgPosts(
+      any,
+      isPendingPost: anyNamed('isPendingPost'),
+    )).thenAnswer((_) async => [PostModel.fromEntity(tPost)]);
+  });
 
-//   setUp(() {
-//     mockPostRemoteDataSource = MockPostRemoteDataSource();
-//     mockPostLocalDataSource = MockPostLocalDataSource();
-//     mockNetworkInfo = MockNetworkInfo();
-//     mockLocationUtils = MockLocationUtils();
-//     postRepositoryImpl = PostRepositoryImpl(
-//       remoteDataSource: mockPostRemoteDataSource,
-//       localDataSource: mockPostLocalDataSource,
-//       networkInfo: mockNetworkInfo,
-//       locationUtils: mockLocationUtils,
-//     );
-//   });
+  void runTestOnline(Function body) {
+    group('device is online', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      });
 
-//   void runTestOnline(Function body) {
-//     group('device is online', () {
-//       setUp(() {
-//         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-//       });
+      body();
+    });
+  }
 
-//       body();
-//     });
-//   }
+  void runTestOffline(Function body) {
+    group('device is offline', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+      });
 
-//   void runTestOffline(Function body) {
-//     group('device is offline', () {
-//       setUp(() {
-//         when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-//       });
+      body();
+    });
+  }
 
-//       body();
-//     });
-//   }
+  runTestOnline(() {
+    group('savePost', () {
+      test(
+        'should save [Post] if datasource succeed',
+        () async {
+          when(mockPostRemoteDataSource.savePost(any))
+              .thenAnswer((_) async => null);
+          when(mockPostLocalDataSource.savePost(
+            any,
+            isPendingPost: anyNamed('isPendingPost'),
+          )).thenAnswer((_) async => null);
+          when(mockLocationUtils.checkLocationPermission())
+              .thenAnswer((_) async => true);
+          when(mockLocationUtils.getCurrentPosition(any)).thenAnswer(
+            (_) async => tLocation,
+          );
 
-//   final tUserId = faker.guid.guid();
-//   final tOrgId = faker.guid.guid();
-//   final tSpecie = faker.randomGenerator.string(20);
-//   final tFile = File(faker.image.image());
-//   final tLocation = Location(
-//     id: faker.guid.guid(),
-//     lat: faker.randomGenerator.decimal(),
-//     lng: faker.randomGenerator.decimal(),
-//     timestamp: faker.date.dateTime(),
-//   );
-//   final tServerException = ServerException(
-//     faker.randomGenerator.string(20),
-//     faker.randomGenerator.string(20),
-//     ExceptionOriginTypes.test,
-//   );
-//   final tLocalException = LocalException(
-//     faker.randomGenerator.string(20),
-//     faker.randomGenerator.string(20),
-//     ExceptionOriginTypes.test,
-//   );
-//   final tLocationException = LocationException(
-//     faker.randomGenerator.string(20),
-//     false,
-//     false,
-//   );
-//   final tPost = Post(
-//     id: faker.guid.guid(),
-//     specie: tSpecie,
-//     imageUrl: tFile.path,
-//     timestamp: faker.date.dateTime(),
-//     location: tLocation,
-//     userId: tUserId,
-//     organizationId: tOrgId,
-//   );
+          await postRepositoryImpl.savePost(
+            organizationId: tOrgId,
+            userId: tUserId,
+            file: tFile,
+            specie: tSpecie,
+          );
 
-//   runTestOnline(() {
-//     group('savePost', () {
-//       test(
-//         'should save [Post] if datasource succeed',
-//         () async {
-//           when(mockPostRemoteDataSource.savePost(
-//             userId: anyNamed('userId'),
-//             organizationId: anyNamed('organizationId'),
-//             specie: anyNamed('specie'),
-//             file: anyNamed('file'),
-//             location: anyNamed('location'),
-//           )).thenAnswer((_) async => null);
-//           when(mockLocationUtils.checkLocationPermission())
-//               .thenAnswer((_) async => true);
-//           when(mockLocationUtils.getCurrentPosition(any)).thenAnswer(
-//             (_) async => tLocation,
-//           );
+          verify(mockPostRemoteDataSource.savePost(any));
 
-//           final result = await postRepositoryImpl.savePost(
-//             organizationId: tOrgId,
-//             userId: tUserId,
-//             file: tFile,
-//             specie: tSpecie,
-//           );
+          verify(mockLocationUtils.checkLocationPermission());
+          verify(mockLocationUtils.getCurrentPosition(true));
+          verifyNoMoreInteractions(mockLocationUtils);
+          verifyNoMoreInteractions(mockPostRemoteDataSource);
+        },
+      );
 
-//           expect(result, Right(null));
-//           verify(mockPostRemoteDataSource.savePost(
-//             userId: tUserId,
-//             organizationId: tOrgId,
-//             file: tFile,
-//             location: tLocation,
-//             specie: tSpecie,
-//           ));
+      test(
+        'should return [LocationFailure] if location fails',
+        () async {
+          when(mockLocationUtils.checkLocationPermission())
+              .thenThrow(tLocationException);
 
-//           verify(mockLocationUtils.checkLocationPermission());
-//           verify(mockLocationUtils.getCurrentPosition(true));
-//           verifyNoMoreInteractions(mockLocationUtils);
-//           verifyNoMoreInteractions(mockPostRemoteDataSource);
-//         },
-//       );
+          final result = await postRepositoryImpl.savePost(
+            organizationId: tOrgId,
+            userId: tUserId,
+            file: tFile,
+            specie: tSpecie,
+          );
 
-//       test(
-//         'should return [LocationFailure] if location fails',
-//         () async {
-//           when(mockLocationUtils.checkLocationPermission())
-//               .thenThrow(tLocationException);
+          expect(
+            result,
+            Left(LocationFailure(
+              tLocationException.message,
+              tLocationException.hasPermission,
+              tLocationException.isGpsEnabled,
+            )),
+          );
 
-//           final result = await postRepositoryImpl.savePost(
-//             organizationId: tOrgId,
-//             userId: tUserId,
-//             file: tFile,
-//             specie: tSpecie,
-//           );
+          verify(mockLocationUtils.checkLocationPermission());
+          verifyNoMoreInteractions(mockLocationUtils);
+          verifyZeroInteractions(mockPostRemoteDataSource);
+        },
+      );
 
-//           expect(
-//             result,
-//             Left(LocationFailure(
-//               tLocationException.message,
-//               tLocationException.hasPermission,
-//               tLocationException.isGpsEnabled,
-//             )),
-//           );
+      test(
+        'should throw [ServerException] when remote data source fails',
+        () async {
+          when(mockPostRemoteDataSource.savePost(any))
+              .thenThrow(tServerException);
+          when(mockLocationUtils.checkLocationPermission())
+              .thenAnswer((_) async => true);
+          when(mockLocationUtils.getCurrentPosition(any)).thenAnswer(
+            (_) async => tLocation,
+          );
 
-//           verify(mockLocationUtils.checkLocationPermission());
-//           verifyNoMoreInteractions(mockLocationUtils);
-//           verifyZeroInteractions(mockPostRemoteDataSource);
-//         },
-//       );
+          final result = await postRepositoryImpl.savePost(
+            organizationId: tOrgId,
+            userId: tUserId,
+            file: tFile,
+            specie: tSpecie,
+          );
 
-//       test(
-//         'should throw [ServerException] when remote data source fails',
-//         () async {
-//           when(mockPostRemoteDataSource.savePost(
-//             userId: anyNamed('userId'),
-//             organizationId: anyNamed('organizationId'),
-//             specie: anyNamed('specie'),
-//             file: anyNamed('file'),
-//             location: anyNamed('location'),
-//           )).thenThrow(tServerException);
-//           when(mockLocationUtils.checkLocationPermission())
-//               .thenAnswer((_) async => true);
-//           when(mockLocationUtils.getCurrentPosition(any)).thenAnswer(
-//             (_) async => tLocation,
-//           );
+          expect(
+            result,
+            Left(ServerFailure(
+              tServerException.message,
+              tServerException.code,
+              tServerException.origin,
+            )),
+          );
+          verify(mockPostRemoteDataSource.savePost(any));
+          verify(mockLocationUtils.checkLocationPermission());
+          verify(mockLocationUtils.getCurrentPosition(true));
+          verifyNoMoreInteractions(mockLocationUtils);
+          verifyNoMoreInteractions(mockPostRemoteDataSource);
+        },
+      );
+    });
 
-//           final result = await postRepositoryImpl.savePost(
-//             organizationId: tOrgId,
-//             userId: tUserId,
-//             file: tFile,
-//             specie: tSpecie,
-//           );
+    group('uploadCachedPost', () {
+      test(
+        'should return [Stream] if datasource succeed',
+        () async {
+          when(mockPostLocalDataSource.getAllPosts())
+              .thenAnswer((_) async => [PostModel.fromEntity(tPost)]);
 
-//           expect(
-//             result,
-//             Left(ServerFailure(
-//               tServerException.message,
-//               tServerException.code,
-//               tServerException.origin,
-//             )),
-//           );
-//           verify(mockPostRemoteDataSource.savePost(
-//             userId: tUserId,
-//             organizationId: tOrgId,
-//             file: tFile,
-//             location: tLocation,
-//             specie: tSpecie,
-//           ));
-//           verify(mockLocationUtils.checkLocationPermission());
-//           verify(mockLocationUtils.getCurrentPosition(true));
-//           verifyNoMoreInteractions(mockLocationUtils);
-//           verifyNoMoreInteractions(mockPostRemoteDataSource);
-//         },
-//       );
-//     });
+          final result = await postRepositoryImpl.uploadCachedPost();
 
-//     group('uploadCachedPost', () {
-//       test(
-//         'should return [Stream] if datasource succeed',
-//         () async {
-//           when(mockPostLocalDataSource.getAllPosts())
-//               .thenAnswer((_) async => [PostModel.fromEntity(tPost)]);
+          result.fold(
+            (l) => null,
+            (controller) => controller.stream.listen(expectAsync1((event) {
+              expect(event, Right(PostModel.fromEntity(tPost)));
+            })),
+          );
 
-//           final result = await postRepositoryImpl.uploadCachedPost();
+          expect(
+            result,
+            isInstanceOf<
+                Right<dynamic, StreamController<Either<Failure, Post>>>>(),
+          );
 
-//           result.fold(
-//             (l) => null,
-//             (controller) => controller.stream.listen(expectAsync1((event) {
-//               expect(event, Right(PostModel.fromEntity(tPost)));
-//             })),
-//           );
+          verify(mockPostLocalDataSource.getAllPosts(isPendingPost: true));
+          verifyNoMoreInteractions(mockPostLocalDataSource);
+        },
+      );
 
-//           expect(
-//             result,
-//             isInstanceOf<
-//                 Right<dynamic, StreamController<Either<Failure, Post>>>>(),
-//           );
+      test(
+        'should return [LocalFailure] if datasource succeed',
+        () async {
+          when(mockPostLocalDataSource.getAllPosts(
+            isPendingPost: anyNamed('isPendingPost'),
+          )).thenThrow(tLocalException);
 
-//           verify(mockPostLocalDataSource.getAllPosts());
-//           verifyNoMoreInteractions(mockPostLocalDataSource);
-//         },
-//       );
+          final result = await postRepositoryImpl.uploadCachedPost();
 
-//       test(
-//         'should return [LocalFailure] if datasource succeed',
-//         () async {
-//           when(mockPostLocalDataSource.getAllPosts())
-//               .thenThrow(tLocalException);
+          expect(
+            result,
+            Left(LocalFailure(
+              tLocalException.message,
+              tLocalException.code,
+              tLocalException.origin,
+            )),
+          );
 
-//           final result = await postRepositoryImpl.uploadCachedPost();
+          verify(mockPostLocalDataSource.getAllPosts(
+              isPendingPost: anyNamed('isPendingPost')));
+          verifyNoMoreInteractions(mockPostLocalDataSource);
+        },
+      );
 
-//           expect(
-//             result,
-//             Left(LocalFailure(
-//               tLocalException.message,
-//               tLocalException.code,
-//               tLocalException.origin,
-//             )),
-//           );
+      test(
+        'should return [ServerFailure] if datasource fails',
+        () async {
+          when(mockPostLocalDataSource.getAllPosts())
+              .thenAnswer((_) async => [PostModel.fromEntity(tPost)]);
+          when(mockPostRemoteDataSource.savePost(any))
+              .thenThrow(tServerException);
 
-//           verify(mockPostLocalDataSource.getAllPosts());
-//           verifyNoMoreInteractions(mockPostLocalDataSource);
-//         },
-//       );
+          final result = await postRepositoryImpl.uploadCachedPost();
 
-//       test(
-//         'should return [ServerFailure] if datasource fails',
-//         () async {
-//           when(mockPostLocalDataSource.getAllPosts())
-//               .thenAnswer((_) async => [PostModel.fromEntity(tPost)]);
-//           when(mockPostRemoteDataSource.savePost(
-//             userId: anyNamed('userId'),
-//             organizationId: anyNamed('organizationId'),
-//             specie: anyNamed('specie'),
-//             file: anyNamed('file'),
-//             location: anyNamed('location'),
-//           )).thenThrow(tServerException);
+          result.fold(
+            (l) => null,
+            (controller) => controller.stream.listen(expectAsync1((event) {
+              expect(
+                event,
+                Left(
+                  ServerFailure(
+                    tServerException.message,
+                    tServerException.code,
+                    tServerException.origin,
+                  ),
+                ),
+              );
+            })),
+          );
+          verify(mockPostLocalDataSource.getAllPosts(
+              isPendingPost: anyNamed('isPendingPost')));
+          verifyNoMoreInteractions(mockPostLocalDataSource);
+        },
+      );
+    });
+  });
 
-//           final result = await postRepositoryImpl.uploadCachedPost();
+  runTestOffline(() {
+    group('savePost', () {
+      test(
+        'should save [Post] if datasource succeed',
+        () async {
+          when(mockPostRemoteDataSource.savePost(any))
+              .thenAnswer((_) async => null);
+          when(mockPostLocalDataSource.savePost(
+            any,
+            isPendingPost: anyNamed('isPendingPost'),
+          )).thenAnswer((_) async => null);
+          when(mockLocationUtils.checkLocationPermission())
+              .thenAnswer((_) async => true);
+          when(mockLocationUtils.getCurrentPosition(any)).thenAnswer(
+            (_) async => tLocation,
+          );
 
-//           result.fold(
-//             (l) => null,
-//             (controller) => controller.stream.listen(expectAsync1((event) {
-//               expect(
-//                 event,
-//                 Left(
-//                   ServerFailure(
-//                     tServerException.message,
-//                     tServerException.code,
-//                     tServerException.origin,
-//                   ),
-//                 ),
-//               );
-//             })),
-//           );
-//           verify(mockPostLocalDataSource.getAllPosts());
-//           verifyNoMoreInteractions(mockPostLocalDataSource);
-//         },
-//       );
-//     });
-//   });
+          await postRepositoryImpl.savePost(
+            organizationId: tOrgId,
+            userId: tUserId,
+            file: tFile,
+            specie: tSpecie,
+          );
 
-//   runTestOffline(() {
-//     group('savePost', () {
-//       test(
-//         'should save [Post] if datasource succeed',
-//         () async {
-//           when(mockPostLocalDataSource.savePost(
-//             userId: anyNamed('userId'),
-//             organizationId: anyNamed('organizationId'),
-//             specie: anyNamed('specie'),
-//             file: anyNamed('file'),
-//             location: anyNamed('location'),
-//           )).thenAnswer((_) async => null);
-//           when(mockLocationUtils.checkLocationPermission())
-//               .thenAnswer((_) async => true);
-//           when(mockLocationUtils.getCurrentPosition(any)).thenAnswer(
-//             (_) async => tLocation,
-//           );
+          verify(mockPostLocalDataSource.savePost(any,
+              isPendingPost: anyNamed('isPendingPost')));
 
-//           final result = await postRepositoryImpl.savePost(
-//             organizationId: tOrgId,
-//             userId: tUserId,
-//             file: tFile,
-//             specie: tSpecie,
-//           );
+          verify(mockLocationUtils.checkLocationPermission());
+          verify(mockLocationUtils.getCurrentPosition(true));
+          verifyNoMoreInteractions(mockLocationUtils);
+          verifyNoMoreInteractions(mockPostRemoteDataSource);
+        },
+      );
 
-//           expect(result, Right(null));
-//           verify(mockPostLocalDataSource.savePost(
-//             userId: tUserId,
-//             organizationId: tOrgId,
-//             file: tFile,
-//             location: tLocation,
-//             specie: tSpecie,
-//           ));
+      test(
+        'should throw [LocalException] when remote data source fails',
+        () async {
+          when(mockPostLocalDataSource.savePost(
+            any,
+            isPendingPost: anyNamed('isPendingPost'),
+          )).thenThrow(tLocalException);
+          when(mockLocationUtils.checkLocationPermission())
+              .thenAnswer((_) async => true);
+          when(mockLocationUtils.getCurrentPosition(any)).thenAnswer(
+            (_) async => tLocation,
+          );
 
-//           verify(mockLocationUtils.checkLocationPermission());
-//           verify(mockLocationUtils.getCurrentPosition(true));
-//           verifyNoMoreInteractions(mockLocationUtils);
-//           verifyNoMoreInteractions(mockPostRemoteDataSource);
-//         },
-//       );
+          final result = await postRepositoryImpl.savePost(
+            organizationId: tOrgId,
+            userId: tUserId,
+            file: tFile,
+            specie: tSpecie,
+          );
 
-//       test(
-//         'should throw [LocalException] when remote data source fails',
-//         () async {
-//           when(mockPostLocalDataSource.savePost(
-//             userId: anyNamed('userId'),
-//             organizationId: anyNamed('organizationId'),
-//             specie: anyNamed('specie'),
-//             file: anyNamed('file'),
-//             location: anyNamed('location'),
-//           )).thenThrow(tLocalException);
-//           when(mockLocationUtils.checkLocationPermission())
-//               .thenAnswer((_) async => true);
-//           when(mockLocationUtils.getCurrentPosition(any)).thenAnswer(
-//             (_) async => tLocation,
-//           );
+          expect(
+            result,
+            Left(LocalFailure(
+              tLocalException.message,
+              tLocalException.code,
+              tLocalException.origin,
+            )),
+          );
+          verify(mockPostLocalDataSource.savePost(any,
+              isPendingPost: anyNamed('isPendingPost')));
+          verify(mockLocationUtils.checkLocationPermission());
+          verify(mockLocationUtils.getCurrentPosition(true));
+          verifyNoMoreInteractions(mockLocationUtils);
+          verifyNoMoreInteractions(mockPostRemoteDataSource);
+        },
+      );
+    });
 
-//           final result = await postRepositoryImpl.savePost(
-//             organizationId: tOrgId,
-//             userId: tUserId,
-//             file: tFile,
-//             specie: tSpecie,
-//           );
+    group('uploadCachedPost', () {
+      test(
+        'should return [NoInternetFailure] if datasource succeed',
+        () async {
+          when(mockPostLocalDataSource.getAllPosts())
+              .thenAnswer((_) async => [PostModel.fromEntity(tPost)]);
 
-//           expect(
-//             result,
-//             Left(LocalFailure(
-//               tLocalException.message,
-//               tLocalException.code,
-//               tLocalException.origin,
-//             )),
-//           );
-//           verify(mockPostLocalDataSource.savePost(
-//             userId: tUserId,
-//             organizationId: tOrgId,
-//             file: tFile,
-//             location: tLocation,
-//             specie: tSpecie,
-//           ));
-//           verify(mockLocationUtils.checkLocationPermission());
-//           verify(mockLocationUtils.getCurrentPosition(true));
-//           verifyNoMoreInteractions(mockLocationUtils);
-//           verifyNoMoreInteractions(mockPostRemoteDataSource);
-//         },
-//       );
-//     });
+          final result = await postRepositoryImpl.uploadCachedPost();
 
-//     group('uploadCachedPost', () {
-//       test(
-//         'should return [NoInternetFailure] if datasource succeed',
-//         () async {
-//           when(mockPostLocalDataSource.getAllPosts())
-//               .thenAnswer((_) async => [PostModel.fromEntity(tPost)]);
+          result.fold(
+            (l) => null,
+            (controller) => controller.stream.listen(expectAsync1((event) {
+              expect(event, Left(NoInternetFailure()));
+            })),
+          );
 
-//           final result = await postRepositoryImpl.uploadCachedPost();
+          expect(
+            result,
+            isInstanceOf<
+                Right<dynamic, StreamController<Either<Failure, Post>>>>(),
+          );
 
-//           result.fold(
-//             (l) => null,
-//             (controller) => controller.stream.listen(expectAsync1((event) {
-//               expect(event, Left(NoInternetFailure()));
-//             })),
-//           );
-
-//           expect(
-//             result,
-//             isInstanceOf<
-//                 Right<dynamic, StreamController<Either<Failure, Post>>>>(),
-//           );
-
-//           verify(mockPostLocalDataSource.getAllPosts());
-//           verifyNoMoreInteractions(mockPostLocalDataSource);
-//         },
-//       );
-//     });
-//   });
-// }
+          verify(mockPostLocalDataSource.getAllPosts(isPendingPost: true));
+          verifyNoMoreInteractions(mockPostLocalDataSource);
+        },
+      );
+    });
+  });
+}

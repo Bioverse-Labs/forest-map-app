@@ -8,13 +8,15 @@ import 'package:forest_map/features/tracking/data/models/location_model.dart';
 import 'package:forest_map/features/tracking/domain/entities/location.dart';
 import 'package:forest_map/features/tracking/domain/repositories/location_repository.dart';
 import 'package:forest_map/features/tracking/domain/usecases/track_user.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-class MockLocationRepository extends Mock implements LocationRepository {}
+import 'track_user_test.mocks.dart';
 
+@GenerateMocks([LocationRepository])
 void main() {
-  MockLocationRepository mockLocationRepository;
-  TrackUser trackUser;
+  late MockLocationRepository mockLocationRepository;
+  late TrackUser trackUser;
 
   setUp(() {
     mockLocationRepository = MockLocationRepository();
@@ -25,7 +27,7 @@ void main() {
     id: faker.guid.guid(),
     lat: faker.randomGenerator.decimal(),
     lng: faker.randomGenerator.decimal(),
-    timestamp: faker.date.dateTime(),
+    timestamp: DateTime.now(),
   );
   Stream<Location> tLocationStream() async* {
     yield tLocation;

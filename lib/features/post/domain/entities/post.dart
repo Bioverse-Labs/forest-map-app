@@ -11,6 +11,9 @@ class Post extends Equatable {
   final DateTime? timestamp;
   final Location location;
   final Catalog? category;
+  final String? landUse;
+  final String? specie;
+  final int? dbh;
 
   Post({
     required this.id,
@@ -19,7 +22,10 @@ class Post extends Equatable {
     required this.location,
     required this.userId,
     required this.organizationId,
-    required this.category,
+    this.specie,
+    this.category,
+    this.landUse,
+    this.dbh,
   });
 
   @override
@@ -31,5 +37,8 @@ class Post extends Equatable {
         timestamp,
         location,
         category,
+        landUse,
+        specie,
+        dbh,
       ];
 }
