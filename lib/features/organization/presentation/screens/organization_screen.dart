@@ -204,17 +204,7 @@ class OrganizationScreen extends StatelessWidget {
               ),
             );
           }
-          return FloatingActionButton.extended(
-            heroTag: 'inviteUserFloatingButton',
-            onPressed: _inviteMember,
-            icon: Icon(Icons.person_add_alt_1_outlined),
-            label: Text(localizedString!.getLocalizedString(
-              'organization-screen.invite-member-button',
-            )),
-            tooltip: localizedString!.getLocalizedString(
-              'organization-screen.invite-member-button-tooltip',
-            ),
-          );
+          return SizedBox.shrink();
         },
       ),
       isLoading: Provider.of<OrganizationNotifierImpl>(context).isLoading,
