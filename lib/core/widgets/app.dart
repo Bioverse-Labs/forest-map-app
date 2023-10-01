@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
+import 'package:forest_map/features/user/presentation/notifiers/user_notifier.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -38,12 +39,13 @@ class _AppState extends State<App> {
   Future<void> _handleDynamicLink() async {
     final notifier =
         Provider.of<OrganizationInviteNotifierImpl>(context, listen: false);
+    final userNotifier = Provider.of<UserNotifierImpl>(context, listen: false);
     final NotificationsUtils? notificationUtils = GetIt.I<NotificationsUtils>();
 
     try {
       final linkData = await FirebaseDynamicLinks.instance.getInitialLink();
 
-      if (linkData != null) {
+      if (linkData != null && userNotifier.user != null) {
         final uri = linkData.link;
         final orgId = uri.queryParameters['orgId'];
         notifier.setOrgId(orgId);
@@ -58,7 +60,7 @@ class _AppState extends State<App> {
 
         final orgId = deepLink.queryParameters['orgId'];
 
-        if (orgId != null) {
+        if (orgId != null && userNotifier.user != null) {
           notifier.setOrgId(orgId);
         }
       },

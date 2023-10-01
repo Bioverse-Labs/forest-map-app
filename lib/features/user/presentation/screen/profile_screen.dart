@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forest_map/features/organization/presentation/notifiers/organizations_notifier.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/errors/failure.dart';
@@ -15,6 +16,7 @@ import '../widgets/user_info.dart';
 class ProfileScreen extends StatelessWidget {
   final AuthNotifierImpl authNotifier;
   final UserNotifierImpl userNotifier;
+  final OrganizationNotifierImpl organizationNotifier;
   final HomeScreenNotifierImpl homeScreenNotifierImpl;
   final AppNavigator? appNavigator;
   final NotificationsUtils? notificationsUtils;
@@ -30,11 +32,14 @@ class ProfileScreen extends StatelessWidget {
     required this.userNotifier,
     required this.localizedString,
     required this.camera,
+    required this.organizationNotifier,
   }) : super(key: key);
 
   void _signOut() {
     try {
       authNotifier.signOut();
+      userNotifier.signOut();
+      organizationNotifier.resetOrganization();
       appNavigator!.pushAndReplace('/');
       homeScreenNotifierImpl.setActiveTab(0);
     } on ServerFailure catch (failure) {

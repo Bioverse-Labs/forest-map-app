@@ -42,6 +42,7 @@ abstract class OrganizationNotifier {
     String? userId,
   });
   Future<void> setOrganization({String? id, Organization? organization});
+  void resetOrganization();
 }
 
 class OrganizationNotifierImpl extends ChangeNotifier
@@ -250,5 +251,11 @@ class OrganizationNotifierImpl extends ChangeNotifier
       (failure) => throw failure,
       (_) {},
     );
+  }
+
+  @override
+  void resetOrganization() {
+    _organization = null;
+    notifyListeners();
   }
 }

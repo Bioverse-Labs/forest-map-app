@@ -105,6 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ProfileScreen(
         authNotifier: widget.authNotifier,
         userNotifier: widget.userNotifier,
+        organizationNotifier: widget.organizationNotifier,
         homeScreenNotifierImpl: widget.homeScreenNotifier,
         camera: widget.camera,
         localizedString: widget.localizedString,

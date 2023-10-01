@@ -19,6 +19,7 @@ abstract class UserNotifier {
     List<Organization>? organizations,
     File? avatar,
   });
+  void signOut();
 }
 
 class UserNotifierImpl extends ChangeNotifier implements UserNotifier {
@@ -90,5 +91,11 @@ class UserNotifierImpl extends ChangeNotifier implements UserNotifier {
         notifyListeners();
       },
     );
+  }
+
+  @override
+  void signOut() {
+    _user = null;
+    notifyListeners();
   }
 }
