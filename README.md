@@ -22,11 +22,10 @@ Designed to serve traditional communities of the amazon rain forest, the Forest 
 
 On the first release, Forest Map TM will allow local cooperatives to use the abundance maps to locate Brazil Nut Tree (Bertholletia excelsa) and Palm Trees. Tree species that contribute to the economic resilience of the riverine communities can be added to future projects when it meets sustainability criteria contributing to increase the value of standing and productive forests.
 
-1. [Setting up your environment](#1-Setting-up-your-environment)
-2. [Run](#2-Run)
-3. [Test ](#3-Test)
-4. [Architecture ](#3-Architecture)
-5. [TODO-list](#5-TODO-list)
+1. [Setting up your environment](#setting-up-your-environment)
+2. [Run](#run)
+3. [Test](#test)
+4. [Architecture ](#architecture)
 
 # Setting up your environment
 
