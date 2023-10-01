@@ -113,7 +113,8 @@
   "organization-invite-screen": {
     "title": "Convite",
     "description": "Essa organização lhe convidou para ser um membro",
-    "button": "Aceitar"
+    "button": "Aceitar",
+    "error": "Ops... algo deu errado ao aceitar o convite"
   },
   "profile-screen": {
     "organization-counter": "Organizações",

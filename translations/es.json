@@ -113,7 +113,8 @@
   "organization-invite-screen": {
     "title": "Invitación",
     "description": "Esta organización te ha invitado a ser miembro",
-    "button": "Aceptar"
+    "button": "Aceptar",
+    "error": "Algo salió mal al aceptar la invitación"
   },
   "profile-screen": {
     "organization-counter": "Organizaciones",

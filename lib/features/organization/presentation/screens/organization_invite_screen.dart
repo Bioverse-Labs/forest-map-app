@@ -56,7 +56,7 @@ class _OrganizationInviteScreenState extends State<OrganizationInviteScreen> {
   Future<void> _acceptInvite() async {
     try {
       await widget.organizationInviteNotifier.acceptInvite(
-        widget.organizationInviteNotifier.organization!.id,
+        widget.organizationInviteNotifier.organization?.id,
         widget.userNotifier.user,
       );
 
@@ -66,7 +66,7 @@ class _OrganizationInviteScreenState extends State<OrganizationInviteScreen> {
       );
 
       await widget.userNotifier.getUser(
-        id: widget.userNotifier.user!.id,
+        id: widget.userNotifier.user?.id,
         searchLocally: false,
       );
 
@@ -75,6 +75,12 @@ class _OrganizationInviteScreenState extends State<OrganizationInviteScreen> {
       widget.notificationsUtils!.showErrorNotification(failure.message);
     } on LocalFailure catch (failure) {
       widget.notificationsUtils!.showErrorNotification(failure.message);
+    } catch (e) {
+      widget.notificationsUtils!.showErrorNotification(
+        widget.localizedString!.getLocalizedString(
+          'organization-invite-screen.error',
+        ),
+      );
     }
   }
 

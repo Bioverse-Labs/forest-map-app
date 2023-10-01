@@ -42,9 +42,10 @@ Future<Either<LocalFailure, Uri>> generateInviteLink(
       // ),
     );
 
-    final dynamicUrl = await parameters.link;
+    final dynamicUrl =
+        await FirebaseDynamicLinks.instance.buildShortLink(parameters);
 
-    return Right(dynamicUrl);
+    return Right(dynamicUrl.shortUrl);
   } catch (error) {
     return Left(LocalFailure(
       GetIt.I<LocalizedString>().getLocalizedString('generic-exception'),

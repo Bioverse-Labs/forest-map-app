@@ -113,7 +113,8 @@
   "organization-invite-screen": {
     "title": "Invite",
     "description": "This Organization has invited you to be member",
-    "button": "Accept"
+    "button": "Accept",
+    "error": "Ops... failed to join the organization"
   },
   "profile-screen": {
     "organization-counter": "Organizations",

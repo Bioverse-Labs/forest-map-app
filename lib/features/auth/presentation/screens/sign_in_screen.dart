@@ -84,7 +84,9 @@ class _SignInScreenState extends State<SignInScreen> {
         await widget.userNotifier.getUser(id: 'currUser', searchLocally: true);
 
         widget.organizationNotifier.getOrganization(
-          id: _authUser.organizations!.first.id,
+          id: (_authUser.organizations ?? []).isEmpty
+              ? null
+              : _authUser.organizations?.first.id,
           searchLocally: false,
         );
 

@@ -52,21 +52,20 @@ class _AppState extends State<App> {
       notificationUtils!.showErrorNotification(error.toString());
     }
 
-    FirebaseDynamicLinks.instance.onLink;
-    // (
-    //   onSuccess: (PendingDynamicLinkData dynamicLink) async {
-    //     final Uri deepLink = dynamicLink.link;
+    FirebaseDynamicLinks.instance.onLink.listen(
+      (PendingDynamicLinkData dynamicLink) async {
+        final Uri deepLink = dynamicLink.link;
 
-    //     final orgId = deepLink.queryParameters['orgId'];
+        final orgId = deepLink.queryParameters['orgId'];
 
-    //     if (orgId != null) {
-    //       notifier.setOrgId(orgId);
-    //     }
-    //   },
-    //   onError: (e) async {
-    //     notificationUtils!.showErrorNotification(e.message);
-    //   },
-    // );
+        if (orgId != null) {
+          notifier.setOrgId(orgId);
+        }
+      },
+      onError: (e) async {
+        notificationUtils!.showErrorNotification(e.message);
+      },
+    );
   }
 
   @override
