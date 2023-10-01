@@ -2,7 +2,7 @@ name: forest_map
 description: Forest Map a Bioverse App.
 
 publish_to: "none"
-version: 2.2.0+01102023
+version: 2.2.0+3.20231001
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
