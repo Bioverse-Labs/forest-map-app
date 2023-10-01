@@ -24,7 +24,7 @@ On the first release, Forest Map TM will allow local cooperatives to use the abu
 
 1. [Setting up your environment](#setting-up-your-environment)
 2. [Run](#run)
-3. [Test](#test)
+3. [Tests](#tests)
 4. [Architecture ](#architecture)
 
 # Setting up your environment
