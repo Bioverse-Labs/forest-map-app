@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faker/faker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forest_map/core/adapters/firebase_storage_adapter.dart';
-import 'package:forest_map/core/adapters/firestore_adapter.dart';
+import 'package:forest_map/core/adapters/firestore_adapter_impl.dart';
+import 'package:forest_map/core/adapters/storage_adapter.dart';
 import 'package:forest_map/core/errors/exceptions.dart';
 import 'package:forest_map/core/util/localized_string.dart';
 import 'package:forest_map/core/util/uuid_generator.dart';
@@ -67,7 +67,7 @@ class MockPathProviderPlatform extends Mock
 
 @GenerateMocks([
   FirestoreAdapterImpl,
-  FirebasStorageAdapter,
+  StorageAdapter,
   LocalizedString,
   UUIDGenerator,
   UploadTask,

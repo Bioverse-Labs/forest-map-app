@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:forest_map/core/adapters/firebase_auth_adapter.dart';
 import 'package:forest_map/core/platform/location.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../features/post/presentation/notifier/post_notifier.dart';
@@ -7,7 +8,6 @@ import '../../features/post/presentation/notifier/post_notifier.dart';
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
 import '../adapters/database_adapter.dart';
-import '../adapters/firebase_auth_adapter.dart';
 import '../adapters/firestore_adapter.dart';
 import '../errors/failure.dart';
 import '../navigation/app_navigator.dart';
@@ -17,7 +17,7 @@ import 'splash_screen.dart';
 
 class InitialScreen extends StatelessWidget {
   final FirebaseAuthAdapterImpl? firebaseAuthAdapterImpl;
-  final FirestoreAdapterImpl? firestoreAdapterImpl;
+  final FirestoreAdapter? firestoreAdapterImpl;
   final AppNavigator? appNavigator;
   final UserNotifierImpl userNotifier;
   final OrganizationNotifierImpl organizationNotifier;

@@ -1,23 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:forest_map/core/adapters/auth_adapter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../features/user/data/models/user_model.dart';
 
-abstract class FirebaseAuthAdapter {
-  Future<UserModel> signInWithEmailAndPassword(String email, String password);
-  Future<UserModel> signInWithCredential(AuthCredential credential);
-  Future<UserModel> signUpUserWithEmailAndPassword(
-    String email,
-    String password,
-  );
-  Future<AuthCredential> getGoogleAuthCredential();
-  Future<AuthCredential> getFacebookAuthCredential();
-  Future<void> signOut();
-  Future<void> forgotPassword(String email);
-}
-
-class FirebaseAuthAdapterImpl implements FirebaseAuthAdapter {
+class FirebaseAuthAdapterImpl implements AuthAdapter {
   final FirebaseAuth? firebaseAuth;
   final GoogleSignIn? googleSignIn;
   final FacebookAuth? facebookAuth;

@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:forest_map/core/adapters/firestore_adapter.dart';
 import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/errors/exceptions.dart';
 
-import '../../../../core/adapters/firestore_adapter.dart';
 import '../../domain/entities/location.dart';
 import '../models/location_model.dart';
 
@@ -18,7 +18,7 @@ abstract class LocationRemoteDataSource {
 }
 
 class LocationRemoteDataSourceImpl implements LocationRemoteDataSource {
-  final FirestoreAdapterImpl? firestoreAdapter;
+  final FirestoreAdapter? firestoreAdapter;
 
   LocationRemoteDataSourceImpl({
     required this.firestoreAdapter,

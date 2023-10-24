@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:forest_map/core/adapters/firestore_adapter.dart';
+import 'package:forest_map/core/adapters/storage_adapter.dart';
 
-import '../../../../core/adapters/firebase_storage_adapter.dart';
-import '../../../../core/adapters/firestore_adapter.dart';
 import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/util/localized_string.dart';
@@ -24,8 +24,8 @@ abstract class UserRemoteDataSource {
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
-  final FirestoreAdapterImpl? firestoreAdapter;
-  final FirebaseStorageAdapterImpl? firebaseStorageAdapter;
+  final FirestoreAdapter? firestoreAdapter;
+  final StorageAdapter? firebaseStorageAdapter;
   final LocalizedString? localizedString;
   final OrganizationRemoteDataSource? organizationRemoteDataSource;
 

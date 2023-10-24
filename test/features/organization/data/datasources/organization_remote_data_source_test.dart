@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:forest_map/core/adapters/firebase_storage_adapter.dart';
-import 'package:forest_map/core/adapters/firestore_adapter.dart';
+import 'package:forest_map/core/adapters/firestore_adapter_impl.dart';
 import 'package:forest_map/core/enums/organization_member_status.dart';
 import 'package:forest_map/core/enums/organization_role_types.dart';
 import 'package:forest_map/core/errors/exceptions.dart';

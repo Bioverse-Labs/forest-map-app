@@ -1,13 +1,9 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:forest_map/core/adapters/storage_adapter.dart';
 
-abstract class FirebasStorageAdapter {
-  UploadTask uploadFile({File? file, String? storagePath});
-  Future<String> getDownloadUrl(String storagePath);
-}
-
-class FirebaseStorageAdapterImpl implements FirebasStorageAdapter {
+class FirebaseStorageAdapterImpl implements StorageAdapter {
   final FirebaseStorage? storage;
 
   FirebaseStorageAdapterImpl(this.storage);

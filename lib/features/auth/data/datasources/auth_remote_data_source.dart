@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:forest_map/core/adapters/auth_adapter.dart';
 
-import '../../../../core/adapters/firebase_auth_adapter.dart';
 import '../../../../core/adapters/firestore_adapter.dart';
 import '../../../../core/adapters/hive_adapter.dart';
 import '../../../../core/enums/exception_origin_types.dart';
@@ -51,7 +51,7 @@ abstract class AuthRemoteDataSource {
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirestoreAdapter? firestoreAdapter;
-  final FirebaseAuthAdapter? firebaseAuthAdapter;
+  final AuthAdapter? firebaseAuthAdapter;
   final LocalizedString? localizedString;
   final HiveAdapter<UserHive>? userHive;
   final HiveAdapter<OrganizationHive>? orgHive;

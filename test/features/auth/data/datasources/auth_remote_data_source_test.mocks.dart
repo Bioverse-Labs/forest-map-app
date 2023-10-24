@@ -8,7 +8,7 @@ import 'dart:async' as _i7;
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:firebase_auth/firebase_auth.dart' as _i3;
 import 'package:forest_map/core/adapters/firebase_auth_adapter.dart' as _i8;
-import 'package:forest_map/core/adapters/firestore_adapter.dart' as _i6;
+import 'package:forest_map/core/adapters/firestore_adapter_impl.dart' as _i6;
 import 'package:forest_map/core/adapters/hive_adapter.dart' as _i10;
 import 'package:forest_map/core/util/localized_string.dart' as _i9;
 import 'package:forest_map/features/user/data/models/user_model.dart' as _i4;

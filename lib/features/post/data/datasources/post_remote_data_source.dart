@@ -2,14 +2,14 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:forest_map/core/adapters/firestore_adapter.dart';
+import 'package:forest_map/core/adapters/storage_adapter.dart';
 import '../models/post_model.dart';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../../core/adapters/firebase_storage_adapter.dart';
-import '../../../../core/adapters/firestore_adapter.dart';
 import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/util/localized_string.dart';
@@ -21,8 +21,8 @@ abstract class PostRemoteDataSource {
 }
 
 class PostRemoteDataSourceImpl implements PostRemoteDataSource {
-  final FirestoreAdapterImpl? firestoreAdapter;
-  final FirebasStorageAdapter? firebaseStorageAdapter;
+  final FirestoreAdapter? firestoreAdapter;
+  final StorageAdapter? firebaseStorageAdapter;
   final LocalizedString? localizedString;
   final UUIDGenerator? uuidGenerator;
 

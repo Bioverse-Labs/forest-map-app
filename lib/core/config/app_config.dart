@@ -6,6 +6,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:forest_map/core/adapters/auth_adapter.dart';
+import 'package:forest_map/core/adapters/database_adapter_impl.dart';
+import 'package:forest_map/core/adapters/firestore_adapter_impl.dart';
+import 'package:forest_map/core/adapters/storage_adapter.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import '../../features/auth/domain/usecases/forgot_password.dart';
 import '../../features/catalog/presentation/notifiers/catalog_notifier.dart';
@@ -173,7 +177,7 @@ class AppConfig {
   static void registerAdapters() {
     // * Register all third parties adapters
 
-    GetIt.I.registerLazySingleton<FirebaseAuthAdapterImpl>(
+    GetIt.I.registerLazySingleton<AuthAdapter>(
       () => FirebaseAuthAdapterImpl(
         FirebaseAuth.instance,
         GoogleSignIn(),
@@ -186,13 +190,13 @@ class AppConfig {
       () => SocialCredentialAdapterImpl(),
     );
 
-    GetIt.I.registerLazySingleton<FirestoreAdapterImpl>(
+    GetIt.I.registerLazySingleton<FirestoreAdapter>(
       () => FirestoreAdapterImpl(
         FirebaseFirestore.instance,
       ),
     );
 
-    GetIt.I.registerLazySingleton<FirebaseStorageAdapterImpl>(
+    GetIt.I.registerLazySingleton<StorageAdapter>(
       () => FirebaseStorageAdapterImpl(FirebaseStorage.instance),
     );
 
@@ -257,8 +261,8 @@ class AppConfig {
 
     GetIt.I.registerLazySingleton<AuthRemoteDataSourceImpl>(
       () => AuthRemoteDataSourceImpl(
-        firestoreAdapter: GetIt.I<FirestoreAdapterImpl>(),
-        firebaseAuthAdapter: GetIt.I<FirebaseAuthAdapterImpl>(),
+        firestoreAdapter: GetIt.I<FirestoreAdapter>(),
+        firebaseAuthAdapter: GetIt.I<AuthAdapter>(),
         localizedString: GetIt.I(),
         userHive: GetIt.I(),
         orgHive: GetIt.I(),
@@ -310,8 +314,8 @@ class AppConfig {
 
     GetIt.I.registerLazySingleton<PostRemoteDataSource>(
       () => PostRemoteDataSourceImpl(
-        firebaseStorageAdapter: GetIt.I<FirebaseStorageAdapterImpl>(),
-        firestoreAdapter: GetIt.I<FirestoreAdapterImpl>(),
+        firebaseStorageAdapter: GetIt.I<StorageAdapter>(),
+        firestoreAdapter: GetIt.I<FirestoreAdapter>(),
         localizedString: GetIt.I(),
         uuidGenerator: GetIt.I(),
       ),

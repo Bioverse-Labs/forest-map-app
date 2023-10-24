@@ -11,7 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:firebase_core/firebase_core.dart' as _i5;
 import 'package:firebase_storage/firebase_storage.dart' as _i3;
 import 'package:forest_map/core/adapters/firebase_storage_adapter.dart' as _i7;
-import 'package:forest_map/core/adapters/firestore_adapter.dart' as _i6;
+import 'package:forest_map/core/adapters/firestore_adapter_impl.dart' as _i6;
 import 'package:forest_map/core/util/localized_string.dart' as _i9;
 import 'package:forest_map/core/util/uuid_generator.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
@@ -306,7 +306,7 @@ class MockFirestoreAdapterImpl extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFirebasStorageAdapter extends _i1.Mock
-    implements _i7.FirebasStorageAdapter {
+    implements _i7.FirebaseStorageAdapterImpl {
   MockFirebasStorageAdapter() {
     _i1.throwOnMissingStub(this);
   }

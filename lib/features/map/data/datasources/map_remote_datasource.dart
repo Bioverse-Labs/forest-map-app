@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:forest_map/core/adapters/storage_adapter.dart';
 import 'package:geojson/geojson.dart';
 
-import '../../../../core/adapters/firebase_storage_adapter.dart';
 import '../../../../core/adapters/http_adapter.dart';
 import '../../../../core/util/dir.dart';
 import '../../../../core/util/geojson.dart';
@@ -16,7 +16,7 @@ abstract class MapRemoteDatasource {
 
 class MapRemoteDatasourceImpl implements MapRemoteDatasource {
   final HttpAdapter? httpAdapter;
-  final FirebaseStorageAdapterImpl? firebaseStorageAdapter;
+  final StorageAdapter? firebaseStorageAdapter;
   final DirUtils? dirUtils;
   final GeoJsonUtils? geoJsonUtils;
 

@@ -6,7 +6,7 @@
 import 'dart:async' as _i6;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i3;
-import 'package:forest_map/core/adapters/firestore_adapter.dart' as _i8;
+import 'package:forest_map/core/adapters/firestore_adapter_impl.dart' as _i8;
 import 'package:forest_map/core/adapters/hive_adapter.dart' as _i9;
 import 'package:forest_map/core/platform/location.dart' as _i5;
 import 'package:forest_map/features/tracking/data/models/location_model.dart'

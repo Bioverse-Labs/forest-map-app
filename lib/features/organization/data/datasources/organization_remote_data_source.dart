@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:forest_map/core/adapters/firestore_adapter.dart';
+import 'package:forest_map/core/adapters/storage_adapter.dart';
 
-import '../../../../core/adapters/firebase_storage_adapter.dart';
-import '../../../../core/adapters/firestore_adapter.dart';
 import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';
@@ -66,8 +66,8 @@ abstract class OrganizationRemoteDataSource {
 }
 
 class OrganizationRemoteDataSourceImpl implements OrganizationRemoteDataSource {
-  final FirestoreAdapterImpl? firestoreAdapter;
-  final FirebaseStorageAdapterImpl? firebaseStorageAdapter;
+  final FirestoreAdapter? firestoreAdapter;
+  final StorageAdapter? firebaseStorageAdapter;
   final LocalizedString? localizedString;
   final UUIDGenerator? uuidGenerator;
 

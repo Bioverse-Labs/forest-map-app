@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faker/faker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:forest_map/core/adapters/firebase_auth_adapter.dart';
-import 'package:forest_map/core/adapters/firestore_adapter.dart';
+import 'package:forest_map/core/adapters/firestore_adapter_impl.dart';
 import 'package:forest_map/core/adapters/hive_adapter.dart';
 import 'package:forest_map/core/enums/social_login_types.dart';
 import 'package:forest_map/core/errors/exceptions.dart';
