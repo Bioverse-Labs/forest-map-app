@@ -136,7 +136,7 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
       final geoData = await compute<Map<String, dynamic>,
           List<GeolocationDataPropertiesModel>>(
         parseDataAsPolygon,
-        {'geo': GeoFlutterFire, 'features': geoJson.features},
+        {'geo': GeoFlutterFire(), 'features': geoJson.features},
       );
 
       return Right(geoData);
@@ -187,7 +187,7 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
       final geoData = await compute<Map<String, dynamic>,
           List<GeolocationDataPropertiesModel>>(
         parseDataAsPoint,
-        {'geo': GeoFlutterFire, 'features': geoJson.features},
+        {'geo': GeoFlutterFire(), 'features': geoJson.features},
       );
 
       return Right(geoData);
