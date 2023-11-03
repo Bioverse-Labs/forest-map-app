@@ -58,7 +58,7 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
         final geoData = await compute<Map<String, dynamic>,
             List<GeolocationDataPropertiesModel>>(
           parseDataAsPoint,
-          {'geo': GeoFlutterFire, 'features': geoJson.features},
+          {'geo': GeoFlutterFire(), 'features': geoJson.features},
         );
 
         await mapLocalDataSource!.saveData(filename, geoData);
@@ -248,16 +248,16 @@ class GeolocationRepositoryImpl implements GeolocationRepository {
 Future<List<GeolocationDataPropertiesModel>> parseDataAsPoint(
   Map<String, dynamic> params,
 ) async {
-  final geo = params['geo'] as GeoFlutterFire?;
+  final GeoFlutterFire geo = params['geo'];
   final features = params['features'] as List<GeoJsonFeature>;
 
   final dataList = <GeolocationDataPropertiesModel>[];
 
   for (var feature in features) {
-    final point = feature.geometry as GeoJsonPoint;
+    final point = feature.geometry;
     final properties = feature.properties!;
 
-    final geoLocation = geo!.point(
+    final geoLocation = geo.point(
       latitude: point.geoPoint.latitude,
       longitude: point.geoPoint.longitude,
     );
