@@ -1,4 +1,4 @@
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:data_connection_checker_nulls/data_connection_checker_nulls.dart';
 
 abstract class NetworkInfo {

@@ -4,6 +4,7 @@ import '../util/color_generator.dart';
 
 class AppTheme {
   final mainTheme = ThemeData(
+    useMaterial3: false,
     primarySwatch: materialColorFromHex(0xff1D2D43),
     buttonTheme: ButtonThemeData(
       buttonColor: materialColorFromHex(0xff1D2D43),
@@ -11,7 +12,7 @@ class AppTheme {
     ),
   );
 
-  final darkTheme = ThemeData.dark().copyWith(
+  final darkTheme = ThemeData.dark(useMaterial3: false).copyWith(
     buttonTheme: ButtonThemeData(
       buttonColor: Colors.tealAccent,
       textTheme: ButtonTextTheme.primary,

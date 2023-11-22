@@ -197,7 +197,8 @@ class MemberList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    organization!.members!.sort((a, b) => b.role!.index.compareTo(a.role!.index));
+    organization!.members!
+        .sort((a, b) => b.role!.index.compareTo(a.role!.index));
     return Column(
       children: [
         ...organization!.members!

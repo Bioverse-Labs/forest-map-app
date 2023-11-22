@@ -81,7 +81,7 @@ class MockPathProviderPlatform extends Mock
 ])
 void main() {
   late MockFirestoreAdapterImpl mockFirestoreAdapter;
-  late MockFirebasStorageAdapter mockFirebaseStorage;
+  late MockStorageAdapter mockFirebaseStorage;
   late MockLocalizedString mockLocalizedString;
   late MockUUIDGenerator mockUUIDGenerator;
   late PostRemoteDataSourceImpl postRemoteDataSourceImpl;
@@ -91,7 +91,7 @@ void main() {
 
   setUp(() {
     mockFirestoreAdapter = MockFirestoreAdapterImpl();
-    mockFirebaseStorage = MockFirebasStorageAdapter();
+    mockFirebaseStorage = MockStorageAdapter();
     mockLocalizedString = MockLocalizedString();
     mockUUIDGenerator = MockUUIDGenerator();
     mockCollectionReference = MockCollectionReference();
