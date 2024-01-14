@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:forest_map/core/adapters/firebase_auth_adapter.dart';
+import 'package:forest_map/core/adapters/auth_adapter.dart';
 import 'package:forest_map/core/platform/location.dart';
+import 'package:forest_map/features/user/domain/entities/user.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../features/post/presentation/notifier/post_notifier.dart';
 
@@ -16,7 +16,7 @@ import '../util/notifications.dart';
 import 'splash_screen.dart';
 
 class InitialScreen extends StatelessWidget {
-  final FirebaseAuthAdapterImpl? firebaseAuthAdapterImpl;
+  final AuthAdapter? authAdapter;
   final FirestoreAdapter? firestoreAdapterImpl;
   final AppNavigator? appNavigator;
   final UserNotifierImpl userNotifier;
@@ -29,7 +29,7 @@ class InitialScreen extends StatelessWidget {
 
   InitialScreen({
     Key? key,
-    required this.firebaseAuthAdapterImpl,
+    required this.authAdapter,
     required this.firestoreAdapterImpl,
     required this.appNavigator,
     required this.userNotifier,
@@ -64,7 +64,7 @@ class InitialScreen extends StatelessWidget {
       }
 
       await userNotifier.getUser(
-        id: isConnected ? user.uid : 'currUser',
+        id: isConnected ? user.id : 'currUser',
         searchLocally: !isConnected,
       );
       await organizationNotifier.getOrganization(
@@ -96,7 +96,7 @@ class InitialScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
-      stream: firebaseAuthAdapterImpl!.firebaseAuth!.authStateChanges(),
+      stream: authAdapter!.authStateStream(),
       builder: (ctx, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           Future.delayed(

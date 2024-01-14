@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:forest_map/core/adapters/auth_adapter.dart';
-import 'package:forest_map/core/adapters/firebase_auth_adapter.dart';
 import 'package:forest_map/core/platform/location.dart';
 import 'package:forest_map/features/tracking/presentation/screens/ask_location_screen.dart';
 import 'features/auth/presentation/screens/forgot_password_screen.dart';
@@ -26,8 +25,7 @@ import 'features/user/presentation/notifiers/user_notifier.dart';
 
 Map<String, Widget Function(BuildContext)> routes = {
   '/': (ctx) => InitialScreen(
-        firebaseAuthAdapterImpl:
-            GetIt.I<AuthAdapter>() as FirebaseAuthAdapterImpl,
+        authAdapter: GetIt.I<AuthAdapter>(),
         userNotifier: Provider.of<UserNotifierImpl>(ctx, listen: false),
         organizationNotifier: Provider.of<OrganizationNotifierImpl>(
           ctx,

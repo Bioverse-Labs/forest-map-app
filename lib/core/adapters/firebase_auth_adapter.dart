@@ -1,12 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:forest_map/core/adapters/auth_adapter.dart';
+import 'package:forest_map/features/user/domain/entities/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../features/user/data/models/user_model.dart';
 
 class FirebaseAuthAdapterImpl implements AuthAdapter {
-  final FirebaseAuth? firebaseAuth;
+  final auth.FirebaseAuth? firebaseAuth;
   final GoogleSignIn? googleSignIn;
   final FacebookAuth? facebookAuth;
   final SocialCredentialAdapter? socialCredentialAdapter;
@@ -19,7 +20,7 @@ class FirebaseAuthAdapterImpl implements AuthAdapter {
   );
 
   @override
-  Future<AuthCredential> getFacebookAuthCredential() async {
+  Future<auth.AuthCredential> getFacebookAuthCredential() async {
     final res = await facebookAuth!.login();
     final credential = await socialCredentialAdapter!
         .getFacebookCredential(res.accessToken!.token);
@@ -27,7 +28,7 @@ class FirebaseAuthAdapterImpl implements AuthAdapter {
   }
 
   @override
-  Future<AuthCredential> getGoogleAuthCredential() async {
+  Future<auth.AuthCredential> getGoogleAuthCredential() async {
     final googleAuth = (await (await googleSignIn!.signIn())?.authentication)!;
     final credential = await socialCredentialAdapter!.getGoogleCredential(
       googleAuth.accessToken,
@@ -38,7 +39,7 @@ class FirebaseAuthAdapterImpl implements AuthAdapter {
   }
 
   @override
-  Future<UserModel> signInWithCredential(AuthCredential credential) async {
+  Future<UserModel> signInWithCredential(auth.AuthCredential credential) async {
     final result = await firebaseAuth!.signInWithCredential(credential);
     return UserModel(
       id: result.user!.uid,
@@ -91,23 +92,36 @@ class FirebaseAuthAdapterImpl implements AuthAdapter {
   Future<void> forgotPassword(String email) {
     return firebaseAuth!.sendPasswordResetEmail(email: email);
   }
+
+  @override
+  Stream<User?> authStateStream() {
+    return firebaseAuth!.authStateChanges().map(
+          (event) => User(
+            id: event?.uid,
+            name: event?.displayName,
+            email: event?.email,
+            avatarUrl: event?.photoURL,
+          ),
+        );
+  }
 }
 
 abstract class SocialCredentialAdapter {
-  Future<AuthCredential> getFacebookCredential(String token);
-  Future<AuthCredential> getGoogleCredential(
+  Future<auth.AuthCredential> getFacebookCredential(String token);
+  Future<auth.AuthCredential> getGoogleCredential(
       String? accessToken, String? idToken);
 }
 
 class SocialCredentialAdapterImpl implements SocialCredentialAdapter {
   @override
-  Future<AuthCredential> getFacebookCredential(String token) async =>
-      FacebookAuthProvider.credential(token);
+  Future<auth.AuthCredential> getFacebookCredential(String token) async =>
+      auth.FacebookAuthProvider.credential(token);
 
   @override
-  Future<AuthCredential> getGoogleCredential(
+  Future<auth.AuthCredential> getGoogleCredential(
     String? accessToken,
     String? idToken,
   ) async =>
-      GoogleAuthProvider.credential(accessToken: accessToken, idToken: idToken);
+      auth.GoogleAuthProvider.credential(
+          accessToken: accessToken, idToken: idToken);
 }
