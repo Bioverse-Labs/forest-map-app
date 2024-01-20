@@ -1,5 +1,5 @@
-import '../../../../core/adapters/database_adapter.dart';
 import '../../../../core/adapters/hive_adapter.dart';
+import '../../../../core/domain/adapters/database_adapter.dart';
 import '../hive/geolocation_file.dart';
 import '../models/geolocation_data_properties_model.dart';
 

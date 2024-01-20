@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:forest_map/core/adapters/auth_adapter.dart';
+import 'package:forest_map/core/domain/adapters/auth_adapter.dart';
+import 'package:forest_map/core/domain/adapters/database_adapter.dart';
+import 'package:forest_map/core/domain/adapters/firestore_adapter.dart';
 import 'package:forest_map/core/platform/location.dart';
 import 'package:forest_map/features/user/domain/entities/user.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,8 +9,6 @@ import '../../features/post/presentation/notifier/post_notifier.dart';
 
 import '../../features/organization/presentation/notifiers/organizations_notifier.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
-import '../adapters/database_adapter.dart';
-import '../adapters/firestore_adapter.dart';
 import '../errors/failure.dart';
 import '../navigation/app_navigator.dart';
 import '../platform/network_info.dart';

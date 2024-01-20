@@ -1,4 +1,4 @@
-import 'package:forest_map/core/adapters/database_adapter.dart';
+import 'package:forest_map/core/domain/adapters/database_adapter.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
 

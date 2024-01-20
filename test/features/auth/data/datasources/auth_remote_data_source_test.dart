@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:forest_map/core/adapters/firebase_auth_adapter.dart';
 import 'package:forest_map/core/adapters/firestore_adapter_impl.dart';
 import 'package:forest_map/core/adapters/hive_adapter.dart';
+import 'package:forest_map/core/adapters/social_credential_adapter_impl.dart';
+import 'package:forest_map/core/domain/entities/auth.dart';
 import 'package:forest_map/core/enums/social_login_types.dart';
 import 'package:forest_map/core/errors/exceptions.dart';
 import 'package:forest_map/core/util/localized_string.dart';
@@ -21,7 +23,6 @@ import 'auth_remote_data_source_test.mocks.dart';
   FirestoreAdapterImpl,
   FirebaseAuthAdapterImpl,
   SocialCredentialAdapterImpl,
-  AuthCredential,
   DocumentReference,
   DocumentSnapshot,
   LocalizedString,
@@ -125,19 +126,22 @@ void main() {
   });
 
   group('signInWithSocial', () {
-    late MockAuthCredential mockAuthCredential;
+    late Auth mockAuth;
     late MockDocumentReference mockDocumentReference;
 
     setUp(() {
-      mockAuthCredential = MockAuthCredential();
+      mockAuth = Auth(
+        providerId: '',
+        signInMethod: '',
+      );
       mockDocumentReference = MockDocumentReference();
       when(mockDocumentSnapshot.data()).thenReturn(tUserData);
       when(mockLocalizatedString.getLocalizedString(any))
           .thenAnswer((_) => tExceptionMessage);
       when(mockFirebaseAuthAdapterImpl.getFacebookAuthCredential())
-          .thenAnswer((_) async => mockAuthCredential);
+          .thenAnswer((_) async => mockAuth);
       when(mockFirebaseAuthAdapterImpl.getGoogleAuthCredential())
-          .thenAnswer((_) async => mockAuthCredential);
+          .thenAnswer((_) async => mockAuth);
     });
 
     test(
@@ -156,7 +160,7 @@ void main() {
 
         expect(result, tUserModel);
         verify(mockFirebaseAuthAdapterImpl.signInWithCredential(
-          mockAuthCredential,
+          mockAuth,
         ));
         verify(mockFirestoreAdapterImpl.getDocument('users/$tUserId'));
         expect(result, tUserModel);
@@ -180,7 +184,7 @@ void main() {
 
         expect(result, tUserModel);
         verify(mockFirebaseAuthAdapterImpl.signInWithCredential(
-          mockAuthCredential,
+          mockAuth,
         ));
         verify(mockFirestoreAdapterImpl.getDocument('users/$tUserId'));
         expect(result, tUserModel);

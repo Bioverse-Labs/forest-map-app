@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:forest_map/core/adapters/firestore_adapter.dart';
-import 'package:forest_map/core/adapters/storage_adapter.dart';
 
+import '../../../../core/domain/adapters/firestore_adapter.dart';
+import '../../../../core/domain/adapters/storage_adapter.dart';
 import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/enums/organization_member_status.dart';
 import '../../../../core/enums/organization_role_types.dart';

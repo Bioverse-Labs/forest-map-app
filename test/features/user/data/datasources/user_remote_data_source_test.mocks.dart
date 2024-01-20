@@ -375,7 +375,7 @@ class MockLocalizedString extends _i1.Mock implements _i10.LocalizedString {
   @override
   String getLocalizedString(
     String? identifier, {
-    Map<String, String?>? namedArgs,
+    Map<String, String>? namedArgs,
   }) =>
       (super.noSuchMethod(
         Invocation.method(

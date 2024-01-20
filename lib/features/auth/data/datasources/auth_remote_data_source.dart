@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:forest_map/core/adapters/auth_adapter.dart';
+import 'package:forest_map/core/domain/adapters/auth_adapter.dart';
+import 'package:forest_map/core/domain/adapters/firestore_adapter.dart';
+import 'package:forest_map/core/domain/entities/auth.dart';
 
-import '../../../../core/adapters/firestore_adapter.dart';
 import '../../../../core/adapters/hive_adapter.dart';
 import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/enums/social_login_types.dart';
@@ -84,7 +85,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<UserModel> signInWithSocial(SocialLoginType type) async {
     try {
-      AuthCredential credential;
+      Auth credential;
       if (type == SocialLoginType.facebook) {
         credential = await firebaseAuthAdapter!.getFacebookAuthCredential();
       } else {

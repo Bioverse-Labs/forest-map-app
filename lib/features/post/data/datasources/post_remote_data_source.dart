@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:forest_map/core/adapters/firestore_adapter.dart';
-import 'package:forest_map/core/adapters/storage_adapter.dart';
+import '../../../../core/domain/adapters/firestore_adapter.dart';
+import '../../../../core/domain/adapters/storage_adapter.dart';
 import '../models/post_model.dart';
 
 import 'package:path/path.dart';
@@ -40,7 +40,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       String? imageUrl;
 
       if (file.existsSync()) {
-        await firebaseStorageAdapter!.uploadFile(
+        firebaseStorageAdapter!.uploadFile(
           file: File(post.imageUrl!),
           storagePath:
               'organizations/${post.organizationId}/posts/${post.id}.png',

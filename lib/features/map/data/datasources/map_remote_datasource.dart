@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:forest_map/core/adapters/storage_adapter.dart';
 import 'package:geojson/geojson.dart';
 
-import '../../../../core/adapters/http_adapter.dart';
+import '../../../../core/domain/adapters/http_adapter.dart';
+import '../../../../core/domain/adapters/storage_adapter.dart';
 import '../../../../core/util/dir.dart';
 import '../../../../core/util/geojson.dart';
 import '../../../organization/domain/entities/organization.dart';

@@ -6,10 +6,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:forest_map/core/adapters/auth_adapter.dart';
 import 'package:forest_map/core/adapters/database_adapter_impl.dart';
 import 'package:forest_map/core/adapters/firestore_adapter_impl.dart';
-import 'package:forest_map/core/adapters/storage_adapter.dart';
+import 'package:forest_map/core/adapters/social_credential_adapter_impl.dart';
+import 'package:forest_map/core/domain/adapters/auth_adapter.dart';
+import 'package:forest_map/core/domain/adapters/database_adapter.dart';
+import 'package:forest_map/core/domain/adapters/firestore_adapter.dart';
+import 'package:forest_map/core/domain/adapters/http_adapter.dart';
+import 'package:forest_map/core/domain/adapters/social_credential_adapter.dart';
+import 'package:forest_map/core/domain/adapters/storage_adapter.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import '../../features/auth/domain/usecases/forgot_password.dart';
 import '../../features/catalog/presentation/notifiers/catalog_notifier.dart';
@@ -82,10 +87,8 @@ import '../../features/user/domain/repository/user_repository.dart';
 import '../../features/user/domain/usecases/get_user.dart';
 import '../../features/user/domain/usecases/update_user.dart';
 import '../../features/user/presentation/notifiers/user_notifier.dart';
-import '../adapters/database_adapter.dart';
 import '../adapters/firebase_auth_adapter.dart';
 import '../adapters/firebase_storage_adapter.dart';
-import '../adapters/firestore_adapter.dart';
 import '../adapters/hive_adapter.dart';
 import '../adapters/http_adapter.dart';
 import '../enums/organization_member_status.dart';
@@ -182,11 +185,11 @@ class AppConfig {
         FirebaseAuth.instance,
         GoogleSignIn(),
         FacebookAuth.instance,
-        GetIt.I<SocialCredentialAdapterImpl>(),
+        GetIt.I<SocialCredentialAdapter>(),
       ),
     );
 
-    GetIt.I.registerLazySingleton<SocialCredentialAdapterImpl>(
+    GetIt.I.registerLazySingleton<SocialCredentialAdapter>(
       () => SocialCredentialAdapterImpl(),
     );
 

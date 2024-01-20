@@ -1,13 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:forest_map/core/adapters/auth_adapter.dart';
+import 'package:forest_map/core/domain/adapters/auth_adapter.dart';
+import 'package:forest_map/core/domain/adapters/social_credential_adapter.dart';
+import 'package:forest_map/core/domain/entities/auth.dart';
 import 'package:forest_map/features/user/domain/entities/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../features/user/data/models/user_model.dart';
 
 class FirebaseAuthAdapterImpl implements AuthAdapter {
-  final auth.FirebaseAuth? firebaseAuth;
+  final firebase.FirebaseAuth? firebaseAuth;
   final GoogleSignIn? googleSignIn;
   final FacebookAuth? facebookAuth;
   final SocialCredentialAdapter? socialCredentialAdapter;
@@ -20,27 +22,46 @@ class FirebaseAuthAdapterImpl implements AuthAdapter {
   );
 
   @override
-  Future<auth.AuthCredential> getFacebookAuthCredential() async {
+  Future<Auth> getFacebookAuthCredential() async {
     final res = await facebookAuth!.login();
     final credential = await socialCredentialAdapter!
         .getFacebookCredential(res.accessToken!.token);
-    return credential;
+
+    return Auth(
+      providerId: credential.providerId,
+      signInMethod: credential.signInMethod,
+      token: credential.token,
+      accessToken: credential.accessToken,
+    );
   }
 
   @override
-  Future<auth.AuthCredential> getGoogleAuthCredential() async {
+  Future<Auth> getGoogleAuthCredential() async {
     final googleAuth = (await (await googleSignIn!.signIn())?.authentication)!;
     final credential = await socialCredentialAdapter!.getGoogleCredential(
       googleAuth.accessToken,
       googleAuth.idToken,
     );
 
-    return credential;
+    return Auth(
+      providerId: credential.providerId,
+      signInMethod: credential.signInMethod,
+      token: credential.token,
+      accessToken: credential.accessToken,
+    );
   }
 
   @override
-  Future<UserModel> signInWithCredential(auth.AuthCredential credential) async {
-    final result = await firebaseAuth!.signInWithCredential(credential);
+  Future<UserModel> signInWithCredential(Auth auth) async {
+    final result = await firebaseAuth!.signInWithCredential(
+      firebase.AuthCredential(
+        providerId: auth.providerId,
+        signInMethod: auth.signInMethod,
+        token: auth.token,
+        accessToken: auth.accessToken,
+      ),
+    );
+
     return UserModel(
       id: result.user!.uid,
       name: result.user!.displayName!,
@@ -96,32 +117,14 @@ class FirebaseAuthAdapterImpl implements AuthAdapter {
   @override
   Stream<User?> authStateStream() {
     return firebaseAuth!.authStateChanges().map(
-          (event) => User(
-            id: event?.uid,
-            name: event?.displayName,
-            email: event?.email,
-            avatarUrl: event?.photoURL,
-          ),
+          (event) => event != null
+              ? User(
+                  id: event.uid,
+                  name: event.displayName,
+                  email: event.email,
+                  avatarUrl: event.photoURL,
+                )
+              : null,
         );
   }
-}
-
-abstract class SocialCredentialAdapter {
-  Future<auth.AuthCredential> getFacebookCredential(String token);
-  Future<auth.AuthCredential> getGoogleCredential(
-      String? accessToken, String? idToken);
-}
-
-class SocialCredentialAdapterImpl implements SocialCredentialAdapter {
-  @override
-  Future<auth.AuthCredential> getFacebookCredential(String token) async =>
-      auth.FacebookAuthProvider.credential(token);
-
-  @override
-  Future<auth.AuthCredential> getGoogleCredential(
-    String? accessToken,
-    String? idToken,
-  ) async =>
-      auth.GoogleAuthProvider.credential(
-          accessToken: accessToken, idToken: idToken);
 }

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:forest_map/core/adapters/storage_adapter.dart';
+import 'package:forest_map/core/domain/adapters/storage_adapter.dart';
 
 class FirebaseStorageAdapterImpl implements StorageAdapter {
   final FirebaseStorage? storage;

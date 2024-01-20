@@ -1,11 +1,8 @@
 import 'dart:io';
-
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 
-abstract class HttpAdapter {
-  Future<File> downloadFile(String url);
-}
+import 'package:forest_map/core/domain/adapters/http_adapter.dart';
+import 'package:path_provider/path_provider.dart';
 
 class HttpAdapterImpl implements HttpAdapter {
   @override

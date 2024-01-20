@@ -1032,11 +1032,6 @@ class MockMockSpec<T> extends _i1.Mock implements _i7.MockSpec<T> {
         returnValue: <Type>[],
       ) as List<Type>);
   @override
-  bool get returnNullOnMissingStub => (super.noSuchMethod(
-        Invocation.getter(#returnNullOnMissingStub),
-        returnValue: false,
-      ) as bool);
-  @override
   Set<Symbol> get unsupportedMembers => (super.noSuchMethod(
         Invocation.getter(#unsupportedMembers),
         returnValue: <Symbol>{},

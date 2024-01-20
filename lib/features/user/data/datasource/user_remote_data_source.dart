@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:forest_map/core/adapters/firestore_adapter.dart';
-import 'package:forest_map/core/adapters/storage_adapter.dart';
 
+import '../../../../core/domain/adapters/firestore_adapter.dart';
+import '../../../../core/domain/adapters/storage_adapter.dart';
 import '../../../../core/enums/exception_origin_types.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/util/localized_string.dart';

@@ -5,7 +5,7 @@ import 'package:faker/faker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:forest_map/core/adapters/firestore_adapter_impl.dart';
-import 'package:forest_map/core/adapters/storage_adapter.dart';
+import 'package:forest_map/core/domain/adapters/storage_adapter.dart';
 import 'package:forest_map/core/errors/exceptions.dart';
 import 'package:forest_map/core/util/localized_string.dart';
 import 'package:forest_map/core/util/uuid_generator.dart';
@@ -81,7 +81,7 @@ class MockPathProviderPlatform extends Mock
 ])
 void main() {
   late MockFirestoreAdapterImpl mockFirestoreAdapter;
-  late MockFirebasStorageAdapter mockFirebaseStorage;
+  late MockStorageAdapter mockFirebaseStorage;
   late MockLocalizedString mockLocalizedString;
   late MockUUIDGenerator mockUUIDGenerator;
   late PostRemoteDataSourceImpl postRemoteDataSourceImpl;
@@ -91,7 +91,7 @@ void main() {
 
   setUp(() {
     mockFirestoreAdapter = MockFirestoreAdapterImpl();
-    mockFirebaseStorage = MockFirebasStorageAdapter();
+    mockFirebaseStorage = MockStorageAdapter();
     mockLocalizedString = MockLocalizedString();
     mockUUIDGenerator = MockUUIDGenerator();
     mockCollectionReference = MockCollectionReference();

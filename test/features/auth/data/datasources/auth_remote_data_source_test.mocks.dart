@@ -6,12 +6,15 @@
 import 'dart:async' as _i7;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
-import 'package:firebase_auth/firebase_auth.dart' as _i3;
 import 'package:forest_map/core/adapters/firebase_auth_adapter.dart' as _i8;
 import 'package:forest_map/core/adapters/firestore_adapter_impl.dart' as _i6;
-import 'package:forest_map/core/adapters/hive_adapter.dart' as _i10;
-import 'package:forest_map/core/util/localized_string.dart' as _i9;
+import 'package:forest_map/core/adapters/hive_adapter.dart' as _i12;
+import 'package:forest_map/core/adapters/social_credential_adapter_impl.dart'
+    as _i10;
+import 'package:forest_map/core/domain/entities/auth.dart' as _i3;
+import 'package:forest_map/core/util/localized_string.dart' as _i11;
 import 'package:forest_map/features/user/data/models/user_model.dart' as _i4;
+import 'package:forest_map/features/user/domain/entities/user.dart' as _i9;
 import 'package:hive/hive.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -59,9 +62,8 @@ class _FakeDocumentSnapshot_2<T extends Object?> extends _i1.SmartFake
         );
 }
 
-class _FakeAuthCredential_3 extends _i1.SmartFake
-    implements _i3.AuthCredential {
-  _FakeAuthCredential_3(
+class _FakeAuth_3 extends _i1.SmartFake implements _i3.Auth {
+  _FakeAuth_3(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -227,48 +229,45 @@ class MockFirebaseAuthAdapterImpl extends _i1.Mock
   }
 
   @override
-  _i7.Future<_i3.AuthCredential> getFacebookAuthCredential() =>
-      (super.noSuchMethod(
+  _i7.Future<_i3.Auth> getFacebookAuthCredential() => (super.noSuchMethod(
         Invocation.method(
           #getFacebookAuthCredential,
           [],
         ),
-        returnValue: _i7.Future<_i3.AuthCredential>.value(_FakeAuthCredential_3(
+        returnValue: _i7.Future<_i3.Auth>.value(_FakeAuth_3(
           this,
           Invocation.method(
             #getFacebookAuthCredential,
             [],
           ),
         )),
-      ) as _i7.Future<_i3.AuthCredential>);
+      ) as _i7.Future<_i3.Auth>);
   @override
-  _i7.Future<_i3.AuthCredential> getGoogleAuthCredential() =>
-      (super.noSuchMethod(
+  _i7.Future<_i3.Auth> getGoogleAuthCredential() => (super.noSuchMethod(
         Invocation.method(
           #getGoogleAuthCredential,
           [],
         ),
-        returnValue: _i7.Future<_i3.AuthCredential>.value(_FakeAuthCredential_3(
+        returnValue: _i7.Future<_i3.Auth>.value(_FakeAuth_3(
           this,
           Invocation.method(
             #getGoogleAuthCredential,
             [],
           ),
         )),
-      ) as _i7.Future<_i3.AuthCredential>);
+      ) as _i7.Future<_i3.Auth>);
   @override
-  _i7.Future<_i4.UserModel> signInWithCredential(
-          _i3.AuthCredential? credential) =>
+  _i7.Future<_i4.UserModel> signInWithCredential(_i3.Auth? auth) =>
       (super.noSuchMethod(
         Invocation.method(
           #signInWithCredential,
-          [credential],
+          [auth],
         ),
         returnValue: _i7.Future<_i4.UserModel>.value(_FakeUserModel_4(
           this,
           Invocation.method(
             #signInWithCredential,
-            [credential],
+            [auth],
           ),
         )),
       ) as _i7.Future<_i4.UserModel>);
@@ -338,34 +337,42 @@ class MockFirebaseAuthAdapterImpl extends _i1.Mock
         returnValue: _i7.Future<void>.value(),
         returnValueForMissingStub: _i7.Future<void>.value(),
       ) as _i7.Future<void>);
+  @override
+  _i7.Stream<_i9.User?> authStateStream() => (super.noSuchMethod(
+        Invocation.method(
+          #authStateStream,
+          [],
+        ),
+        returnValue: _i7.Stream<_i9.User?>.empty(),
+      ) as _i7.Stream<_i9.User?>);
 }
 
 /// A class which mocks [SocialCredentialAdapterImpl].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSocialCredentialAdapterImpl extends _i1.Mock
-    implements _i8.SocialCredentialAdapterImpl {
+    implements _i10.SocialCredentialAdapterImpl {
   MockSocialCredentialAdapterImpl() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i7.Future<_i3.AuthCredential> getFacebookCredential(String? token) =>
+  _i7.Future<_i3.Auth> getFacebookCredential(String? token) =>
       (super.noSuchMethod(
         Invocation.method(
           #getFacebookCredential,
           [token],
         ),
-        returnValue: _i7.Future<_i3.AuthCredential>.value(_FakeAuthCredential_3(
+        returnValue: _i7.Future<_i3.Auth>.value(_FakeAuth_3(
           this,
           Invocation.method(
             #getFacebookCredential,
             [token],
           ),
         )),
-      ) as _i7.Future<_i3.AuthCredential>);
+      ) as _i7.Future<_i3.Auth>);
   @override
-  _i7.Future<_i3.AuthCredential> getGoogleCredential(
+  _i7.Future<_i3.Auth> getGoogleCredential(
     String? accessToken,
     String? idToken,
   ) =>
@@ -377,7 +384,7 @@ class MockSocialCredentialAdapterImpl extends _i1.Mock
             idToken,
           ],
         ),
-        returnValue: _i7.Future<_i3.AuthCredential>.value(_FakeAuthCredential_3(
+        returnValue: _i7.Future<_i3.Auth>.value(_FakeAuth_3(
           this,
           Invocation.method(
             #getGoogleCredential,
@@ -387,35 +394,7 @@ class MockSocialCredentialAdapterImpl extends _i1.Mock
             ],
           ),
         )),
-      ) as _i7.Future<_i3.AuthCredential>);
-}
-
-/// A class which mocks [AuthCredential].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockAuthCredential extends _i1.Mock implements _i3.AuthCredential {
-  MockAuthCredential() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  String get providerId => (super.noSuchMethod(
-        Invocation.getter(#providerId),
-        returnValue: '',
-      ) as String);
-  @override
-  String get signInMethod => (super.noSuchMethod(
-        Invocation.getter(#signInMethod),
-        returnValue: '',
-      ) as String);
-  @override
-  Map<String, dynamic> asMap() => (super.noSuchMethod(
-        Invocation.method(
-          #asMap,
-          [],
-        ),
-        returnValue: <String, dynamic>{},
-      ) as Map<String, dynamic>);
+      ) as _i7.Future<_i3.Auth>);
 }
 
 /// A class which mocks [DocumentReference].
@@ -609,7 +588,7 @@ class MockDocumentSnapshot<T extends Object?> extends _i1.Mock
 /// A class which mocks [LocalizedString].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLocalizedString extends _i1.Mock implements _i9.LocalizedString {
+class MockLocalizedString extends _i1.Mock implements _i11.LocalizedString {
   MockLocalizedString() {
     _i1.throwOnMissingStub(this);
   }
@@ -617,7 +596,7 @@ class MockLocalizedString extends _i1.Mock implements _i9.LocalizedString {
   @override
   String getLocalizedString(
     String? identifier, {
-    Map<String, String?>? namedArgs,
+    Map<String, String>? namedArgs,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -632,7 +611,7 @@ class MockLocalizedString extends _i1.Mock implements _i9.LocalizedString {
 /// A class which mocks [HiveAdapter].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockHiveAdapter<T> extends _i1.Mock implements _i10.HiveAdapter<T> {
+class MockHiveAdapter<T> extends _i1.Mock implements _i12.HiveAdapter<T> {
   MockHiveAdapter() {
     _i1.throwOnMissingStub(this);
   }

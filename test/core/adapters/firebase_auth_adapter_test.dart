@@ -2,6 +2,8 @@ import 'package:faker/faker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:forest_map/core/adapters/firebase_auth_adapter.dart';
+import 'package:forest_map/core/adapters/social_credential_adapter_impl.dart';
+import 'package:forest_map/core/domain/entities/auth.dart';
 import 'package:forest_map/features/user/data/models/user_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mockito/annotations.dart';
@@ -17,7 +19,6 @@ import 'firebase_auth_adapter_test.mocks.dart';
   SocialCredentialAdapterImpl,
   UserCredential,
   User,
-  AuthCredential,
   GoogleSignInAccount,
   GoogleSignInAuthentication,
 ])
@@ -51,7 +52,14 @@ void main() {
     final tName = faker.person.name();
     final tAvatarUrl = faker.internet.uri('protocol');
     final tUserId = faker.guid.guid();
-    final tAuthCredential = MockAuthCredential();
+    final tAuth = Auth(
+      providerId: '',
+      signInMethod: '',
+    );
+    final tAuthCredential = AuthCredential(
+      providerId: tAuth.providerId,
+      signInMethod: tAuth.signInMethod,
+    );
     final tUserModel = UserModel(
       id: tUserId,
       name: tName,
@@ -60,6 +68,7 @@ void main() {
     );
 
     setUp(() {
+      when(mockUserCredential.credential).thenReturn(tAuthCredential);
       when(mockUserCredential.user).thenReturn(mockFirebaseUser);
       when(mockFirebaseUser.uid).thenReturn(tUserId);
       when(mockFirebaseUser.displayName).thenReturn(tName);
@@ -117,13 +126,13 @@ void main() {
       test(
         'should return UserModel when credential signIn succeed',
         () async {
-          when(mockFirebaseAuth.signInWithCredential(tAuthCredential))
+          when(mockFirebaseAuth.signInWithCredential(any))
               .thenAnswer((_) async => mockUserCredential);
 
-          final result = await firebaseAuthAdapterImpl
-              .signInWithCredential(tAuthCredential);
+          final result =
+              await firebaseAuthAdapterImpl.signInWithCredential(tAuth);
 
-          verify(mockFirebaseAuth.signInWithCredential(tAuthCredential));
+          verify(mockFirebaseAuth.signInWithCredential(any));
           expect(result, tUserModel);
           verifyNoMoreInteractions(mockFirebaseAuth);
         },
@@ -152,14 +161,14 @@ void main() {
           when(mockFacebookAuth.login()).thenAnswer((_) async => tResult);
           when(mockSocialCredentialAdapterImpl
                   .getFacebookCredential(tAccessToken.token))
-              .thenAnswer((_) async => tAuthCredential);
+              .thenAnswer((_) async => tAuth);
 
           final result =
               await firebaseAuthAdapterImpl.getFacebookAuthCredential();
 
           verify(mockSocialCredentialAdapterImpl
               .getFacebookCredential(tAccessToken.token));
-          expect(result, tAuthCredential);
+          expect(result.accessToken, tAuthCredential.accessToken);
           verifyNoMoreInteractions(mockSocialCredentialAdapterImpl);
         },
       );
@@ -201,7 +210,7 @@ void main() {
           when(mockGoogleSignIn.signIn())
               .thenAnswer((_) async => mockGoogleSignInAccount);
           when(mockSocialCredentialAdapterImpl.getGoogleCredential(any, any))
-              .thenAnswer((_) async => tAuthCredential);
+              .thenAnswer((_) async => tAuth);
 
           final result =
               await firebaseAuthAdapterImpl.getGoogleAuthCredential();
@@ -210,7 +219,7 @@ void main() {
             tAccessToken,
             tIdToken,
           ));
-          expect(result, tAuthCredential);
+          expect(result.providerId, tAuthCredential.providerId);
           verifyNoMoreInteractions(mockSocialCredentialAdapterImpl);
         },
       );

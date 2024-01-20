@@ -118,11 +118,11 @@ class OrganizationScreen extends StatelessWidget {
           children: [
             Consumer2<UserNotifierImpl, OrganizationNotifierImpl>(
               builder: (ctx, userState, orgState, _) {
-                final user = userState.user!;
+                final user = userState.user;
                 final organization = orgState.organization;
 
-                if (user.organizations == null ||
-                    user.organizations!.length <= 0) {
+                if (user?.organizations == null ||
+                    (user?.organizations?.length ?? 0) <= 0) {
                   return EmptyOrganizations(localizedString: localizedString);
                 }
 

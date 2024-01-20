@@ -10,8 +10,8 @@ import 'dart:typed_data' as _i11;
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:firebase_core/firebase_core.dart' as _i5;
 import 'package:firebase_storage/firebase_storage.dart' as _i3;
-import 'package:forest_map/core/adapters/firebase_storage_adapter.dart' as _i7;
 import 'package:forest_map/core/adapters/firestore_adapter_impl.dart' as _i6;
+import 'package:forest_map/core/domain/adapters/storage_adapter.dart' as _i7;
 import 'package:forest_map/core/util/localized_string.dart' as _i9;
 import 'package:forest_map/core/util/uuid_generator.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
@@ -60,19 +60,9 @@ class _FakeDocumentSnapshot_2<T extends Object?> extends _i1.SmartFake
         );
 }
 
-class _FakeUploadTask_3 extends _i1.SmartFake implements _i3.UploadTask {
-  _FakeUploadTask_3(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeFirebaseStorage_4 extends _i1.SmartFake
+class _FakeFirebaseStorage_3 extends _i1.SmartFake
     implements _i3.FirebaseStorage {
-  _FakeFirebaseStorage_4(
+  _FakeFirebaseStorage_3(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -81,8 +71,8 @@ class _FakeFirebaseStorage_4 extends _i1.SmartFake
         );
 }
 
-class _FakeTaskSnapshot_5 extends _i1.SmartFake implements _i3.TaskSnapshot {
-  _FakeTaskSnapshot_5(
+class _FakeTaskSnapshot_4 extends _i1.SmartFake implements _i3.TaskSnapshot {
+  _FakeTaskSnapshot_4(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -91,8 +81,8 @@ class _FakeTaskSnapshot_5 extends _i1.SmartFake implements _i3.TaskSnapshot {
         );
 }
 
-class _FakeFuture_6<T> extends _i1.SmartFake implements _i4.Future<T> {
-  _FakeFuture_6(
+class _FakeFuture_5<T> extends _i1.SmartFake implements _i4.Future<T> {
+  _FakeFuture_5(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -101,9 +91,9 @@ class _FakeFuture_6<T> extends _i1.SmartFake implements _i4.Future<T> {
         );
 }
 
-class _FakeCollectionReference_7<T extends Object?> extends _i1.SmartFake
+class _FakeCollectionReference_6<T extends Object?> extends _i1.SmartFake
     implements _i2.CollectionReference<T> {
-  _FakeCollectionReference_7(
+  _FakeCollectionReference_6(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -112,9 +102,9 @@ class _FakeCollectionReference_7<T extends Object?> extends _i1.SmartFake
         );
 }
 
-class _FakeQuery_8<T extends Object?> extends _i1.SmartFake
+class _FakeQuery_7<T extends Object?> extends _i1.SmartFake
     implements _i2.Query<T> {
-  _FakeQuery_8(
+  _FakeQuery_7(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -123,9 +113,9 @@ class _FakeQuery_8<T extends Object?> extends _i1.SmartFake
         );
 }
 
-class _FakeQuerySnapshot_9<T extends Object?> extends _i1.SmartFake
+class _FakeQuerySnapshot_8<T extends Object?> extends _i1.SmartFake
     implements _i2.QuerySnapshot<T> {
-  _FakeQuerySnapshot_9(
+  _FakeQuerySnapshot_8(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -134,9 +124,9 @@ class _FakeQuerySnapshot_9<T extends Object?> extends _i1.SmartFake
         );
 }
 
-class _FakeAggregateQuery_10 extends _i1.SmartFake
+class _FakeAggregateQuery_9 extends _i1.SmartFake
     implements _i2.AggregateQuery {
-  _FakeAggregateQuery_10(
+  _FakeAggregateQuery_9(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -145,8 +135,8 @@ class _FakeAggregateQuery_10 extends _i1.SmartFake
         );
 }
 
-class _FakeFirebaseApp_11 extends _i1.SmartFake implements _i5.FirebaseApp {
-  _FakeFirebaseApp_11(
+class _FakeFirebaseApp_10 extends _i1.SmartFake implements _i5.FirebaseApp {
+  _FakeFirebaseApp_10(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -155,8 +145,8 @@ class _FakeFirebaseApp_11 extends _i1.SmartFake implements _i5.FirebaseApp {
         );
 }
 
-class _FakeSettings_12 extends _i1.SmartFake implements _i2.Settings {
-  _FakeSettings_12(
+class _FakeSettings_11 extends _i1.SmartFake implements _i2.Settings {
+  _FakeSettings_11(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -165,8 +155,8 @@ class _FakeSettings_12 extends _i1.SmartFake implements _i2.Settings {
         );
 }
 
-class _FakeWriteBatch_13 extends _i1.SmartFake implements _i2.WriteBatch {
-  _FakeWriteBatch_13(
+class _FakeWriteBatch_12 extends _i1.SmartFake implements _i2.WriteBatch {
+  _FakeWriteBatch_12(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -175,9 +165,9 @@ class _FakeWriteBatch_13 extends _i1.SmartFake implements _i2.WriteBatch {
         );
 }
 
-class _FakeLoadBundleTask_14 extends _i1.SmartFake
+class _FakeLoadBundleTask_13 extends _i1.SmartFake
     implements _i2.LoadBundleTask {
-  _FakeLoadBundleTask_14(
+  _FakeLoadBundleTask_13(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -186,9 +176,9 @@ class _FakeLoadBundleTask_14 extends _i1.SmartFake
         );
 }
 
-class _FakeSnapshotMetadata_15 extends _i1.SmartFake
+class _FakeSnapshotMetadata_14 extends _i1.SmartFake
     implements _i2.SnapshotMetadata {
-  _FakeSnapshotMetadata_15(
+  _FakeSnapshotMetadata_14(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -302,21 +292,20 @@ class MockFirestoreAdapterImpl extends _i1.Mock
       ) as _i4.Future<_i2.DocumentReference<Object?>>);
 }
 
-/// A class which mocks [FirebasStorageAdapter].
+/// A class which mocks [StorageAdapter].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFirebasStorageAdapter extends _i1.Mock
-    implements _i7.FirebaseStorageAdapterImpl {
-  MockFirebasStorageAdapter() {
+class MockStorageAdapter extends _i1.Mock implements _i7.StorageAdapter {
+  MockStorageAdapter() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.UploadTask uploadFile({
+  void uploadFile({
     _i8.File? file,
     String? storagePath,
   }) =>
-      (super.noSuchMethod(
+      super.noSuchMethod(
         Invocation.method(
           #uploadFile,
           [],
@@ -325,18 +314,8 @@ class MockFirebasStorageAdapter extends _i1.Mock
             #storagePath: storagePath,
           },
         ),
-        returnValue: _FakeUploadTask_3(
-          this,
-          Invocation.method(
-            #uploadFile,
-            [],
-            {
-              #file: file,
-              #storagePath: storagePath,
-            },
-          ),
-        ),
-      ) as _i3.UploadTask);
+        returnValueForMissingStub: null,
+      );
   @override
   _i4.Future<String> getDownloadUrl(String? storagePath) => (super.noSuchMethod(
         Invocation.method(
@@ -358,7 +337,7 @@ class MockLocalizedString extends _i1.Mock implements _i9.LocalizedString {
   @override
   String getLocalizedString(
     String? identifier, {
-    Map<String, String?>? namedArgs,
+    Map<String, String>? namedArgs,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -399,7 +378,7 @@ class MockUploadTask extends _i1.Mock implements _i3.UploadTask {
   @override
   _i3.FirebaseStorage get storage => (super.noSuchMethod(
         Invocation.getter(#storage),
-        returnValue: _FakeFirebaseStorage_4(
+        returnValue: _FakeFirebaseStorage_3(
           this,
           Invocation.getter(#storage),
         ),
@@ -412,7 +391,7 @@ class MockUploadTask extends _i1.Mock implements _i3.UploadTask {
   @override
   _i3.TaskSnapshot get snapshot => (super.noSuchMethod(
         Invocation.getter(#snapshot),
-        returnValue: _FakeTaskSnapshot_5(
+        returnValue: _FakeTaskSnapshot_4(
           this,
           Invocation.getter(#snapshot),
         ),
@@ -460,7 +439,7 @@ class MockUploadTask extends _i1.Mock implements _i3.UploadTask {
           [onError],
           {#test: test},
         ),
-        returnValue: _i4.Future<_i3.TaskSnapshot>.value(_FakeTaskSnapshot_5(
+        returnValue: _i4.Future<_i3.TaskSnapshot>.value(_FakeTaskSnapshot_4(
           this,
           Invocation.method(
             #catchError,
@@ -480,7 +459,7 @@ class MockUploadTask extends _i1.Mock implements _i3.UploadTask {
           [onValue],
           {#onError: onError},
         ),
-        returnValue: _FakeFuture_6<S>(
+        returnValue: _FakeFuture_5<S>(
           this,
           Invocation.method(
             #then,
@@ -497,7 +476,7 @@ class MockUploadTask extends _i1.Mock implements _i3.UploadTask {
           #whenComplete,
           [action],
         ),
-        returnValue: _i4.Future<_i3.TaskSnapshot>.value(_FakeTaskSnapshot_5(
+        returnValue: _i4.Future<_i3.TaskSnapshot>.value(_FakeTaskSnapshot_4(
           this,
           Invocation.method(
             #whenComplete,
@@ -516,7 +495,7 @@ class MockUploadTask extends _i1.Mock implements _i3.UploadTask {
           [timeLimit],
           {#onTimeout: onTimeout},
         ),
-        returnValue: _i4.Future<_i3.TaskSnapshot>.value(_FakeTaskSnapshot_5(
+        returnValue: _i4.Future<_i3.TaskSnapshot>.value(_FakeTaskSnapshot_4(
           this,
           Invocation.method(
             #timeout,
@@ -553,7 +532,7 @@ class MockDocumentReference<T extends Object?> extends _i1.Mock
   @override
   _i2.CollectionReference<T> get parent => (super.noSuchMethod(
         Invocation.getter(#parent),
-        returnValue: _FakeCollectionReference_7<T>(
+        returnValue: _FakeCollectionReference_6<T>(
           this,
           Invocation.getter(#parent),
         ),
@@ -571,7 +550,7 @@ class MockDocumentReference<T extends Object?> extends _i1.Mock
           #collection,
           [collectionPath],
         ),
-        returnValue: _FakeCollectionReference_7<Map<String, dynamic>>(
+        returnValue: _FakeCollectionReference_6<Map<String, dynamic>>(
           this,
           Invocation.method(
             #collection,
@@ -744,7 +723,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
             #toFirestore: toFirestore,
           },
         ),
-        returnValue: _FakeCollectionReference_7<R>(
+        returnValue: _FakeCollectionReference_6<R>(
           this,
           Invocation.method(
             #withConverter,
@@ -763,7 +742,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
           #endAtDocument,
           [documentSnapshot],
         ),
-        returnValue: _FakeQuery_8<T>(
+        returnValue: _FakeQuery_7<T>(
           this,
           Invocation.method(
             #endAtDocument,
@@ -777,7 +756,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
           #endAt,
           [values],
         ),
-        returnValue: _FakeQuery_8<T>(
+        returnValue: _FakeQuery_7<T>(
           this,
           Invocation.method(
             #endAt,
@@ -793,7 +772,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
           #endBeforeDocument,
           [documentSnapshot],
         ),
-        returnValue: _FakeQuery_8<T>(
+        returnValue: _FakeQuery_7<T>(
           this,
           Invocation.method(
             #endBeforeDocument,
@@ -807,7 +786,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
           #endBefore,
           [values],
         ),
-        returnValue: _FakeQuery_8<T>(
+        returnValue: _FakeQuery_7<T>(
           this,
           Invocation.method(
             #endBefore,
@@ -823,7 +802,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
           [options],
         ),
         returnValue:
-            _i4.Future<_i2.QuerySnapshot<T>>.value(_FakeQuerySnapshot_9<T>(
+            _i4.Future<_i2.QuerySnapshot<T>>.value(_FakeQuerySnapshot_8<T>(
           this,
           Invocation.method(
             #get,
@@ -837,7 +816,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
           #limit,
           [limit],
         ),
-        returnValue: _FakeQuery_8<T>(
+        returnValue: _FakeQuery_7<T>(
           this,
           Invocation.method(
             #limit,
@@ -851,7 +830,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
           #limitToLast,
           [limit],
         ),
-        returnValue: _FakeQuery_8<T>(
+        returnValue: _FakeQuery_7<T>(
           this,
           Invocation.method(
             #limitToLast,
@@ -881,7 +860,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
           [field],
           {#descending: descending},
         ),
-        returnValue: _FakeQuery_8<T>(
+        returnValue: _FakeQuery_7<T>(
           this,
           Invocation.method(
             #orderBy,
@@ -898,7 +877,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
           #startAfterDocument,
           [documentSnapshot],
         ),
-        returnValue: _FakeQuery_8<T>(
+        returnValue: _FakeQuery_7<T>(
           this,
           Invocation.method(
             #startAfterDocument,
@@ -912,7 +891,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
           #startAfter,
           [values],
         ),
-        returnValue: _FakeQuery_8<T>(
+        returnValue: _FakeQuery_7<T>(
           this,
           Invocation.method(
             #startAfter,
@@ -928,7 +907,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
           #startAtDocument,
           [documentSnapshot],
         ),
-        returnValue: _FakeQuery_8<T>(
+        returnValue: _FakeQuery_7<T>(
           this,
           Invocation.method(
             #startAtDocument,
@@ -942,7 +921,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
           #startAt,
           [values],
         ),
-        returnValue: _FakeQuery_8<T>(
+        returnValue: _FakeQuery_7<T>(
           this,
           Invocation.method(
             #startAt,
@@ -983,7 +962,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
             #isNull: isNull,
           },
         ),
-        returnValue: _FakeQuery_8<T>(
+        returnValue: _FakeQuery_7<T>(
           this,
           Invocation.method(
             #where,
@@ -1010,7 +989,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
           #count,
           [],
         ),
-        returnValue: _FakeAggregateQuery_10(
+        returnValue: _FakeAggregateQuery_9(
           this,
           Invocation.method(
             #count,
@@ -1031,7 +1010,7 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
   @override
   _i5.FirebaseApp get app => (super.noSuchMethod(
         Invocation.getter(#app),
-        returnValue: _FakeFirebaseApp_11(
+        returnValue: _FakeFirebaseApp_10(
           this,
           Invocation.getter(#app),
         ),
@@ -1068,7 +1047,7 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
   @override
   _i2.Settings get settings => (super.noSuchMethod(
         Invocation.getter(#settings),
-        returnValue: _FakeSettings_12(
+        returnValue: _FakeSettings_11(
           this,
           Invocation.getter(#settings),
         ),
@@ -1086,7 +1065,7 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
           #collection,
           [collectionPath],
         ),
-        returnValue: _FakeCollectionReference_7<Map<String, dynamic>>(
+        returnValue: _FakeCollectionReference_6<Map<String, dynamic>>(
           this,
           Invocation.method(
             #collection,
@@ -1100,7 +1079,7 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
           #batch,
           [],
         ),
-        returnValue: _FakeWriteBatch_13(
+        returnValue: _FakeWriteBatch_12(
           this,
           Invocation.method(
             #batch,
@@ -1134,7 +1113,7 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
           #loadBundle,
           [bundle],
         ),
-        returnValue: _FakeLoadBundleTask_14(
+        returnValue: _FakeLoadBundleTask_13(
           this,
           Invocation.method(
             #loadBundle,
@@ -1177,7 +1156,7 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
           },
         ),
         returnValue:
-            _i4.Future<_i2.QuerySnapshot<T>>.value(_FakeQuerySnapshot_9<T>(
+            _i4.Future<_i2.QuerySnapshot<T>>.value(_FakeQuerySnapshot_8<T>(
           this,
           Invocation.method(
             #namedQueryWithConverterGet,
@@ -1202,7 +1181,7 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
           {#options: options},
         ),
         returnValue: _i4.Future<_i2.QuerySnapshot<Map<String, dynamic>>>.value(
-            _FakeQuerySnapshot_9<Map<String, dynamic>>(
+            _FakeQuerySnapshot_8<Map<String, dynamic>>(
           this,
           Invocation.method(
             #namedQueryGet,
@@ -1218,7 +1197,7 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
           #collectionGroup,
           [collectionPath],
         ),
-        returnValue: _FakeQuery_8<Map<String, dynamic>>(
+        returnValue: _FakeQuery_7<Map<String, dynamic>>(
           this,
           Invocation.method(
             #collectionGroup,
@@ -1282,7 +1261,7 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
             #maxAttempts: maxAttempts,
           },
         ),
-        returnValue: _FakeFuture_6<T>(
+        returnValue: _FakeFuture_5<T>(
           this,
           Invocation.method(
             #runTransaction,
@@ -1367,7 +1346,7 @@ class MockQueryDocumentSnapshot extends _i1.Mock
   @override
   _i2.SnapshotMetadata get metadata => (super.noSuchMethod(
         Invocation.getter(#metadata),
-        returnValue: _FakeSnapshotMetadata_15(
+        returnValue: _FakeSnapshotMetadata_14(
           this,
           Invocation.getter(#metadata),
         ),

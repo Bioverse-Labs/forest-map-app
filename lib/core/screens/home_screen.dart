@@ -179,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _getData();
-      widget.locationNotifier.trackUser(widget.userNotifier.user!.id);
+      widget.locationNotifier.trackUser(widget.userNotifier.user?.id);
       widget.organizationNotifier.addListener(_getData);
     });
 

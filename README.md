@@ -64,6 +64,12 @@ On the first release, Forest Map TM will allow local cooperatives to use the abu
     <img src="https://i0.wp.com/resocoder.com/wp-content/uploads/2019/08/Clean-Architecture-Flutter-Diagram.png?w=556&ssl=1" width="350" />
 </p>
 
+### Firebase
+
+- To run with firebase create a new app on your firebase account and [add your GoogleService to the app](https://firebase.google.com/docs/android/setup).
+
+- To run without firebase just create new adapters implementing the contracts of `AuthAdapter` and `StorageAdapter`. Then remove all firebase dependencies.
+
 #
 
 <a href="https://www.bioverse.io/privacy-policy">Privacy Policy</a>

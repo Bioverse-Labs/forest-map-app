@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:forest_map/core/adapters/firestore_adapter.dart';
+import 'package:forest_map/core/domain/adapters/firestore_adapter.dart';
 import '../enums/exception_origin_types.dart';
 import '../errors/exceptions.dart';
 
