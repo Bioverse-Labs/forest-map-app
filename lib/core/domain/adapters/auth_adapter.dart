@@ -9,8 +9,6 @@ abstract class AuthAdapter {
     String email,
     String password,
   );
-  Future<Auth> getGoogleAuthCredential();
-  Future<Auth> getFacebookAuthCredential();
   Future<void> signOut();
   Future<void> forgotPassword(String email);
   Stream<User?> authStateStream();

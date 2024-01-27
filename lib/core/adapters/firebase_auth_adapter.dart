@@ -21,7 +21,6 @@ class FirebaseAuthAdapterImpl implements AuthAdapter {
     this.socialCredentialAdapter,
   );
 
-  @override
   Future<Auth> getFacebookAuthCredential() async {
     final res = await facebookAuth!.login();
     final credential = await socialCredentialAdapter!
@@ -35,7 +34,6 @@ class FirebaseAuthAdapterImpl implements AuthAdapter {
     );
   }
 
-  @override
   Future<Auth> getGoogleAuthCredential() async {
     final googleAuth = (await (await googleSignIn!.signIn())?.authentication)!;
     final credential = await socialCredentialAdapter!.getGoogleCredential(

@@ -265,7 +265,7 @@ class AppConfig {
     GetIt.I.registerLazySingleton<AuthRemoteDataSourceImpl>(
       () => AuthRemoteDataSourceImpl(
         firestoreAdapter: GetIt.I<FirestoreAdapter>(),
-        firebaseAuthAdapter: GetIt.I<AuthAdapter>(),
+        firebaseAuthAdapter: GetIt.I<AuthAdapter>() as FirebaseAuthAdapterImpl,
         localizedString: GetIt.I(),
         userHive: GetIt.I(),
         orgHive: GetIt.I(),
